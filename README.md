@@ -18,14 +18,14 @@ This package centralises the location for GovUKColours in order that it can be u
 For installation using pip:
 
 ```sh
-pip install git+https://github.com/communitiesuk/GOV_UK_Colours.git
+pip install git+https://github.com/communitiesuk/Plotly_utilities.git
 ```
 
 For installation using conda, paste the following code into the environment configuration file:
 
 ```yml
  - pip:
-     - git+https://github.com/communitiesuk/GOV_UK_Colours.git
+     - git+https://github.com/communitiesuk/Plotly_utilities.git
 ```
 
 
