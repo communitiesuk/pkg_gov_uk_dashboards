@@ -1,6 +1,6 @@
-# GOV_UK_Colours
+# Plotly utilities
 
-This package creates options for using diffent colours within the [GOV.UK pallette](https://design-system.service.gov.uk/styles/colour/)
+This package creates options for using different colours within the [GOV.UK palette](https://design-system.service.gov.uk/styles/colour/)
 
 ## Table of Contents
 
