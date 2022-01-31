@@ -41,4 +41,4 @@ GovUKColors.DLUHC_BLUE.value
 
 ## License
 
-[MIT](LICENSE) © Department of Levelling Up, Housing and Communities
+[MIT](LICENSE) Copyright (c) 2022 Crown Copyright (Department for Levelling Up, Housing and Communities)
