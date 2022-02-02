@@ -10,6 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'setuptools~=59.8.0',
-        'dash~=2.0.0'
+        'dash~=2.0.0',
+        'numpy>=1.22.0',
     ],
 )
