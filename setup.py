@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 # Call setup function
 setup(
     author="Department for Levelling Up, Housing and Communities",
-    description="Provides Gov.UK colours in a class for convenient use, see: https://design-system.service.gov.uk/styles/colour/",
-    name="GOV_UK_Colours",
-    packages=['GOV_UK_Colours'],
-    version="0.0.1",
+    description="Provides access to functionality common to creating a data dashboard.",
+    name="gov_uk_dashboards",
+    version="1.1.0",
+    packages=find_packages()
 )

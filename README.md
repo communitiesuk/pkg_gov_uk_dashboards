@@ -34,7 +34,7 @@ For installation using conda, paste the following code into the environment conf
 In order to access the colours in the package, use the command:
 
 ```python
-from GOV_UK_Colours.colours import GovUKColors
+from gov_uk_dashboards.colours.colours import GovUKColors
 
 GovUKColors.DLUHC_BLUE.value
 ```
