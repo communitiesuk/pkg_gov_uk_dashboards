@@ -7,5 +7,9 @@ setup(
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
     version="1.1.0",
-    packages=find_packages()
+    packages=find_packages(),
+    install_requires=[
+        'setuptools~=59.8.0',
+        'dash~=2.0.0'
+    ],
 )
