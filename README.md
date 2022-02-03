@@ -34,10 +34,18 @@ For installation using conda, paste the following code into the environment conf
 In order to access the colours in the package, use the command:
 
 ```python
-from gov_uk_dashboards.colours.colours import GovUKColors
+from gov_uk_dashboards.colours.colours import GovUKColours
 
-GovUKColors.DLUHC_BLUE.value
+GovUKColours.DLUHC_BLUE.value
 ```
+
+For components:
+```python
+from gov_uk_dashboards.components.plotly import banners
+
+banners.message_banner('category','message')
+```
+
 
 ## License
 
