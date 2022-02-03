@@ -1,8 +1,8 @@
 """filter_panel"""
 from dash import html
 
-from collapsible_panel import collapsible_panel
-from row_component import row_component
+from .collapsible_panel import collapsible_panel
+from .row_component import row_component
 
 
 def filter_panel(children):
