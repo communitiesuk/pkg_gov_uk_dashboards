@@ -2,7 +2,7 @@
 from enum import Enum
 
 
-class GovUKColors(Enum):
+class GovUKColours(Enum):
     """
     From the GOV.UK colour scheme: https://design-system.service.gov.uk/styles/colour/
     """
