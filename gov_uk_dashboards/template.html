@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    {%metas%}
+    <title>{%title%} - DLUHC Data Dashboards</title>
+    {%favicon%} {%css%}
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+  </head>
+  <body class="govuk-template__body">
+    {%app_entry%}
+    <footer>{%config%} {%scripts%} {%renderer%}</footer>
+    <script>
+      document.body.className = document.body.className
+        ? document.body.className + ' js-enabled'
+        : 'js-enabled';
+    </script>
+    <!-- component HTML -->
+    <script src="/assets/govuk-frontend-3.14.0.min.js"></script>
+    <script>
+      window.GOVUKFrontend.initAll();
+    </script>
+  </body>
+</html>

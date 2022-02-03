@@ -31,13 +31,29 @@ For installation using conda, paste the following code into the environment conf
 
 ## Usage
 
-In order to access the colours in the package, use the command:
-
+Using Government dashboard template with dash:
 ```python
-from GOV_UK_Colours.colours import GovUKColors
+import dash
+from gov_uk_dashboards.template import read_template
 
-GovUKColors.DLUHC_BLUE.value
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
+app.index_string = read_template()
 ```
+
+For colours:
+```python
+from gov_uk_dashboards.colours import GovUKColours
+
+GovUKColours.DLUHC_BLUE.value
+```
+
+For components:
+```python
+from gov_uk_dashboards.components.plotly import banners
+
+banners.message_banner('category','message')
+```
+
 
 ## License
 
