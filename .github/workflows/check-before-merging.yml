@@ -35,4 +35,4 @@ jobs:
           activate-environment: pkg_gov_uk_dashboards
           environment-file: environment.yml
       - name: Run linter
-        run: pylint $(pwd)
+        run: pylint $(pwd)/gov_uk_dashboards
