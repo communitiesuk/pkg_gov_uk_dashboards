@@ -1,0 +1,11 @@
+name: pkg_gov_uk_dashboards
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.9
+  - dash=2.0
+  - pytest=6.2
+  - pylint=2.12
+  - black=21.12b0
+  - numpy=1.22.0

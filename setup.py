@@ -13,7 +13,6 @@ setup(
         "dash~=2.0.0",
         "numpy>=1.22.0",
     ],
-    package_data={'':['gov_uk_dashboards/template.html']},
-    include_package_data=True
+    package_data={"": ["gov_uk_dashboards/template.html"]},
+    include_package_data=True,
 )
-

@@ -11,6 +11,6 @@ def read_template() -> str:
     """
     path = os.path.dirname(__file__)
     path = os.path.join(path, "template.html")
-    with open(path, encoding="utf-8") as f:
-        template = f.read()
+    with open(path, encoding="utf-8") as file:
+        template = file.read()
         return template
