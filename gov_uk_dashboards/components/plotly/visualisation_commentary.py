@@ -11,7 +11,7 @@ def format_visualisation_commentary(commentary):
                     html.P(
                         commentary,
                         className="govuk-heading-m govuk-!-margin-bottom-1",
-                        style={"font-size": "14px", "font-weight": "normal"},
+                        style={"fontSize": "14px", "fontWeight": "normal"},
                     ),
                 ],
                 className="govuk-grid-column-full",

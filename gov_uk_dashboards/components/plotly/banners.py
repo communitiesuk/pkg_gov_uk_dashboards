@@ -20,7 +20,7 @@ def message_banner(category, message):
                             "background": "white",
                             "color": "#1d70b8",
                             "margin": "0 1rem 0 0",
-                            "line-height": "initial",
+                            "lineHeight": "initial",
                         },
                     ),
                     message,
