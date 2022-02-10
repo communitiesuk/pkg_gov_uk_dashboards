@@ -68,13 +68,14 @@ When making changes to the package, the following should be done:
     - Major - any breaking changes to previous functionality.
     - Minor - additional functionality that doesn't effect backward compatibility.
     - Patch - bug fixes that don't effect backward compatibility.
-- On merge with main, go [here](https://github.com/communitiesuk/pkg_gov_uk_dashboards/releases) to add a new version tag.
+- After merging with main, go [here](https://github.com/communitiesuk/pkg_gov_uk_dashboards/releases) to add a new version tag.
     - Click 'Draft a new release'
-    - Under 'Choose a tag' enter 'v&lt;version number&gt;'. Click 'Create new tag'
+    - Under 'Choose a tag' dropdown, enter 'v&lt;version number&gt;'. Click 'Create new tag'
     - Give the tag a release title, this should be the same as the tag name.
-    - Give a bullet point list of changes.
+    - Give a bullet point list of changes in the "Describe this release" section.
     - Make sure 'Target' is set to 'main'.
     - Click 'Publish release'.
+- Update the package references within projects where the package is used, by following the [Installation](#Install) section.
 
 ## License
 
