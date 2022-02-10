@@ -28,11 +28,6 @@ For installation using conda, paste the following code into the environment conf
      - git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@<version>
 ```
 
-**Note:** &lt;version&gt; should be formatted 'v0.0.0'. For example:
-
-```sh
-pip install git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@v2.0.0
-```
 
 ## Usage
 
