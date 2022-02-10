@@ -53,7 +53,7 @@ def header(title):
             ),
             className="govuk-header__container govuk-width-container",
         ),
-        style={"align-items": "center", "justify-content": "center"},
+        style={"alignItems": "center", "justifyContent": "center"},
         className="govuk-header",
         role="banner",
         **{"data-module": "govuk-header"},
