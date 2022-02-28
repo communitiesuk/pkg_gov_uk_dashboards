@@ -9,9 +9,7 @@ def graph(element_id: str, figure: any, style: dict = None):
     graphs if style is not specified.
     """
     if not style:
-        return dcc.Graph(
-            id=element_id, figure=figure, responsive=True, style={"height": "450px"}
-        )
+        style = {}
 
     if "height" not in style.keys():
         style["height"] = "450px"
