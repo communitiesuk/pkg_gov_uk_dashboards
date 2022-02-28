@@ -1,3 +1,4 @@
 include LICENSE
 include README.md
 include gov_uk_dashboards/template.html
+exclude tests/
