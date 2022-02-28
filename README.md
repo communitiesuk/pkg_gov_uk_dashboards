@@ -1,6 +1,6 @@
-# Plotly utilities
+# Gov UK dashboards
 
-This package creates options for using different colours within the [GOV.UK palette](https://design-system.service.gov.uk/styles/colour/)
+This package contains functionality which is common to UK Government plotly dashboards.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ This package creates options for using different colours within the [GOV.UK pale
 
 ## Background
 
-This package centralises the location for GovUKColours in order that it can be used in all Government dashboards. 
+This package is to enable quicker development of government data dashboards, such as the government colour schemes and plotly components.
 
 ## Install
 
