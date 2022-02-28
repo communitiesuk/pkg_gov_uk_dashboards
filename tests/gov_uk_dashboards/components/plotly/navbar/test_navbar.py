@@ -5,7 +5,7 @@ from gov_uk_dashboards.components.plotly.navbar import navbar
 
 
 def test_navbar_is_nav_element():
-    """test the navbar element is returning a dash.html.Nav element """
+    """test the navbar element is returning a dash.html.Nav element"""
     # act
     sut = navbar("")
 
@@ -16,7 +16,7 @@ def test_navbar_is_nav_element():
 def test_navbar_has_children():
     """test navbar has children that are dash.html.Div and dash.html.Ul element"""
     #  act
-    sut = navbar('')
+    sut = navbar("")
     children = sut.children
 
     # assert
@@ -27,16 +27,16 @@ def test_navbar_has_children():
 def test_navbar_classname():
     """test navbar classname"""
     # act
-    sut = navbar('')
+    sut = navbar("")
 
     # assert
-    assert sut.className == 'dashboard-menu'
+    assert sut.className == "dashboard-menu"
 
 
 def test_navbar_children_classname():
     """test navbar children classname"""
     # act
-    sut = navbar('')
+    sut = navbar("")
     children = sut.children
 
     # assert
@@ -47,7 +47,7 @@ def test_navbar_children_classname():
 def test_navbar_link():
     """test navbar link is set"""
     # arrange
-    expected_link = 'testing link'
+    expected_link = "testing link"
 
     # act
     sut = navbar(expected_link)
