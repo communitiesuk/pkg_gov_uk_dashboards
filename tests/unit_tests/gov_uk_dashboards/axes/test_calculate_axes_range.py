@@ -1,7 +1,8 @@
 """Testing calculate axis range"""
 import pandas as pd
 import pytest
-from ../../../gov_uk_dashboards.axes import calc_axis_range
+
+from gov_uk_dashboards.axes import calc_axis_range
 
 
 def test_given_positive_data_returns_min_range_zero():
