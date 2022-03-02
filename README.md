@@ -66,8 +66,9 @@ When making changes to the package, the following should be done:
 - Update version in setup.py accordingly
     - Style: Major.Minor.Patch, e.g. 1.2.3
     - Major - any breaking changes to previous functionality.
-    - Minor - additional functionality that doesn't effect backward compatibility.
+    - Minor - additional functionality that doesn't effect backward compatibility. When updated the patch version should be reset to zero. eg. 2.3.1 goes to 2.4.0 for minor update.
     - Patch - bug fixes that don't effect backward compatibility.
+    For more information see [here](https://semver.org)
 - After merging with main, go [here](https://github.com/communitiesuk/pkg_gov_uk_dashboards/releases) to add a new version tag.
     - Click 'Draft a new release'
     - Under 'Choose a tag' dropdown, enter 'v&lt;version number&gt;'. Click 'Create new tag'
