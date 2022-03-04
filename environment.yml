@@ -9,3 +9,4 @@ dependencies:
   - pylint=2.12
   - black=21.12b0
   - numpy=1.22.0
+  - pandas=1.3

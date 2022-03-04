@@ -36,3 +36,19 @@ jobs:
           environment-file: environment.yml
       - name: Run linter
         run: pylint $(pwd)/gov_uk_dashboards
+
+  test:
+    name: 'Run tests'
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          activate-environment: data_dashboards
+          environment-file: environment.yml
+      - name: Execute tests
+        run: python -u -m pytest --headless tests
