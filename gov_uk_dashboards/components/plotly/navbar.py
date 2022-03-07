@@ -8,8 +8,7 @@ def navbar(links):
     return html.Nav(
         html.Div(
             html.Ul(
-                links,
-                className="moj-side-navigation__list",
+                links, className="moj-side-navigation__list", id="navigation-items"
             ),
             className="moj-side-navigation govuk-!-padding-right-2",
             role="navigation",
