@@ -1,0 +1,56 @@
+"""footer"""
+from dash import html
+
+
+def footer():
+    """
+    HTML component for a Gov.UK standard footer.
+
+    The footer provides copyright, licensing and other information about your
+    service and department.
+
+    Part of the Gov.UK Design System:
+    https://design-system.service.gov.uk/components/footer/
+    
+    Returns:
+        html.Footer: A footer element with copyright information.
+    """
+    return html.Footer(
+        html.Div(
+            html.Div(
+                [
+                    html.Div(
+                        html.Span(
+                            [
+                                "All content is available under the",
+                                html.A(
+                                    "Open Government Licence v3.0",
+                                    rel="license",
+                                    href="https://www.nationalarchives.gov.uk/doc/"
+                                    "open-government-licence/version/3/",
+                                    className="govuk-footer__link",
+                                ),
+                                ", except where otherwise stated",
+                            ],
+                            className="govuk-footer__licence-description",
+                        ),
+                        className="govuk-footer__meta-item govuk-footer__meta-item--grow",
+                    ),
+                    html.Div(
+                        html.A(
+                            "© Crown copyright",
+                            className="govuk-footer__link govuk-footer__copyright-logo",
+                            href="https://www.nationalarchives.gov.uk/information-management/"
+                            "re-using-public-sector-information/uk-government-licensing-framework/"
+                            "crown-copyright/",
+                        ),
+                        className="govuk-footer__meta-item",
+                    ),
+                ],
+                className="govuk-footer__meta",
+            ),
+            className="govuk-width-container",
+        ),
+        className="govuk-footer",
+        role="contentinfo",
+    )
