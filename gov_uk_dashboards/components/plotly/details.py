@@ -2,7 +2,7 @@
 from dash import html
 
 
-def details(details_summary: str, details_text:str) -> html.Details:
+def details(details_summary: str, details_text: str) -> html.Details:
     """
     HTML component for showing a summary exapandable with more information beneath.
 
@@ -15,7 +15,7 @@ def details(details_summary: str, details_text:str) -> html.Details:
     Args:
         details_summary (str): The summary text to display all the time.
         details_text (str): The details to reveal when the use requests them.
-    
+
     Returns:
         html.Details: A Details HTML element with the specified text
     """

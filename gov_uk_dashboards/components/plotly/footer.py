@@ -11,7 +11,7 @@ def footer():
 
     Part of the Gov.UK Design System:
     https://design-system.service.gov.uk/components/footer/
-    
+
     Returns:
         html.Footer: A footer element with copyright information.
     """
