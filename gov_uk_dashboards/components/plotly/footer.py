@@ -22,7 +22,7 @@ def footer():
                     html.Div(
                         html.Span(
                             [
-                                "All content is available under the",
+                                "All content is available under the ",
                                 html.A(
                                     "Open Government Licence v3.0",
                                     rel="license",
