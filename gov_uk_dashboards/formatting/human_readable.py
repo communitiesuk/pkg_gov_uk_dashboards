@@ -1,7 +1,7 @@
 """Functions for converting values to human readable format"""
 
 
-def format_as_human_readable(value_to_format: float, /, *, prefix: str = "") -> str:
+def format_as_human_readable(value_to_format: float, *, prefix: str = "") -> str:
     """Format a number as a human readable string
     Appends bn, m, k as appropriate
     Rounds number to 3dp
@@ -20,4 +20,4 @@ def format_as_human_readable(value_to_format: float, /, *, prefix: str = "") -> 
         return f"{prefix}{value_to_format/1_000_000:g}m"
     if value_to_format >= 1_000:
         return f"{prefix}{value_to_format/1_000:g}k"
-    return f"{prefix}{value_to_format:,g}"
+    return f"{prefix}{value_to_format:g}"
