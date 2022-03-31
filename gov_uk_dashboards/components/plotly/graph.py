@@ -14,4 +14,10 @@ def graph(element_id: str, figure: any, style: dict = None):
     if "height" not in style.keys():
         style["height"] = "450px"
 
-    return dcc.Graph(id=element_id, responsive=True, figure=figure, style=style)
+    return dcc.Graph(
+        id=element_id,
+        responsive=True,
+        figure=figure,
+        style=style,
+        config={"displayModeBar": False},
+    )
