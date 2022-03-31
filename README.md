@@ -59,6 +59,13 @@ from gov_uk_dashboards.components.plotly import banners
 banners.message_banner('category','message')
 ```
 
+For formatting:
+```python
+from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
+
+format_as_human_readable(1200,prefix='£')
+```
+
 ## Updating
 
 When making changes to the package, the following should be done:
