@@ -37,3 +37,14 @@ class GovUKColours(Enum):
         "#11436e",
         "#092237",
     ]
+
+
+class ONSAccessibleColours(Enum):
+    """ONS colours taken from their Subnational indicators explorer
+    (https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/articles/
+    subnationalindicatorsexplorer/2022-01-06)"""
+
+    DARK_BLUE = "#206095"
+    LIME = "#a8bd3a"
+    MAROON = "#871a5b"
+    LIGHT_BLUE = "#871a5b"
