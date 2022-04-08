@@ -5,6 +5,7 @@ channels:
 dependencies:
   - python=3.9
   - dash=2.0
+  - Werkzeug=2.0.3
   - pytest=6.2
   - pylint=2.12
   - black=22.3.0

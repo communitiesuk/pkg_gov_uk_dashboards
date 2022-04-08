@@ -1,5 +1,4 @@
-from gov_uk_dashboards.formatting.human_readable import \
-    format_as_human_readable
+from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 
 
 def test_format_as_human_readable_returns_formatted_billions():
@@ -38,6 +37,7 @@ def test_format_as_human_readable_applies_rounding():
     assert format_as_human_readable(1.234, decimal_places=1) == "1.2"
     assert format_as_human_readable(1_234_567, decimal_places=2) == "1.23m"
     assert format_as_human_readable(12_345, prefix="£", decimal_places=0) == "£12k"
+
 
 def test_format_as_human_readable_applies_negative_round():
     assert format_as_human_readable(123, decimal_places=-1) == "120"
