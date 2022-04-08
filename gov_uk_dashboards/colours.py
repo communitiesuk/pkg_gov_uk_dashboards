@@ -37,3 +37,10 @@ class GovUKColours(Enum):
         "#11436e",
         "#092237",
     ]
+
+class ONSAccessibleColours(Enum):
+    DARK_BLUE = '#206095'
+    LIME = '#a8bd3a'
+    MAROON = '#871a5b'
+    LIGHT_BLUE = '#871a5b'
+
