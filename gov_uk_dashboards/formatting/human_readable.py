@@ -40,7 +40,7 @@ def format_as_human_readable(
         value = value_to_format / 1_000
         value_suffix = "k"
 
-    if decimal_places:
+    if decimal_places is not None:
         value = round(value, decimal_places)
 
     return f"{prefix}{value:g}{value_suffix}{suffix}"

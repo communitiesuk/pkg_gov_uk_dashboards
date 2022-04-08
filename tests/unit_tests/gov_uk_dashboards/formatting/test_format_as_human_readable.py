@@ -1,4 +1,5 @@
-from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
+from gov_uk_dashboards.formatting.human_readable import \
+    format_as_human_readable
 
 
 def test_format_as_human_readable_returns_formatted_billions():
@@ -23,3 +24,22 @@ def test_format_as_human_readable_returns_formatted_units():
     assert format_as_human_readable(1) == "1"
     assert format_as_human_readable(999) == "999"
     assert format_as_human_readable(45.678, prefix="ABC") == "ABC45.678"
+
+
+def test_format_as_human_readable_returns_adds_suffix():
+    assert format_as_human_readable(1, suffix="%") == "1%"
+    assert (
+        format_as_human_readable(156_000, prefix="£", suffix=" per annum")
+        == "£156k per annum"
+    )
+
+
+def test_format_as_human_readable_applies_rounding():
+    assert format_as_human_readable(1.234, decimal_places=1) == "1.2"
+    assert format_as_human_readable(1_234_567, decimal_places=2) == "1.23m"
+    assert format_as_human_readable(12_345, prefix="£", decimal_places=0) == "£12k"
+
+def test_format_as_human_readable_applies_negative_round():
+    assert format_as_human_readable(123, decimal_places=-1) == "120"
+    assert format_as_human_readable(567_890, decimal_places=-1) == "570k"
+    assert format_as_human_readable(567_890, decimal_places=-2) == "600k"
