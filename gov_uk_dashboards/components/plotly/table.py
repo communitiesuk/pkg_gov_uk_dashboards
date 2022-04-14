@@ -1,13 +1,15 @@
 """Function for creating a table component from a dataframe"""
+from typing import Optional
 from pandas import DataFrame
 from dash import html
 
 
 def table_from_dataframe(
     dataframe: DataFrame,
-    title: str = None,
+    title: Optional[str] = None,
     include_headers: bool = True,
     first_column_is_header: bool = True,
+    title_is_subtitle: bool = False,
     **table_properties
 ):
     """
@@ -22,7 +24,10 @@ def table_from_dataframe(
         title (str, optional): Title to display above the table. Defaults to None.
         include_headers (bool, optional): If the column labels should be included as headers.
             Defaults to True.
-        first_column_is_header (bool, optional): _description_. Defaults to True.
+        first_column_is_header (bool, optional): Sets if the first column is a header column.
+            Defaults to True.
+        title_is_subtitle (bool, optional): Sets if the title should be displayed as a subtitle
+            or full title. Defaults to False.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -34,7 +39,10 @@ def table_from_dataframe(
     if title:
         table_contents.append(
             html.Caption(
-                title, className="govuk-table__caption govuk-table__caption--m"
+                title,
+                className="govuk-table__caption govuk-table__caption--s"
+                if title_is_subtitle
+                else "govuk-table__caption govuk-table__caption--m",
             )
         )
 
