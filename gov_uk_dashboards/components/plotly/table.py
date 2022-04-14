@@ -7,7 +7,6 @@ from dash import html
 def table_from_dataframe(
     dataframe: DataFrame,
     title: Optional[str] = None,
-    *,
     include_headers: bool = True,
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
