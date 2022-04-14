@@ -1,11 +1,12 @@
 """Function for creating a table component from a dataframe"""
+from typing import Optional
 from pandas import DataFrame
 from dash import html
 
 
 def table_from_dataframe(
     dataframe: DataFrame,
-    title: str = None,
+    title: Optional[str] = None,
     *,
     include_headers: bool = True,
     first_column_is_header: bool = True,
