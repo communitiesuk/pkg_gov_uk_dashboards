@@ -23,7 +23,8 @@ def format_as_human_readable(
         decimal_places(int, optional): If set, rounds formatted number to that many d.p.
             This is applied after shortening, e.g. 1,234,000 with decimal places = 1 becomes
             1.2m. Defaults to None, which does not apply rounding.
-        separator(str,optional): If set, will be returned for a NaN or None passed as value_to_format
+        separator(str,optional): If set, will be returned for a NaN or None passed as
+            value_to_format
 
     Returns:
         str: formatted number
