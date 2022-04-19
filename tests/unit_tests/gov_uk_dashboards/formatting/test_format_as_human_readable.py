@@ -47,4 +47,7 @@ def test_format_as_human_readable_applies_negative_round():
 
 def test_format_as_human_readable_returns_dash_for_nan():
     assert format_as_human_readable(None, decimal_places=-1) == "-"
-    assert format_as_human_readable(float("NaN"), decimal_places=-1, separator="ABC") == "ABC"
+    assert (
+        format_as_human_readable(float("NaN"), decimal_places=-1, separator="ABC")
+        == "ABC"
+    )

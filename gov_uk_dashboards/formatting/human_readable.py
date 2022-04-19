@@ -9,7 +9,7 @@ def format_as_human_readable(
     prefix: str = "",
     suffix: str = "",
     decimal_places: Optional[int] = None,
-    separator = "-"
+    separator="-",
 ) -> str:
     """
     Format a number as a human readable string.
