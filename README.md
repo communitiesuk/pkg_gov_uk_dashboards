@@ -66,6 +66,29 @@ from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 format_as_human_readable(1200,prefix='£')
 ```
 
+For figures:
+```python
+from gov_uk_dashboards import figures
+
+chart_data = figures.ChartData(
+    dataframe,
+    x_column = "Date",
+    y_column = "Value",
+    category_column = "Category"
+)
+
+line_chart = figures.line_chart(
+    data = chart_data,
+    title = "Chart title"
+    line_style = {
+        "Category 1": figures.format.LineFormat(
+            color = "#000000",
+            dash_pattern = figures.enums.DashPatterns.SOLID,
+        ),
+    }
+)
+```
+
 ## Updating
 
 When making changes to the package, the following should be done:
