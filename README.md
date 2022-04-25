@@ -83,8 +83,8 @@ line_chart = figures.line_chart(
     line_style = {
         "Category 1": figures.format.LineFormat(
             color = "#000000",
-            dash_pattern = figures.enums.DashPatterns.SOLID
-        ,)
+            dash_pattern = figures.enums.DashPatterns.SOLID,
+        ),
     }
 )
 ```
