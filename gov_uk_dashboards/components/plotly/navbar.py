@@ -34,7 +34,7 @@ def navbar(links):
 def navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
-        dcc.Link(text, href=href),
+        html.A(text, href=href),
         className="moj-sub-navigation__item",
     )
 
@@ -45,6 +45,6 @@ def navbar_link_active(text, href):
     already viewing the linked dashboard.
     """
     return html.Li(
-        dcc.Link(text, href=href,ariaCurrent="page"),
+        html.A(text, href=href,aria-current="page"),
         className="moj-sub-navigation__item",
     )
