@@ -45,6 +45,6 @@ def navbar_link_active(text, href):
     already viewing the linked dashboard.
     """
     return html.Li(
-        html.A(text, href=href,aria_current="page",),
+        html.A(text, href=href,**{'aria-current': 'page'},),
         className="moj-sub-navigation__item",
     )
