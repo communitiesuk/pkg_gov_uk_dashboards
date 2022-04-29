@@ -3,7 +3,7 @@
 from dash import html, dcc
 
 
-def sideNavbar(links):
+def side_navbar(links):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
         html.Ul(
@@ -14,7 +14,7 @@ def sideNavbar(links):
     )
 
 
-def sideNavbar_link(text, href):
+def side_navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
         dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
@@ -22,7 +22,7 @@ def sideNavbar_link(text, href):
     )
 
 
-def sideNavbar_link_active(text, href):
+def side_navbar_link_active(text, href):
     """
     A link to another dashboard that appears highlighted, suggesting to the user that they are
     already viewing the linked dashboard.
