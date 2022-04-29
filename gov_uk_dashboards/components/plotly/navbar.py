@@ -34,7 +34,7 @@ def navbar(links):
 def navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
-        html.A(text, href=href),
+        html.A(text, href=href, classname="moj-sub-navigation__link"),
         className="moj-sub-navigation__item",
     )
 
@@ -45,6 +45,6 @@ def navbar_link_active(text, href):
     already viewing the linked dashboard.
     """
     return html.Li(
-        html.A(text, href=href,**{'aria-current': 'page'},),
+        html.A(text, href=href, classname="moj-sub-navigation__link", **{'aria-current': 'page'}),
         className="moj-sub-navigation__item",
     )
