@@ -2,40 +2,53 @@
 
 from dash import html, dcc
 
-# <nav class="moj-sub-navigation" aria-label="Sub navigation">
+# <div class = "moj-primary-navigation" >
 
-#   <ul class="moj-sub-navigation__list">
-#     <li class="moj-sub-navigation__item">
-#       <a class="moj-sub-navigation__link" aria-current="page" href="#1">Nav item 1</a>
-#     </li>
+#  <div class = "moj-primary-navigation__container" >
 
-#     <li class="moj-sub-navigation__item">
-#       <a class="moj-sub-navigation__link" href="#2">Nav item 2</a>
-#     </li>
+#    <div class = "moj-primary-navigation__nav" >
 
-#     <li class="moj-sub-navigation__item">
-#       <a class="moj-sub-navigation__link" href="#3">Nav item 3</a>
-#     </li>
-#   </ul>
+#       <nav class = "moj-primary-navigation" aria-label = "Primary navigation" >
 
-# </nav>
+#        <ul class = "moj-primary-navigation__list" >
+#          <li class = "moj-primary-navigation__item" >
+#             <a class = "moj-primary-navigation__link" aria-current = "page" href = "#1" > Nav item 1 < /a >
+#           </li >
+
+#           <li class = "moj-primary-navigation__item" >
+#             <a class = "moj-primary-navigation__link" href = "#2">Nav item 2</a>
+#           </li >
+
+#           <li class = "moj-primary-navigation__item" >
+#             <a class = "moj-primary-navigation__link" href = "#3">Nav item 3</a>
+#           </li >
+#         </ul >
+
+#       </nav >
+
+#     </div >
+#   </div >
+
+# </div >
+
 
 def navbar(links):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
         html.Ul(
-            links, className="moj-sub-navigation__list", id="navigation-items"
+            links, className="moj-primary-navigation__list", id="navigation-items"
         ),
-        className="moj-sub-navigation",
+        className="moj-primary-navigation",
         role="navigation",
+        **{"aria-label": "Primary navigation"}
     )
 
 
 def navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
-        html.A(text, href=href, className="moj-sub-navigation__link"),
-        className="moj-sub-navigation__item",
+        html.A(text, href=href, className="moj-primary-navigation__link"),
+        className="moj-primary-navigation__item",
     )
 
 
@@ -45,7 +58,7 @@ def navbar_link_active(text, href):
     already viewing the linked dashboard.
     """
     return html.Li(
-        html.A(text, href=href, className="moj-sub-navigation__link",
+        html.A(text, href=href, className="moj-primary-navigation__link",
                **{'aria-current': 'page'}),
-        className="moj-sub-navigation__item",
+        className="moj-primary-navigation__item",
     )
