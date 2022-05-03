@@ -6,9 +6,7 @@ from dash import html, dcc
 def side_navbar(links):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
-        html.Ul(
-            links, className="moj-side-navigation__list", id="navigation-items"
-        ),
+        html.Ul(links, className="moj-side-navigation__list", id="navigation-items"),
         className="moj-side-navigation",
         role="navigation",
     )
