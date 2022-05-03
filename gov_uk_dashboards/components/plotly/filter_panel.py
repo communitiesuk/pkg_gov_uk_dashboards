@@ -23,7 +23,9 @@ def filter_panel(children):
                 children=[
                     *children,
                     html.A(
-                        "Reset", className="govuk-button govuk-!-margin-0", href="?"
+                        "Reset",
+                        className="govuk-button govuk-button--warning govuk-!-margin-0",
+                        href="?",
                     ),
                 ],
             ),
