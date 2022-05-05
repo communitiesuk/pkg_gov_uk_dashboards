@@ -5,6 +5,7 @@ from dash import html
 
 class ParagraphSizes(str, Enum):
     """Enum class to specify the allowed paragraph sizes"""
+
     LEAD = "govuk-body-l"
     DEFAULT = "govuk-body"
     SMALL = "govuk-body-s"
