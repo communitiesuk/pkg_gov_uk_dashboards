@@ -12,7 +12,7 @@ class ParagraphSizes(str, Enum):
 
 
 def paragraph(text: str, size: ParagraphSizes = ParagraphSizes.DEFAULT) -> html.P:
-    """Create a <p> Html component with the test provided"""
+    """Create a <p> Html component with the text provided"""
     if size not in list(ParagraphSizes):
         raise ValueError(
             f"Size {size} is not a valid paragraph size (use ParagraphSize enum)."
