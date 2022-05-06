@@ -21,6 +21,16 @@ def test_paragraph_has_text_in_children():
     assert actual.children == test_text
 
 
+def test_paragraph_has_all_components_in_children():
+    """Test component has supplied text as its children"""
+    test_text = "A sentence"
+    test_link = html.A("A Link")
+
+    actual = paragraph([test_text, test_link])
+
+    assert actual.children == [test_text, test_link]
+
+
 def test_paragraph_default_class():
     """Test component has correct CSS class under default"""
     test_text = "A sentence"
@@ -30,31 +40,17 @@ def test_paragraph_default_class():
     assert getattr(actual, "className") == "govuk-body"
 
 
-def test_paragraph_lead_class():
+@pytest.mark.parametrize(
+    "size",
+    [ParagraphSizes.SMALL, ParagraphSizes.LEAD, ParagraphSizes.DEFAULT],
+)
+def test_paragraph_has_expected_class(size):
     """Test component has correct class when lead size is specified"""
     test_text = "A sentence"
 
-    actual = paragraph(test_text, ParagraphSizes.LEAD)
+    actual = paragraph(test_text, size=size)
 
-    assert getattr(actual, "className") == "govuk-body-l"
-
-
-def test_paragraph_small_class():
-    """Test component has correct class when small size is specified"""
-    test_text = "A sentence"
-
-    actual = paragraph(test_text, ParagraphSizes.SMALL)
-
-    assert getattr(actual, "className") == "govuk-body-s"
-
-
-def test_paragraph_specify_default_class():
-    """Test component has correct class when default size is specified"""
-    test_text = "A sentence"
-
-    actual = paragraph(test_text, ParagraphSizes.DEFAULT)
-
-    assert getattr(actual, "className") == "govuk-body"
+    assert getattr(actual, "className") == size
 
 
 def test_paragraph_specify_unknown_class():

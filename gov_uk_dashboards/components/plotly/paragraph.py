@@ -1,5 +1,7 @@
 """paragraph component"""
 from enum import Enum
+from typing import Union
+
 from dash import html
 
 
@@ -11,14 +13,16 @@ class ParagraphSizes(str, Enum):
     SMALL = "govuk-body-s"
 
 
-def paragraph(text: str, size: ParagraphSizes = ParagraphSizes.DEFAULT) -> html.P:
-    """Create a <p> Html component with the text provided"""
+def paragraph(
+    children: Union[str, list], size: ParagraphSizes = ParagraphSizes.DEFAULT
+) -> html.P:
+    """Create a <p> Html component with the children provided"""
     if size not in list(ParagraphSizes):
         raise ValueError(
             f"Size {size} is not a valid paragraph size (use ParagraphSize enum)."
         )
 
     return html.P(
-        text,
+        children,
         className=size,
     )
