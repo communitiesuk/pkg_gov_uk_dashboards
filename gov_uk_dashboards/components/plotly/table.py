@@ -20,7 +20,7 @@ def table_from_dataframe(
 
 
     Args:
-        df (DataFrame): Dataframe containing formatted data to display.
+        dataframe (DataFrame): Dataframe containing formatted data to display.
         title (str, optional): Title to display above the table. Defaults to None.
         include_headers (bool, optional): If the column labels should be included as headers.
             Defaults to True.

@@ -31,6 +31,8 @@ def line_chart(
             the categories in the category column (if supplied), and values that are
             LineStyle data objects to set out the style of the corresponding line.
             Defaults to None.
+        **px_line_kwargs: Any other keyword arguments to pass to the plotly express
+            line graph function.
 
     Returns:
         plotly.Figure: The generated line chart figure object.
