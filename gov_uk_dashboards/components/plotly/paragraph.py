@@ -26,6 +26,9 @@ def paragraph(
 
     Returns:
         html.P: The dash HTML object for a paragraph.
+
+    Raises:
+        ValueError: If the paragraph size supplied is not a valid size.
     """
     if size not in list(ParagraphSizes):
         raise ValueError(

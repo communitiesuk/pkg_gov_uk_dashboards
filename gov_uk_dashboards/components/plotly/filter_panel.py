@@ -11,9 +11,8 @@ def filter_panel(children):
     on the dashboard.
 
     Args:
-        children: Dash HTML elements representing the individual selection
-        and filtering widgets.
-        E.g.dropdown menus, sliders, text input boxes etc.
+        children (list): Dash HTML elements representing the individual selection
+            and filtering widgets. E.g.dropdown menus, sliders, text input boxes etc.
     """
     return row_component(
         html.Div(
