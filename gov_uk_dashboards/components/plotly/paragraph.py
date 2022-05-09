@@ -16,7 +16,16 @@ class ParagraphSizes(str, Enum):
 def paragraph(
     children: Union[str, list], size: ParagraphSizes = ParagraphSizes.DEFAULT
 ) -> html.P:
-    """Create a <p> Html component with the children provided"""
+    """
+    Create a <p> Html component with the children provided
+
+    Args:
+        children (DataFrame): The children to render inside the dash paragraph component.
+        size (str, optional): The size of the text that this paragraph will display. Defaults to DEFAULT.
+
+    Returns:
+        html.P: The dash HTML object for a paragraph.
+    """
     if size not in list(ParagraphSizes):
         raise ValueError(
             f"Size {size} is not a valid paragraph size (use ParagraphSize enum)."
