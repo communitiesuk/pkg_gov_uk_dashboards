@@ -21,7 +21,8 @@ def paragraph(
 
     Args:
         children (DataFrame): The children to render inside the dash paragraph component.
-        size (str, list): The size of the text that this paragraph will display. Defaults to DEFAULT.
+        size (str, list): The size of the text that this paragraph will display.
+            Defaults to DEFAULT.
 
     Returns:
         html.P: The dash HTML object for a paragraph.
