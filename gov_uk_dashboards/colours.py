@@ -1,4 +1,10 @@
-"""govuk_colors"""
+"""Module containing Enums for Gov.UK colours and ONS Accessible Colours.
+
+Contains:
+- GovUKColours: From the GOV.UK colour scheme:
+    https://design-system.service.gov.uk/styles/colour/
+- ONSAccessibleColours: ONS colours taken from the Subnational Indicators Explorer.
+"""
 from enum import Enum
 
 

@@ -4,7 +4,7 @@ from dash import html
 
 def details(details_summary: str, details_text: str) -> html.Details:
     """
-    HTML component for showing a summary exapandable with more information beneath.
+    HTML component for showing a summary expandable with more information beneath.
 
     Makes a page easier to scan by letting users reveal more detailed information
     only if they need it.

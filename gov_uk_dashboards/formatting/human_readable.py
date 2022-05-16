@@ -1,4 +1,4 @@
-"""Functions for converting values to human readable format"""
+"""Functions for converting values to human readable format."""
 import math
 from typing import Optional
 

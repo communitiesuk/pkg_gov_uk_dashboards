@@ -6,7 +6,8 @@ def html_list(
     list_items: list[str], *, numbered_list: bool = False, extra_spacing: bool = False
 ):
     """Create either a <ul> or <ol> component, with the children set as a list of <li>
-    components matching the list_items provided"""
+    components matching the list_items provided.
+    """
     li_items = [html.Li(x) for x in list_items]
 
     classes = ["govuk-list"]

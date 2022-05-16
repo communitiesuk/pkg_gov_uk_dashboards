@@ -1,4 +1,10 @@
-"""Function for calculating the axis range"""
+"""Module containing functions related to graph axes.
+
+Contains:
+- calc_axis_range: Return a range for a column of a dataframe so the derived
+    axis is at the origin or the lowest negative value in the column, whichever
+    is lower.
+"""
 from math import floor, ceil
 import pandas as pd
 
