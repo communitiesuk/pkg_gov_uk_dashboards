@@ -1,4 +1,9 @@
-"""Functions to round data to the standard rounding we want for display"""
+"""Module containing functions to round data to the standard rounding needed
+for display.
+
+Contains:
+- round_thousands_to_1dp: Rounds values to 1dp in steps of 1000.
+"""
 
 
 def round_thousands_to_1dp(value: float) -> float:
