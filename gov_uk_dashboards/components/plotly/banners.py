@@ -9,9 +9,8 @@ def message_banner(category, message):
 
     See https://coronavirus.data.gov.uk
     """
-    return html.Ul(
-        html.Li(
-            html.Div(
+    return html.Div(
+            html.P(
                 [
                     html.Strong(
                         category,
@@ -27,7 +26,5 @@ def message_banner(category, message):
                 ],
                 className="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0",
             ),
-            className="change-log-banner",
-        ),
-        className="change-logs govuk-!-padding-left-0 govuk-!-margin-top-1",
-    )
+            className="change-log-banner govuk-!-margin-bottom-2",
+        )
