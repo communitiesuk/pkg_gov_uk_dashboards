@@ -12,6 +12,8 @@ setup(
         "setuptools~=59.8.0",
         "dash~=2.0.0",
         "numpy>=1.22.0",
+        "dash_bootstrap_components~=1.1.0",
+        "pandas>=1.3",
     ],
     package_data={"": ["gov_uk_dashboards/template.html"]},
     include_package_data=True,
