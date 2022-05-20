@@ -2,7 +2,7 @@
 from typing import Any, Optional, Union
 import plotly
 import dash
-import gov_uk_dashboards.components.plotly
+from gov_uk_dashboards.components.plotly.graph import graph
 
 
 def captioned_figure(
@@ -37,7 +37,7 @@ def captioned_figure(
     return dash.html.Figure(
         [
             dash.html.Div(
-                children=gov_uk_dashboards.components.plotly.graph(
+                children=graph(
                     element_id=f"{figure_name}-figure",
                     figure=figure,
                     style=style,
