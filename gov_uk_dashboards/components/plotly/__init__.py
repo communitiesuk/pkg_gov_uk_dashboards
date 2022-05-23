@@ -5,6 +5,8 @@ See: https://design-system.service.gov.uk/components/
 Contains:
 - message_banner: Return a changelog banner to be used to communicate to the
     user when the dashboard was last updated.
+- captioned_figure: Return figure with attached captions that can be read
+    by a screen reader.
 - card: Return a rectangle with a grey background. Mostly used to wrap
     individual visualisations.
 - card_full_width: Return a card with a grey background that fits the full
@@ -59,6 +61,7 @@ Contains:
 """
 
 from .banners import message_banner
+from .captioned_figure import captioned_figure
 from .card import card, empty_card
 from .card_full_width import card_full_width
 from .collapsible_panel import collapsible_panel
