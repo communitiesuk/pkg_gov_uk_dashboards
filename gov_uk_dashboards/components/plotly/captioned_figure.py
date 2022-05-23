@@ -17,9 +17,9 @@ def captioned_figure(
     Return figure with attached caption that can be read by a screen reader.
 
     The caption will not be displayed to users viewing the website through a
-    browser but is available for the a screen reader to describe.
+    browser but is available for a screen reader to describe.
 
-    The supplied graph and caption are wrapped in an HTML <figure > element.
+    The supplied graph and caption are wrapped in an HTML <figure> element.
 
     Args:
         figure (plotly.graph_objects.Figure): The plotly figure to display and caption.
