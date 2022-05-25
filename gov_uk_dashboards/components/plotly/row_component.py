@@ -11,6 +11,6 @@ def row_component(cards):
 
     See https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout for more information.
     """
-    return html.Ul(
+    return html.Div(
         cards, className="govuk-list card-container", style={"alignItems": "stretch"}
     )

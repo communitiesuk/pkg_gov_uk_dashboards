@@ -9,4 +9,4 @@ def card_full_width(children):
 
     See https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout for more information.
     """
-    return html.Li(children, className="mini-card", style={"flex": "1 1 100%"})
+    return html.Div(children, className="mini-card", style={"flex": "1 1 100%"})
