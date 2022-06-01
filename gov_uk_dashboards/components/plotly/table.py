@@ -11,7 +11,7 @@ def table_from_dataframe(
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
     first_column_formatter: Optional = None,
-    columns_to_exclude: Optional[list[str]] = [],
+    columns_to_exclude: Optional[list[str]] = None,
     **table_properties
 ):
     """
@@ -45,7 +45,11 @@ def table_from_dataframe(
 
     table_contents = []
 
-    filtered_dataframe = dataframe.loc[:, ~dataframe.columns.isin(columns_to_exclude)]
+    filtered_dataframe = (
+        dataframe
+        if columns_to_exclude is None
+        else dataframe.loc[:, ~dataframe.columns.isin(columns_to_exclude)]
+    )
 
     if title:
         table_contents.append(

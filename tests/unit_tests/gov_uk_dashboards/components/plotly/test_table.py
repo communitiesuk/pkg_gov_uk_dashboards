@@ -1,7 +1,5 @@
 """Tests for the table component"""
 import pandas
-import pytest
-from dash import html
 
 from gov_uk_dashboards.components.plotly.table import table_from_dataframe
 
