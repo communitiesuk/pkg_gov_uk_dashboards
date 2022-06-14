@@ -1,8 +1,10 @@
 """footer"""
+from pydoc import classname
+from typing import Optional
 from dash import html
 
 
-def footer():
+def footer(footer_links: Optional[list[any]]):
     """
     HTML component for a Gov.UK standard footer.
 
@@ -19,6 +21,14 @@ def footer():
         html.Div(
             html.Div(
                 [
+                    html.Ul(
+                        children=[
+                            html.Li(
+                                item,
+                                classname="govuk-footer__inline-list-item"
+                            ) for item in footer_links],
+                        classname="govuk-footer__inline-list govuk-!-display-none-print",
+                    ) if footer_links else None,
                     html.Div(
                         html.Span(
                             [
