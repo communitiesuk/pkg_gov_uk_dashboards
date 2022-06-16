@@ -22,7 +22,7 @@ def footer(footer_links: Optional[list[any]]):
                 [
                     html.Div(
                         (
-                            html.h2("Support Links",
+                            html.H2("Support Links",
                                     className="govuk-visually-hidden"),
                             html.Ul(
                                 children=[
