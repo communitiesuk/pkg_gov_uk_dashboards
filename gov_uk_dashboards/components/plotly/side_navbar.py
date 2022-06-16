@@ -10,7 +10,7 @@ def side_navbar(links, id: Optional[str] = None):
         html.Ul(links, className="moj-side-navigation__list"),
         className="moj-side-navigation",
         role="navigation",
-        id=id
+        id=id if id != None else ''
     )
 
 
