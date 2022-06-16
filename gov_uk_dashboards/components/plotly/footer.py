@@ -1,5 +1,4 @@
 """footer"""
-from pydoc import classname
 from typing import Optional
 from dash import html
 
@@ -25,9 +24,9 @@ def footer(footer_links: Optional[list[any]]):
                         children=[
                             html.Li(
                                 item,
-                                classname="govuk-footer__inline-list-item"
+                                className="govuk-footer__inline-list-item"
                             ) for item in footer_links],
-                        classname="govuk-footer__inline-list govuk-!-display-none-print",
+                        className="govuk-footer__inline-list govuk-!-display-none-print",
                     ) if footer_links else None,
                     html.Div(
                         html.Span(
