@@ -20,15 +20,19 @@ def footer(footer_links: Optional[list[any]]):
         html.Div(
             html.Div(
                 [
-                    html.Ul(
-                        children=[
-                            html.Li(
-                                item,
-                                className="govuk-footer__inline-list-item"
-                            ) for item in footer_links],
-                        className="govuk-footer__inline-list govuk-!-display-none-print",
-                    ) if footer_links else None,
                     html.Div(
+                        (
+                            html.h2("Support Links",
+                                    className="govuk-visually-hidden"),
+                            html.Ul(
+                                children=[
+                                    html.Li(
+                                        item,
+                                        className="govuk-footer__inline-list-item"
+                                    ) for item in footer_links],
+                                className="govuk-footer__inline-list govuk-!-display-none-print",
+                            )
+                        )if footer_links else None,
                         html.Span(
                             [
                                 "All content is available under the ",

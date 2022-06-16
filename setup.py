@@ -6,7 +6,7 @@ setup(
     author="Department for Levelling Up, Housing and Communities",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
-    version="4.7.3",
+    version="4.7.4",
     packages=find_packages(),
     install_requires=[
         "setuptools~=59.8.0",
