@@ -11,7 +11,7 @@ def navbar(links, id: Optional[str] = None):
         className="moj-primary-navigation",
         role="navigation",
         **{"aria-label": "Primary navigation"},
-        id=id if id != None else ''
+        id=id if id is not None else ""
     )
 
 
