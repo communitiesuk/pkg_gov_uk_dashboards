@@ -4,13 +4,13 @@ from typing import Optional
 from dash import html, dcc
 
 
-def side_navbar(links, id: Optional[str] = None):
+def side_navbar(links, identifier: Optional[str] = None):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
         html.Ul(links, className="moj-side-navigation__list"),
         className="moj-side-navigation",
         role="navigation",
-        id=id if id is not None else "",
+        id=identifier if identifier is not None else "",
     )
 
 

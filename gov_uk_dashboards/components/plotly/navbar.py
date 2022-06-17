@@ -4,14 +4,14 @@ from typing import Optional
 from dash import html
 
 
-def navbar(links, id: Optional[str] = None):
+def navbar(links, identifier: Optional[str] = None):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
         html.Ul(links, className="moj-primary-navigation__list"),
         className="moj-primary-navigation",
         role="navigation",
         **{"aria-label": "Primary navigation"},
-        id=id if id is not None else ""
+        id=identifier if identifier is not None else ""
     )
 
 
