@@ -21,10 +21,10 @@ def filter_panel(children):
                 default_open=True,
                 children=[
                     html.A(
-                        "Clear all selections",html.Br(),
+                        "Clear all selections",
                         className="govuk-button govuk-button--warning govuk-!-margin-0",
                         href="?",
-                    ),
+                    ),html.Br(),
                     *children,   
                 ],
             ),
