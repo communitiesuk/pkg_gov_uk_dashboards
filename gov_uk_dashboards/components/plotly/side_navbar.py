@@ -1,14 +1,16 @@
 """navbar"""
 
+from typing import Optional
 from dash import html, dcc
 
 
-def side_navbar(links):
+def side_navbar(links, identifier: Optional[str] = None):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
-        html.Ul(links, className="moj-side-navigation__list", id="navigation-items"),
+        html.Ul(links, className="moj-side-navigation__list"),
         className="moj-side-navigation",
         role="navigation",
+        id=identifier if identifier is not None else "",
     )
 
 

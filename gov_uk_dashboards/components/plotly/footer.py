@@ -1,8 +1,9 @@
 """footer"""
+from typing import Optional
 from dash import html
 
 
-def footer():
+def footer(footer_links: Optional[list[any]]):
     """
     HTML component for a Gov.UK standard footer.
 
@@ -20,20 +21,36 @@ def footer():
             html.Div(
                 [
                     html.Div(
-                        html.Span(
-                            [
-                                "All content is available under the ",
-                                html.A(
-                                    "Open Government Licence v3.0",
-                                    rel="license",
-                                    href="https://www.nationalarchives.gov.uk/doc/"
-                                    "open-government-licence/version/3/",
-                                    className="govuk-footer__link",
-                                ),
-                                ", except where otherwise stated",
-                            ],
-                            className="govuk-footer__licence-description",
-                        ),
+                        [
+                            html.H2("Support Links", className="govuk-visually-hidden")
+                            if footer_links
+                            else None,
+                            html.Ul(
+                                children=[
+                                    html.Li(
+                                        item, className="govuk-footer__inline-list-item"
+                                    )
+                                    for item in footer_links
+                                ],
+                                className="govuk-footer__inline-list govuk-!-display-none-print",
+                            )
+                            if footer_links
+                            else None,
+                            html.Span(
+                                [
+                                    "All content is available under the ",
+                                    html.A(
+                                        "Open Government Licence v3.0",
+                                        rel="license",
+                                        href="https://www.nationalarchives.gov.uk/doc/"
+                                        "open-government-licence/version/3/",
+                                        className="govuk-footer__link",
+                                    ),
+                                    ", except where otherwise stated",
+                                ],
+                                className="govuk-footer__licence-description",
+                            ),
+                        ],
                         className="govuk-footer__meta-item govuk-footer__meta-item--grow",
                     ),
                     html.Div(
