@@ -25,6 +25,7 @@ def filter_panel(children):
                             "Clear all selections",
                             className="govuk-button govuk-button--warning govuk-!-margin-0",
                             href="?",
+                            role="button",
                         ),
                         style={"width": "100%"},
                     ),
