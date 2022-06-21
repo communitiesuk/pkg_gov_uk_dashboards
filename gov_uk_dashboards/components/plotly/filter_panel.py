@@ -20,12 +20,15 @@ def filter_panel(children):
                 title="Select and filter metrics",
                 default_open=True,
                 children=[
-                    *children,
-                    html.A(
-                        "Reset",
-                        className="govuk-button govuk-button--warning govuk-!-margin-0",
-                        href="?",
+                    html.Div(
+                        html.A(
+                            "Clear all selections",
+                            className="govuk-button govuk-button--warning govuk-!-margin-0",
+                            href="?",
+                        ),
+                        style={"width": "100%"},
                     ),
+                    *children,
                 ],
             ),
             className="govuk-!-margin-0",
