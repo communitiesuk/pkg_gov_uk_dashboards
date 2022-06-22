@@ -3,9 +3,10 @@ from dash import html
 
 from .collapsible_panel import collapsible_panel
 from .row_component import row_component
+from gov_uk_dashboards.components.plotly.heading import heading2
 
 
-def filter_panel(children):
+def filter_panel(children, title=None):
     """
     A container with a grey background and a title that allows the user to select and filter metrics
     on the dashboard.
@@ -16,21 +17,24 @@ def filter_panel(children):
     """
     return row_component(
         html.Div(
-            collapsible_panel(
-                title="Select and filter metrics",
-                default_open=True,
-                children=[
-                    html.Div(
-                        html.A(
-                            "Clear all selections",
-                            className="govuk-button govuk-button--warning govuk-!-margin-0",
-                            href="?",
+            [
+                heading2(title) if title else None,
+                collapsible_panel(
+                    title="Select and filter metrics",
+                    default_open=True,
+                    children=[
+                        html.Div(
+                            html.A(
+                                "Clear all selections",
+                                className="govuk-button govuk-button--warning govuk-!-margin-0",
+                                href="?",
+                            ),
+                            style={"width": "100%"},
                         ),
-                        style={"width": "100%"},
-                    ),
-                    *children,
-                ],
-            ),
+                        *children,
+                    ],
+                ),
+            ],
             className="govuk-!-margin-0",
             style={"flex": "1 1 100%"},
         )
