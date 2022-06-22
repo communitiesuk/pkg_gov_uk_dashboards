@@ -1,12 +1,13 @@
 """filter_panel"""
+from typing import Optional
 from dash import html
 
+from gov_uk_dashboards.components.plotly.heading import heading2
 from .collapsible_panel import collapsible_panel
 from .row_component import row_component
-from gov_uk_dashboards.components.plotly.heading import heading2
 
 
-def filter_panel(children, title=None):
+def filter_panel(children, title: Optional[str] = None):
     """
     A container with a grey background and a title that allows the user to select and filter metrics
     on the dashboard.
@@ -14,6 +15,7 @@ def filter_panel(children, title=None):
     Args:
         children (list): Dash HTML elements representing the individual selection
             and filtering widgets. E.g.dropdown menus, sliders, text input boxes etc.
+        title (Optional[str]): Title for filter panel
     """
     return row_component(
         html.Div(
