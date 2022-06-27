@@ -1,11 +1,13 @@
 """filter_panel"""
+from typing import Optional
 from dash import html
 
+from gov_uk_dashboards.components.plotly.heading import heading2
 from .collapsible_panel import collapsible_panel
 from .row_component import row_component
 
 
-def filter_panel(children):
+def filter_panel(children, title: Optional[str] = None):
     """
     A container with a grey background and a title that allows the user to select and filter metrics
     on the dashboard.
@@ -13,25 +15,29 @@ def filter_panel(children):
     Args:
         children (list): Dash HTML elements representing the individual selection
             and filtering widgets. E.g.dropdown menus, sliders, text input boxes etc.
+        title (Optional[str]): Title for filter panel
     """
     return row_component(
         html.Div(
-            collapsible_panel(
-                title="Select and filter metrics",
-                default_open=True,
-                children=[
-                    html.Div(
-                        html.A(
-                            "Clear all selections",
-                            className="govuk-button govuk-button--warning govuk-!-margin-0",
-                            href="?",
-                            role="button",
+            [
+                heading2(title) if title else None,
+                collapsible_panel(
+                    title="Select and filter metrics",
+                    default_open=True,
+                    children=[
+                        html.Div(
+                            html.A(
+                                "Clear all selections",
+                                className="govuk-button govuk-button--warning govuk-!-margin-0",
+                                href="?",
+                                role="button",
+                            ),
+                            style={"width": "100%"},
                         ),
-                        style={"width": "100%"},
-                    ),
-                    *children,
-                ],
-            ),
+                        *children,
+                    ],
+                ),
+            ],
             className="govuk-!-margin-0",
             style={"flex": "1 1 100%"},
         )
