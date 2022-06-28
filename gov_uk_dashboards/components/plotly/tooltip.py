@@ -3,8 +3,16 @@ from dash import html
 import dash_bootstrap_components as dbc
 
 
-def tooltip(tooltip_text, tooltip_id):
-    """Creates a tooltip for providing further information"""
+def tooltip(tooltip_text: str, tooltip_id: str):
+    """Creates a tooltip for providing further information
+
+    Args:
+        tooltip_text (str): The text to display when hovering
+        tooltip_id (str): The element ID to contain the tooltip text
+
+    Returns:
+        html.Span: The dash HTML object for the tooltip.
+    """
 
     return html.Span(
         [
