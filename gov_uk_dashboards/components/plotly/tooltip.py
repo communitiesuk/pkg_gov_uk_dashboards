@@ -21,12 +21,12 @@ def tooltip(tooltip_text: str, tooltip_id: str, color: str, font_size: int):
             " ⓘ",
             dbc.Tooltip(
                 tooltip_text,
-                role="tooltip",
                 target=tooltip_id,
                 class_name="tooltip tooltiptext",
                 style={"color": color, "font-size": font_size},
             ),
         ],
         id=tooltip_id,
+        role="tooltip",
         style={"cursor": "pointer"},
     )
