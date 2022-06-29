@@ -3,7 +3,9 @@ from dash import html
 import dash_bootstrap_components as dbc
 
 
-def tooltip(tooltip_text: str, tooltip_id: str, color: str="white", font_size: str = "16px"):
+def tooltip(
+    tooltip_text: str, tooltip_id: str, color: str = "white", font_size: str = "16px"
+):
     """Creates a tooltip for providing further information
 
     Args:
