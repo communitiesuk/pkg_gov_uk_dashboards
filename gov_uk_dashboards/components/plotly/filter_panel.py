@@ -22,7 +22,7 @@ def filter_panel(children, title: Optional[str] = None):
             [
                 heading2(title) if title else None,
                 collapsible_panel(
-                    title="Select and filter metrics",
+                    title="Choose your areas of local authority spend to explore in the chart(s) below",
                     default_open=True,
                     children=[
                         html.Div(
