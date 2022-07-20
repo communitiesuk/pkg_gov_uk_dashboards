@@ -7,7 +7,9 @@ from .collapsible_panel import collapsible_panel
 from .row_component import row_component
 
 
-def filter_panel(children, title: Optional[str] = None, sub_title: str = "Select and filter metrics"):
+def filter_panel(
+    children, title: Optional[str] = None, sub_title: str = "Select and filter metrics"
+):
     """
     A container with a grey background and a title that allows the user to select and filter metrics
     on the dashboard.
