@@ -26,7 +26,7 @@ def table_from_dataframe(
             Defaults to True.
         title_is_subtitle (bool, optional): Sets if the title should be displayed as a subtitle
             or full title. Defaults to False.
-        short_table: (bool, optional): sets if the header of the table should scroll with window.
+        short_table: (bool, optional): if False the header of the table will scroll with window.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
