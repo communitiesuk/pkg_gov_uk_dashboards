@@ -10,6 +10,7 @@ def table_from_dataframe(
     include_headers: bool = True,
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
+    short_table: bool = False
     **table_properties
 ):
     """
@@ -56,7 +57,7 @@ def table_from_dataframe(
                     ],
                     className="govuk-table__row",
                 ),
-                className="govuk-table__head",
+                className="govuk-table__head-short" if short_table else "govuk-table__head",
             )
         )
 
