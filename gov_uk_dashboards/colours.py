@@ -38,8 +38,8 @@ class GovUKColours(Enum):
     RED_LIGHT_TO_DARK = ["#fbebe8", "#ea9a8e", "#d4351c", "#6a1b0e", "#150503"]
     BLUE_LIGHT_TO_DARK = [
         "#e8f1f8",
-        "#1d70b8",
         "#77a9d4",
+        "#1d70b8",
         "#11436e",
         "#092237",
     ]
