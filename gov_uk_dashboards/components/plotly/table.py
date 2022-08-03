@@ -54,9 +54,7 @@ def table_from_dataframe(
                 ],
                 className="govuk-table__row",
             ),
-            className="govuk-table__head-short"
-            if short_table
-            else "govuk-table__head",
+            className="govuk-table__head-short" if short_table else "govuk-table__head",
         )
     )
 
