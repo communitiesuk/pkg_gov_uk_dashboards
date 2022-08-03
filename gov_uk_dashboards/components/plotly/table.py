@@ -7,10 +7,10 @@ from dash import html
 def table_from_dataframe(
     dataframe: DataFrame,
     title: Optional[str] = None,
-    include_headers: bool = True,
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
-    short_table: bool = False**table_properties,
+    short_table: bool = False,
+    **table_properties,
 ):
     """
     Displays a pandas DataFrame as a table formatted in the Gov.UK style
@@ -22,12 +22,11 @@ def table_from_dataframe(
     Args:
         dataframe (DataFrame): Dataframe containing formatted data to display.
         title (str, optional): Title to display above the table. Defaults to None.
-        include_headers (bool, optional): If the column labels should be included as headers.
-            Defaults to True.
         first_column_is_header (bool, optional): Sets if the first column is a header column.
             Defaults to True.
         title_is_subtitle (bool, optional): Sets if the title should be displayed as a subtitle
             or full title. Defaults to False.
+        short_table: (bool, optional): sets if the header of the table should scroll with window.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -46,21 +45,20 @@ def table_from_dataframe(
             )
         )
 
-    if include_headers:
-        table_contents.append(
-            html.Thead(
-                html.Tr(
-                    [
-                        html.Th(header, scope="col", className="govuk-table__header")
-                        for header in dataframe.columns
-                    ],
-                    className="govuk-table__row",
-                ),
-                className="govuk-table__head-short"
-                if short_table
-                else "govuk-table__head",
-            )
+    table_contents.append(
+        html.Thead(
+            html.Tr(
+                [
+                    html.Th(header, scope="col", className="govuk-table__header")
+                    for header in dataframe.columns
+                ],
+                className="govuk-table__row",
+            ),
+            className="govuk-table__head-short"
+            if short_table
+            else "govuk-table__head",
         )
+    )
 
     table_contents.append(
         html.Tbody(
