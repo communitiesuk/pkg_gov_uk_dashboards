@@ -9,6 +9,6 @@ def clear_all_selections_link():
     return html.A(
         "Clear all selections",
         href="?",
-        className="govuk-link govuk-body",
-        style={"float": "right", "paddingBottom": "30px"},
+        className="govuk-link govuk-body govuk-!-padding-bottom-6",
+        style={"float": "right"},
     )
