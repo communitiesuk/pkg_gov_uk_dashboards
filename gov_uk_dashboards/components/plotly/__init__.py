@@ -58,7 +58,7 @@ Contains:
 - format_visualisation_commentary: Return paragraph styling commentary.
 - format_visualisation_title: Return a default formatted title for a
     visualisation.
-- clear_all_selections_link: Return clear all selections link which is aligned to the right 
+- clear_all_selections_link: Return clear all selections link which is aligned to the right
 """
 
 from .banners import message_banner
