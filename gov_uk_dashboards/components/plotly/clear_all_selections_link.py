@@ -1,8 +1,8 @@
-"""clear_all_selections"""
+"""clear_all_selections_link"""
 from dash import html
 
 
-def clear_all_selections():
+def clear_all_selections_link():
     """
     Clear all selections link which is aligned to the right
     """
