@@ -4,7 +4,7 @@ from dash import html
 
 def clear_all_selections_link():
     """
-    Clear all selections link which is aligned to the right
+    Return clear all selections link which is aligned to the right
     """
     return html.A(
         "Clear all selections",
