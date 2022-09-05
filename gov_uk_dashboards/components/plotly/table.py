@@ -9,7 +9,7 @@ def table_from_dataframe(
     title: Optional[str] = None,
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
-    short_table: bool = False,
+    short_table: bool = True,
     **table_properties,
 ):
     """
