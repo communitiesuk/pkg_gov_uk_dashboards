@@ -11452,8 +11452,6 @@ main {
 .card-container
   > *:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) {
   padding: 10px;
-  background-color: #f8f8f8;
-  border: 1px #f3f2f1 solid;
   display: grid;
   grid-auto-flow: row;
   grid-template-rows: auto;
