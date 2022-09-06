@@ -12630,7 +12630,7 @@ mark.expenditure {
   text-align: right;
 }
 
- #income_graph path.legendundefined, #Ofsted-ratings path.legendundefined {
+.dash-graph path.legendundefined {
   d: path("M 8 8 H -8 V -8 H 8 Z")
    /*By default plotly draws the icons using a 6x6 pixel square, however that isn't large enough
     to accurately display enough of the pattern used on a barchart. We've instead increased this
