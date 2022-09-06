@@ -17,6 +17,7 @@ Contains the following modules:
         rounding needed for display.
 - colours: Module containing Enums for Gov.UK colours and ONS Accessible
     Colours.
+- assets: Module shared front end assets such as CSS and JavaScript
 
 Contains the following function:
 - read_template: Return the government html template as a str for Plotly.
@@ -26,4 +27,5 @@ from . import figures
 from . import axes
 from . import formatting
 from . import colours
+from . import assets
 from .template import read_template
