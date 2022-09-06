@@ -15,5 +15,6 @@ setup(
         "dash_bootstrap_components~=1.1",
         "pandas>=1.3",
         "plotly~=5.5",
-    ]
+    ],
+    include_package_data=True,
 )
