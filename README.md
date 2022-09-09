@@ -7,6 +7,8 @@ This package contains functionality which is common to UK Government plotly dash
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
+- [Updating](#updating)
+- [Trying out changes to the package from other repositories](#Making changes to the package from other repositories)
 - [License](#license)
 
 ## Background
@@ -108,6 +110,19 @@ When making changes to the package, the following should be done:
     - Click 'Publish release'.
 - Update the package references within projects where the package is used, by following the [Installation](#Install) section.
 
+
+## Trying out changes to the package from other repositories
+
+When you want to make changes to the package to use in another repository, it can be useful to see what changes would look like before commiting to the package repo. You can do this by making changes directly to the package files in the conda environment of the repository you're working in.
+
+- Open the file you wish to change in the conda environment
+- You can do this by clicking into functions from the package in your IDE or by finding the file you wish to change in your file system, e.g.
+ ```.../anaconda3/envs/local_government_dashboard/lib/python3.9/site-packages/gov_uk_dashboards/components/...```
+- Make the changes to the package file and you should see the changes in your localhost on refresh
+
+When you're happy, you can make the changes on a branch in the package repo and install it locally to check it works as expected when imported before merging into main in the package repo:
+- You can update the *environment.yml* to point at your branch or run ```pip install``` with the url:
+    ```git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@<your-branch>``` 
 ## License
 
 [MIT](LICENSE) Copyright (c) 2022 Crown Copyright (Department for Levelling Up, Housing and Communities)
