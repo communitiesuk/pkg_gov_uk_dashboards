@@ -8,7 +8,7 @@ This package contains functionality which is common to UK Government plotly dash
 - [Install](#install)
 - [Usage](#usage)
 - [Updating](#updating)
-- [Trying out changes to the package from other repositories](#Trying out changes to the package from other repositories)
+- [Trying out changes to the package from other repositories](#trying-out-changes-to-the-package-from-other-repositories)
 - [License](#license)
 
 ## Background
