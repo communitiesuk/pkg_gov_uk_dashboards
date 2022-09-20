@@ -12557,6 +12557,7 @@ number-* {
 /* This prevents the size of the menu changing when a link becomes active and therefore bold */
 .dashboard-container .moj-side-navigation {
   width: 15%;
+  padding-right: 2%;
 }
 .jitter-desktop-only{
   display:none;
@@ -12637,4 +12638,8 @@ mark.expenditure {
     to an 8x8 pixel square so more of the pattern shows in the legend icon. For more information
     svg path command used above, take a look at
     https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#line_commands */
+}
+
+.moj-side-navigation__list--nested {
+  padding-left: 20px;
 }
