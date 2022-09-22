@@ -12643,3 +12643,39 @@ mark.expenditure {
 .moj-side-navigation__list--nested {
   padding-left: 20px;
 }
+
+.moj-side-navigation__item--expanded a:after {
+  -webkit-transform:translateY(-35%) rotate(45deg) scale(1);
+  -ms-transform: translateY(-35%) rotate(45deg) scale(1);
+  transform: translateY(-35%) rotate(45deg) scale(1);
+  border-bottom: 2px solid #1d70b8;
+  border-right: 2px solid #1d70b8;
+  content: "";
+  display: inline-block;
+  height: 8px;
+  position: absolute;
+  margin: 0 10px 0 2px;
+  vertical-align: middle; 
+  width: 8px;
+  -webkit-transform: translateY(1px) rotate(225deg) scale(1);
+  -ms-transform: translateY(1px) rotate(225deg) scale(1);
+  transform: translateY(1px) rotate(225deg) scale(1) translateX(-10px)
+}
+
+.moj-side-navigation__item--collapsed a:after {
+  -webkit-transform:translateY(-35%) rotate(225deg) scale(1);
+  -ms-transform: translateY(-35%) rotate(225deg) scale(1);
+  transform: translateY(-35%) rotate(225deg) scale(1);
+  border-bottom: 2px solid #1d70b8;
+  border-right: 2px solid #1d70b8;
+  content: "";
+  display: inline-block;
+  height: 8px;
+  position: absolute;
+  margin: 0 10px 0 2px;
+  vertical-align: middle;
+  width: 8px;
+  -webkit-transform: translateY(1px) rotate(45deg) scale(1);
+  -ms-transform: translateY(1px) rotate(45deg) scale(1);
+  transform: translateY(1px) rotate(45deg) scale(1)
+}
