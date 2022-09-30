@@ -29,5 +29,6 @@ def side_navbar_link_active(text, href):
     """
     return html.Li(
         dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
-        className="moj-side-navigation__item moj-side-navigation__item--active govuk-!-margin-bottom-1",
+        className=("moj-side-navigation__item moj-side-navigation__item--active "
+                    "govuk-!-margin-bottom-1"),
     )
