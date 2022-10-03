@@ -18,7 +18,7 @@ def side_navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
         dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
-        className="moj-side-navigation__item",
+        className="moj-side-navigation__item govuk-!-margin-bottom-1",
     )
 
 
@@ -29,5 +29,8 @@ def side_navbar_link_active(text, href):
     """
     return html.Li(
         dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
-        className="moj-side-navigation__item moj-side-navigation__item--active",
+        className=(
+            "moj-side-navigation__item moj-side-navigation__item--active "
+            "govuk-!-margin-bottom-1"
+        ),
     )
