@@ -116,7 +116,7 @@ When making changes to the package, the following should be done:
 When you want to make changes to the package to use in another repository, it can be useful to see what changes would look like before commiting to the package repo. You can do this by making changes directly to the package files in the conda environment of the repository you're working in.
 
 - Open the file you wish to change in the conda environment
-- You can do this by clicking into functions from the package in your IDE or by finding the file you wish to change in your file system, e.g.
+- Do this by clicking into functions from the package in your IDE or by finding the file you wish to change in your file system, e.g.
  ```.../anaconda3/envs/local_government_dashboard/lib/python3.9/site-packages/gov_uk_dashboards/components/...```
 - Make the changes to the package file and you should see the changes in your localhost on refresh
 
