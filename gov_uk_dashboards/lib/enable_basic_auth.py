@@ -4,6 +4,7 @@ import os
 import dash
 from flask_basicauth import BasicAuth
 
+
 def enable_basic_auth(dash_app: dash.Dash):
     """Turn on basic auth for the dash app if required"""
     if os.environ.get("STAGE") == "production":
