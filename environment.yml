@@ -4,6 +4,7 @@ channels:
   - nodefaults
 dependencies:
   - python=3.9
+  - flask-basicauth=0.2.0
   - dash=2.0
   - Werkzeug=2.0.3
   - pytest=6.2
