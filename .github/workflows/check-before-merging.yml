@@ -52,3 +52,10 @@ jobs:
           environment-file: environment.yml
       - name: Execute tests
         run: python -u -m pytest --headless tests
+
+  setup_check:
+    name: 'Check setup.py is formatted correctly'
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: python setup.py check
