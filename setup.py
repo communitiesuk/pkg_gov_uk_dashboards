@@ -6,7 +6,7 @@ setup(
     author="Department for Levelling Up, Housing and Communities",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
-    version="6.2.0",
+    version="6.2.1",
     packages=find_packages(),
     install_requires=[
         "setuptools~=59.8",
@@ -15,7 +15,7 @@ setup(
         "dash_bootstrap_components~=1.1",
         "pandas>=1.3",
         "plotly~=5.5",
-        "flask-basicauth=0.2.0",
+        "flask-basicauth~=0.2.0",
     ],
     include_package_data=True,
 )
