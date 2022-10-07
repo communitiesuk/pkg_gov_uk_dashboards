@@ -15,7 +15,7 @@ setup(
         "dash_bootstrap_components~=1.1",
         "pandas>=1.3",
         "plotly~=5.5",
-        "flask-basicauth=0.2.0",
+        "flask-basicauth~=0.2.0",
     ],
     include_package_data=True,
 )
