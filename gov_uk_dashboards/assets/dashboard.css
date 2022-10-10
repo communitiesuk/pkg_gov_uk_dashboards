@@ -29,13 +29,7 @@
 
 @charset "UTF-8";
 
-.govuk-link,
-.banner>.content>.body a,
-.developers-guide a,
-.about .markdown a,
-.accessibility .markdown a,
-.disclaimer .markdown a,
-.modal.markdown a {
+.govuk-link {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -44,24 +38,12 @@
 
 @media print {
 
-  .govuk-link,
-  .banner>.content>.body a,
-  .developers-guide a,
-  .about .markdown a,
-  .accessibility .markdown a,
-  .disclaimer .markdown a,
-  .modal.markdown a {
+  .govuk-link {
     font-family: sans-serif;
   }
 }
 
-.govuk-link:focus,
-.banner>.content>.body a:focus,
-.developers-guide a:focus,
-.about .markdown a:focus,
-.accessibility .markdown a:focus,
-.disclaimer .markdown a:focus,
-.modal.markdown a:focus {
+.govuk-link:focus {
   outline: 3px solid transparent;
   color: #0b0c0c;
   background-color: #fd0;
@@ -69,79 +51,31 @@
   text-decoration: none;
 }
 
-.govuk-link:link,
-.banner>.content>.body a:link,
-.developers-guide a:link,
-.about .markdown a:link,
-.accessibility .markdown a:link,
-.disclaimer .markdown a:link,
-.modal.markdown a:link {
+.govuk-link:link {
   color: #1d70b8;
 }
 
-.govuk-link:visited,
-.banner>.content>.body a:visited,
-.developers-guide a:visited,
-.about .markdown a:visited,
-.accessibility .markdown a:visited,
-.disclaimer .markdown a:visited,
-.modal.markdown a:visited {
+.govuk-link:visited {
   color: #4c2c92;
 }
 
-.govuk-link:hover,
-.banner>.content>.body a:hover,
-.developers-guide a:hover,
-.about .markdown a:hover,
-.accessibility .markdown a:hover,
-.disclaimer .markdown a:hover,
-.modal.markdown a:hover {
+.govuk-link:hover {
   color: #003078;
 }
 
-.govuk-link:active,
-.banner>.content>.body a:active,
-.developers-guide a:active,
-.about .markdown a:active,
-.accessibility .markdown a:active,
-.disclaimer .markdown a:active,
-.modal.markdown a:active {
+.govuk-link:active {
   color: #0b0c0c;
 }
 
-.govuk-link:focus,
-.banner>.content>.body a:focus,
-.developers-guide a:focus,
-.about .markdown a:focus,
-.accessibility .markdown a:focus,
-.disclaimer .markdown a:focus,
-.modal.markdown a:focus {
+.govuk-link:focus {
   color: #0b0c0c;
 }
 
 @media print {
 
-  [href^="/"].govuk-link:after,
-  .banner>.content>.body a[href^="/"]:after,
-  .developers-guide a[href^="/"]:after,
-  .about .markdown a[href^="/"]:after,
-  .accessibility .markdown a[href^="/"]:after,
-  .disclaimer .markdown a[href^="/"]:after,
-  .modal.markdown a[href^="/"]:after,
+  [href^="/"].govuk-link:after
   [href^="http://"].govuk-link:after,
-  .banner>.content>.body a[href^="http://"]:after,
-  .developers-guide a[href^="http://"]:after,
-  .about .markdown a[href^="http://"]:after,
-  .accessibility .markdown a[href^="http://"]:after,
-  .disclaimer .markdown a[href^="http://"]:after,
-  .modal.markdown a[href^="http://"]:after,
-  [href^="https://"].govuk-link:after,
-  .banner>.content>.body a[href^="https://"]:after,
-  .developers-guide a[href^="https://"]:after,
-  .about .markdown a[href^="https://"]:after,
-  .accessibility .markdown a[href^="https://"]:after,
-  .disclaimer .markdown a[href^="https://"]:after,
-  .modal.markdown a[href^="https://"]:after {
+  [href^="https://"].govuk-link:after {
     content: ' (' attr(href) ')';
     font-size: 90%;
     word-wrap: break-word;
@@ -211,63 +145,34 @@
 }
 
 .govuk-link--no-visited-state:link,
-.toc a:link,
-.modal.markdown a:link,
-.about .markdown ul:first-of-type a:link,
-.accessibility .markdown ul:first-of-type a:link,
-.disclaimer .markdown ul:first-of-type a:link,
-.modal.markdown ul:first-of-type a:link {
+.toc a:link {
   color: #1d70b8;
 }
 
 .govuk-link--no-visited-state:visited,
-.toc a:visited,
-.modal.markdown a:visited,
-.about .markdown ul:first-of-type a:visited,
-.accessibility .markdown ul:first-of-type a:visited,
-.disclaimer .markdown ul:first-of-type a:visited,
-.modal.markdown ul:first-of-type a:visited {
+.toc a:visited {
   color: #1d70b8;
 }
 
 .govuk-link--no-visited-state:hover,
-.toc a:hover,
-.modal.markdown a:hover,
-.about .markdown ul:first-of-type a:hover,
-.accessibility .markdown ul:first-of-type a:hover,
-.disclaimer .markdown ul:first-of-type a:hover,
-.modal.markdown ul:first-of-type a:hover {
+.toc a:hover{
   color: #003078;
 }
 
 .govuk-link--no-visited-state:active,
-.toc a:active,
-.modal.markdown a:active,
-.about .markdown ul:first-of-type a:active,
-.accessibility .markdown ul:first-of-type a:active,
-.disclaimer .markdown ul:first-of-type a:active,
-.modal.markdown ul:first-of-type a:active {
+.toc a:active {
   color: #0b0c0c;
 }
 
 .govuk-link--no-visited-state:focus,
-.toc a:focus,
-.modal.markdown a:focus,
-.about .markdown ul:first-of-type a:focus,
-.accessibility .markdown ul:first-of-type a:focus,
-.disclaimer .markdown ul:first-of-type a:focus,
-.modal.markdown ul:first-of-type a:focus {
+.toc a:focus {
   color: #0b0c0c;
 }
 
 .govuk-list,
 .banner,
 .postcode-lead-data,
-.toc li,
-.about .markdown ul,
-.accessibility .markdown ul,
-.disclaimer .markdown ul,
-.modal.markdown ul {
+.toc li {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -287,11 +192,7 @@
   .govuk-list,
   .banner,
   .postcode-lead-data,
-  .toc li,
-  .about .markdown ul,
-  .accessibility .markdown ul,
-  .disclaimer .markdown ul,
-  .modal.markdown ul {
+  .toc li {
     font-family: sans-serif;
   }
 }
@@ -301,11 +202,7 @@
   .govuk-list,
   .banner,
   .postcode-lead-data,
-  .toc li,
-  .about .markdown ul,
-  .accessibility .markdown ul,
-  .disclaimer .markdown ul,
-  .modal.markdown ul {
+  .toc li {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
@@ -317,11 +214,7 @@
   .govuk-list,
   .banner,
   .postcode-lead-data,
-  .toc li,
-  .about .markdown ul,
-  .accessibility .markdown ul,
-  .disclaimer .markdown ul,
-  .modal.markdown ul {
+  .toc li {
     font-size: 14pt;
     line-height: 1.15;
   }
@@ -332,11 +225,7 @@
   .govuk-list,
   .banner,
   .postcode-lead-data,
-  .toc li,
-  .about .markdown ul,
-  .accessibility .markdown ul,
-  .disclaimer .markdown ul,
-  .modal.markdown ul {
+  .toc li {
     color: #000;
   }
 }
@@ -346,11 +235,7 @@
   .govuk-list,
   .banner,
   .postcode-lead-data,
-  .toc li,
-  .about .markdown ul,
-  .accessibility .markdown ul,
-  .disclaimer .markdown ul,
-  .modal.markdown ul {
+  .toc li {
     margin-bottom: 20px;
   }
 }
@@ -373,87 +258,18 @@
 .toc .govuk-list li,
 .toc .banner li,
 .toc .postcode-lead-data li,
-.toc li li,
-.about .markdown ul .govuk-list,
-.about .markdown ul .banner,
-.about .markdown ul .postcode-lead-data,
-.about .markdown ul .toc li,
-.toc .about .markdown ul li,
-.accessibility .markdown ul .govuk-list,
-.accessibility .markdown ul .banner,
-.accessibility .markdown ul .postcode-lead-data,
-.accessibility .markdown ul .toc li,
-.toc .accessibility .markdown ul li,
-.disclaimer .markdown ul .govuk-list,
-.disclaimer .markdown ul .banner,
-.disclaimer .markdown ul .postcode-lead-data,
-.disclaimer .markdown ul .toc li,
-.toc .disclaimer .markdown ul li,
-.modal.markdown ul .govuk-list,
-.modal.markdown ul .banner,
-.modal.markdown ul .postcode-lead-data,
-.modal.markdown ul .toc li,
-.toc .modal.markdown ul li,
-.govuk-list .about .markdown ul,
-.banner .about .markdown ul,
-.postcode-lead-data .about .markdown ul,
-.toc li .about .markdown ul,
-.about .markdown .govuk-list ul,
-.about .markdown .banner ul,
-.about .markdown .postcode-lead-data ul,
-.about .markdown .toc li ul,
-.toc .about .markdown li ul,
-.about .markdown ul ul,
-.govuk-list .accessibility .markdown ul,
-.banner .accessibility .markdown ul,
-.postcode-lead-data .accessibility .markdown ul,
-.toc li .accessibility .markdown ul,
-.accessibility .markdown .govuk-list ul,
-.accessibility .markdown .banner ul,
-.accessibility .markdown .postcode-lead-data ul,
-.accessibility .markdown .toc li ul,
-.toc .accessibility .markdown li ul,
-.accessibility .markdown ul ul,
-.govuk-list .disclaimer .markdown ul,
-.banner .disclaimer .markdown ul,
-.postcode-lead-data .disclaimer .markdown ul,
-.toc li .disclaimer .markdown ul,
-.disclaimer .markdown .govuk-list ul,
-.disclaimer .markdown .banner ul,
-.disclaimer .markdown .postcode-lead-data ul,
-.disclaimer .markdown .toc li ul,
-.toc .disclaimer .markdown li ul,
-.disclaimer .markdown ul ul,
-.govuk-list .modal.markdown ul,
-.banner .modal.markdown ul,
-.postcode-lead-data .modal.markdown ul,
-.toc li .modal.markdown ul,
-.modal.markdown .govuk-list ul,
-.modal.markdown .banner ul,
-.modal.markdown .postcode-lead-data ul,
-.modal.markdown .toc li ul,
-.toc .modal.markdown li ul,
-.modal.markdown ul ul {
+.toc li li {
   margin-top: 10px;
 }
 
 .govuk-list>li,
 .banner>li,
 .postcode-lead-data>li,
-.toc li>li,
-.about .markdown ul>li,
-.accessibility .markdown ul>li,
-.disclaimer .markdown ul>li,
-.modal.markdown ul>li {
+.toc li>li {
   margin-bottom: 5px;
 }
 
-.govuk-list--bullet,
-.modal.markdown ul,
-.about .markdown ul:not(:first-of-type),
-.accessibility .markdown ul:not(:first-of-type),
-.disclaimer .markdown ul:not(:first-of-type),
-.modal.markdown ul:not(:first-of-type) {
+.govuk-list--bullet {
   padding-left: 20px;
   list-style-type: disc;
 }
@@ -464,11 +280,6 @@
 }
 
 .govuk-list--bullet>li,
-.modal.markdown ul>li,
-.about .markdown ul:not(:first-of-type)>li,
-.accessibility .markdown ul:not(:first-of-type)>li,
-.disclaimer .markdown ul:not(:first-of-type)>li,
-.modal.markdown ul:not(:first-of-type)>li,
 .govuk-list--number>li {
   margin-bottom: 0;
 }
@@ -476,11 +287,6 @@
 @media (min-width: 49.9375em) {
 
   .govuk-list--bullet>li,
-  .modal.markdown ul>li,
-  .about .markdown ul:not(:first-of-type)>li,
-  .accessibility .markdown ul:not(:first-of-type)>li,
-  .disclaimer .markdown ul:not(:first-of-type)>li,
-  .modal.markdown ul:not(:first-of-type)>li,
   .govuk-list--number>li {
     margin-bottom: 5px;
   }
@@ -513,11 +319,7 @@
   background-color: #fff;
 }
 
-.govuk-heading-xl,
-.about .markdown h1,
-.accessibility .markdown h1,
-.disclaimer .markdown h1,
-.modal.markdown h1 {
+.govuk-heading-xl {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -533,33 +335,21 @@
 
 @media print {
 
-  .govuk-heading-xl,
-  .about .markdown h1,
-  .accessibility .markdown h1,
-  .disclaimer .markdown h1,
-  .modal.markdown h1 {
+  .govuk-heading-xl {
     color: #000;
   }
 }
 
 @media print {
 
-  .govuk-heading-xl,
-  .about .markdown h1,
-  .accessibility .markdown h1,
-  .disclaimer .markdown h1,
-  .modal.markdown h1 {
+  .govuk-heading-xl {
     font-family: sans-serif;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-xl,
-  .about .markdown h1,
-  .accessibility .markdown h1,
-  .disclaimer .markdown h1,
-  .modal.markdown h1 {
+  .govuk-heading-xl {
     font-size: 48px;
     font-size: 3rem;
     line-height: 1.0416666667;
@@ -568,11 +358,7 @@
 
 @media print {
 
-  .govuk-heading-xl,
-  .about .markdown h1,
-  .accessibility .markdown h1,
-  .disclaimer .markdown h1,
-  .modal.markdown h1 {
+  .govuk-heading-xl {
     font-size: 32pt;
     line-height: 1.15;
   }
@@ -580,20 +366,12 @@
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-xl,
-  .about .markdown h1,
-  .accessibility .markdown h1,
-  .disclaimer .markdown h1,
-  .modal.markdown h1 {
+  .govuk-heading-xl {
     margin-bottom: 50px;
   }
 }
 
-.govuk-heading-l,
-.about .markdown h2,
-.accessibility .markdown h2,
-.disclaimer .markdown h2,
-.modal.markdown h2 {
+.govuk-heading-l {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -609,33 +387,21 @@
 
 @media print {
 
-  .govuk-heading-l,
-  .about .markdown h2,
-  .accessibility .markdown h2,
-  .disclaimer .markdown h2,
-  .modal.markdown h2 {
+  .govuk-heading-l {
     color: #000;
   }
 }
 
 @media print {
 
-  .govuk-heading-l,
-  .about .markdown h2,
-  .accessibility .markdown h2,
-  .disclaimer .markdown h2,
-  .modal.markdown h2 {
+  .govuk-heading-l {
     font-family: sans-serif;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-l,
-  .about .markdown h2,
-  .accessibility .markdown h2,
-  .disclaimer .markdown h2,
-  .modal.markdown h2 {
+  .govuk-heading-l {
     font-size: 36px;
     font-size: 2.25rem;
     line-height: 1.1111111111;
@@ -644,11 +410,7 @@
 
 @media print {
 
-  .govuk-heading-l,
-  .about .markdown h2,
-  .accessibility .markdown h2,
-  .disclaimer .markdown h2,
-  .modal.markdown h2 {
+  .govuk-heading-l {
     font-size: 24pt;
     line-height: 1.05;
   }
@@ -656,24 +418,12 @@
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-l,
-  .about .markdown h2,
-  .accessibility .markdown h2,
-  .disclaimer .markdown h2,
-  .modal.markdown h2 {
+  .govuk-heading-l {
     margin-bottom: 30px;
   }
 }
 
-.govuk-heading-m,
-.about .markdown h3,
-.accessibility .markdown h3,
-.disclaimer .markdown h3,
-.modal.markdown h3,
-.about .markdown #table-of-contents,
-.accessibility .markdown #table-of-contents,
-.disclaimer .markdown #table-of-contents,
-.modal.markdown #table-of-contents {
+.govuk-heading-m {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -689,45 +439,21 @@
 
 @media print {
 
-  .govuk-heading-m,
-  .about .markdown h3,
-  .accessibility .markdown h3,
-  .disclaimer .markdown h3,
-  .modal.markdown h3,
-  .about .markdown #table-of-contents,
-  .accessibility .markdown #table-of-contents,
-  .disclaimer .markdown #table-of-contents,
-  .modal.markdown #table-of-contents {
+  .govuk-heading-m {
     color: #000;
   }
 }
 
 @media print {
 
-  .govuk-heading-m,
-  .about .markdown h3,
-  .accessibility .markdown h3,
-  .disclaimer .markdown h3,
-  .modal.markdown h3,
-  .about .markdown #table-of-contents,
-  .accessibility .markdown #table-of-contents,
-  .disclaimer .markdown #table-of-contents,
-  .modal.markdown #table-of-contents {
+  .govuk-heading-m {
     font-family: sans-serif;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-m,
-  .about .markdown h3,
-  .accessibility .markdown h3,
-  .disclaimer .markdown h3,
-  .modal.markdown h3,
-  .about .markdown #table-of-contents,
-  .accessibility .markdown #table-of-contents,
-  .disclaimer .markdown #table-of-contents,
-  .modal.markdown #table-of-contents {
+  .govuk-heading-m {
     font-size: 24px;
     font-size: 1.5rem;
     line-height: 1.25;
@@ -736,15 +462,7 @@
 
 @media print {
 
-  .govuk-heading-m,
-  .about .markdown h3,
-  .accessibility .markdown h3,
-  .disclaimer .markdown h3,
-  .modal.markdown h3,
-  .about .markdown #table-of-contents,
-  .accessibility .markdown #table-of-contents,
-  .disclaimer .markdown #table-of-contents,
-  .modal.markdown #table-of-contents {
+  .govuk-heading-m {
     font-size: 18pt;
     line-height: 1.15;
   }
@@ -752,25 +470,13 @@
 
 @media (min-width: 49.9375em) {
 
-  .govuk-heading-m,
-  .about .markdown h3,
-  .accessibility .markdown h3,
-  .disclaimer .markdown h3,
-  .modal.markdown h3,
-  .about .markdown #table-of-contents,
-  .accessibility .markdown #table-of-contents,
-  .disclaimer .markdown #table-of-contents,
-  .modal.markdown #table-of-contents {
+  .govuk-heading-m {
     margin-bottom: 20px;
   }
 }
 
 .govuk-heading-s,
-.stand-alone-metric>.sam-heading,
-.about .markdown h4,
-.accessibility .markdown h4,
-.disclaimer .markdown h4,
-.modal.markdown h4 {
+.stand-alone-metric>.sam-heading {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -787,11 +493,7 @@
 @media print {
 
   .govuk-heading-s,
-  .stand-alone-metric>.sam-heading,
-  .about .markdown h4,
-  .accessibility .markdown h4,
-  .disclaimer .markdown h4,
-  .modal.markdown h4 {
+  .stand-alone-metric>.sam-heading {
     color: #000;
   }
 }
@@ -799,11 +501,7 @@
 @media print {
 
   .govuk-heading-s,
-  .stand-alone-metric>.sam-heading,
-  .about .markdown h4,
-  .accessibility .markdown h4,
-  .disclaimer .markdown h4,
-  .modal.markdown h4 {
+  .stand-alone-metric>.sam-heading {
     font-family: sans-serif;
   }
 }
@@ -811,11 +509,7 @@
 @media (min-width: 49.9375em) {
 
   .govuk-heading-s,
-  .stand-alone-metric>.sam-heading,
-  .about .markdown h4,
-  .accessibility .markdown h4,
-  .disclaimer .markdown h4,
-  .modal.markdown h4 {
+  .stand-alone-metric>.sam-heading {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
@@ -825,11 +519,7 @@
 @media print {
 
   .govuk-heading-s,
-  .stand-alone-metric>.sam-heading,
-  .about .markdown h4,
-  .accessibility .markdown h4,
-  .disclaimer .markdown h4,
-  .modal.markdown h4 {
+  .stand-alone-metric>.sam-heading {
     font-size: 14pt;
     line-height: 1.15;
   }
@@ -838,11 +528,7 @@
 @media (min-width: 49.9375em) {
 
   .govuk-heading-s,
-  .stand-alone-metric>.sam-heading,
-  .about .markdown h4,
-  .accessibility .markdown h4,
-  .disclaimer .markdown h4,
-  .modal.markdown h4 {
+  .stand-alone-metric>.sam-heading {
     margin-bottom: 20px;
   }
 }
@@ -1014,16 +700,7 @@
 .govuk-body,
 .postcode-lead dl.inline,
 .stand-alone-metric>.sam-body,
-.developers-guide,
-.about .markdown,
-.accessibility .markdown,
-.disclaimer .markdown,
-.modal.markdown,
-.govuk-body-m,
-.about .markdown p,
-.accessibility .markdown p,
-.disclaimer .markdown p,
-.modal.markdown p {
+.developers-guide {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -1041,16 +718,7 @@
   .govuk-body,
   .postcode-lead dl.inline,
   .stand-alone-metric>.sam-body,
-  .developers-guide,
-  .about .markdown,
-  .accessibility .markdown,
-  .disclaimer .markdown,
-  .modal.markdown,
-  .govuk-body-m,
-  .about .markdown p,
-  .accessibility .markdown p,
-  .disclaimer .markdown p,
-  .modal.markdown p {
+  .developers-guide {
     color: #000;
   }
 }
@@ -1060,16 +728,7 @@
   .govuk-body,
   .postcode-lead dl.inline,
   .stand-alone-metric>.sam-body,
-  .developers-guide,
-  .about .markdown,
-  .accessibility .markdown,
-  .disclaimer .markdown,
-  .modal.markdown,
-  .govuk-body-m,
-  .about .markdown p,
-  .accessibility .markdown p,
-  .disclaimer .markdown p,
-  .modal.markdown p {
+  .developers-guide {
     font-family: sans-serif;
   }
 }
@@ -1079,16 +738,7 @@
   .govuk-body,
   .postcode-lead dl.inline,
   .stand-alone-metric>.sam-body,
-  .developers-guide,
-  .about .markdown,
-  .accessibility .markdown,
-  .disclaimer .markdown,
-  .modal.markdown,
-  .govuk-body-m,
-  .about .markdown p,
-  .accessibility .markdown p,
-  .disclaimer .markdown p,
-  .modal.markdown p {
+  .developers-guide {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
@@ -1100,16 +750,7 @@
   .govuk-body,
   .postcode-lead dl.inline,
   .stand-alone-metric>.sam-body,
-  .developers-guide,
-  .about .markdown,
-  .accessibility .markdown,
-  .disclaimer .markdown,
-  .modal.markdown,
-  .govuk-body-m,
-  .about .markdown p,
-  .accessibility .markdown p,
-  .disclaimer .markdown p,
-  .modal.markdown p {
+  .developers-guide {
     font-size: 14pt;
     line-height: 1.15;
   }
@@ -1120,16 +761,7 @@
   .govuk-body,
   .postcode-lead dl.inline,
   .stand-alone-metric>.sam-body,
-  .developers-guide,
-  .about .markdown,
-  .accessibility .markdown,
-  .disclaimer .markdown,
-  .modal.markdown,
-  .govuk-body-m,
-  .about .markdown p,
-  .accessibility .markdown p,
-  .disclaimer .markdown p,
-  .modal.markdown p {
+  .developers-guide {
     margin-bottom: 20px;
   }
 }
@@ -1249,599 +881,71 @@
   }
 }
 
-.govuk-body-l+.govuk-heading-l,
-.about .markdown .govuk-body-l+h2,
-.accessibility .markdown .govuk-body-l+h2,
-.disclaimer .markdown .govuk-body-l+h2,
-.modal.markdown .govuk-body-l+h2,
-.govuk-body-lead+.govuk-heading-l,
-.about .markdown .govuk-body-lead+h2,
-.accessibility .markdown .govuk-body-lead+h2,
-.disclaimer .markdown .govuk-body-lead+h2,
-.modal.markdown .govuk-body-lead+h2 {
+.govuk-body-l+.govuk-heading-l
+.govuk-body-lead+.govuk-heading-l {
   padding-top: 5px;
 }
 
 @media (min-width: 49.9375em) {
 
   .govuk-body-l+.govuk-heading-l,
-  .about .markdown .govuk-body-l+h2,
-  .accessibility .markdown .govuk-body-l+h2,
-  .disclaimer .markdown .govuk-body-l+h2,
-  .modal.markdown .govuk-body-l+h2,
-  .govuk-body-lead+.govuk-heading-l,
-  .about .markdown .govuk-body-lead+h2,
-  .accessibility .markdown .govuk-body-lead+h2,
-  .disclaimer .markdown .govuk-body-lead+h2,
-  .modal.markdown .govuk-body-lead+h2 {
+  .govuk-body-lead+.govuk-heading-l {
     padding-top: 10px;
   }
 }
 
 .govuk-body-m+.govuk-heading-l,
-.about .markdown p+.govuk-heading-l,
-.accessibility .markdown p+.govuk-heading-l,
-.disclaimer .markdown p+.govuk-heading-l,
-.modal.markdown p+.govuk-heading-l,
-.about .markdown .govuk-body-m+h2,
-.about .markdown p+h2,
-.accessibility .markdown .govuk-body-m+h2,
-.accessibility .markdown p+h2,
-.disclaimer .markdown .govuk-body-m+h2,
-.disclaimer .markdown p+h2,
-.modal.markdown .govuk-body-m+h2,
-.modal.markdown p+h2,
 .govuk-body+.govuk-heading-l,
 .postcode-lead dl.inline+.govuk-heading-l,
 .stand-alone-metric>.sam-body+.govuk-heading-l,
 .developers-guide+.govuk-heading-l,
-.about .markdown .govuk-body+h2,
-.about .markdown .postcode-lead dl.inline+h2,
-.postcode-lead .about .markdown dl.inline+h2,
-.about .markdown .stand-alone-metric>.sam-body+h2,
-.about .markdown .developers-guide+h2,
-.accessibility .markdown .govuk-body+h2,
-.accessibility .markdown .postcode-lead dl.inline+h2,
-.postcode-lead .accessibility .markdown dl.inline+h2,
-.accessibility .markdown .stand-alone-metric>.sam-body+h2,
-.accessibility .markdown .developers-guide+h2,
-.disclaimer .markdown .govuk-body+h2,
-.disclaimer .markdown .postcode-lead dl.inline+h2,
 .postcode-lead .disclaimer .markdown dl.inline+h2,
-.disclaimer .markdown .stand-alone-metric>.sam-body+h2,
-.disclaimer .markdown .developers-guide+h2,
-.modal.markdown .govuk-body+h2,
-.modal.markdown .postcode-lead dl.inline+h2,
 .postcode-lead .modal.markdown dl.inline+h2,
-.modal.markdown .stand-alone-metric>.sam-body+h2,
-.modal.markdown .developers-guide+h2,
-.about .markdown+.govuk-heading-l,
-.about .markdown .markdown+h2,
-.accessibility .markdown .about .markdown+h2,
-.disclaimer .markdown .about .markdown+h2,
-.modal.markdown .about .markdown+h2,
-.accessibility .markdown+.govuk-heading-l,
-.about .markdown .accessibility .markdown+h2,
-.accessibility .markdown .markdown+h2,
-.disclaimer .markdown .accessibility .markdown+h2,
-.modal.markdown .accessibility .markdown+h2,
-.disclaimer .markdown+.govuk-heading-l,
-.about .markdown .disclaimer .markdown+h2,
-.accessibility .markdown .disclaimer .markdown+h2,
-.disclaimer .markdown .markdown+h2,
-.modal.markdown .disclaimer .markdown+h2,
-.modal.markdown+.govuk-heading-l,
-.modal.markdown .modal.markdown+h2,
 .govuk-body-s+.govuk-heading-l,
 .banner>.content>.body+.govuk-heading-l,
 .banner>.content+.govuk-heading-l,
 .card-wide.transmission>.content>.column+.govuk-heading-l,
-.about .markdown .govuk-body-s+h2,
-.about .markdown .banner>.content>.body+h2,
-.about .markdown .banner>.content+h2,
-.about .markdown .card-wide.transmission>.content>.column+h2,
-.accessibility .markdown .govuk-body-s+h2,
-.accessibility .markdown .banner>.content>.body+h2,
-.accessibility .markdown .banner>.content+h2,
-.accessibility .markdown .card-wide.transmission>.content>.column+h2,
-.disclaimer .markdown .govuk-body-s+h2,
-.disclaimer .markdown .banner>.content>.body+h2,
-.disclaimer .markdown .banner>.content+h2,
-.disclaimer .markdown .card-wide.transmission>.content>.column+h2,
-.modal.markdown .govuk-body-s+h2,
-.modal.markdown .banner>.content>.body+h2,
-.modal.markdown .banner>.content+h2,
-.modal.markdown .card-wide.transmission>.content>.column+h2,
 .govuk-list+.govuk-heading-l,
 .banner+.govuk-heading-l,
 .postcode-lead-data+.govuk-heading-l,
-.toc li+.govuk-heading-l,
-.about .markdown ul+.govuk-heading-l,
-.accessibility .markdown ul+.govuk-heading-l,
-.disclaimer .markdown ul+.govuk-heading-l,
-.modal.markdown ul+.govuk-heading-l,
-.about .markdown .govuk-list+h2,
-.about .markdown .banner+h2,
-.about .markdown .postcode-lead-data+h2,
-.about .markdown .toc li+h2,
-.toc .about .markdown li+h2,
-.about .markdown ul+h2,
-.about .accessibility .markdown ul+h2,
-.accessibility .about .markdown ul+h2,
-.about .disclaimer .markdown ul+h2,
-.disclaimer .about .markdown ul+h2,
-.about .modal.markdown ul+h2,
-.accessibility .markdown .govuk-list+h2,
-.accessibility .markdown .banner+h2,
-.accessibility .markdown .postcode-lead-data+h2,
-.accessibility .markdown .toc li+h2,
-.toc .accessibility .markdown li+h2,
-.accessibility .about .markdown ul+h2,
-.about .accessibility .markdown ul+h2,
-.accessibility .markdown ul+h2,
-.accessibility .disclaimer .markdown ul+h2,
-.disclaimer .accessibility .markdown ul+h2,
-.accessibility .modal.markdown ul+h2,
-.disclaimer .markdown .govuk-list+h2,
-.disclaimer .markdown .banner+h2,
-.disclaimer .markdown .postcode-lead-data+h2,
-.disclaimer .markdown .toc li+h2,
-.toc .disclaimer .markdown li+h2,
-.disclaimer .about .markdown ul+h2,
-.about .disclaimer .markdown ul+h2,
-.disclaimer .accessibility .markdown ul+h2,
-.accessibility .disclaimer .markdown ul+h2,
-.disclaimer .markdown ul+h2,
-.disclaimer .modal.markdown ul+h2,
-.modal.markdown .govuk-list+h2,
-.modal.markdown .banner+h2,
-.modal.markdown .postcode-lead-data+h2,
-.modal.markdown .toc li+h2,
-.toc .modal.markdown li+h2,
-.about .modal.markdown ul+h2,
-.accessibility .modal.markdown ul+h2,
-.disclaimer .modal.markdown ul+h2,
-.modal.markdown ul+h2 {
+.toc li+.govuk-heading-l {
   padding-top: 15px;
 }
 
 @media (min-width: 49.9375em) {
 
   .govuk-body-m+.govuk-heading-l,
-  .about .markdown p+.govuk-heading-l,
-  .accessibility .markdown p+.govuk-heading-l,
-  .disclaimer .markdown p+.govuk-heading-l,
-  .modal.markdown p+.govuk-heading-l,
-  .about .markdown .govuk-body-m+h2,
-  .about .markdown p+h2,
-  .accessibility .markdown .govuk-body-m+h2,
-  .accessibility .markdown p+h2,
-  .disclaimer .markdown .govuk-body-m+h2,
-  .disclaimer .markdown p+h2,
-  .modal.markdown .govuk-body-m+h2,
-  .modal.markdown p+h2,
   .govuk-body+.govuk-heading-l,
   .postcode-lead dl.inline+.govuk-heading-l,
   .stand-alone-metric>.sam-body+.govuk-heading-l,
   .developers-guide+.govuk-heading-l,
-  .about .markdown .govuk-body+h2,
-  .about .markdown .postcode-lead dl.inline+h2,
-  .postcode-lead .about .markdown dl.inline+h2,
-  .about .markdown .stand-alone-metric>.sam-body+h2,
-  .about .markdown .developers-guide+h2,
-  .accessibility .markdown .govuk-body+h2,
-  .accessibility .markdown .postcode-lead dl.inline+h2,
-  .postcode-lead .accessibility .markdown dl.inline+h2,
-  .accessibility .markdown .stand-alone-metric>.sam-body+h2,
-  .accessibility .markdown .developers-guide+h2,
-  .disclaimer .markdown .govuk-body+h2,
-  .disclaimer .markdown .postcode-lead dl.inline+h2,
-  .postcode-lead .disclaimer .markdown dl.inline+h2,
-  .disclaimer .markdown .stand-alone-metric>.sam-body+h2,
-  .disclaimer .markdown .developers-guide+h2,
-  .modal.markdown .govuk-body+h2,
-  .modal.markdown .postcode-lead dl.inline+h2,
-  .postcode-lead .modal.markdown dl.inline+h2,
-  .modal.markdown .stand-alone-metric>.sam-body+h2,
-  .modal.markdown .developers-guide+h2,
-  .about .markdown+.govuk-heading-l,
-  .about .markdown .markdown+h2,
-  .accessibility .markdown .about .markdown+h2,
-  .disclaimer .markdown .about .markdown+h2,
-  .modal.markdown .about .markdown+h2,
-  .accessibility .markdown+.govuk-heading-l,
-  .about .markdown .accessibility .markdown+h2,
-  .accessibility .markdown .markdown+h2,
-  .disclaimer .markdown .accessibility .markdown+h2,
-  .modal.markdown .accessibility .markdown+h2,
-  .disclaimer .markdown+.govuk-heading-l,
-  .about .markdown .disclaimer .markdown+h2,
-  .accessibility .markdown .disclaimer .markdown+h2,
-  .disclaimer .markdown .markdown+h2,
-  .modal.markdown .disclaimer .markdown+h2,
-  .modal.markdown+.govuk-heading-l,
-  .modal.markdown .modal.markdown+h2,
   .govuk-body-s+.govuk-heading-l,
   .banner>.content>.body+.govuk-heading-l,
   .banner>.content+.govuk-heading-l,
   .card-wide.transmission>.content>.column+.govuk-heading-l,
-  .about .markdown .govuk-body-s+h2,
-  .about .markdown .banner>.content>.body+h2,
-  .about .markdown .banner>.content+h2,
-  .about .markdown .card-wide.transmission>.content>.column+h2,
-  .accessibility .markdown .govuk-body-s+h2,
-  .accessibility .markdown .banner>.content>.body+h2,
-  .accessibility .markdown .banner>.content+h2,
-  .accessibility .markdown .card-wide.transmission>.content>.column+h2,
-  .disclaimer .markdown .govuk-body-s+h2,
-  .disclaimer .markdown .banner>.content>.body+h2,
-  .disclaimer .markdown .banner>.content+h2,
-  .disclaimer .markdown .card-wide.transmission>.content>.column+h2,
-  .modal.markdown .govuk-body-s+h2,
-  .modal.markdown .banner>.content>.body+h2,
-  .modal.markdown .banner>.content+h2,
-  .modal.markdown .card-wide.transmission>.content>.column+h2,
   .govuk-list+.govuk-heading-l,
   .banner+.govuk-heading-l,
   .postcode-lead-data+.govuk-heading-l,
-  .toc li+.govuk-heading-l,
-  .about .markdown ul+.govuk-heading-l,
-  .accessibility .markdown ul+.govuk-heading-l,
-  .disclaimer .markdown ul+.govuk-heading-l,
-  .modal.markdown ul+.govuk-heading-l,
-  .about .markdown .govuk-list+h2,
-  .about .markdown .banner+h2,
-  .about .markdown .postcode-lead-data+h2,
-  .about .markdown .toc li+h2,
-  .toc .about .markdown li+h2,
-  .about .markdown ul+h2,
-  .about .accessibility .markdown ul+h2,
-  .accessibility .about .markdown ul+h2,
-  .about .disclaimer .markdown ul+h2,
-  .disclaimer .about .markdown ul+h2,
-  .about .modal.markdown ul+h2,
-  .accessibility .markdown .govuk-list+h2,
-  .accessibility .markdown .banner+h2,
-  .accessibility .markdown .postcode-lead-data+h2,
-  .accessibility .markdown .toc li+h2,
-  .toc .accessibility .markdown li+h2,
-  .accessibility .about .markdown ul+h2,
-  .about .accessibility .markdown ul+h2,
-  .accessibility .markdown ul+h2,
-  .accessibility .disclaimer .markdown ul+h2,
-  .disclaimer .accessibility .markdown ul+h2,
-  .accessibility .modal.markdown ul+h2,
-  .disclaimer .markdown .govuk-list+h2,
-  .disclaimer .markdown .banner+h2,
-  .disclaimer .markdown .postcode-lead-data+h2,
-  .disclaimer .markdown .toc li+h2,
-  .toc .disclaimer .markdown li+h2,
-  .disclaimer .about .markdown ul+h2,
-  .about .disclaimer .markdown ul+h2,
-  .disclaimer .accessibility .markdown ul+h2,
-  .accessibility .disclaimer .markdown ul+h2,
-  .disclaimer .markdown ul+h2,
-  .disclaimer .modal.markdown ul+h2,
-  .modal.markdown .govuk-list+h2,
-  .modal.markdown .banner+h2,
-  .modal.markdown .postcode-lead-data+h2,
-  .modal.markdown .toc li+h2,
-  .toc .modal.markdown li+h2,
-  .about .modal.markdown ul+h2,
-  .accessibility .modal.markdown ul+h2,
-  .disclaimer .modal.markdown ul+h2,
-  .modal.markdown ul+h2 {
+  .toc li+.govuk-heading-l {
     padding-top: 20px;
   }
 }
 
 .govuk-body-m+.govuk-heading-m,
-.about .markdown p+.govuk-heading-m,
-.accessibility .markdown p+.govuk-heading-m,
-.disclaimer .markdown p+.govuk-heading-m,
-.modal.markdown p+.govuk-heading-m,
-.about .markdown .govuk-body-m+h3,
-.about .markdown p+h3,
-.about .accessibility .markdown p+h3,
-.accessibility .about .markdown p+h3,
-.about .disclaimer .markdown p+h3,
-.disclaimer .about .markdown p+h3,
-.about .modal.markdown p+h3,
-.accessibility .markdown .govuk-body-m+h3,
-.accessibility .about .markdown p+h3,
-.about .accessibility .markdown p+h3,
-.accessibility .markdown p+h3,
-.accessibility .disclaimer .markdown p+h3,
-.disclaimer .accessibility .markdown p+h3,
-.accessibility .modal.markdown p+h3,
-.disclaimer .markdown .govuk-body-m+h3,
-.disclaimer .about .markdown p+h3,
-.about .disclaimer .markdown p+h3,
-.disclaimer .accessibility .markdown p+h3,
-.accessibility .disclaimer .markdown p+h3,
-.disclaimer .markdown p+h3,
-.disclaimer .modal.markdown p+h3,
-.modal.markdown .govuk-body-m+h3,
-.about .modal.markdown p+h3,
-.accessibility .modal.markdown p+h3,
-.disclaimer .modal.markdown p+h3,
-.modal.markdown p+h3,
-.about .markdown .govuk-body-m+#table-of-contents,
-.about .markdown p+#table-of-contents,
-.about .accessibility .markdown p+#table-of-contents,
-.accessibility .about .markdown p+#table-of-contents,
-.about .disclaimer .markdown p+#table-of-contents,
-.disclaimer .about .markdown p+#table-of-contents,
-.about .modal.markdown p+#table-of-contents,
-.accessibility .markdown .govuk-body-m+#table-of-contents,
-.accessibility .about .markdown p+#table-of-contents,
-.about .accessibility .markdown p+#table-of-contents,
-.accessibility .markdown p+#table-of-contents,
-.accessibility .disclaimer .markdown p+#table-of-contents,
-.disclaimer .accessibility .markdown p+#table-of-contents,
-.accessibility .modal.markdown p+#table-of-contents,
-.disclaimer .markdown .govuk-body-m+#table-of-contents,
-.disclaimer .about .markdown p+#table-of-contents,
-.about .disclaimer .markdown p+#table-of-contents,
-.disclaimer .accessibility .markdown p+#table-of-contents,
-.accessibility .disclaimer .markdown p+#table-of-contents,
-.disclaimer .markdown p+#table-of-contents,
-.disclaimer .modal.markdown p+#table-of-contents,
-.modal.markdown .govuk-body-m+#table-of-contents,
-.about .modal.markdown p+#table-of-contents,
-.accessibility .modal.markdown p+#table-of-contents,
-.disclaimer .modal.markdown p+#table-of-contents,
-.modal.markdown p+#table-of-contents,
 .govuk-body+.govuk-heading-m,
 .postcode-lead dl.inline+.govuk-heading-m,
 .stand-alone-metric>.sam-body+.govuk-heading-m,
 .developers-guide+.govuk-heading-m,
-.about .markdown .govuk-body+h3,
-.about .markdown .postcode-lead dl.inline+h3,
-.postcode-lead .about .markdown dl.inline+h3,
-.about .markdown .stand-alone-metric>.sam-body+h3,
-.about .markdown .developers-guide+h3,
-.accessibility .markdown .govuk-body+h3,
-.accessibility .markdown .postcode-lead dl.inline+h3,
-.postcode-lead .accessibility .markdown dl.inline+h3,
-.accessibility .markdown .stand-alone-metric>.sam-body+h3,
-.accessibility .markdown .developers-guide+h3,
-.disclaimer .markdown .govuk-body+h3,
-.disclaimer .markdown .postcode-lead dl.inline+h3,
-.postcode-lead .disclaimer .markdown dl.inline+h3,
-.disclaimer .markdown .stand-alone-metric>.sam-body+h3,
-.disclaimer .markdown .developers-guide+h3,
-.modal.markdown .govuk-body+h3,
-.modal.markdown .postcode-lead dl.inline+h3,
-.postcode-lead .modal.markdown dl.inline+h3,
-.modal.markdown .stand-alone-metric>.sam-body+h3,
-.modal.markdown .developers-guide+h3,
-.about .markdown .govuk-body+#table-of-contents,
-.about .markdown .postcode-lead dl.inline+#table-of-contents,
-.postcode-lead .about .markdown dl.inline+#table-of-contents,
-.about .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-.about .markdown .developers-guide+#table-of-contents,
-.accessibility .markdown .govuk-body+#table-of-contents,
-.accessibility .markdown .postcode-lead dl.inline+#table-of-contents,
-.postcode-lead .accessibility .markdown dl.inline+#table-of-contents,
-.accessibility .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-.accessibility .markdown .developers-guide+#table-of-contents,
-.disclaimer .markdown .govuk-body+#table-of-contents,
-.disclaimer .markdown .postcode-lead dl.inline+#table-of-contents,
-.postcode-lead .disclaimer .markdown dl.inline+#table-of-contents,
-.disclaimer .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-.disclaimer .markdown .developers-guide+#table-of-contents,
-.modal.markdown .govuk-body+#table-of-contents,
-.modal.markdown .postcode-lead dl.inline+#table-of-contents,
-.postcode-lead .modal.markdown dl.inline+#table-of-contents,
-.modal.markdown .stand-alone-metric>.sam-body+#table-of-contents,
-.modal.markdown .developers-guide+#table-of-contents,
-.about .markdown+.govuk-heading-m,
-.about .markdown .markdown+h3,
-.about .accessibility .markdown .markdown+h3,
-.accessibility .markdown .about .markdown+h3,
-.about .disclaimer .markdown .markdown+h3,
-.disclaimer .markdown .about .markdown+h3,
-.about .modal.markdown .markdown+h3,
-.modal.markdown .about .markdown+h3,
-.about .markdown .markdown+#table-of-contents,
-.accessibility .markdown .about .markdown+#table-of-contents,
-.disclaimer .markdown .about .markdown+#table-of-contents,
-.modal.markdown .about .markdown+#table-of-contents,
-.accessibility .markdown+.govuk-heading-m,
-.accessibility .about .markdown .markdown+h3,
-.about .markdown .accessibility .markdown+h3,
-.accessibility .markdown .markdown+h3,
-.accessibility .disclaimer .markdown .markdown+h3,
-.disclaimer .markdown .accessibility .markdown+h3,
-.accessibility .modal.markdown .markdown+h3,
-.modal.markdown .accessibility .markdown+h3,
-.about .markdown .accessibility .markdown+#table-of-contents,
-.accessibility .markdown .markdown+#table-of-contents,
-.disclaimer .markdown .accessibility .markdown+#table-of-contents,
-.modal.markdown .accessibility .markdown+#table-of-contents,
-.disclaimer .markdown+.govuk-heading-m,
-.disclaimer .about .markdown .markdown+h3,
-.about .markdown .disclaimer .markdown+h3,
-.disclaimer .accessibility .markdown .markdown+h3,
-.accessibility .markdown .disclaimer .markdown+h3,
-.disclaimer .markdown .markdown+h3,
-.disclaimer .modal.markdown .markdown+h3,
-.modal.markdown .disclaimer .markdown+h3,
-.about .markdown .disclaimer .markdown+#table-of-contents,
-.accessibility .markdown .disclaimer .markdown+#table-of-contents,
-.disclaimer .markdown .markdown+#table-of-contents,
-.modal.markdown .disclaimer .markdown+#table-of-contents,
-.modal.markdown+.govuk-heading-m,
-.about .markdown .modal.markdown+h3,
-.accessibility .markdown .modal.markdown+h3,
-.disclaimer .markdown .modal.markdown+h3,
-.modal.markdown .modal.markdown+h3,
-.modal.markdown .modal.markdown+#table-of-contents,
 .govuk-body-s+.govuk-heading-m,
 .banner>.content>.body+.govuk-heading-m,
 .banner>.content+.govuk-heading-m,
 .card-wide.transmission>.content>.column+.govuk-heading-m,
-.about .markdown .govuk-body-s+h3,
-.about .markdown .banner>.content>.body+h3,
-.about .markdown .banner>.content+h3,
-.about .markdown .card-wide.transmission>.content>.column+h3,
-.accessibility .markdown .govuk-body-s+h3,
-.accessibility .markdown .banner>.content>.body+h3,
-.accessibility .markdown .banner>.content+h3,
-.accessibility .markdown .card-wide.transmission>.content>.column+h3,
-.disclaimer .markdown .govuk-body-s+h3,
-.disclaimer .markdown .banner>.content>.body+h3,
-.disclaimer .markdown .banner>.content+h3,
-.disclaimer .markdown .card-wide.transmission>.content>.column+h3,
-.modal.markdown .govuk-body-s+h3,
-.modal.markdown .banner>.content>.body+h3,
-.modal.markdown .banner>.content+h3,
-.modal.markdown .card-wide.transmission>.content>.column+h3,
-.about .markdown .govuk-body-s+#table-of-contents,
-.about .markdown .banner>.content>.body+#table-of-contents,
-.about .markdown .banner>.content+#table-of-contents,
-.about .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-.accessibility .markdown .govuk-body-s+#table-of-contents,
-.accessibility .markdown .banner>.content>.body+#table-of-contents,
-.accessibility .markdown .banner>.content+#table-of-contents,
-.accessibility .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-.disclaimer .markdown .govuk-body-s+#table-of-contents,
-.disclaimer .markdown .banner>.content>.body+#table-of-contents,
-.disclaimer .markdown .banner>.content+#table-of-contents,
-.disclaimer .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-.modal.markdown .govuk-body-s+#table-of-contents,
-.modal.markdown .banner>.content>.body+#table-of-contents,
-.modal.markdown .banner>.content+#table-of-contents,
-.modal.markdown .card-wide.transmission>.content>.column+#table-of-contents,
 .govuk-list+.govuk-heading-m,
 .banner+.govuk-heading-m,
 .postcode-lead-data+.govuk-heading-m,
 .toc li+.govuk-heading-m,
-.about .markdown ul+.govuk-heading-m,
-.accessibility .markdown ul+.govuk-heading-m,
-.disclaimer .markdown ul+.govuk-heading-m,
-.modal.markdown ul+.govuk-heading-m,
-.about .markdown .govuk-list+h3,
-.about .markdown .banner+h3,
-.about .markdown .postcode-lead-data+h3,
-.about .markdown .toc li+h3,
-.toc .about .markdown li+h3,
-.about .markdown ul+h3,
-.about .accessibility .markdown ul+h3,
-.accessibility .about .markdown ul+h3,
-.about .disclaimer .markdown ul+h3,
-.disclaimer .about .markdown ul+h3,
-.about .modal.markdown ul+h3,
-.accessibility .markdown .govuk-list+h3,
-.accessibility .markdown .banner+h3,
-.accessibility .markdown .postcode-lead-data+h3,
-.accessibility .markdown .toc li+h3,
-.toc .accessibility .markdown li+h3,
-.accessibility .about .markdown ul+h3,
-.about .accessibility .markdown ul+h3,
-.accessibility .markdown ul+h3,
-.accessibility .disclaimer .markdown ul+h3,
-.disclaimer .accessibility .markdown ul+h3,
-.accessibility .modal.markdown ul+h3,
-.disclaimer .markdown .govuk-list+h3,
-.disclaimer .markdown .banner+h3,
-.disclaimer .markdown .postcode-lead-data+h3,
-.disclaimer .markdown .toc li+h3,
-.toc .disclaimer .markdown li+h3,
-.disclaimer .about .markdown ul+h3,
-.about .disclaimer .markdown ul+h3,
-.disclaimer .accessibility .markdown ul+h3,
-.accessibility .disclaimer .markdown ul+h3,
-.disclaimer .markdown ul+h3,
-.disclaimer .modal.markdown ul+h3,
-.modal.markdown .govuk-list+h3,
-.modal.markdown .banner+h3,
-.modal.markdown .postcode-lead-data+h3,
-.modal.markdown .toc li+h3,
-.toc .modal.markdown li+h3,
-.about .modal.markdown ul+h3,
-.accessibility .modal.markdown ul+h3,
-.disclaimer .modal.markdown ul+h3,
-.modal.markdown ul+h3,
-.about .markdown .govuk-list+#table-of-contents,
-.about .markdown .banner+#table-of-contents,
-.about .markdown .postcode-lead-data+#table-of-contents,
-.about .markdown .toc li+#table-of-contents,
-.toc .about .markdown li+#table-of-contents,
-.about .markdown ul+#table-of-contents,
-.about .accessibility .markdown ul+#table-of-contents,
-.accessibility .about .markdown ul+#table-of-contents,
-.about .disclaimer .markdown ul+#table-of-contents,
-.disclaimer .about .markdown ul+#table-of-contents,
-.about .modal.markdown ul+#table-of-contents,
-.accessibility .markdown .govuk-list+#table-of-contents,
-.accessibility .markdown .banner+#table-of-contents,
-.accessibility .markdown .postcode-lead-data+#table-of-contents,
-.accessibility .markdown .toc li+#table-of-contents,
-.toc .accessibility .markdown li+#table-of-contents,
-.accessibility .about .markdown ul+#table-of-contents,
-.about .accessibility .markdown ul+#table-of-contents,
-.accessibility .markdown ul+#table-of-contents,
-.accessibility .disclaimer .markdown ul+#table-of-contents,
-.disclaimer .accessibility .markdown ul+#table-of-contents,
-.accessibility .modal.markdown ul+#table-of-contents,
-.disclaimer .markdown .govuk-list+#table-of-contents,
-.disclaimer .markdown .banner+#table-of-contents,
-.disclaimer .markdown .postcode-lead-data+#table-of-contents,
-.disclaimer .markdown .toc li+#table-of-contents,
-.toc .disclaimer .markdown li+#table-of-contents,
-.disclaimer .about .markdown ul+#table-of-contents,
-.about .disclaimer .markdown ul+#table-of-contents,
-.disclaimer .accessibility .markdown ul+#table-of-contents,
-.accessibility .disclaimer .markdown ul+#table-of-contents,
-.disclaimer .markdown ul+#table-of-contents,
-.disclaimer .modal.markdown ul+#table-of-contents,
-.modal.markdown .govuk-list+#table-of-contents,
-.modal.markdown .banner+#table-of-contents,
-.modal.markdown .postcode-lead-data+#table-of-contents,
-.modal.markdown .toc li+#table-of-contents,
-.toc .modal.markdown li+#table-of-contents,
-.about .modal.markdown ul+#table-of-contents,
-.accessibility .modal.markdown ul+#table-of-contents,
-.disclaimer .modal.markdown ul+#table-of-contents,
-.modal.markdown ul+#table-of-contents,
 .govuk-body-m+.govuk-heading-s,
 .stand-alone-metric>.govuk-body-m+.sam-heading,
-.about .markdown p+.govuk-heading-s,
-.about .markdown .stand-alone-metric>p+.sam-heading,
-.accessibility .markdown p+.govuk-heading-s,
-.accessibility .markdown .stand-alone-metric>p+.sam-heading,
-.disclaimer .markdown p+.govuk-heading-s,
-.disclaimer .markdown .stand-alone-metric>p+.sam-heading,
-.modal.markdown p+.govuk-heading-s,
-.modal.markdown .stand-alone-metric>p+.sam-heading,
-.about .markdown .govuk-body-m+h4,
-.about .markdown p+h4,
-.about .accessibility .markdown p+h4,
-.accessibility .about .markdown p+h4,
-.about .disclaimer .markdown p+h4,
-.disclaimer .about .markdown p+h4,
-.about .modal.markdown p+h4,
-.accessibility .markdown .govuk-body-m+h4,
-.accessibility .about .markdown p+h4,
-.about .accessibility .markdown p+h4,
-.accessibility .markdown p+h4,
-.accessibility .disclaimer .markdown p+h4,
-.disclaimer .accessibility .markdown p+h4,
-.accessibility .modal.markdown p+h4,
-.disclaimer .markdown .govuk-body-m+h4,
-.disclaimer .about .markdown p+h4,
-.about .disclaimer .markdown p+h4,
-.disclaimer .accessibility .markdown p+h4,
-.accessibility .disclaimer .markdown p+h4,
-.disclaimer .markdown p+h4,
-.disclaimer .modal.markdown p+h4,
-.modal.markdown .govuk-body-m+h4,
-.about .modal.markdown p+h4,
-.accessibility .modal.markdown p+h4,
-.disclaimer .modal.markdown p+h4,
-.modal.markdown p+h4,
 .govuk-body+.govuk-heading-s,
 .postcode-lead dl.inline+.govuk-heading-s,
 .stand-alone-metric>.sam-body+.govuk-heading-s,
@@ -1850,59 +954,6 @@
 .stand-alone-metric>.sam-body+.sam-heading,
 .developers-guide+.govuk-heading-s,
 .stand-alone-metric>.developers-guide+.sam-heading,
-.about .markdown .govuk-body+h4,
-.about .markdown .postcode-lead dl.inline+h4,
-.postcode-lead .about .markdown dl.inline+h4,
-.about .markdown .stand-alone-metric>.sam-body+h4,
-.about .markdown .developers-guide+h4,
-.accessibility .markdown .govuk-body+h4,
-.accessibility .markdown .postcode-lead dl.inline+h4,
-.postcode-lead .accessibility .markdown dl.inline+h4,
-.accessibility .markdown .stand-alone-metric>.sam-body+h4,
-.accessibility .markdown .developers-guide+h4,
-.disclaimer .markdown .govuk-body+h4,
-.disclaimer .markdown .postcode-lead dl.inline+h4,
-.postcode-lead .disclaimer .markdown dl.inline+h4,
-.disclaimer .markdown .stand-alone-metric>.sam-body+h4,
-.disclaimer .markdown .developers-guide+h4,
-.modal.markdown .govuk-body+h4,
-.modal.markdown .postcode-lead dl.inline+h4,
-.postcode-lead .modal.markdown dl.inline+h4,
-.modal.markdown .stand-alone-metric>.sam-body+h4,
-.modal.markdown .developers-guide+h4,
-.about .markdown+.govuk-heading-s,
-.about .stand-alone-metric>.markdown+.sam-heading,
-.about .markdown .markdown+h4,
-.about .accessibility .markdown .markdown+h4,
-.accessibility .markdown .about .markdown+h4,
-.about .disclaimer .markdown .markdown+h4,
-.disclaimer .markdown .about .markdown+h4,
-.about .modal.markdown .markdown+h4,
-.modal.markdown .about .markdown+h4,
-.accessibility .markdown+.govuk-heading-s,
-.accessibility .stand-alone-metric>.markdown+.sam-heading,
-.accessibility .about .markdown .markdown+h4,
-.about .markdown .accessibility .markdown+h4,
-.accessibility .markdown .markdown+h4,
-.accessibility .disclaimer .markdown .markdown+h4,
-.disclaimer .markdown .accessibility .markdown+h4,
-.accessibility .modal.markdown .markdown+h4,
-.modal.markdown .accessibility .markdown+h4,
-.disclaimer .markdown+.govuk-heading-s,
-.disclaimer .stand-alone-metric>.markdown+.sam-heading,
-.disclaimer .about .markdown .markdown+h4,
-.about .markdown .disclaimer .markdown+h4,
-.disclaimer .accessibility .markdown .markdown+h4,
-.accessibility .markdown .disclaimer .markdown+h4,
-.disclaimer .markdown .markdown+h4,
-.disclaimer .modal.markdown .markdown+h4,
-.modal.markdown .disclaimer .markdown+h4,
-.modal.markdown+.govuk-heading-s,
-.stand-alone-metric>.modal.markdown+.sam-heading,
-.about .markdown .modal.markdown+h4,
-.accessibility .markdown .modal.markdown+h4,
-.disclaimer .markdown .modal.markdown+h4,
-.modal.markdown .modal.markdown+h4,
 .govuk-body-s+.govuk-heading-s,
 .banner>.content>.body+.govuk-heading-s,
 .banner>.content+.govuk-heading-s,
@@ -1911,22 +962,6 @@
 .banner>.content.stand-alone-metric>.body+.sam-heading,
 .banner.stand-alone-metric>.content+.sam-heading,
 .card-wide.transmission>.content.stand-alone-metric>.column+.sam-heading,
-.about .markdown .govuk-body-s+h4,
-.about .markdown .banner>.content>.body+h4,
-.about .markdown .banner>.content+h4,
-.about .markdown .card-wide.transmission>.content>.column+h4,
-.accessibility .markdown .govuk-body-s+h4,
-.accessibility .markdown .banner>.content>.body+h4,
-.accessibility .markdown .banner>.content+h4,
-.accessibility .markdown .card-wide.transmission>.content>.column+h4,
-.disclaimer .markdown .govuk-body-s+h4,
-.disclaimer .markdown .banner>.content>.body+h4,
-.disclaimer .markdown .banner>.content+h4,
-.disclaimer .markdown .card-wide.transmission>.content>.column+h4,
-.modal.markdown .govuk-body-s+h4,
-.modal.markdown .banner>.content>.body+h4,
-.modal.markdown .banner>.content+h4,
-.modal.markdown .card-wide.transmission>.content>.column+h4,
 .govuk-list+.govuk-heading-s,
 .banner+.govuk-heading-s,
 .postcode-lead-data+.govuk-heading-s,
@@ -1934,369 +969,27 @@
 .stand-alone-metric>.banner+.sam-heading,
 .stand-alone-metric>.postcode-lead-data+.sam-heading,
 .toc li+.govuk-heading-s,
-.toc .stand-alone-metric>li+.sam-heading,
-.about .markdown ul+.govuk-heading-s,
-.about .markdown .stand-alone-metric>ul+.sam-heading,
-.accessibility .markdown ul+.govuk-heading-s,
-.accessibility .markdown .stand-alone-metric>ul+.sam-heading,
-.disclaimer .markdown ul+.govuk-heading-s,
-.disclaimer .markdown .stand-alone-metric>ul+.sam-heading,
-.modal.markdown ul+.govuk-heading-s,
-.modal.markdown .stand-alone-metric>ul+.sam-heading,
-.about .markdown .govuk-list+h4,
-.about .markdown .banner+h4,
-.about .markdown .postcode-lead-data+h4,
-.about .markdown .toc li+h4,
-.toc .about .markdown li+h4,
-.about .markdown ul+h4,
-.about .accessibility .markdown ul+h4,
-.accessibility .about .markdown ul+h4,
-.about .disclaimer .markdown ul+h4,
-.disclaimer .about .markdown ul+h4,
-.about .modal.markdown ul+h4,
-.accessibility .markdown .govuk-list+h4,
-.accessibility .markdown .banner+h4,
-.accessibility .markdown .postcode-lead-data+h4,
-.accessibility .markdown .toc li+h4,
-.toc .accessibility .markdown li+h4,
-.accessibility .about .markdown ul+h4,
-.about .accessibility .markdown ul+h4,
-.accessibility .markdown ul+h4,
-.accessibility .disclaimer .markdown ul+h4,
-.disclaimer .accessibility .markdown ul+h4,
-.accessibility .modal.markdown ul+h4,
-.disclaimer .markdown .govuk-list+h4,
-.disclaimer .markdown .banner+h4,
-.disclaimer .markdown .postcode-lead-data+h4,
-.disclaimer .markdown .toc li+h4,
-.toc .disclaimer .markdown li+h4,
-.disclaimer .about .markdown ul+h4,
-.about .disclaimer .markdown ul+h4,
-.disclaimer .accessibility .markdown ul+h4,
-.accessibility .disclaimer .markdown ul+h4,
-.disclaimer .markdown ul+h4,
-.disclaimer .modal.markdown ul+h4,
-.modal.markdown .govuk-list+h4,
-.modal.markdown .banner+h4,
-.modal.markdown .postcode-lead-data+h4,
-.modal.markdown .toc li+h4,
-.toc .modal.markdown li+h4,
-.about .modal.markdown ul+h4,
-.accessibility .modal.markdown ul+h4,
-.disclaimer .modal.markdown ul+h4,
-.modal.markdown ul+h4 {
+.toc .stand-alone-metric>li+.sam-heading {
   padding-top: 5px;
 }
 
 @media (min-width: 49.9375em) {
 
   .govuk-body-m+.govuk-heading-m,
-  .about .markdown p+.govuk-heading-m,
-  .accessibility .markdown p+.govuk-heading-m,
-  .disclaimer .markdown p+.govuk-heading-m,
-  .modal.markdown p+.govuk-heading-m,
-  .about .markdown .govuk-body-m+h3,
-  .about .markdown p+h3,
-  .about .accessibility .markdown p+h3,
-  .accessibility .about .markdown p+h3,
-  .about .disclaimer .markdown p+h3,
-  .disclaimer .about .markdown p+h3,
-  .about .modal.markdown p+h3,
-  .accessibility .markdown .govuk-body-m+h3,
-  .accessibility .about .markdown p+h3,
-  .about .accessibility .markdown p+h3,
-  .accessibility .markdown p+h3,
-  .accessibility .disclaimer .markdown p+h3,
-  .disclaimer .accessibility .markdown p+h3,
-  .accessibility .modal.markdown p+h3,
-  .disclaimer .markdown .govuk-body-m+h3,
-  .disclaimer .about .markdown p+h3,
-  .about .disclaimer .markdown p+h3,
-  .disclaimer .accessibility .markdown p+h3,
-  .accessibility .disclaimer .markdown p+h3,
-  .disclaimer .markdown p+h3,
-  .disclaimer .modal.markdown p+h3,
-  .modal.markdown .govuk-body-m+h3,
-  .about .modal.markdown p+h3,
-  .accessibility .modal.markdown p+h3,
-  .disclaimer .modal.markdown p+h3,
-  .modal.markdown p+h3,
-  .about .markdown .govuk-body-m+#table-of-contents,
-  .about .markdown p+#table-of-contents,
-  .about .accessibility .markdown p+#table-of-contents,
-  .accessibility .about .markdown p+#table-of-contents,
-  .about .disclaimer .markdown p+#table-of-contents,
-  .disclaimer .about .markdown p+#table-of-contents,
-  .about .modal.markdown p+#table-of-contents,
-  .accessibility .markdown .govuk-body-m+#table-of-contents,
-  .accessibility .about .markdown p+#table-of-contents,
-  .about .accessibility .markdown p+#table-of-contents,
-  .accessibility .markdown p+#table-of-contents,
-  .accessibility .disclaimer .markdown p+#table-of-contents,
-  .disclaimer .accessibility .markdown p+#table-of-contents,
-  .accessibility .modal.markdown p+#table-of-contents,
-  .disclaimer .markdown .govuk-body-m+#table-of-contents,
-  .disclaimer .about .markdown p+#table-of-contents,
-  .about .disclaimer .markdown p+#table-of-contents,
-  .disclaimer .accessibility .markdown p+#table-of-contents,
-  .accessibility .disclaimer .markdown p+#table-of-contents,
-  .disclaimer .markdown p+#table-of-contents,
-  .disclaimer .modal.markdown p+#table-of-contents,
-  .modal.markdown .govuk-body-m+#table-of-contents,
-  .about .modal.markdown p+#table-of-contents,
-  .accessibility .modal.markdown p+#table-of-contents,
-  .disclaimer .modal.markdown p+#table-of-contents,
-  .modal.markdown p+#table-of-contents,
   .govuk-body+.govuk-heading-m,
   .postcode-lead dl.inline+.govuk-heading-m,
   .stand-alone-metric>.sam-body+.govuk-heading-m,
   .developers-guide+.govuk-heading-m,
-  .about .markdown .govuk-body+h3,
-  .about .markdown .postcode-lead dl.inline+h3,
-  .postcode-lead .about .markdown dl.inline+h3,
-  .about .markdown .stand-alone-metric>.sam-body+h3,
-  .about .markdown .developers-guide+h3,
-  .accessibility .markdown .govuk-body+h3,
-  .accessibility .markdown .postcode-lead dl.inline+h3,
-  .postcode-lead .accessibility .markdown dl.inline+h3,
-  .accessibility .markdown .stand-alone-metric>.sam-body+h3,
-  .accessibility .markdown .developers-guide+h3,
-  .disclaimer .markdown .govuk-body+h3,
-  .disclaimer .markdown .postcode-lead dl.inline+h3,
-  .postcode-lead .disclaimer .markdown dl.inline+h3,
-  .disclaimer .markdown .stand-alone-metric>.sam-body+h3,
-  .disclaimer .markdown .developers-guide+h3,
-  .modal.markdown .govuk-body+h3,
-  .modal.markdown .postcode-lead dl.inline+h3,
-  .postcode-lead .modal.markdown dl.inline+h3,
-  .modal.markdown .stand-alone-metric>.sam-body+h3,
-  .modal.markdown .developers-guide+h3,
-  .about .markdown .govuk-body+#table-of-contents,
-  .about .markdown .postcode-lead dl.inline+#table-of-contents,
-  .postcode-lead .about .markdown dl.inline+#table-of-contents,
-  .about .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-  .about .markdown .developers-guide+#table-of-contents,
-  .accessibility .markdown .govuk-body+#table-of-contents,
-  .accessibility .markdown .postcode-lead dl.inline+#table-of-contents,
-  .postcode-lead .accessibility .markdown dl.inline+#table-of-contents,
-  .accessibility .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-  .accessibility .markdown .developers-guide+#table-of-contents,
-  .disclaimer .markdown .govuk-body+#table-of-contents,
-  .disclaimer .markdown .postcode-lead dl.inline+#table-of-contents,
-  .postcode-lead .disclaimer .markdown dl.inline+#table-of-contents,
-  .disclaimer .markdown .stand-alone-metric>.sam-body+#table-of-contents,
-  .disclaimer .markdown .developers-guide+#table-of-contents,
-  .modal.markdown .govuk-body+#table-of-contents,
-  .modal.markdown .postcode-lead dl.inline+#table-of-contents,
-  .postcode-lead .modal.markdown dl.inline+#table-of-contents,
-  .modal.markdown .stand-alone-metric>.sam-body+#table-of-contents,
-  .modal.markdown .developers-guide+#table-of-contents,
-  .about .markdown+.govuk-heading-m,
-  .about .markdown .markdown+h3,
-  .about .accessibility .markdown .markdown+h3,
-  .accessibility .markdown .about .markdown+h3,
-  .about .disclaimer .markdown .markdown+h3,
-  .disclaimer .markdown .about .markdown+h3,
-  .about .modal.markdown .markdown+h3,
-  .modal.markdown .about .markdown+h3,
-  .about .markdown .markdown+#table-of-contents,
-  .accessibility .markdown .about .markdown+#table-of-contents,
-  .disclaimer .markdown .about .markdown+#table-of-contents,
-  .modal.markdown .about .markdown+#table-of-contents,
-  .accessibility .markdown+.govuk-heading-m,
-  .accessibility .about .markdown .markdown+h3,
-  .about .markdown .accessibility .markdown+h3,
-  .accessibility .markdown .markdown+h3,
-  .accessibility .disclaimer .markdown .markdown+h3,
-  .disclaimer .markdown .accessibility .markdown+h3,
-  .accessibility .modal.markdown .markdown+h3,
-  .modal.markdown .accessibility .markdown+h3,
-  .about .markdown .accessibility .markdown+#table-of-contents,
-  .accessibility .markdown .markdown+#table-of-contents,
-  .disclaimer .markdown .accessibility .markdown+#table-of-contents,
-  .modal.markdown .accessibility .markdown+#table-of-contents,
-  .disclaimer .markdown+.govuk-heading-m,
-  .disclaimer .about .markdown .markdown+h3,
-  .about .markdown .disclaimer .markdown+h3,
-  .disclaimer .accessibility .markdown .markdown+h3,
-  .accessibility .markdown .disclaimer .markdown+h3,
-  .disclaimer .markdown .markdown+h3,
-  .disclaimer .modal.markdown .markdown+h3,
-  .modal.markdown .disclaimer .markdown+h3,
-  .about .markdown .disclaimer .markdown+#table-of-contents,
-  .accessibility .markdown .disclaimer .markdown+#table-of-contents,
-  .disclaimer .markdown .markdown+#table-of-contents,
-  .modal.markdown .disclaimer .markdown+#table-of-contents,
-  .modal.markdown+.govuk-heading-m,
-  .about .markdown .modal.markdown+h3,
-  .accessibility .markdown .modal.markdown+h3,
-  .disclaimer .markdown .modal.markdown+h3,
-  .modal.markdown .modal.markdown+h3,
-  .modal.markdown .modal.markdown+#table-of-contents,
   .govuk-body-s+.govuk-heading-m,
   .banner>.content>.body+.govuk-heading-m,
   .banner>.content+.govuk-heading-m,
   .card-wide.transmission>.content>.column+.govuk-heading-m,
-  .about .markdown .govuk-body-s+h3,
-  .about .markdown .banner>.content>.body+h3,
-  .about .markdown .banner>.content+h3,
-  .about .markdown .card-wide.transmission>.content>.column+h3,
-  .accessibility .markdown .govuk-body-s+h3,
-  .accessibility .markdown .banner>.content>.body+h3,
-  .accessibility .markdown .banner>.content+h3,
-  .accessibility .markdown .card-wide.transmission>.content>.column+h3,
-  .disclaimer .markdown .govuk-body-s+h3,
-  .disclaimer .markdown .banner>.content>.body+h3,
-  .disclaimer .markdown .banner>.content+h3,
-  .disclaimer .markdown .card-wide.transmission>.content>.column+h3,
-  .modal.markdown .govuk-body-s+h3,
-  .modal.markdown .banner>.content>.body+h3,
-  .modal.markdown .banner>.content+h3,
-  .modal.markdown .card-wide.transmission>.content>.column+h3,
-  .about .markdown .govuk-body-s+#table-of-contents,
-  .about .markdown .banner>.content>.body+#table-of-contents,
-  .about .markdown .banner>.content+#table-of-contents,
-  .about .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-  .accessibility .markdown .govuk-body-s+#table-of-contents,
-  .accessibility .markdown .banner>.content>.body+#table-of-contents,
-  .accessibility .markdown .banner>.content+#table-of-contents,
-  .accessibility .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-  .disclaimer .markdown .govuk-body-s+#table-of-contents,
-  .disclaimer .markdown .banner>.content>.body+#table-of-contents,
-  .disclaimer .markdown .banner>.content+#table-of-contents,
-  .disclaimer .markdown .card-wide.transmission>.content>.column+#table-of-contents,
-  .modal.markdown .govuk-body-s+#table-of-contents,
-  .modal.markdown .banner>.content>.body+#table-of-contents,
-  .modal.markdown .banner>.content+#table-of-contents,
-  .modal.markdown .card-wide.transmission>.content>.column+#table-of-contents,
   .govuk-list+.govuk-heading-m,
   .banner+.govuk-heading-m,
   .postcode-lead-data+.govuk-heading-m,
   .toc li+.govuk-heading-m,
-  .about .markdown ul+.govuk-heading-m,
-  .accessibility .markdown ul+.govuk-heading-m,
-  .disclaimer .markdown ul+.govuk-heading-m,
-  .modal.markdown ul+.govuk-heading-m,
-  .about .markdown .govuk-list+h3,
-  .about .markdown .banner+h3,
-  .about .markdown .postcode-lead-data+h3,
-  .about .markdown .toc li+h3,
-  .toc .about .markdown li+h3,
-  .about .markdown ul+h3,
-  .about .accessibility .markdown ul+h3,
-  .accessibility .about .markdown ul+h3,
-  .about .disclaimer .markdown ul+h3,
-  .disclaimer .about .markdown ul+h3,
-  .about .modal.markdown ul+h3,
-  .accessibility .markdown .govuk-list+h3,
-  .accessibility .markdown .banner+h3,
-  .accessibility .markdown .postcode-lead-data+h3,
-  .accessibility .markdown .toc li+h3,
-  .toc .accessibility .markdown li+h3,
-  .accessibility .about .markdown ul+h3,
-  .about .accessibility .markdown ul+h3,
-  .accessibility .markdown ul+h3,
-  .accessibility .disclaimer .markdown ul+h3,
-  .disclaimer .accessibility .markdown ul+h3,
-  .accessibility .modal.markdown ul+h3,
-  .disclaimer .markdown .govuk-list+h3,
-  .disclaimer .markdown .banner+h3,
-  .disclaimer .markdown .postcode-lead-data+h3,
-  .disclaimer .markdown .toc li+h3,
-  .toc .disclaimer .markdown li+h3,
-  .disclaimer .about .markdown ul+h3,
-  .about .disclaimer .markdown ul+h3,
-  .disclaimer .accessibility .markdown ul+h3,
-  .accessibility .disclaimer .markdown ul+h3,
-  .disclaimer .markdown ul+h3,
-  .disclaimer .modal.markdown ul+h3,
-  .modal.markdown .govuk-list+h3,
-  .modal.markdown .banner+h3,
-  .modal.markdown .postcode-lead-data+h3,
-  .modal.markdown .toc li+h3,
-  .toc .modal.markdown li+h3,
-  .about .modal.markdown ul+h3,
-  .accessibility .modal.markdown ul+h3,
-  .disclaimer .modal.markdown ul+h3,
-  .modal.markdown ul+h3,
-  .about .markdown .govuk-list+#table-of-contents,
-  .about .markdown .banner+#table-of-contents,
-  .about .markdown .postcode-lead-data+#table-of-contents,
-  .about .markdown .toc li+#table-of-contents,
-  .toc .about .markdown li+#table-of-contents,
-  .about .markdown ul+#table-of-contents,
-  .about .accessibility .markdown ul+#table-of-contents,
-  .accessibility .about .markdown ul+#table-of-contents,
-  .about .disclaimer .markdown ul+#table-of-contents,
-  .disclaimer .about .markdown ul+#table-of-contents,
-  .about .modal.markdown ul+#table-of-contents,
-  .accessibility .markdown .govuk-list+#table-of-contents,
-  .accessibility .markdown .banner+#table-of-contents,
-  .accessibility .markdown .postcode-lead-data+#table-of-contents,
-  .accessibility .markdown .toc li+#table-of-contents,
-  .toc .accessibility .markdown li+#table-of-contents,
-  .accessibility .about .markdown ul+#table-of-contents,
-  .about .accessibility .markdown ul+#table-of-contents,
-  .accessibility .markdown ul+#table-of-contents,
-  .accessibility .disclaimer .markdown ul+#table-of-contents,
-  .disclaimer .accessibility .markdown ul+#table-of-contents,
-  .accessibility .modal.markdown ul+#table-of-contents,
-  .disclaimer .markdown .govuk-list+#table-of-contents,
-  .disclaimer .markdown .banner+#table-of-contents,
-  .disclaimer .markdown .postcode-lead-data+#table-of-contents,
-  .disclaimer .markdown .toc li+#table-of-contents,
-  .toc .disclaimer .markdown li+#table-of-contents,
-  .disclaimer .about .markdown ul+#table-of-contents,
-  .about .disclaimer .markdown ul+#table-of-contents,
-  .disclaimer .accessibility .markdown ul+#table-of-contents,
-  .accessibility .disclaimer .markdown ul+#table-of-contents,
-  .disclaimer .markdown ul+#table-of-contents,
-  .disclaimer .modal.markdown ul+#table-of-contents,
-  .modal.markdown .govuk-list+#table-of-contents,
-  .modal.markdown .banner+#table-of-contents,
-  .modal.markdown .postcode-lead-data+#table-of-contents,
-  .modal.markdown .toc li+#table-of-contents,
-  .toc .modal.markdown li+#table-of-contents,
-  .about .modal.markdown ul+#table-of-contents,
-  .accessibility .modal.markdown ul+#table-of-contents,
-  .disclaimer .modal.markdown ul+#table-of-contents,
-  .modal.markdown ul+#table-of-contents,
   .govuk-body-m+.govuk-heading-s,
   .stand-alone-metric>.govuk-body-m+.sam-heading,
-  .about .markdown p+.govuk-heading-s,
-  .about .markdown .stand-alone-metric>p+.sam-heading,
-  .accessibility .markdown p+.govuk-heading-s,
-  .accessibility .markdown .stand-alone-metric>p+.sam-heading,
-  .disclaimer .markdown p+.govuk-heading-s,
-  .disclaimer .markdown .stand-alone-metric>p+.sam-heading,
-  .modal.markdown p+.govuk-heading-s,
-  .modal.markdown .stand-alone-metric>p+.sam-heading,
-  .about .markdown .govuk-body-m+h4,
-  .about .markdown p+h4,
-  .about .accessibility .markdown p+h4,
-  .accessibility .about .markdown p+h4,
-  .about .disclaimer .markdown p+h4,
-  .disclaimer .about .markdown p+h4,
-  .about .modal.markdown p+h4,
-  .accessibility .markdown .govuk-body-m+h4,
-  .accessibility .about .markdown p+h4,
-  .about .accessibility .markdown p+h4,
-  .accessibility .markdown p+h4,
-  .accessibility .disclaimer .markdown p+h4,
-  .disclaimer .accessibility .markdown p+h4,
-  .accessibility .modal.markdown p+h4,
-  .disclaimer .markdown .govuk-body-m+h4,
-  .disclaimer .about .markdown p+h4,
-  .about .disclaimer .markdown p+h4,
-  .disclaimer .accessibility .markdown p+h4,
-  .accessibility .disclaimer .markdown p+h4,
-  .disclaimer .markdown p+h4,
-  .disclaimer .modal.markdown p+h4,
-  .modal.markdown .govuk-body-m+h4,
-  .about .modal.markdown p+h4,
-  .accessibility .modal.markdown p+h4,
-  .disclaimer .modal.markdown p+h4,
-  .modal.markdown p+h4,
   .govuk-body+.govuk-heading-s,
   .postcode-lead dl.inline+.govuk-heading-s,
   .stand-alone-metric>.sam-body+.govuk-heading-s,
@@ -2305,59 +998,6 @@
   .stand-alone-metric>.sam-body+.sam-heading,
   .developers-guide+.govuk-heading-s,
   .stand-alone-metric>.developers-guide+.sam-heading,
-  .about .markdown .govuk-body+h4,
-  .about .markdown .postcode-lead dl.inline+h4,
-  .postcode-lead .about .markdown dl.inline+h4,
-  .about .markdown .stand-alone-metric>.sam-body+h4,
-  .about .markdown .developers-guide+h4,
-  .accessibility .markdown .govuk-body+h4,
-  .accessibility .markdown .postcode-lead dl.inline+h4,
-  .postcode-lead .accessibility .markdown dl.inline+h4,
-  .accessibility .markdown .stand-alone-metric>.sam-body+h4,
-  .accessibility .markdown .developers-guide+h4,
-  .disclaimer .markdown .govuk-body+h4,
-  .disclaimer .markdown .postcode-lead dl.inline+h4,
-  .postcode-lead .disclaimer .markdown dl.inline+h4,
-  .disclaimer .markdown .stand-alone-metric>.sam-body+h4,
-  .disclaimer .markdown .developers-guide+h4,
-  .modal.markdown .govuk-body+h4,
-  .modal.markdown .postcode-lead dl.inline+h4,
-  .postcode-lead .modal.markdown dl.inline+h4,
-  .modal.markdown .stand-alone-metric>.sam-body+h4,
-  .modal.markdown .developers-guide+h4,
-  .about .markdown+.govuk-heading-s,
-  .about .stand-alone-metric>.markdown+.sam-heading,
-  .about .markdown .markdown+h4,
-  .about .accessibility .markdown .markdown+h4,
-  .accessibility .markdown .about .markdown+h4,
-  .about .disclaimer .markdown .markdown+h4,
-  .disclaimer .markdown .about .markdown+h4,
-  .about .modal.markdown .markdown+h4,
-  .modal.markdown .about .markdown+h4,
-  .accessibility .markdown+.govuk-heading-s,
-  .accessibility .stand-alone-metric>.markdown+.sam-heading,
-  .accessibility .about .markdown .markdown+h4,
-  .about .markdown .accessibility .markdown+h4,
-  .accessibility .markdown .markdown+h4,
-  .accessibility .disclaimer .markdown .markdown+h4,
-  .disclaimer .markdown .accessibility .markdown+h4,
-  .accessibility .modal.markdown .markdown+h4,
-  .modal.markdown .accessibility .markdown+h4,
-  .disclaimer .markdown+.govuk-heading-s,
-  .disclaimer .stand-alone-metric>.markdown+.sam-heading,
-  .disclaimer .about .markdown .markdown+h4,
-  .about .markdown .disclaimer .markdown+h4,
-  .disclaimer .accessibility .markdown .markdown+h4,
-  .accessibility .markdown .disclaimer .markdown+h4,
-  .disclaimer .markdown .markdown+h4,
-  .disclaimer .modal.markdown .markdown+h4,
-  .modal.markdown .disclaimer .markdown+h4,
-  .modal.markdown+.govuk-heading-s,
-  .stand-alone-metric>.modal.markdown+.sam-heading,
-  .about .markdown .modal.markdown+h4,
-  .accessibility .markdown .modal.markdown+h4,
-  .disclaimer .markdown .modal.markdown+h4,
-  .modal.markdown .modal.markdown+h4,
   .govuk-body-s+.govuk-heading-s,
   .banner>.content>.body+.govuk-heading-s,
   .banner>.content+.govuk-heading-s,
@@ -2366,22 +1006,6 @@
   .banner>.content.stand-alone-metric>.body+.sam-heading,
   .banner.stand-alone-metric>.content+.sam-heading,
   .card-wide.transmission>.content.stand-alone-metric>.column+.sam-heading,
-  .about .markdown .govuk-body-s+h4,
-  .about .markdown .banner>.content>.body+h4,
-  .about .markdown .banner>.content+h4,
-  .about .markdown .card-wide.transmission>.content>.column+h4,
-  .accessibility .markdown .govuk-body-s+h4,
-  .accessibility .markdown .banner>.content>.body+h4,
-  .accessibility .markdown .banner>.content+h4,
-  .accessibility .markdown .card-wide.transmission>.content>.column+h4,
-  .disclaimer .markdown .govuk-body-s+h4,
-  .disclaimer .markdown .banner>.content>.body+h4,
-  .disclaimer .markdown .banner>.content+h4,
-  .disclaimer .markdown .card-wide.transmission>.content>.column+h4,
-  .modal.markdown .govuk-body-s+h4,
-  .modal.markdown .banner>.content>.body+h4,
-  .modal.markdown .banner>.content+h4,
-  .modal.markdown .card-wide.transmission>.content>.column+h4,
   .govuk-list+.govuk-heading-s,
   .banner+.govuk-heading-s,
   .postcode-lead-data+.govuk-heading-s,
@@ -2389,66 +1013,12 @@
   .stand-alone-metric>.banner+.sam-heading,
   .stand-alone-metric>.postcode-lead-data+.sam-heading,
   .toc li+.govuk-heading-s,
-  .toc .stand-alone-metric>li+.sam-heading,
-  .about .markdown ul+.govuk-heading-s,
-  .about .markdown .stand-alone-metric>ul+.sam-heading,
-  .accessibility .markdown ul+.govuk-heading-s,
-  .accessibility .markdown .stand-alone-metric>ul+.sam-heading,
-  .disclaimer .markdown ul+.govuk-heading-s,
-  .disclaimer .markdown .stand-alone-metric>ul+.sam-heading,
-  .modal.markdown ul+.govuk-heading-s,
-  .modal.markdown .stand-alone-metric>ul+.sam-heading,
-  .about .markdown .govuk-list+h4,
-  .about .markdown .banner+h4,
-  .about .markdown .postcode-lead-data+h4,
-  .about .markdown .toc li+h4,
-  .toc .about .markdown li+h4,
-  .about .markdown ul+h4,
-  .about .accessibility .markdown ul+h4,
-  .accessibility .about .markdown ul+h4,
-  .about .disclaimer .markdown ul+h4,
-  .disclaimer .about .markdown ul+h4,
-  .about .modal.markdown ul+h4,
-  .accessibility .markdown .govuk-list+h4,
-  .accessibility .markdown .banner+h4,
-  .accessibility .markdown .postcode-lead-data+h4,
-  .accessibility .markdown .toc li+h4,
-  .toc .accessibility .markdown li+h4,
-  .accessibility .about .markdown ul+h4,
-  .about .accessibility .markdown ul+h4,
-  .accessibility .markdown ul+h4,
-  .accessibility .disclaimer .markdown ul+h4,
-  .disclaimer .accessibility .markdown ul+h4,
-  .accessibility .modal.markdown ul+h4,
-  .disclaimer .markdown .govuk-list+h4,
-  .disclaimer .markdown .banner+h4,
-  .disclaimer .markdown .postcode-lead-data+h4,
-  .disclaimer .markdown .toc li+h4,
-  .toc .disclaimer .markdown li+h4,
-  .disclaimer .about .markdown ul+h4,
-  .about .disclaimer .markdown ul+h4,
-  .disclaimer .accessibility .markdown ul+h4,
-  .accessibility .disclaimer .markdown ul+h4,
-  .disclaimer .markdown ul+h4,
-  .disclaimer .modal.markdown ul+h4,
-  .modal.markdown .govuk-list+h4,
-  .modal.markdown .banner+h4,
-  .modal.markdown .postcode-lead-data+h4,
-  .modal.markdown .toc li+h4,
-  .toc .modal.markdown li+h4,
-  .about .modal.markdown ul+h4,
-  .accessibility .modal.markdown ul+h4,
-  .disclaimer .modal.markdown ul+h4,
-  .modal.markdown ul+h4 {
+  .toc .stand-alone-metric>li+.sam-heading {
     padding-top: 10px;
   }
 }
 
-.govuk-section-break,
-.about .markdown hr,
-.accessibility .markdown hr,
-.disclaimer .markdown hr,
-.modal.markdown hr {
+.govuk-section-break {
   margin: 0;
   border: 0;
 }
@@ -2487,42 +1057,26 @@
   }
 }
 
-.govuk-section-break--m,
-.about .markdown hr,
-.accessibility .markdown hr,
-.disclaimer .markdown hr,
-.modal.markdown hr {
+.govuk-section-break--m {
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-section-break--m,
-  .about .markdown hr,
-  .accessibility .markdown hr,
-  .disclaimer .markdown hr,
-  .modal.markdown hr {
+  .govuk-section-break--m {
     margin-top: 20px;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-section-break--m,
-  .about .markdown hr,
-  .accessibility .markdown hr,
-  .disclaimer .markdown hr,
-  .modal.markdown hr {
+  .govuk-section-break--m {
     margin-bottom: 20px;
   }
 }
 
-.govuk-section-break--visible,
-.about .markdown hr,
-.accessibility .markdown hr,
-.disclaimer .markdown hr,
-.modal.markdown hr {
+.govuk-section-break--visible {
   border-bottom: 1px solid #b1b4b6;
 }
 
@@ -2553,15 +1107,7 @@
 .govuk-button-group .banner>.content>.body a,
 .banner>.content>.body .govuk-button-group a,
 .govuk-button-group .developers-guide a,
-.developers-guide .govuk-button-group a,
-.govuk-button-group .about .markdown a,
-.about .markdown .govuk-button-group a,
-.govuk-button-group .accessibility .markdown a,
-.accessibility .markdown .govuk-button-group a,
-.govuk-button-group .disclaimer .markdown a,
-.disclaimer .markdown .govuk-button-group a,
-.govuk-button-group .modal.markdown a,
-.modal.markdown .govuk-button-group a {
+.developers-guide .govuk-button-group a {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2582,15 +1128,7 @@
   .govuk-button-group .banner>.content>.body a,
   .banner>.content>.body .govuk-button-group a,
   .govuk-button-group .developers-guide a,
-  .developers-guide .govuk-button-group a,
-  .govuk-button-group .about .markdown a,
-  .about .markdown .govuk-button-group a,
-  .govuk-button-group .accessibility .markdown a,
-  .accessibility .markdown .govuk-button-group a,
-  .govuk-button-group .disclaimer .markdown a,
-  .disclaimer .markdown .govuk-button-group a,
-  .govuk-button-group .modal.markdown a,
-  .modal.markdown .govuk-button-group a {
+  .developers-guide .govuk-button-group a {
     font-family: sans-serif;
   }
 }
@@ -2601,15 +1139,7 @@
   .govuk-button-group .banner>.content>.body a,
   .banner>.content>.body .govuk-button-group a,
   .govuk-button-group .developers-guide a,
-  .developers-guide .govuk-button-group a,
-  .govuk-button-group .about .markdown a,
-  .about .markdown .govuk-button-group a,
-  .govuk-button-group .accessibility .markdown a,
-  .accessibility .markdown .govuk-button-group a,
-  .govuk-button-group .disclaimer .markdown a,
-  .disclaimer .markdown .govuk-button-group a,
-  .govuk-button-group .modal.markdown a,
-  .modal.markdown .govuk-button-group a {
+  .developers-guide .govuk-button-group a {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1;
@@ -2622,15 +1152,7 @@
   .govuk-button-group .banner>.content>.body a,
   .banner>.content>.body .govuk-button-group a,
   .govuk-button-group .developers-guide a,
-  .developers-guide .govuk-button-group a,
-  .govuk-button-group .about .markdown a,
-  .about .markdown .govuk-button-group a,
-  .govuk-button-group .accessibility .markdown a,
-  .accessibility .markdown .govuk-button-group a,
-  .govuk-button-group .disclaimer .markdown a,
-  .disclaimer .markdown .govuk-button-group a,
-  .govuk-button-group .modal.markdown a,
-  .modal.markdown .govuk-button-group a {
+  .developers-guide .govuk-button-group a {
     font-size: 14pt;
     line-height: 19px;
   }
@@ -2662,15 +1184,7 @@
   .govuk-button-group .banner>.content>.body a,
   .banner>.content>.body .govuk-button-group a,
   .govuk-button-group .developers-guide a,
-  .developers-guide .govuk-button-group a,
-  .govuk-button-group .about .markdown a,
-  .about .markdown .govuk-button-group a,
-  .govuk-button-group .accessibility .markdown a,
-  .accessibility .markdown .govuk-button-group a,
-  .govuk-button-group .disclaimer .markdown a,
-  .disclaimer .markdown .govuk-button-group a,
-  .govuk-button-group .modal.markdown a,
-  .modal.markdown .govuk-button-group a {
+  .developers-guide .govuk-button-group a {
     margin-right: 15px;
   }
 
@@ -2678,15 +1192,7 @@
   .govuk-button-group .banner>.content>.body a,
   .banner>.content>.body .govuk-button-group a,
   .govuk-button-group .developers-guide a,
-  .developers-guide .govuk-button-group a,
-  .govuk-button-group .about .markdown a,
-  .about .markdown .govuk-button-group a,
-  .govuk-button-group .accessibility .markdown a,
-  .accessibility .markdown .govuk-button-group a,
-  .govuk-button-group .disclaimer .markdown a,
-  .disclaimer .markdown .govuk-button-group a,
-  .govuk-button-group .modal.markdown a,
-  .modal.markdown .govuk-button-group a {
+  .developers-guide .govuk-button-group a {
     text-align: left;
   }
 }
@@ -11297,23 +9803,7 @@ main {
 }
 
 .mini-card .govuk-section-break,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .govuk-section-break,
-.mini-card .about .markdown hr,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .about .markdown hr,
-.about .markdown .mini-card hr,
-.about .markdown .card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) hr,
-.mini-card .accessibility .markdown hr,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .accessibility .markdown hr,
-.accessibility .markdown .mini-card hr,
-.accessibility .markdown .card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) hr,
-.mini-card .disclaimer .markdown hr,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .disclaimer .markdown hr,
-.disclaimer .markdown .mini-card hr,
-.disclaimer .markdown .card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) hr,
-.mini-card .modal.markdown hr,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .modal.markdown hr,
-.modal.markdown .mini-card hr,
-.modal.markdown .card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) hr {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .govuk-section-break {
   align-self: end;
 }
 
