@@ -8029,42 +8029,6 @@ thead.govuk-table__head-short th {
   clear: both;
 }
 
-.infolink:before {
-  content: 'i';
-  display: inline-block;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  text-align: center;
-  width: 10px;
-  height: 10px;
-  line-height: 10px;
-  border-radius: 1.8ex;
-  margin-left: 4px;
-  padding: 2px;
-  border: 1px solid #1d70b8;
-  text-decoration: none;
-}
-
-.infolink:hover:before {
-  color: white;
-  background: #1d70b8;
-  border-color: #1d70b8;
-  text-decoration: none;
-}
-
-.location-mobile {
-  margin-bottom: 0;
-}
-
-.image_full {
-  display: block;
-}
-
-.image_mobile {
-  display: none;
-}
-
 #mobile-navi {
   display: none;
   background-color: #f8f8f8;
@@ -8072,27 +8036,7 @@ thead.govuk-table__head-short th {
   padding-bottom: 20px;
 }
 
-.mobile-nav-items a {
-  text-decoration: none;
-  margin-bottom: 30px;
-}
-
-.mobile-nav-items li {
-  margin-bottom: 30px;
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 20px;
-}
-
 @media only screen and (max-width: 600px) {
-  .image_full {
-    display: none;
-  }
-
-  .image_mobile {
-    display: block;
-  }
-
   html,
   body {
     overflow-x: hidden;
@@ -8104,10 +8048,6 @@ thead.govuk-table__head-short th {
 
   .govuk-grid-column-dashboard {
     width: 100%;
-  }
-
-  .panel-right {
-    margin-top: 15px;
   }
 
   .govuk-grid-column-one-half {
@@ -8139,50 +8079,9 @@ thead.govuk-table__head-short th {
     z-index: 6666px;
   }
 
-  .location-mobile {
-    margin-bottom: 8px;
-  }
-
-  .leftpanel {
-    padding-right: 7px !important;
-  }
-
-  .rightpanel {
-    padding-left: 7px !important;
-  }
-
   .moj-search--inline {
     padding: 0 !important;
   }
-
-  .mobile-metric {
-    padding-left: 10px;
-    margin-top: 20px;
-  }
-
-  .mobile-metric2 {
-    margin-top: 20px;
-  }
-
-  .mobile-hide {
-    display: none;
-  }
-
-  .desktop-hide {
-    display: block !important;
-  }
-}
-
-.desktop-hide {
-  display: none;
-}
-
-.half {
-  width: 50%;
-  float: left;
-  box-sizing: border-box;
-  padding: 0 15px;
-}
 
 .overlay {
   height: 100%;
@@ -8196,14 +8095,6 @@ thead.govuk-table__head-short th {
   transition: 0.2s;
 }
 
-.overlay-content {
-  position: relative;
-  top: 25%;
-  width: 100%;
-  text-align: center;
-  margin-top: 30px;
-}
-
 .overlay a {
   padding: 8px;
   text-decoration: none;
@@ -8211,11 +8102,6 @@ thead.govuk-table__head-short th {
   color: #fff !important;
   display: block;
   transition: 0.3s;
-}
-
-.mobile-navigation-active {
-  font-weight: bold;
-  border-bottom: 2px solid #fff;
 }
 
 .overlay a:hover,
@@ -8284,19 +8170,6 @@ thead.govuk-table__head-short th {
   text-decoration: none;
 }
 
-.total-figure {
-  color: #6f777b;
-  font-weight: normal;
-}
-
-.grey {
-  color: #636a6d;
-}
-
-.total-figure2 {
-  font-weight: normal;
-}
-
 #deaths-more {
   display: none;
 }
@@ -8311,11 +8184,6 @@ thead.govuk-table__head-short th {
 
 #test-more {
   display: none;
-}
-
-.child-checkbox {
-  border-left: 3px solid #bfc1c3;
-  margin-left: 10px;
 }
 
 .number-container {
