@@ -3287,8 +3287,7 @@
   }
 }
 
-.govuk-input,
-.DayPickerInput>input {
+.govuk-input {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -3311,16 +3310,14 @@
 
 @media print {
 
-  .govuk-input,
-  .DayPickerInput>input {
+  .govuk-input {
     font-family: sans-serif;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-input,
-  .DayPickerInput>input {
+  .govuk-input {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
@@ -3329,30 +3326,25 @@
 
 @media print {
 
-  .govuk-input,
-  .DayPickerInput>input {
+  .govuk-input {
     font-size: 14pt;
     line-height: 1.15;
   }
 }
 
-.govuk-input:focus,
-.DayPickerInput>input:focus {
+.govuk-input:focus {
   outline: 3px solid #fd0;
   outline-offset: 0;
   box-shadow: inset 0 0 0 2px;
 }
 
 .govuk-input::-webkit-outer-spin-button,
-.DayPickerInput>input::-webkit-outer-spin-button,
-.govuk-input::-webkit-inner-spin-button,
-.DayPickerInput>input::-webkit-inner-spin-button {
+.govuk-input::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
 }
 
-.govuk-input[type='number'],
-.DayPickerInput>input[type='number'] {
+.govuk-input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -3399,16 +3391,14 @@
   display: flex;
 }
 
-.govuk-input__wrapper .govuk-input,
-.govuk-input__wrapper .DayPickerInput>input {
+.govuk-input__wrapper .govuk-input {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 auto;
   -ms-flex: 0 1 auto;
   flex: 0 1 auto;
 }
 
-.govuk-input__wrapper .govuk-input:focus,
-.govuk-input__wrapper .DayPickerInput>input:focus {
+.govuk-input__wrapper .govuk-input:focus {
   z-index: 1;
 }
 
@@ -3417,8 +3407,7 @@
     display: block;
   }
 
-  .govuk-input__wrapper .govuk-input,
-  .govuk-input__wrapper .DayPickerInput>input {
+  .govuk-input__wrapper .govuk-input {
     max-width: 100%;
   }
 }
@@ -5773,8 +5762,7 @@ only screen and (min-resolution: 2dppx) {
   }
 }
 
-.govuk-select,
-.select div[class*='control'] {
+.govuk-select {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -5792,16 +5780,14 @@ only screen and (min-resolution: 2dppx) {
 
 @media print {
 
-  .govuk-select,
-  .select div[class*='control'] {
+  .govuk-select {
     font-family: sans-serif;
   }
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-select,
-  .select div[class*='control'] {
+  .govuk-select {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.25;
@@ -5810,26 +5796,21 @@ only screen and (min-resolution: 2dppx) {
 
 @media print {
 
-  .govuk-select,
-  .select div[class*='control'] {
+  .govuk-select {
     font-size: 14pt;
     line-height: 1.25;
   }
 }
 
-.govuk-select:focus,
-.select div[class*='control']:focus {
+.govuk-select:focus {
   outline: 3px solid #fd0;
   outline-offset: 0;
   box-shadow: inset 0 0 0 2px;
 }
 
 .govuk-select option:active,
-.select div[class*='control'] option:active,
 .govuk-select option:checked,
-.select div[class*='control'] option:checked,
-.govuk-select:focus::-ms-value,
-.select div[class*='control']:focus::-ms-value {
+.govuk-select:focus::-ms-value {
   color: #fff;
   background-color: #1d70b8;
 }
@@ -8012,232 +7993,6 @@ thead.govuk-table__head-short th {
   padding-top: 20px;
 }
 
-.sticky-header {
-  position: -webkit-sticky;
-  position: sticky;
-  z-index: 9999;
-  top: 0;
-  background-color: rgba(248, 248, 248, 0.95);
-}
-
-.DayPicker {
-  display: inline-block;
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
-}
-
-.DayPicker-wrapper {
-  position: relative;
-  flex-direction: row;
-  padding-bottom: 1em;
-  user-select: none;
-}
-
-.DayPicker-Months {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.DayPicker-Month {
-  display: table;
-  margin: 1em 1em 0;
-  border-collapse: collapse;
-  border-spacing: 0;
-  user-select: none;
-}
-
-.DayPicker-NavBar {
-  background: red;
-}
-
-.DayPicker-NavButton {
-  position: absolute;
-  top: 1em;
-  right: 1.5em;
-  left: auto;
-  display: inline-block;
-  width: 1.25em;
-  height: 1.25em;
-  margin-top: -0.4em;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 50%;
-  color: white;
-  cursor: pointer;
-}
-
-.DayPicker-NavButton:hover {
-  opacity: 0.8;
-}
-
-.DayPicker-NavButton--prev {
-  margin-right: 1.5em;
-  background-image: none;
-  font-size: 16px;
-}
-
-.DayPicker-NavButton--prev::before {
-  content: '◄';
-}
-
-.DayPicker-NavButton--next {
-  background-image: none;
-  font-size: 16px;
-}
-
-.DayPicker-NavButton--next::before {
-  content: '►';
-}
-
-.DayPicker-NavButton--interactionDisabled {
-  display: none;
-}
-
-.DayPicker-Caption {
-  display: table-caption;
-  padding: 0.5em 1em;
-  margin: -1em;
-  margin-bottom: 0.5em;
-  background: #1d70b8;
-  color: white;
-  font-weight: bold;
-  text-align: left;
-}
-
-.DayPicker-Caption>div {
-  font-size: 1.15em;
-  font-weight: 500;
-}
-
-.DayPicker-Weekdays {
-  display: table-header-group;
-  margin-top: 1em;
-}
-
-.DayPicker-WeekdaysRow {
-  display: table-row;
-}
-
-.DayPicker-Weekday {
-  display: table-cell;
-  padding: 0.5em;
-  color: #8b9898;
-  font-size: 0.875em;
-  text-align: center;
-}
-
-.DayPicker-Weekday abbr[title] {
-  border-bottom: 0;
-  text-decoration: none;
-}
-
-.DayPicker-Body {
-  display: table-row-group;
-}
-
-.DayPicker-Week {
-  display: table-row;
-}
-
-.DayPicker-Day {
-  display: table-cell;
-  padding: 0.5em;
-  border-radius: 50%;
-  cursor: pointer;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.DayPicker-WeekNumber {
-  display: table-cell;
-  min-width: 1em;
-  padding: 0.5em;
-  border-right: 1px solid #eaecec;
-  color: #8b9898;
-  cursor: pointer;
-  font-size: 0.75em;
-  text-align: right;
-  vertical-align: middle;
-}
-
-.DayPicker--interactionDisabled .DayPicker-Day {
-  cursor: default;
-}
-
-.DayPicker-Footer {
-  padding-top: 0.5em;
-}
-
-.DayPicker-TodayButton {
-  border: 0;
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-  color: #4a90e2;
-  cursor: pointer;
-  font-size: 0.875em;
-}
-
-.DayPicker-Day--today {
-  color: #1d70b8;
-  font-weight: 700;
-}
-
-.DayPicker-Day--outside {
-  color: #8b9898;
-  cursor: default;
-}
-
-.DayPicker-Day--disabled {
-  color: #dce0e0;
-  cursor: default;
-}
-
-.DayPicker-Day--sunday {
-  background-color: #f7f8f8;
-}
-
-.DayPicker-Day--sunday:not(.DayPicker-Day--today) {
-  color: #dce0e0;
-}
-
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
-  position: relative;
-  background-color: #4a90e2;
-  color: #f0f8ff;
-}
-
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-  background-color: #51a0fa;
-}
-
-.DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-  background-color: #f0f8ff;
-}
-
-.DayPickerInput {
-  display: inline-block;
-}
-
-.DayPickerInput>input::after {
-  width: 32px;
-  background-image: url(https://c19pub.azureedge.net/assets/images/cal.svg);
-  content: ' ';
-}
-
-.DayPickerInput-OverlayWrapper {
-  position: relative;
-}
-
-.DayPickerInput-Overlay {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
 .tooltip {
   width: 150px;
   padding: 8px 10px;
@@ -8272,48 +8027,6 @@ thead.govuk-table__head-short th {
     font-size: 14pt;
     line-height: 1.2;
   }
-}
-
-.util-flex {
-  display: flex !important;
-}
-
-.util-flex-col {
-  flex-direction: column !important;
-}
-
-.util-flex-wrap {
-  flex-wrap: wrap !important;
-}
-
-.util-flex-justify-between {
-  justify-content: space-between !important;
-}
-
-.util-flex-align-items-center {
-  align-items: center !important;
-}
-
-.util-flex-align-items-start {
-  align-items: flex-start !important;
-}
-
-a.no-decoration {
-  text-decoration: none;
-}
-
-.select {
-  font-family: Arial, sans-serif;
-}
-
-.select div[class*='control'] {
-  border-radius: 0;
-  padding: 0 0.3rem;
-}
-
-.select div[class*='control']:focus,
-.select div[class*='control']:active {
-  box-shadow: 0 0 0 3px #fd0;
 }
 
 #breakdown-table th {
@@ -8948,14 +8661,6 @@ a.no-decoration {
   color: #1d6fb8;
 }
 
-.sticky-header {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  z-index: 4444;
-}
-
 #localisation {
   display: none;
 }
@@ -9179,10 +8884,6 @@ a.no-decoration {
     height: 100%;
     background-color: red;
     z-index: 6666px;
-  }
-
-  .sticky-header {
-    padding-top: 8px;
   }
 
   .location-mobile {
@@ -9556,8 +9257,7 @@ a.no-decoration {
   height: 440px;
 }
 
-.govuk-select,
-.select div[class*='control'] {
+.govuk-select {
   background-color: #f8f8f8;
 }
 
