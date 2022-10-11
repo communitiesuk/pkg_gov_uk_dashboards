@@ -6224,17 +6224,13 @@ only screen and (min-resolution: 2dppx) {
   }
 }
 
-.govuk-\!-margin-top-1,
-.card-timestamp,
-.numbers-container {
+.govuk-\!-margin-top-1 {
   margin-top: 5px !important;
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-\!-margin-top-1,
-  .card-timestamp,
-  .numbers-container {
+  .govuk-\!-margin-top-1 {
     margin-top: 5px !important;
   }
 }
@@ -6250,15 +6246,13 @@ only screen and (min-resolution: 2dppx) {
   }
 }
 
-.govuk-\!-margin-bottom-1,
-.numbers-container {
+.govuk-\!-margin-bottom-1 {
   margin-bottom: 5px !important;
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-\!-margin-bottom-1,
-  .numbers-container {
+  .govuk-\!-margin-bottom-1 {
     margin-bottom: 5px !important;
   }
 }
@@ -8161,10 +8155,6 @@ thead.govuk-table__head-short th {
     padding-left: 7px !important;
   }
 
-  .title-mobile {
-    width: auto;
-  }
-
   .moj-search--inline {
     padding: 0 !important;
   }
@@ -8785,13 +8775,6 @@ number-* {
   width: 100%;
 }
 
-.additional-info {
-  display: grid;
-  grid-template-rows: 1fr minmax(0, auto);
-  grid-template-columns: 1fr;
-  align-self: end;
-}
-
 .mini-card>details.govuk-details,
 .card-container>*:not(.more-details)>details.govuk-details {
   margin-bottom: 0rem !important;
@@ -8981,33 +8964,6 @@ number-* {
   border: 1px #f3f2f1 solid;
 }
 
-.numbers-container {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.numbers-container>* {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  min-width: 7em;
-  margin-right: 1rem;
-}
-
-@media only screen and (max-width: 800px) {
-  .numbers-container>* strong {
-    margin-bottom: 0.5rem !important;
-  }
-}
-
-.numbers-container>li.content-size {
-  min-width: auto;
-}
-
-.numbers-container>li.content-size+li {
-  margin-left: -1.75rem;
-}
-
 .lead-case-container>.figure {
   justify-self: flex-end;
 }
@@ -9032,61 +8988,6 @@ number-* {
 .card-container>*:not(.more-details) hr {
   margin-left: -1.3rem;
   margin-right: -1.3rem;
-}
-
-.additional-info {
-  margin-bottom: -0.5rem;
-  margin-top: 0.2rem;
-}
-
-.areatype-tag {
-  background: #ebe9e7;
-  color: #383f43;
-  padding: 0.2rem 0.4rem;
-  text-transform: uppercase;
-  font-family: Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
-  font-size: 12px;
-  font-size: 0.75rem;
-  line-height: 1.25;
-  font-weight: bold;
-}
-
-@media print {
-  .areatype-tag {
-    font-family: sans-serif;
-  }
-}
-
-@media (min-width: 49.9375em) {
-  .areatype-tag {
-    font-size: 14px;
-    font-size: 0.875rem;
-    line-height: 1.4285714286;
-  }
-}
-
-@media print {
-  .areatype-tag {
-    font-size: 12pt;
-    line-height: 1.2;
-  }
-}
-
-.card-timestamp {
-  display: block;
-}
-
-.title {
-  font-size: 1.65rem;
-}
-
-@media only screen and (max-width: 768px) {
-  .title {
-    font-size: 1.15rem;
-  }
 }
 
 .moj-side-navigation {
