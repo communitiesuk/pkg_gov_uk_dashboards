@@ -7980,10 +7980,6 @@ thead.govuk-table__head-short th {
   display: none;
 }
 
-.inline {
-  display: inline-block;
-}
-
 #mobile-menu {
   display: none !important;
 }
@@ -8018,15 +8014,6 @@ thead.govuk-table__head-short th {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
-
-.float {
-  display: inline-block;
-  float: left;
-}
-
-.clear {
-  clear: both;
 }
 
 #mobile-navi {
@@ -8084,50 +8071,6 @@ thead.govuk-table__head-short th {
   }
 }
 
-.overlay {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  background-color: #1d70b8;
-  overflow-x: hidden;
-  transition: 0.2s;
-}
-
-.overlay a {
-  padding: 8px;
-  text-decoration: none;
-  font-size: 24px;
-  color: #fff !important;
-  display: block;
-  transition: 0.3s;
-}
-
-.overlay a:hover,
-.overlay a:focus {
-  color: #f1f1f1;
-}
-
-.overlay .closebtn {
-  position: absolute;
-  top: 20px;
-  right: 45px;
-  font-size: 60px;
-}
-
-@media screen and (max-height: 450px) {
-  .overlay a {
-    font-size: 20px;
-  }
-
-  .overlay .closebtn {
-    font-size: 40px;
-    top: 15px;
-    right: 35px;
-  }
-}
 
 .dialog-overlay {
   z-index: 8888;
@@ -8139,20 +8082,6 @@ thead.govuk-table__head-short th {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.dialog {
-  z-index: 9999;
-  background-color: #fff;
-  padding: 30px;
-  text-align: left;
-  width: 90%;
-  max-width: 400px;
-  position: fixed;
-  border: 5px solid black;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .dialog-overlay[aria-hidden='true'],
 .dialog[aria-hidden='true'] {
   display: none;
@@ -8161,14 +8090,6 @@ thead.govuk-table__head-short th {
 .dialog-overlay:not([aria-hidden='true']),
 .dialog:not([aria-hidden='true']) {
   display: block;
-}
-
-.hide {
-  display: none;
-}
-
-.tertiary-menu a {
-  text-decoration: none;
 }
 
 #deaths-more {
@@ -8187,62 +8108,9 @@ thead.govuk-table__head-short th {
   display: none;
 }
 
-.data-metric {
-  width: 100%;
-  clear: both;
-  display: block;
-  float: left;
-}
-
-.data-metric2 {
-  width: 100%;
-  display: block;
-  clear: both;
-}
-
 .number {
   display: block;
   float: left;
-}
-
-.location-warning {
-  background-color: #e3f5ff;
-}
-
-.changelog {
-  background-color: #1d70b8;
-}
-
-.number-link {
-  text-decoration: none;
-  border-bottom: 1px dashed #000;
-  color: #000 !important;
-  cursor: help;
-}
-
-.number-link-bold {
-  text-decoration: none;
-  border-bottom: 1px dashed #000;
-  color: #000 !important;
-  font-weight: bold;
-}
-
-.number-link-green {
-  text-decoration: none;
-  border-bottom: 1px dashed #85994b;
-  color: #85994b !important;
-}
-
-.number-link-grey {
-  text-decoration: none;
-  border-bottom: 1px dashed #626a6e;
-  color: #626a6e !important;
-}
-
-.number-link-red {
-  text-decoration: none;
-  border-bottom: 1px dashed #d4351c;
-  color: #d4351c !important;
 }
 
 #region {
@@ -8275,35 +8143,12 @@ thead.govuk-table__head-short th {
   vertical-align: middle;
 }
 
-.scroll-table {
-  overflow-y: auto;
-  height: 500px;
-}
-
-.scroll-table2 {
-  overflow-y: auto;
-  height: 440px;
-}
-
 .govuk-select {
   background-color: #f8f8f8;
 }
 
-.pin {
-  margin-right: 6px;
-}
-
 .govuk-tag--grey {
   background: #ebe9e7;
-}
-
-.blue-panel {
-  background-color: #6b7276;
-  padding: 20px;
-}
-
-.white {
-  color: #fff !important;
 }
 
 .govuk-tag--yellow {
