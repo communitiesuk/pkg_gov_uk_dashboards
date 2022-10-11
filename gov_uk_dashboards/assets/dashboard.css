@@ -7808,70 +7808,6 @@ thead.govuk-table__head-short th {
   }
 }
 
-#breakdown-table th {
-  border-bottom: 0 solid #fff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-#breakdown-table td {
-  border-bottom: 0 solid #fff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-#place-name {
-  width: 40%;
-}
-
-#place-name2 {
-  width: 33%;
-}
-
-#bar-data {
-  width: 60%;
-}
-
-#bar-data2 {
-  width: 33%;
-}
-
-.breakdown-table2 th {
-  border-bottom: 0 solid #fff;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-.breakdown-table2 td {
-  border-bottom: 0 solid #fff;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-.breakdown-table th {
-  border-bottom: 0 solid #fff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.breakdown-table td {
-  border-bottom: 0 solid #fff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.place-name {
-  width: 40%;
-}
-
-.place-name2 {
-  width: 33%;
-}
-
-.place-name3 {
-  width: 25%;
-}
-
 .sticky-menu {
   position: inherit;
   top: 20px;
@@ -7964,25 +7900,6 @@ thead.govuk-table__head-short th {
   padding-left: 15px;
 }
 
-#pointer {
-  color: #1d6fb8;
-}
-
-#pointer-date {
-  color: #1d6fb8;
-}
-
-#localisation {
-  display: none;
-}
-
-#datepicker {
-  display: none;
-}
-
-#mobile-menu {
-  display: none !important;
-}
 
 .tooltip {
   position: relative;
@@ -8016,12 +7933,6 @@ thead.govuk-table__head-short th {
   visibility: visible;
 }
 
-#mobile-navi {
-  display: none;
-  background-color: #f8f8f8;
-  padding-top: 30px;
-  padding-bottom: 20px;
-}
 
 @media only screen and (max-width: 600px) {
   html,
@@ -8053,84 +7964,9 @@ thead.govuk-table__head-short th {
     padding-right: 0;
   }
 
-  #mobile-menu2 {
-    display: block;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-color: red;
-    z-index: 6666px;
-  }
-
   .moj-search--inline {
     padding: 0 !important;
   }
-}
-
-
-.dialog-overlay {
-  z-index: 8888;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.dialog-overlay[aria-hidden='true'],
-.dialog[aria-hidden='true'] {
-  display: none;
-}
-
-.dialog-overlay:not([aria-hidden='true']),
-.dialog:not([aria-hidden='true']) {
-  display: block;
-}
-
-#deaths-more {
-  display: none;
-}
-
-#healthcare-more {
-  display: none;
-}
-
-#cases-more {
-  display: none;
-}
-
-#test-more {
-  display: none;
-}
-
-.number {
-  display: block;
-  float: left;
-}
-
-#region {
-  display: none;
-}
-
-#nation {
-  display: none;
-}
-
-#utla {
-  display: none;
-}
-
-#ltla {
-  display: none;
-}
-
-.right {
-  text-align: right;
 }
 
 .moj-search__button {
