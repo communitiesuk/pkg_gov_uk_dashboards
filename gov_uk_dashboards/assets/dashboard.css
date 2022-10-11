@@ -8082,6 +8082,7 @@ thead.govuk-table__head-short th {
   .moj-search--inline {
     padding: 0 !important;
   }
+}
 
 .overlay {
   height: 100%;
@@ -8186,17 +8187,6 @@ thead.govuk-table__head-short th {
   display: none;
 }
 
-.number-container {
-  display: block;
-  float: left;
-}
-
-.number-group {
-  position: relative;
-  display: block;
-  clear: both;
-}
-
 .data-metric {
   width: 100%;
   clear: both;
@@ -8275,56 +8265,14 @@ thead.govuk-table__head-short th {
   text-align: right;
 }
 
-.center {
-  text-align: center;
-}
-
-.tip-link {
-  color: #000 !important;
-  text-decoration: none;
-  border-bottom: 1px dashed #000;
-}
-
-.no-underline {
-  text-decoration: none;
-}
-
-.hcia-location {
-  display: inline-block;
-  float: left;
-}
-
 .moj-search__button {
   margin-left: 0 !important;
   background-color: #000 !important;
 }
 
-#areanamediv {
-  display: none;
-}
-
-.status-green {
-  background-color: #85994b;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.status-green p {
-  color: #fff;
-}
-
-.reset {
-  display: inline-block;
-  margin-top: 12px;
-}
-
 .moj-primary-navigation__search {
   display: block;
   vertical-align: middle;
-}
-
-#imgClickAndChange {
-  cursor: pointer;
 }
 
 .scroll-table {
@@ -8394,68 +8342,9 @@ main {
   gap: 10px;
 }
 
-.map-view {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
-}
-
-.map-view a {
-  max-width: 10rem;
-}
-
-.map-view .map-img {
-  max-height: 350px;
-}
-
-@media (min-width: 49.9375em) {
-  .map-view {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  .map-view .map-img {
-    max-height: 380px;
-    grid-auto-flow: column;
-  }
-}
-
-@media (min-width: 68.75em) {
-  .map-view {
-    grid-template-columns: 1fr 1.2fr;
-    grid-template-rows: 1fr;
-  }
-
-  .map-view .map-img {
-    max-height: 380px;
-    grid-auto-flow: column;
-  }
-
-  .map-view * {
-    grid-row: 1/-1;
-  }
-}
-
-@media screen and (max-width: 385px) {
-  .map-view .map-img {
-    max-height: 350px;
-  }
-}
-
 .mini-card .govuk-section-break,
 .card-container>*:not(.more-details) .govuk-section-break {
   align-self: end;
-}
-
-#submit-postcode {
-  background: #000;
-  background-image: url(https://coronavirus.data.gov.uk/public/assets/summary/images/icon-magnify.svg);
-  background-repeat: no-repeat;
-  background-size: 70% 70%;
-  background-position: center center;
-  width: 45px;
-  height: 38px;
-  margin-left: 2px;
 }
 
 .tooltip {
@@ -8469,70 +8358,10 @@ main {
   background: rgba(0, 0, 0, 0.9);
 }
 
-.card-local {
-  border: 0;
-  background-color: unset;
-  margin: 10px 0 !important;
-}
-
-.local-data {
-  background-color: #f8f8f8;
-  border: 1px #f3f2f1 solid;
-  margin: 10px;
-}
-
-.local-intro {
-  margin: 20px;
-}
-
 @media only print {
   .govuk-grid-column-menu {
     display: none;
   }
-}
-
-.status-banner {
-  padding: 0.7rem 30px;
-}
-
-@media only screen and (max-width: 600px) {
-
-  .card,
-  .card-local,
-  .local-data {
-    padding: 10px;
-    margin: 5px 0 !important;
-  }
-
-  .status-banner {
-    padding: 0.7rem 20px;
-  }
-
-  .local-intro {
-    margin: 10px;
-  }
-}
-
-.number,
-number-* {
-  font-feature-settings: 'tnum' !important;
-  font-variant-numeric: tabular-nums !important;
-}
-
-.card {
-  justify-self: flex-end;
-  align-self: stretch;
-}
-
-.graph {
-  display: block;
-  margin: 0;
-  max-height: 400px;
-}
-
-.graph>img {
-  width: inherit;
-  max-height: 400px;
 }
 
 .main {
@@ -8564,10 +8393,6 @@ number-* {
 .mini-card>details.govuk-details .govuk-details__text,
 .card-container>*:not(.more-details)>details.govuk-details .govuk-details__text {
   color: #636a6d !important;
-}
-
-.mini-card-figure {
-  width: 100%;
 }
 
 .tooltiptext {
