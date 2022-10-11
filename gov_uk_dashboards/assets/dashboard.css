@@ -144,35 +144,29 @@
   text-decoration: none;
 }
 
-.govuk-link--no-visited-state:link,
-.toc a:link {
+.govuk-link--no-visited-state:link {
   color: #1d70b8;
 }
 
-.govuk-link--no-visited-state:visited,
-.toc a:visited {
+.govuk-link--no-visited-state:visited {
   color: #1d70b8;
 }
 
-.govuk-link--no-visited-state:hover,
-.toc a:hover{
+.govuk-link--no-visited-state:hover {
   color: #003078;
 }
 
-.govuk-link--no-visited-state:active,
-.toc a:active {
+.govuk-link--no-visited-state:active {
   color: #0b0c0c;
 }
 
-.govuk-link--no-visited-state:focus,
-.toc a:focus {
+.govuk-link--no-visited-state:focus {
   color: #0b0c0c;
 }
 
 .govuk-list,
 .banner,
-.postcode-lead-data,
-.toc li {
+.postcode-lead-data {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -191,8 +185,7 @@
 
   .govuk-list,
   .banner,
-  .postcode-lead-data,
-  .toc li {
+  .postcode-lead-data {
     font-family: sans-serif;
   }
 }
@@ -201,8 +194,7 @@
 
   .govuk-list,
   .banner,
-  .postcode-lead-data,
-  .toc li {
+  .postcode-lead-data {
     font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
@@ -213,8 +205,7 @@
 
   .govuk-list,
   .banner,
-  .postcode-lead-data,
-  .toc li {
+  .postcode-lead-data {
     font-size: 14pt;
     line-height: 1.15;
   }
@@ -224,8 +215,7 @@
 
   .govuk-list,
   .banner,
-  .postcode-lead-data,
-  .toc li {
+  .postcode-lead-data {
     color: #000;
   }
 }
@@ -234,8 +224,7 @@
 
   .govuk-list,
   .banner,
-  .postcode-lead-data,
-  .toc li {
+  .postcode-lead-data {
     margin-bottom: 20px;
   }
 }
@@ -248,24 +237,13 @@
 .postcode-lead-data .banner,
 .govuk-list .postcode-lead-data,
 .banner .postcode-lead-data,
-.postcode-lead-data .postcode-lead-data,
-.toc li .govuk-list,
-.toc li .banner,
-.toc li .postcode-lead-data,
-.govuk-list .toc li,
-.banner .toc li,
-.postcode-lead-data .toc li,
-.toc .govuk-list li,
-.toc .banner li,
-.toc .postcode-lead-data li,
-.toc li li {
+.postcode-lead-data .postcode-lead-data {
   margin-top: 10px;
 }
 
 .govuk-list>li,
 .banner>li,
-.postcode-lead-data>li,
-.toc li>li {
+.postcode-lead-data>li {
   margin-bottom: 5px;
 }
 
@@ -899,16 +877,13 @@
 .postcode-lead dl.inline+.govuk-heading-l,
 .stand-alone-metric>.sam-body+.govuk-heading-l,
 .developers-guide+.govuk-heading-l,
-.postcode-lead .disclaimer .markdown dl.inline+h2,
-.postcode-lead .modal.markdown dl.inline+h2,
 .govuk-body-s+.govuk-heading-l,
 .banner>.content>.body+.govuk-heading-l,
 .banner>.content+.govuk-heading-l,
 .card-wide.transmission>.content>.column+.govuk-heading-l,
 .govuk-list+.govuk-heading-l,
 .banner+.govuk-heading-l,
-.postcode-lead-data+.govuk-heading-l,
-.toc li+.govuk-heading-l {
+.postcode-lead-data+.govuk-heading-l {
   padding-top: 15px;
 }
 
@@ -925,8 +900,7 @@
   .card-wide.transmission>.content>.column+.govuk-heading-l,
   .govuk-list+.govuk-heading-l,
   .banner+.govuk-heading-l,
-  .postcode-lead-data+.govuk-heading-l,
-  .toc li+.govuk-heading-l {
+  .postcode-lead-data+.govuk-heading-l {
     padding-top: 20px;
   }
 }
@@ -943,7 +917,6 @@
 .govuk-list+.govuk-heading-m,
 .banner+.govuk-heading-m,
 .postcode-lead-data+.govuk-heading-m,
-.toc li+.govuk-heading-m,
 .govuk-body-m+.govuk-heading-s,
 .stand-alone-metric>.govuk-body-m+.sam-heading,
 .govuk-body+.govuk-heading-s,
@@ -967,9 +940,7 @@
 .postcode-lead-data+.govuk-heading-s,
 .stand-alone-metric>.govuk-list+.sam-heading,
 .stand-alone-metric>.banner+.sam-heading,
-.stand-alone-metric>.postcode-lead-data+.sam-heading,
-.toc li+.govuk-heading-s,
-.toc .stand-alone-metric>li+.sam-heading {
+.stand-alone-metric>.postcode-lead-data+.sam-heading {
   padding-top: 5px;
 }
 
@@ -986,8 +957,7 @@
   .card-wide.transmission>.content>.column+.govuk-heading-m,
   .govuk-list+.govuk-heading-m,
   .banner+.govuk-heading-m,
-  .postcode-lead-data+.govuk-heading-m,
-  .toc li+.govuk-heading-m,
+  .postcode-lead-data+.govuk-heading-m
   .govuk-body-m+.govuk-heading-s,
   .stand-alone-metric>.govuk-body-m+.sam-heading,
   .govuk-body+.govuk-heading-s,
@@ -1011,9 +981,7 @@
   .postcode-lead-data+.govuk-heading-s,
   .stand-alone-metric>.govuk-list+.sam-heading,
   .stand-alone-metric>.banner+.sam-heading,
-  .stand-alone-metric>.postcode-lead-data+.sam-heading,
-  .toc li+.govuk-heading-s,
-  .toc .stand-alone-metric>li+.sam-heading {
+  .stand-alone-metric>.postcode-lead-data+.sam-heading {
     padding-top: 10px;
   }
 }
@@ -7801,31 +7769,6 @@ svg.back-to-top {
   position: sticky;
 }
 
-
-.sr-only {
-  position: absolute !important;
-  overflow: hidden !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  margin: -1px !important;
-  clip: rect(1px, 1px, 1px, 1px) !important;
-  clip-path: inset(50%) !important;
-  white-space: nowrap !important;
-}
-
-.sr-only-focusable:focus,
-.sr-only-focusable:active {
-  overflow: visible !important;
-  width: auto !important;
-  height: auto !important;
-  margin: auto !important;
-  clip: auto !important;
-  clip-path: none !important;
-  white-space: normal !important;
-}
-
 a:focus,
 button:focus,
 input[type='submit']:focus,
@@ -7837,76 +7780,9 @@ input[type='reset']:focus {
   text-decoration: none !important;
 }
 
-.u-lock-scroll {
-  overflow: hidden !important;
-}
-
-.dashboard-menu {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 4px;
-  flex: 0 0 auto;
-  align-self: flex-start;
-  width: 200px;
-  display: none;
-}
-
-@media (min-width: 49.9375em) {
-  .dashboard-menu {
-    display: block;
-  }
-}
-
 .dashboard-container {
   display: flex;
   flex-direction: row;
-}
-
-.dashboard-content {
-  display: flex;
-  flex-direction: column;
-  min-height: 80vh;
-}
-
-.smaller {
-  font-size: 90%;
-}
-
-.toc {
-  margin-bottom: 2em;
-}
-
-.toc,
-.toc * {
-  font-size: 12pt;
-  margin-top: 0;
-}
-
-.toc li {
-  margin-bottom: 0.2rem;
-  margin-top: 0 !important;
-}
-
-.toc ul {
-  margin-bottom: 0;
-  margin-left: 1em;
-  padding-left: 1em;
-}
-
-.simple-summary {
-  display: flex !important;
-  border: none !important;
-  padding: 0 !important;
-  margin-top: 0.8rem;
-  margin-bottom: 1.5rem !important;
-  min-width: 85%;
-}
-
-.simple-summary,
-.simple-summary * {
-  background: 0;
-  background-color: transparent;
-  margin-right: auto;
 }
 
 .main {
@@ -9458,13 +9334,6 @@ a.no-decoration {
   display: block;
 }
 
-.sr-only {
-  opacity: 0;
-  position: absolute;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-}
-
 .hide {
   display: none;
 }
@@ -9649,15 +9518,6 @@ a.no-decoration {
   background-color: #000 !important;
 }
 
-.gem-c-search__submit {
-  width: 40px;
-  background-image: url(/public/images/search-button.png);
-  background-repeat: no-repeat;
-  background-position: 2px 50%;
-  text-indent: -5000px;
-  overflow: hidden;
-}
-
 #areanamediv {
   display: none;
 }
@@ -9738,7 +9598,7 @@ main {
 
 .mini-card,
 .card-container
-  > *:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) {
+  > *:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations) {
   padding: 10px;
   display: grid;
   grid-auto-flow: row;
@@ -9803,7 +9663,7 @@ main {
 }
 
 .mini-card .govuk-section-break,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) .govuk-section-break {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations) .govuk-section-break {
   align-self: end;
 }
 
@@ -9940,7 +9800,7 @@ number-* {
 
 .gray-text,
 .mini-card>details.govuk-details .govuk-details__text,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details .govuk-details__text {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details .govuk-details__text {
   color: #636a6d !important;
 }
 
@@ -9996,35 +9856,35 @@ number-* {
 }
 
 .mini-card>details.govuk-details,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details {
   margin-bottom: 0rem !important;
 }
 
 .mini-card>details.govuk-details>.govuk-details__summary,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details>.govuk-details__summary {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details>.govuk-details__summary {
   padding-left: 16px;
 }
 
 .mini-card>details.govuk-details>.govuk-details__summary>.govuk-details__summary-text,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details>.govuk-details__summary>.govuk-details__summary-text {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details>.govuk-details__summary>.govuk-details__summary-text {
   text-decoration: none;
   padding-right: 5px;
 }
 
 .mini-card>details.govuk-details>.govuk-details__summary:before,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details>.govuk-details__summary:before {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details>.govuk-details__summary:before {
   top: 5px;
   border-width: 5px 0 5px 9px;
 }
 
 .mini-card>details.govuk-details[open] .govuk-details__summary:before,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details[open] .govuk-details__summary:before {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details[open] .govuk-details__summary:before {
   top: 2px;
   border-width: 9px 5px 0 5px;
 }
 
 .mini-card>details.govuk-details .govuk-details__text,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations)>details.govuk-details .govuk-details__text {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations)>details.govuk-details .govuk-details__text {
   padding: 0.5rem;
 }
 
@@ -10121,7 +9981,7 @@ number-* {
   list-style: none;
 }
 
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations) {
   flex-grow: 4;
   flex-shrink: 1;
   flex-basis: 20%;
@@ -10251,7 +10111,7 @@ number-* {
 }
 
 .mini-card hr,
-.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric, .simple-summary):not(.vaccinations) hr {
+.card-container>*:not(.postcode-lead, .more-details, .stand-alone-metric):not(.vaccinations) hr {
   margin-left: -1.3rem;
   margin-right: -1.3rem;
 }
