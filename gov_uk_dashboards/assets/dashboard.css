@@ -6389,15 +6389,13 @@ only screen and (min-resolution: 2dppx) {
   }
 }
 
-.govuk-\!-margin-right-4,
-.lead-case-container>li:first-of-type {
+.govuk-\!-margin-right-4 {
   margin-right: 15px !important;
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-\!-margin-right-4,
-  .lead-case-container>li:first-of-type {
+  .govuk-\!-margin-right-4 {
     margin-right: 20px !important;
   }
 }
@@ -6432,15 +6430,13 @@ only screen and (min-resolution: 2dppx) {
   }
 }
 
-.govuk-\!-margin-top-5,
-.lead-case-container>.figure figure {
+.govuk-\!-margin-top-5 {
   margin-top: 15px !important;
 }
 
 @media (min-width: 49.9375em) {
 
-  .govuk-\!-margin-top-5,
-  .lead-case-container>.figure figure {
+  .govuk-\!-margin-top-5 {
     margin-top: 25px !important;
   }
 }
@@ -8411,35 +8407,6 @@ thead.govuk-table__head-short th {
   text-align: right;
 }
 
-.download {
-  text-decoration: none;
-}
-
-.rotate {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-  padding-top: 2px;
-}
-
-#pointer-new {
-  display: inline-block;
-  color: #1d6fb8;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.loading {
-  text-align: center;
-}
-
-.green {
-  color: #00703c;
-}
-
-.red {
-  color: #d53880;
-}
-
 .center {
   text-align: center;
 }
@@ -8808,83 +8775,6 @@ number-* {
   padding: 0.5rem;
 }
 
-.transmission .content {
-  grid-column-gap: 2rem !important;
-}
-
-@media (min-width: 37.5em) {
-  .transmission .link {
-    margin-top: 1rem;
-  }
-}
-
-.bottom-aligned {
-  align-self: flex-end;
-}
-
-.top-aligned {
-  align-self: start;
-}
-
-.center-aligned {
-  align-self: center;
-}
-
-.body-small {
-  font-family: Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
-  font-size: 12px;
-  font-size: 0.75rem;
-  line-height: 1.25;
-}
-
-@media print {
-  .body-small {
-    font-family: sans-serif;
-  }
-}
-
-@media (min-width: 49.9375em) {
-  .body-small {
-    font-size: 14px;
-    font-size: 0.875rem;
-    line-height: 1.4285714286;
-  }
-}
-
-@media print {
-  .body-small {
-    font-size: 12pt;
-    line-height: 1.2;
-  }
-}
-
-.text-width {
-  max-width: 40em;
-}
-
-.vertical-only {
-  display: flex;
-  flex-direction: column;
-}
-
-.change-box.bad {
-  background: #f6d7d2;
-  color: #942514;
-}
-
-.change-box.good {
-  background: #cce2d8;
-  color: #005a30;
-}
-
-.change-box.neutral {
-  background: #ebe9e7;
-  color: #383f43;
-}
-
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -8901,86 +8791,6 @@ number-* {
   flex-grow: 4;
   flex-shrink: 1;
   flex-basis: 20%;
-  min-width: 250px;
-}
-
-.postcode-lead dl {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  align-content: flex-start;
-  justify-content: flex-start;
-  flex: 1 1 100%;
-  margin-top: unset;
-}
-
-.postcode-lead dl dt {
-  margin-left: unset;
-  flex: 1 1 100%;
-  justify-content: flex-start;
-  justify-items: flex-start;
-}
-
-.postcode-lead dl dt:first-of-type {
-  margin-top: unset !important;
-}
-
-.postcode-lead dl dt>* {
-  margin-top: unset;
-}
-
-.postcode-lead dl dd {
-  margin-left: 0;
-}
-
-.postcode-lead dl.inline {
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.postcode-lead dl.inline * {
-  font-size: large !important;
-}
-
-.postcode-lead dl.inline dt {
-  flex: 0 2 auto;
-}
-
-.postcode-lead dl.inline dd {
-  flex: 1 2 100%;
-}
-
-.postcode-lead .comparison-scale,
-.postcode-lead .postcode-thumbnail>img {
-  max-width: min(400px, 100%);
-  height: auto;
-}
-
-.postcode-lead figure {
-  margin-left: 0;
-}
-
-.postcode-lead .postcode-thumbnail>img {
-  border: 1px #f3f2f1 solid;
-}
-
-.lead-case-container>.figure {
-  justify-self: flex-end;
-}
-
-.lead-case-container>.figure figure {
-  display: inline-flex;
-  flex-direction: column;
-  max-width: 400px;
-}
-
-@media only screen and (max-width: 1300px) {
-  .lead-case-container>.figure figure {
-    margin-top: 1rem !important;
-  }
-}
-
-.lead-case-container>.figure figure img {
   min-width: 250px;
 }
 
