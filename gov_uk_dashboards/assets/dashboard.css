@@ -7882,104 +7882,6 @@ thead.govuk-table__head-short th {
   width: 25%;
 }
 
-.map-container {
-  background-size: auto 100%;
-  background-position: center;
-  background-image: url(/public/images/mapnew.jpg);
-  display: block;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 400px;
-  position: relative;
-}
-
-@media (min-width: 990px) {
-  .map-container {
-    background-size: 100% auto;
-    height: 600px;
-  }
-}
-
-.map-container2 {
-  background-size: auto 100%;
-  background-position: center;
-  background-image: url(/public/images/map-cases.png);
-  display: block;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 400px;
-  position: relative;
-}
-
-@media (min-width: 990px) {
-  .map-container2 {
-    background-size: 100% auto;
-    height: 600px;
-    display: block;
-  }
-}
-
-.map-container-local {
-  background-size: auto 100%;
-  background-position: center;
-  background-image: url(/public/images/map-local.jpg);
-  display: block;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 400px;
-  position: relative;
-}
-
-@media (min-width: 990px) {
-  .map-container-local {
-    background-size: 100% auto;
-    height: 600px;
-    display: block;
-  }
-}
-
-.map-data {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.mapbox {
-  border: 1px solid #b1b4b6;
-  background-color: rgba(255, 255, 255, 0.6);
-}
-
-.map-key {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: none;
-}
-
-@media (min-width: 990px) {
-  .map-key {
-    background-size: 100% auto;
-    height: 600px;
-    display: block;
-  }
-}
-
-.mapkey-mobile {
-  display: block;
-}
-
-@media (min-width: 990px) {
-  .mapkey-mobile {
-    display: none;
-  }
-}
-
-.related-navigation {
-  color: #0b0c0c;
-  border-top: 2px solid #1d70b8;
-  padding-top: 10px;
-}
-
 .sticky-menu {
   position: inherit;
   top: 20px;
@@ -7994,66 +7896,8 @@ thead.govuk-table__head-short th {
   }
 }
 
-.deaths {
-  margin-top: 30px;
-}
-
-@media (min-width: 990px) {
-  .deaths {
-    margin-top: 0;
-  }
-}
-
-.dashboard-panel {
-  background-color: #f8f8f8;
-  padding: 20px;
-  border: 1px #f3f2f1 solid;
-}
-
-.dashboard-panel2 {
-  background-color: #f8f8f8;
-  padding: 20px;
-  padding-top: 30px;
-  border: 1px #f3f2f1 solid;
-}
-
-.dashboard-panel-title {
-  background-color: #1d70b8;
-  padding: 20px;
-  color: #fff;
-  padding-top: 30px;
-  border: 1px #f3f2f1 solid;
-  height: 100%;
-}
-
 .filter .govuk-accordion__controls {
   display: none;
-}
-
-.covid-wrapper {
-  padding-top: 20px !important;
-}
-
-.date-updated {
-  text-align: right;
-  margin-top: 10px;
-  color: #626a6e;
-}
-
-.more-detail {
-  text-align: right;
-  text-decoration: none;
-}
-
-.filters {
-  text-align: right;
-}
-
-.slides-wrapper {
-  max-width: 1920px !important;
-  padding-top: 0 !important;
-  padding-left: 60px !important;
-  padding-right: 60px !important;
 }
 
 .govuk-main-wrapper {
@@ -8244,21 +8088,6 @@ thead.govuk-table__head-short th {
   display: table-cell;
 }
 
-.map-container1 {
-  overflow: hidden;
-  height: 550px;
-  position: relative;
-}
-
-.map-container img {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  right: -9999px;
-  bottom: -9999px;
-  margin: auto;
-}
-
 .spacer {
   margin-bottom: 94px;
 }
@@ -8321,19 +8150,6 @@ thead.govuk-table__head-short th {
   border-left: 5px solid #85994b;
 }
 
-.map-container3 {
-  overflow: hidden;
-  height: 650px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.map-container3 img {
-  max-height: 100%;
-}
-
 .map-parent {
   overflow: hidden;
   position: relative;
@@ -8386,11 +8202,6 @@ thead.govuk-table__head-short th {
 
 .global-filters {
   display: inline-block;
-}
-
-.more-detail {
-  display: inline-block;
-  float: right;
 }
 
 .panel-title {
@@ -8528,11 +8339,6 @@ thead.govuk-table__head-short th {
     margin-bottom: 0;
   }
 
-  .slides-wrapper {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-
   .govuk-grid-column-dashboard {
     width: 100%;
   }
@@ -8559,10 +8365,6 @@ thead.govuk-table__head-short th {
 
   .govuk-grid-column-menu {
     display: none;
-  }
-
-  .filters {
-    padding-top: 6px !important;
   }
 
   .container-map {
@@ -8594,10 +8396,6 @@ thead.govuk-table__head-short th {
     margin-bottom: 8px;
   }
 
-  .dashboard-panel {
-    padding: 12px;
-  }
-
   .leftpanel {
     padding-right: 7px !important;
   }
@@ -8608,10 +8406,6 @@ thead.govuk-table__head-short th {
 
   .title-mobile {
     width: auto;
-  }
-
-  .filters {
-    text-align: left;
   }
 
   .moj-search--inline {
@@ -9143,8 +8937,7 @@ number-* {
   font-variant-numeric: tabular-nums !important;
 }
 
-.card,
-.more-detail {
+.card {
   justify-self: flex-end;
   align-self: stretch;
 }
@@ -9371,10 +9164,64 @@ number-* {
   min-width: 250px;
 }
 
-.card-container>.more-detail {
-  flex-grow: 4;
-  min-width: 80%;
-  align-self: flex-start;
+.postcode-lead dl {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-start;
+  flex: 1 1 100%;
+  margin-top: unset;
+}
+
+.postcode-lead dl dt {
+  margin-left: unset;
+  flex: 1 1 100%;
+  justify-content: flex-start;
+  justify-items: flex-start;
+}
+
+.postcode-lead dl dt:first-of-type {
+  margin-top: unset !important;
+}
+
+.postcode-lead dl dt>* {
+  margin-top: unset;
+}
+
+.postcode-lead dl dd {
+  margin-left: 0;
+}
+
+.postcode-lead dl.inline {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.postcode-lead dl.inline * {
+  font-size: large !important;
+}
+
+.postcode-lead dl.inline dt {
+  flex: 0 2 auto;
+}
+
+.postcode-lead dl.inline dd {
+  flex: 1 2 100%;
+}
+
+.postcode-lead .comparison-scale,
+.postcode-lead .postcode-thumbnail>img {
+  max-width: min(400px, 100%);
+  height: auto;
+}
+
+.postcode-lead figure {
+  margin-left: 0;
+}
+
+.postcode-lead .postcode-thumbnail>img {
+  border: 1px #f3f2f1 solid;
 }
 
 .numbers-container {
