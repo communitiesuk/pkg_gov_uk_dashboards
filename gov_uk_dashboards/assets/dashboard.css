@@ -7529,6 +7529,17 @@ svg.back-to-top {
   position: sticky;
 }
 
+a:focus,
+button:focus,
+input[type='submit']:focus,
+input[type='reset']:focus {
+  background-color: #fd0 !important;
+  outline: #1d70b8 solid 2px !important;
+  border-bottom-color: transparent !important;
+  box-shadow: unset !important;
+  text-decoration: none !important;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: row;
