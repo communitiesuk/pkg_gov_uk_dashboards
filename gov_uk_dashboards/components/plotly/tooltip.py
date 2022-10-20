@@ -30,6 +30,6 @@ def tooltip(
         ],
         id=tooltip_id,
         role="tooltip",
-        **{'aria-label':"test"},
+        **{'aria-label':tooltip_text},
         style={"cursor": "pointer"},
     )
