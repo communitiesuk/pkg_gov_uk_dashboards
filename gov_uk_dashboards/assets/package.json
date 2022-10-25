@@ -4,5 +4,8 @@
   },
   "devDependencies": {
     "sass": "^1.52.3"
+  },
+  "dependencies": {
+    "govuk-frontend": "^4.3.1"
   }
 }
