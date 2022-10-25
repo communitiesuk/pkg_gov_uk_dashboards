@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "sass": "node compile-scss.js"
+  },
+  "devDependencies": {
+    "sass": "^1.52.3"
+  }
+}
