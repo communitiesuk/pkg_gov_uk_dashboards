@@ -90,8 +90,14 @@ line_chart = figures.line_chart(
     }
 )
 ```
+## Updating the CSS
 
-## Updating
+We use SCSS to generate our CSS - NEVER directly alter the `dashboard.css` file in the assets folder.
+To update CSS:
+- Add your changes to `dashboard.scss` in the sccs folder
+- Run `npm run sass` to generate CSS from SCSS
+
+## Updating the package
 
 When making changes to the package, the following should be done:
 
