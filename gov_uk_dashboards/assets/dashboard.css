@@ -57,7 +57,7 @@
 }
 
 .govuk-link--muted:link, .govuk-link--muted:visited {
-  color: #505a5f;
+  color: #6B7276;
 }
 .govuk-link--muted:hover, .govuk-link--muted:active {
   color: #0b0c0c;
@@ -374,7 +374,7 @@
   line-height: 1.1111111111;
   display: block;
   margin-bottom: 5px;
-  color: #505a5f;
+  color: #6B7276;
 }
 @media print {
   .govuk-caption-xl {
@@ -405,7 +405,7 @@
   line-height: 1.1111111111;
   display: block;
   margin-bottom: 5px;
-  color: #505a5f;
+  color: #6B7276;
 }
 @media print {
   .govuk-caption-l {
@@ -440,7 +440,7 @@
   font-size: 1rem;
   line-height: 1.25;
   display: block;
-  color: #505a5f;
+  color: #6B7276;
 }
 @media print {
   .govuk-caption-m {
@@ -1005,7 +1005,7 @@
 }
 
 .govuk-width-container {
-  max-width: 960px;
+  max-width: 1920px;
   margin-right: 15px;
   margin-left: 15px;
 }
@@ -1027,7 +1027,7 @@
     }
   }
 }
-@media (min-width: 1020px) {
+@media (min-width: 1980px) {
   .govuk-width-container {
     margin-right: auto;
     margin-left: auto;
@@ -1439,7 +1439,7 @@
   transform: rotate(225deg);
   border: solid;
   border-width: 1px 1px 0 0;
-  border-color: #505a5f;
+  border-color: #6B7276;
 }
 
 .govuk-back-link:focus:before {
@@ -1525,7 +1525,7 @@
   transform: rotate(45deg);
   border: solid;
   border-width: 1px 1px 0 0;
-  border-color: #505a5f;
+  border-color: #6B7276;
 }
 .govuk-breadcrumbs__list-item:first-child {
   margin-left: 0;
@@ -1992,7 +1992,7 @@ x:-moz-any-link {
   font-size: 1rem;
   line-height: 1.25;
   margin-bottom: 15px;
-  color: #505a5f;
+  color: #6B7276;
 }
 @media print {
   .govuk-hint {
@@ -4042,7 +4042,7 @@ x:-moz-any-link {
 }
 .govuk-notification-banner__content > * {
   box-sizing: border-box;
-  max-width: 605px;
+  max-width: 1245px;
 }
 .govuk-notification-banner__content > :last-child {
   margin-bottom: 0;
@@ -4264,7 +4264,7 @@ x:-moz-any-link {
 
 .govuk-pagination__item--ellipses {
   font-weight: 700;
-  color: #505a5f;
+  color: #6B7276;
 }
 .govuk-pagination__item--ellipses:hover {
   background-color: transparent;
@@ -4329,7 +4329,7 @@ x:-moz-any-link {
 .govuk-pagination__icon {
   width: 0.9375rem;
   height: 0.8125rem;
-  color: #505a5f;
+  color: #6B7276;
   fill: currentcolor;
   forced-color-adjust: auto;
 }
