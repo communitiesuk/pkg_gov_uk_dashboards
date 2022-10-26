@@ -1,4 +1,7 @@
 /* Styles https://github.com/publichealthengland/coronavirus-dashboard via source: https://coronavirus.data.gov.uk/*/
+$govuk-page-width: 1920px;
+$primary-colour: #1d70b8;
+$govuk-secondary-text-colour: #6B7276;
 
 @import "node_modules/govuk-frontend/govuk/all";
 
