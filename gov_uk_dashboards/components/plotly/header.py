@@ -11,46 +11,48 @@ def header(title):
     """
     return html.Header(
         html.Div(
-            html.Div(
-                [
-                    html.Img(
-                        src="assets\\images\\hm-government-logo.png",
-                        style={"width": "62px"},
-                    ),
-                    html.Span(
-                        [
-                            "Department for Levelling Up,",
-                            html.Br(),
-                            "Housing & Communities",
-                        ],
-                        className=" ".join(
-                            [
-                                "govuk-header__link",
-                                "govuk-header__link--service-name",
-                                "govuk-!-padding-left-3",
-                                "govuk-!-font-size-14",
-                            ]
+            [
+                html.Div(
+                    [
+                        html.Img(
+                            src="assets\\images\\hm-government-logo.png",
+                            style={"width": "62px"},
                         ),
-                    ),
-                    html.A(
-                        title,
-                        href="/",
-                        className=" ".join(
+                        html.Span(
                             [
-                                "govuk-header__link",
-                                "govuk-header__link--service-name dashboard-title",
-                                "govuk-!-padding-top-3",
+                                "Department for Levelling Up,",
+                                html.Br(),
+                                "Housing & Communities",
                             ],
+                            className=" ".join(
+                                [
+                                    "govuk-header__link",
+                                    "govuk-header__link--service-name",
+                                    "govuk-!-padding-left-3",
+                                    "govuk-!-font-size-14",
+                                ]
+                            ),
                         ),
-                    ),
-                    html.Strong(
-                        "OFFICIAL",
-                        className="govuk-tag protective-marking",
-                        id="protective-marking",
-                    ),
-                ],
-                className="govuk-header__content",
-            ),
+                        html.A(
+                            title,
+                            href="/",
+                            className=" ".join(
+                                [
+                                    "govuk-header__link",
+                                    "govuk-header__link--service-name dashboard-title",
+                                    "govuk-!-padding-top-3",
+                                ],
+                            ),
+                        ),
+                        html.Strong(
+                            "OFFICIAL",
+                            className="govuk-tag protective-marking",
+                            id="protective-marking",
+                        ),
+                    ],
+                    className="govuk-header__content",
+                ),
+            ],
             className="govuk-header__container govuk-width-container",
         ),
         style={"alignItems": "center", "justifyContent": "center"},
