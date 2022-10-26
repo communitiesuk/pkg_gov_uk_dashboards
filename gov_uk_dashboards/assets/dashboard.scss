@@ -1079,3 +1079,20 @@ mark.expenditure {
   border-bottom: 2px solid #1d70b8;
   border-right: 2px solid #1d70b8;
 }
+
+.govuk-header__logo,
+.govuk-header__content {
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (min-width: 50em) {
+  .govuk-header__content {
+    width: 100%;
+    padding-left: 15px;
+    float: left;
+  }
+}
