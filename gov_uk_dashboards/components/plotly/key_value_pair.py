@@ -8,7 +8,10 @@ def key_value_pair(key, value):
     Create an HTML element that displays a value (such as a metric) labelled by a key (such as the
     name of the metric).
     """
-    value_can_be_displayed = value is not None and not np.isnan(value)
+    if isinstance(value, float):
+        value_can_be_displayed = value is not None and not np.isnan(value)
+    else:
+        value_can_be_displayed = value is not None
 
     return [
         html.Dt(
