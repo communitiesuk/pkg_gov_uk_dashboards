@@ -25,7 +25,6 @@ Contains:
 - footer: Return a component for a Gov.UK standard footer.
 - graph: Takes a Plotly Figure and returns a responsive Dash graph with useful
     defaults.
-- header: Return a header with the dashboard title.
 - heading1: Return a H1 Dash component with gov.uk styling
 - heading2: Return a H1 Dash component with gov.uk styling
 - heading3: Return a H1 Dash component with gov.uk styling
@@ -73,7 +72,6 @@ from .details import details
 from .filter_panel import filter_panel, hidden_filter
 from .footer import footer
 from .graph import graph
-from .header import header
 from .heading import heading1, heading2, heading3, HeadingSizes
 from .html_list import html_list
 from .key_value_pair import key_value_pair
