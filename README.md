@@ -96,6 +96,15 @@ We use SCSS to generate our CSS - NEVER directly alter the `dashboard.css` file 
 To update CSS:
 - Add your changes to `dashboard.scss` in the sccs folder
 - Run `npm run sass` to generate CSS from SCSS
+- Change package version in setup.py
+- Push your changes to a new branch 
+- Try new CSS on dashboard repo using pip install git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@<YOUR-BRANCH-NAME>
+
+## Updating govuk-frontend CSS
+- Update govuk-frontend version in package.json 
+- Run `npm run sass` to generate CSS from SCSS
+- Follow steps above to test new CSS on dashboard repo
+
 
 ## Updating the package
 
