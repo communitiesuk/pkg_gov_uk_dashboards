@@ -18,22 +18,19 @@ This package is to enable quicker development of government data dashboards, suc
 ## Install
 
 For installation using pip:
-
 ```sh
-pip install git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@<version>
+pip install gov-uk-dashboards
+```
+
+or for a specific version:
+```sh
+pip install gov-uk-dashboards~=6.7.0
 ```
 
 For installation using conda, paste the following code into the environment configuration file:
-
 ```yml
  - pip:
-     - git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@<version>
-```
-
-**Note:** &lt;version&gt; should be formatted 'v0.0.0'. For example:
-
-```sh
-pip install git+https://github.com/communitiesuk/pkg_gov_uk_dashboards.git@v2.0.0
+     - gov-uk-dashboards~=6.7.0
 ```
 
 ## Usage
@@ -123,8 +120,10 @@ When making changes to the package, the following should be done:
     - Give a bullet point list of changes in the "Describe this release" section.
     - Make sure 'Target' is set to 'main'.
     - Click 'Publish release'.
+    - The release will be [uploaded to PyPI.org automatically][pypi-workflow].
 - Update the package references within projects where the package is used, by following the [Installation](#Install) section.
 
+[pypi-workflow]: https://github.com/communitiesuk/pkg_gov_uk_dashboards/actions/workflows/deployment.yml
 
 ## Trying out changes to the package from other repositories
 
