@@ -1,5 +1,9 @@
 # Import required functions
 from setuptools import setup, find_packages
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 # Call setup function
 setup(
@@ -7,6 +11,8 @@ setup(
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
     version="6.6.0",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
         "setuptools~=59.8",
