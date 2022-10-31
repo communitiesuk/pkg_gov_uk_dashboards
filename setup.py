@@ -12,7 +12,7 @@ setup(
     name="gov_uk_dashboards",
     version="6.6.0",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     packages=find_packages(),
     install_requires=[
         "setuptools~=59.8",
