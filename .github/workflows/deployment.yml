@@ -1,5 +1,6 @@
 name: Publish package to PyPI and TestPyPI
 on:
+  workflow_dispatch:
   release:
     types: [created]
 jobs:
