@@ -15,3 +15,5 @@ dependencies:
   - plotly=5.5.0
   - dash-bootstrap-components=1.0.3
   - python-build=0.9.0
+  - boto3==1.20.24
+  - pyodbc==4.0.34
