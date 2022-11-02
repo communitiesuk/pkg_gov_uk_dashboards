@@ -4,8 +4,7 @@ import pandas as pd
 import pyodbc
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
-from data.annual_housing_data import query
-from lib.absolute_path import absolute_path
+from gov_uk_dashboards.lib.absolute_path import absolute_path
 
 CONN_STRING = (
     "Driver={SQL Server};"
@@ -21,10 +20,14 @@ CONN_STRING_DAP = (
     "Database=Dashboards;"
 )
 
-def data_from_cds_if_connected():
+
+def data_from_cds_if_connected(query: str, csv_path: str):
     """Tries to return dataframe from CDS first via Pydash credentials,
     otherwise via Amazon WorkSpaces,
-    otherwise via a file from folder
+    otherwise via a file from folder.
+    Inputs:
+        query(str): SQL query string
+        csv_path(str): Filepath for location of csv
     Returns:
         pd.DataFrame
     """
@@ -58,7 +61,7 @@ def data_from_cds_if_connected():
         except pyodbc.Error as conn_error_except:
             print(credential_error, conn_error_except, "Data source is CSV")
             return pd.read_csv(
-                absolute_path("data/housing/2022-10-24_analyse_hd_annual_data.csv")
+                absolute_path(csv_path)
             )
 
 
