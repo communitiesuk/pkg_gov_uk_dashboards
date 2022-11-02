@@ -4,7 +4,6 @@ import pandas as pd
 import pyodbc
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
-from gov_uk_dashboards.lib.absolute_path import absolute_path
 
 CONN_STRING = (
     "Driver={SQL Server};"
@@ -60,7 +59,7 @@ def data_from_cds_if_connected(query: str, csv_path: str):
 
         except pyodbc.Error as conn_error_except:
             print(credential_error, conn_error_except, "Data source is CSV")
-            return pd.read_csv(absolute_path(csv_path))
+            return pd.read_csv(csv_path)
 
 
 def pydash_sql_credentials():
