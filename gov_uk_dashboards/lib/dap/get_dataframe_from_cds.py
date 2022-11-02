@@ -4,7 +4,6 @@ import pandas as pd
 import pyodbc
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
-from gov_uk_dashboards.lib.absolute_path import absolute_path
 
 def get_data_from_cds_or_fallback_to_csv(
     cds_sql_query: str, csv_path: str, secret_name: str, cds_server_name: str
