@@ -1,2 +1,6 @@
 [MASTER]
 load-plugins=pylint.extensions.docparams
+
+# Load up this C package when linting so that pylint can generate a list
+# of valid methods is exposes.
+extension-pkg-allow-list = pyodbc
