@@ -34,7 +34,8 @@ def get_data_from_cds_or_fallback_to_csv(
     """
     try:
         conn = pyodbc.connect(_get_pydash_connection_string())
-        print("From Pydash Data source is CDS")
+        print("Dataframe has been loaded from CDS using Pydash credentials")
+        
         return pd.read_sql_query(
             cds_sql_query,
             conn,
@@ -42,15 +43,19 @@ def get_data_from_cds_or_fallback_to_csv(
 
     except (ClientError, NoCredentialsError) as credential_error:
         try:
+            print("Failed to load dataframe using Pydash credentials: ", credential_error)
             conn = pyodbc.connect(CONN_STRING)
-            print(credential_error, "From Amazon Workspace, data source is CDS")
+            print("Dataframe has been loaded from CDS using Windows login authentication")
+            
             return pd.read_sql_query(
                 cds_sql_query,
                 conn,
             )
 
         except pyodbc.Error as conn_error_except:
-            print(credential_error, conn_error_except, "Data source is CSV")
+            print("Failed to load dataframe using Windows login authentication: ", conn_error_except)
+            print("Dataframe has been loaded from CSV")
+            
             return pd.read_csv(csv_path)
 
 
