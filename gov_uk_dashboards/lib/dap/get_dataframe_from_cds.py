@@ -51,9 +51,12 @@ def get_data_from_cds_or_fallback_to_csv(
             )
 
         except pyodbc.Error as conn_error_except:
-            print("Failed to load dataframe using Windows login authentication: ", conn_error_except)
+            print(
+                "Failed to load dataframe using Windows login authentication: ",
+                conn_error_except,
+            )
             print("Dataframe has been loaded from CSV")
-            
+
             return pd.read_csv(csv_path)
 
 
