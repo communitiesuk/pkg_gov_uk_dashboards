@@ -35,7 +35,7 @@ def get_data_from_cds_or_fallback_to_csv(
     try:
         conn = pyodbc.connect(_get_pydash_connection_string())
         print("Dataframe has been loaded from CDS using Pydash credentials")
-        
+
         return pd.read_sql_query(
             cds_sql_query,
             conn,
@@ -43,19 +43,26 @@ def get_data_from_cds_or_fallback_to_csv(
 
     except (ClientError, NoCredentialsError) as credential_error:
         try:
-            print("Failed to load dataframe using Pydash credentials: ", credential_error)
+            print(
+                "Failed to load dataframe using Pydash credentials: ", credential_error
+            )
             conn = pyodbc.connect(CONN_STRING)
-            print("Dataframe has been loaded from CDS using Windows login authentication")
-            
+            print(
+                "Dataframe has been loaded from CDS using Windows login authentication"
+            )
+
             return pd.read_sql_query(
                 cds_sql_query,
                 conn,
             )
 
         except pyodbc.Error as conn_error_except:
-            print("Failed to load dataframe using Windows login authentication: ", conn_error_except)
+            print(
+                "Failed to load dataframe using Windows login authentication: ",
+                conn_error_except,
+            )
             print("Dataframe has been loaded from CSV")
-            
+
             return pd.read_csv(csv_path)
 
 
@@ -63,15 +70,7 @@ def _get_pydash_connection_string():
     """Pydash aka DAP Hosting requires username and password"""
     credentials = _pydash_sql_credentials()
 
-    return (
-        CONN_STRING_DAP
-        + "UID="
-        + credentials["username"]
-        + ";"
-        + "PWD="
-        + credentials["password"]
-        + ";"
-    )
+    return f"{CONN_STRING_DAP}UID={credentials['username']};PWD={credentials['password']};"
 
 
 def _pydash_sql_credentials():
