@@ -20,12 +20,12 @@ CONN_STRING_DAP = (
 )
 
 
-def data_from_cds_if_connected(query: str, csv_path: str):
+def get_data_from_cds_or_fallback_to_csv(cds_sql_query: str, csv_path: str) -> pd.DataFrame:
     """Tries to return dataframe from CDS first via Pydash credentials,
     otherwise via Amazon WorkSpaces,
     otherwise via a file from folder.
     Inputs:
-        query(str): SQL query string
+        cds_sql_query(str): SQL query string
         csv_path(str): Filepath for location of csv
     Returns:
         pd.DataFrame
@@ -44,7 +44,7 @@ def data_from_cds_if_connected(query: str, csv_path: str):
         )
         print("From Pydash Data source is CDS")
         return pd.read_sql_query(
-            query,
+            cds_sql_query,
             conn,
         )
 
@@ -53,7 +53,7 @@ def data_from_cds_if_connected(query: str, csv_path: str):
             conn = pyodbc.connect(CONN_STRING)
             print(credential_error, "From Amazon Workspace, data source is CDS")
             return pd.read_sql_query(
-                query,
+                cds_sql_query,
                 conn,
             )
 
