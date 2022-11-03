@@ -70,7 +70,9 @@ def _get_pydash_connection_string():
     """Pydash aka DAP Hosting requires username and password"""
     credentials = _pydash_sql_credentials()
 
-    return f"{CONN_STRING_DAP}UID={credentials['username']};PWD={credentials['password']};"
+    return (
+        f"{CONN_STRING_DAP}UID={credentials['username']};PWD={credentials['password']};"
+    )
 
 
 def _pydash_sql_credentials():
