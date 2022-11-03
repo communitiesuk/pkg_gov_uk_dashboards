@@ -20,7 +20,9 @@ CONN_STRING_DAP = (
 )
 
 
-def get_data_from_cds_or_fallback_to_csv(cds_sql_query: str, csv_path: str) -> pd.DataFrame:
+def get_data_from_cds_or_fallback_to_csv(
+    cds_sql_query: str, csv_path: str
+) -> pd.DataFrame:
     """Tries to return dataframe from CDS first via Pydash credentials,
     otherwise via Amazon WorkSpaces,
     otherwise via a file from folder.
@@ -31,17 +33,7 @@ def get_data_from_cds_or_fallback_to_csv(cds_sql_query: str, csv_path: str) -> p
         pd.DataFrame
     """
     try:
-        credentials = pydash_sql_credentials()
-
-        conn = pyodbc.connect(
-            CONN_STRING_DAP
-            + "UID="
-            + credentials["username"]
-            + ";"
-            + "PWD="
-            + credentials["password"]
-            + ";"
-        )
+        conn = pyodbc.connect(_get_pydash_connection_string())
         print("From Pydash Data source is CDS")
         return pd.read_sql_query(
             cds_sql_query,
@@ -62,7 +54,22 @@ def get_data_from_cds_or_fallback_to_csv(cds_sql_query: str, csv_path: str) -> p
             return pd.read_csv(csv_path)
 
 
-def pydash_sql_credentials():
+def _get_pydash_connection_string():
+    """Pydash aka DAP Hosting requires username and password"""
+    credentials = _pydash_sql_credentials()
+
+    return (
+        CONN_STRING_DAP
+        + "UID="
+        + credentials["username"]
+        + ";"
+        + "PWD="
+        + credentials["password"]
+        + ";"
+    )
+
+
+def _pydash_sql_credentials():
     """
     Logging into CDS from Pydash requires user name and password.
     This method will return a dictionary containing the keys "username" and "password".
