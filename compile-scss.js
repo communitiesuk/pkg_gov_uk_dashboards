@@ -8,4 +8,4 @@ const result = renderSync({
 	includePaths: ['node_modules']
 });
 
-writeFileSync('assets/dashboard.css', result.css, { encoding: 'utf8', flag: 'w' })
+writeFileSync('gov_uk_dashboards/assets/dashboard.css', result.css, { encoding: 'utf8', flag: 'w' })
