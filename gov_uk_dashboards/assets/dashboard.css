@@ -7074,7 +7074,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-ononesx-font-smoothing: grayscale;
 }
-
 body .govuk-header {
   border-color: #1d70b8;
 }
@@ -7149,15 +7148,6 @@ svg.back-to-top {
   margin-top: -5px;
   margin-right: 10px;
   vertical-align: middle;
-}
-
-.govuk-table__cell--date {
-  font-variant-numeric: tabular-nums;
-}
-
-.govuk-main-wrapper {
-  padding-top: 0;
-  width: 100%;
 }
 
 .mobile-menu-button {
