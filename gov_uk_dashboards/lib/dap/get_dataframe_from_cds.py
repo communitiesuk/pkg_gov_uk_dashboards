@@ -5,35 +5,25 @@ import pyodbc
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
 
-CONN_STRING = (
-    "Driver={SQL Server};"
-    "Server=DAP-SQLTEST\\CDS;"
-    "Database=Dashboards;"
-    "Trusted_Connection=yes;"
-)
-
-CONN_STRING_DAP = (
-    "Driver={/usr/lib/libmsodbcsql-18.so};"
-    "Server=10.154.41.171\\CDS,1444;"
-    "TrustServerCertificate=yes;"
-    "Database=Dashboards;"
-)
-
 
 def get_data_from_cds_or_fallback_to_csv(
-    cds_sql_query: str, csv_path: str
+    cds_sql_query: str, csv_path: str, secret_name: str, cds_server_name: str
 ) -> pd.DataFrame:
     """Tries to return dataframe from CDS first via Pydash credentials,
     otherwise via Amazon WorkSpaces,
     otherwise via a file from folder.
     Inputs:
         cds_sql_query(str): SQL query string
-        csv_path(str): Filepath for location of csv
+        csv_path(str): Filepath for location of csv to fallback to
+        secret_name(str): AWS Secrets Manager, secret name containing CDS credentials.
+        cds_server_name(str): CDS Server name used in connection string
     Returns:
         pd.DataFrame
     """
     try:
-        conn = pyodbc.connect(_get_pydash_connection_string())
+        conn = pyodbc.connect(
+            _get_pydash_connection_string(secret_name, cds_server_name)
+        )
         print("Dataframe has been loaded from CDS using Pydash credentials")
 
         return pd.read_sql_query(
@@ -46,7 +36,12 @@ def get_data_from_cds_or_fallback_to_csv(
             print(
                 "Failed to load dataframe using Pydash credentials: ", credential_error
             )
-            conn = pyodbc.connect(CONN_STRING)
+            conn = pyodbc.connect(
+                "Driver={SQL Server};"
+                f"Server={cds_server_name};"
+                "Database=Dashboards;"
+                "Trusted_Connection=yes;"
+            )
             print(
                 "Dataframe has been loaded from CDS using Windows login authentication"
             )
@@ -66,25 +61,35 @@ def get_data_from_cds_or_fallback_to_csv(
             return pd.read_csv(csv_path)
 
 
-def _get_pydash_connection_string():
-    """Pydash aka DAP Hosting requires username and password"""
-    credentials = _pydash_sql_credentials()
-
+def _get_pydash_connection_string(secret_name: str, cds_server_name: str):
+    """
+    Pydash aka DAP Hosting requires username and password
+    Inputs:
+        secret_name(str): AWS Secrets Manager, secret name containing CDS credentials.
+        cds_server_name(str): CDS Server name used in connection string
+    """
+    credentials = _pydash_sql_credentials(secret_name)
+    conn_string_dap = (
+        "Driver={/usr/lib/libmsodbcsql-18.so};"
+        f"Server={cds_server_name};"
+        "TrustServerCertificate=yes;"
+        "Database=Dashboards;"
+    )
     return (
-        f"{CONN_STRING_DAP}UID={credentials['username']};PWD={credentials['password']};"
+        f"{conn_string_dap}UID={credentials['username']};PWD={credentials['password']};"
     )
 
 
-def _pydash_sql_credentials():
+def _pydash_sql_credentials(secret_name: str):
     """
     Logging into CDS from Pydash requires user name and password.
     This method will return a dictionary containing the keys "username" and "password".
     Raises `botocore.exceptions.ClientError` if no credentials could be obtained
+    Inputs:
+        secret_name(str): AWS Secrets Manager, secret name containing CDS credentials.
     Returns:
         dict:   a dictionary containing the keys "username" and "password"
     """
-    # These values have come from David Wheatley
-    secret_name = "test-pydash-sql-access"
     region_name = "eu-west-1"
     # Create a Secrets Manager client
     session = boto3.session.Session()
