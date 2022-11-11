@@ -3,6 +3,7 @@ $govuk-page-width: 1920px;
 $primary-colour: #1d70b8;
 $govuk-secondary-text-colour: #6B7276;
 $govuk-font-family: Arial, sans-serif;
+$font-sans-serif: sans-serif;
 
 @import "node_modules/govuk-frontend/govuk/all";
 
@@ -36,10 +37,9 @@ $govuk-font-family: Arial, sans-serif;
 body {
   -webkit-font-smoothing: antialiased;
   -moz-ononesx-font-smoothing: grayscale;
-}
-
-body .govuk-header {
-  border-color: #1d70b8;
+  .govuk-header {
+    border-color: $primary-colour;
+  }
 }
 
 pre,
@@ -114,15 +114,6 @@ svg.back-to-top {
   vertical-align: middle;
 }
 
-.govuk-table__cell--date {
-  font-variant-numeric: tabular-nums;
-}
-
-.govuk-main-wrapper {
-  padding-top: 0;
-  width: 100%;
-}
-
 .mobile-menu-button {
   width: max-content !important;
   color: #fff !important;
@@ -156,7 +147,7 @@ button:focus,
 input[type='submit']:focus,
 input[type='reset']:focus {
   background-color: #fd0 !important;
-  outline: #1d70b8 solid 2px !important;
+  outline: $primary-colour solid 2px !important;
   border-bottom-color: transparent !important;
   box-shadow: unset !important;
   text-decoration: none !important;
@@ -173,7 +164,7 @@ input[type='reset']:focus {
 }
 
 .moj-side-navigation {
-  font-family: Arial, sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -184,7 +175,7 @@ input[type='reset']:focus {
 
 @media print {
   .moj-side-navigation {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -205,7 +196,7 @@ input[type='reset']:focus {
 
 @media (min-width: 49.9375em) {
   .moj-side-navigation {
-    font-family: Arial, sans-serif;
+    font-family: $govuk-font-family;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
@@ -217,7 +208,7 @@ input[type='reset']:focus {
 
 @media print and (min-width: 49.9375em) {
   .moj-side-navigation {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -247,7 +238,7 @@ input[type='reset']:focus {
 .moj-side-navigation__item a:visited {
   display: block;
   background-color: inherit;
-  color: #1d70b8;
+  color: $primary-colour;
   text-decoration: none;
 }
 
@@ -288,10 +279,10 @@ input[type='reset']:focus {
 
 .moj-side-navigation__item--active a:link,
 .moj-side-navigation__item--active a:visited {
-  border-color: #1d70b8;
+  border-color: $primary-colour;
   background-color: #f3f2f1;
-  color: #1d70b8;
-  font-family: Arial, sans-serif;
+  color: $primary-colour;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 700;
@@ -304,7 +295,7 @@ input[type='reset']:focus {
 
   .moj-side-navigation__item--active a:link,
   .moj-side-navigation__item--active a:visited {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -331,7 +322,7 @@ input[type='reset']:focus {
 
   .moj-side-navigation__item--active a:link,
   .moj-side-navigation__item--active a:visited {
-    font-family: Arial, sans-serif;
+    font-family: $govuk-font-family;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 700;
@@ -345,7 +336,7 @@ input[type='reset']:focus {
 
   .moj-side-navigation__item--active a:link,
   .moj-side-navigation__item--active a:visited {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -372,7 +363,7 @@ input[type='reset']:focus {
   border-color: #0b0c0c;
   border-left-color: transparent;
   background-color: #fd0;
-  box-shadow: 0 -2px #1d70b8, 0 4px #1d70b8;
+  box-shadow: 0 -2px $primary-colour, 0 4px $primary-colour;
   color: #0b0c0c;
 }
 
@@ -397,7 +388,7 @@ thead.govuk-table__head-short th {
 .tooltip {
   width: 150px;
   padding: 8px 10px;
-  font-family: Arial, sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -411,7 +402,7 @@ thead.govuk-table__head-short th {
 
 @media print {
   .tooltip {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -478,12 +469,12 @@ thead.govuk-table__head-short th {
 }
 
 .cases .govuk-tabs__list-item .govuk-tabs__tab:link {
-  color: #1d70b8 !important;
+  color: $primary-colour !important;
   text-decoration: none;
 }
 
 .cases .govuk-tabs__list-item .govuk-tabs__tab:visited {
-  color: #1d70b8 !important;
+  color: $primary-colour !important;
   text-decoration: none;
 }
 
@@ -619,7 +610,7 @@ thead.govuk-table__head-short th {
 }
 
 main {
-  font-family: Arial, sans-serif;
+  font-family: $govuk-font-family;
 }
 
 .mini-card-empty{
@@ -702,7 +693,7 @@ main {
   background: rgba(0, 0, 0, 0.85) !important;
   border-radius: 3px;
   transition: opacity 0.3s ease-out;
-  font-family: Arial, sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -715,7 +706,7 @@ main {
 
 @media print {
   .tooltiptext {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -797,7 +788,7 @@ main {
 }
 
 .moj-side-navigation {
-  font-family: Arial, sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -808,7 +799,7 @@ main {
 
 @media print {
   .moj-side-navigation {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -829,7 +820,7 @@ main {
 
 @media (min-width: 49.9375em) {
   .moj-side-navigation {
-    font-family: Arial, sans-serif;
+    font-family: $govuk-font-family;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
@@ -841,7 +832,7 @@ main {
 
 @media print and (min-width: 49.9375em) {
   .moj-side-navigation {
-    font-family: sans-serif;
+    font-family: $font-sans-serif;
   }
 }
 
@@ -883,7 +874,7 @@ main {
 .moj-side-navigation__item a:visited {
   display: block;
   background-color: inherit;
-  color: #1d70b8;
+  color: $primary-colour;
   text-decoration: none;
 }
 
@@ -924,9 +915,9 @@ main {
 
 .moj-side-navigation__item--active a:link,
 .moj-side-navigation__item--active a:visited {
-  border-color: #1d70b8;
+  border-color: $primary-colour;
   background-color: #f3f2f1;
-  color: #1d70b8;
+  color: $primary-colour;
   font-weight: bold;
 }
 
@@ -934,7 +925,7 @@ main {
   border-color: #0b0c0c;
   border-left-color: transparent;
   background-color: #fd0;
-  box-shadow: 0 -2px #1d70b8, 0 4px #1d70b8;
+  box-shadow: 0 -2px $primary-colour, 0 4px $primary-colour;
   color: #0b0c0c;
 }
 
@@ -942,7 +933,7 @@ main {
   display: grid;
   padding: 0.7rem;
   justify-content: center;
-  background-color: #1d70b8;
+  background-color: $primary-colour;
   margin-bottom: 1px;
 }
 
@@ -1070,15 +1061,15 @@ mark.expenditure {
 .moj-side-navigation__item--expanded>a:after {
   transform: translateY(-35%) rotate(45deg) scale(1);
   transform: translateY(1px) rotate(225deg) scale(1);
-  border-bottom: 2px solid #1d70b8;
-  border-right: 2px solid #1d70b8;
+  border-bottom: 2px solid $primary-colour;
+  border-right: 2px solid $primary-colour;
 }
 
 .moj-side-navigation__item--collapsed>a:after {
   transform: translateY(-35%) rotate(225deg) scale(1);
   transform: translateY(1px) rotate(45deg) scale(1);
-  border-bottom: 2px solid #1d70b8;
-  border-right: 2px solid #1d70b8;
+  border-bottom: 2px solid $primary-colour;
+  border-right: 2px solid $primary-colour;
 }
 
 .govuk-header__logo,
