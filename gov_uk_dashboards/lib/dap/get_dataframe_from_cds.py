@@ -1,4 +1,5 @@
 """ Returns a dataframe after connecting to CDS, otherwise uses a csv already saved in the file"""
+import os
 import json
 import pandas as pd
 import pyodbc
@@ -20,6 +21,12 @@ def get_data_from_cds_or_fallback_to_csv(
     Returns:
         pd.DataFrame
     """
+    if (
+        "DATA_FOLDER_LOCATION" in os.environ
+        and os.environ["DATA_FOLDER_LOCATION"] == "tests/"
+    ) or ("STAGE" in os.environ and os.environ["STAGE"] == "testing"):
+        return pd.read_csv(csv_path)
+
     try:
         conn = pyodbc.connect(
             _get_pydash_connection_string(secret_name, cds_server_name)
