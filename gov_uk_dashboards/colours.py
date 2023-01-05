@@ -48,9 +48,13 @@ class GovUKColours(Enum):
 class ONSAccessibleColours(Enum):
     """ONS colours taken from their Subnational indicators explorer
     (https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/articles/
-    subnationalindicatorsexplorer/2022-01-06)"""
+    subnationalindicatorsexplorer/2022-01-06)
+
+    Orange added to differentiate from CIPFA light blue
+    """
 
     DARK_BLUE = "#206095"
     LIME = "#a8bd3a"
     MAROON = "#871a5b"
-    LIGHT_BLUE = "#27a0cc"
+    # LIGHT_BLUE = "#27a0cc"
+    ORANGE = "#f47738"
