@@ -134,6 +134,7 @@ When you want to make changes to the package to use in another repository, it ca
 - Do this by clicking into functions from the package in your IDE or by finding the file you wish to change in your file system, e.g.
  ```.../anaconda3/envs/local_government_dashboard/lib/python3.9/site-packages/gov_uk_dashboards/components/...```
 - Make the changes to the package file and you should see the changes in your localhost on refresh
+- If you want to undo your changes: `pip install --upgrade --force-reinstall <package_name>~=<package_version>`
 
 When you're happy, you can make the changes on a branch in the package repo and install it locally to check it works as expected when imported before merging into main in the package repo:
 - You can update the *environment.yml* to point at your branch or run ```pip install``` with the url:
