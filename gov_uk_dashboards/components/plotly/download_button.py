@@ -12,7 +12,7 @@ def download_button():
                 "Download data",
                 id="download-button",
                 n_clicks=0,
-                className="govuk-button govuk-button--secondary",  
+                className="govuk-button govuk-button--secondary",
             ),
         ],
         className="govuk-button-group",
