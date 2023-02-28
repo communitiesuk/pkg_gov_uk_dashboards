@@ -64,7 +64,6 @@ def get_data_from_cds_or_fallback_to_csv(
                 conn_error_except,
             )
             print("Dataframe has been loaded from CSV")
-            print(csv_path)
             return pd.read_csv(csv_path)
 
 
