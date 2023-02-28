@@ -4,7 +4,6 @@ import json
 import pandas as pd
 import pyodbc
 import boto3
-from botocore.exceptions import ClientError, NoCredentialsError
 
 
 def get_data_from_cds_or_fallback_to_csv(
@@ -38,7 +37,7 @@ def get_data_from_cds_or_fallback_to_csv(
             conn,
         )
 
-    except Exception as credential_error:
+    except Exception as credential_error:  # pylint: disable=broad-except
         try:
             print(
                 "Failed to load dataframe using Pydash credentials: ", credential_error
