@@ -10,7 +10,7 @@ setup(
     author="Department for Levelling Up, Housing and Communities",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
-    version="7.3.1",
+    version="7.3.2",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
