@@ -2,14 +2,17 @@
 from dash import html
 
 
-def download_button():
+def download_button(button_text: str):
     """
-    Return download button which is aligned to the right
+    Return a download button which is aligned to the right
+    
+    Args:
+    button_text (str): The text to display on the button.
     """
     return html.Div(
         [
             html.Button(
-                "Download data",
+                button_text,
                 id="download-button",
                 n_clicks=0,
                 className="govuk-button govuk-button--secondary",
