@@ -5,7 +5,7 @@ from dash import html
 def download_button(button_text: str):
     """
     Return a download button which is aligned to the right
-    
+
     Args:
     button_text (str): The text to display on the button.
     """
