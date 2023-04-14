@@ -5,14 +5,18 @@ from dash import html, dcc
 
 
 def side_navbar(
-    links, identifier: Optional[str] = None, list_id: Optional[str] = "navbar_list"
+    links, identifier: Optional[str] = None, nav_id: Optional[str] = "nav-section"
 ):
     """A navigation bar for switching between dashboards."""
     return html.Nav(
-        html.Ul(links, id=list_id, className="moj-side-navigation__list"),
+        html.Ul(
+            links,
+            id=identifier if identifier is not None else "",
+            className="moj-side-navigation__list",
+        ),
         className="moj-side-navigation",
         role="navigation",
-        id=identifier if identifier is not None else "",
+        id=nav_id if nav_id is not None else "",
     )
 
 
