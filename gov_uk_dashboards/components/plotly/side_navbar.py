@@ -16,7 +16,7 @@ def side_navbar(
         ),
         className="moj-side-navigation",
         role="navigation",
-        id=nav_id if nav_id is not None else "",
+        id=nav_id,
     )
 
 
