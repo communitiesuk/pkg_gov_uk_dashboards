@@ -12,7 +12,7 @@ def table_from_dataframe(
     short_table: bool = True,
     last_row_unbolded: bool = False,
     **table_properties,
-): # pylint: disable=too-many-arguments
+):  # pylint: disable=too-many-arguments
     """
     Displays a pandas DataFrame as a table formatted in the Gov.UK style
 
