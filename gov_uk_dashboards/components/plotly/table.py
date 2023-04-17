@@ -10,6 +10,7 @@ def table_from_dataframe(
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
     short_table: bool = True,
+    last_row_unbolded = False,
     **table_properties,
 ):
     """
@@ -58,6 +59,7 @@ def table_from_dataframe(
         )
     )
 
+    last_row_index = len(dataframe) - 1 if last_row_unbolded else len(dataframe)
     table_contents.append(
         html.Tbody(
             [
@@ -65,11 +67,11 @@ def table_from_dataframe(
                     [html.Th(row[0], scope="row", className="govuk-table__header")]
                     + [html.Td(cell, className="govuk-table__cell") for cell in row[1:]]
                 )
-                if first_column_is_header
+                if first_column_is_header and index != last_row_index
                 else html.Tr(
                     [html.Td(cell, className="govuk-table__cell") for cell in row]
                 )
-                for _, row in dataframe.iterrows()
+                for index, row in dataframe.iterrows()
             ],
             className="govuk-table__body",
         )
