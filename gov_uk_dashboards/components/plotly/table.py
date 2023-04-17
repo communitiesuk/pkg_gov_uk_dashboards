@@ -10,7 +10,7 @@ def table_from_dataframe(
     first_column_is_header: bool = True,
     title_is_subtitle: bool = False,
     short_table: bool = True,
-    last_row_unbolded = False,
+    last_row_unbolded=False,
     **table_properties,
 ):
     """
