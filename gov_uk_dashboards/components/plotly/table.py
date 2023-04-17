@@ -1,7 +1,7 @@
 """Function for creating a table component from a dataframe"""
 from typing import Optional
 from pandas import DataFrame
-from dash import html
+from dash import html, dcc
 
 
 def table_from_dataframe(
@@ -11,6 +11,7 @@ def table_from_dataframe(
     title_is_subtitle: bool = False,
     short_table: bool = True,
     last_row_unbolded: bool = False,
+    format_column_headers_as_markdown: bool = False,
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
@@ -30,6 +31,8 @@ def table_from_dataframe(
         short_table: (bool, optional): if False the header of the table will scroll with window.
         last_row_unbolded: (bool, optional): Sets if the last row should not be bolded if
             first_column_is_header is True. Defaults to False.
+        format_column_headers_as_markdown: (bool, optional): Sets if the column headers should
+            be formatted as markdown. Defaults to False.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -52,7 +55,13 @@ def table_from_dataframe(
         html.Thead(
             html.Tr(
                 [
-                    html.Th(header, scope="col", className="govuk-table__header")
+                    html.Th(
+                        dcc.Markdown(header),
+                        scope="col",
+                        className="govuk-table__header",
+                    )
+                    if format_column_headers_as_markdown
+                    else html.Th(header, scope="col", className="govuk-table__header")
                     for header in dataframe.columns
                 ],
                 className="govuk-table__row",
