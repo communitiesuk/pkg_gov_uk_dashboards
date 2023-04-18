@@ -88,4 +88,10 @@ def table_from_dataframe(
         )
     )
 
-    return html.Table(table_contents, className="govuk-table", **table_properties)
+    return html.Table(
+        table_contents,
+        className="govuk-table",
+        id="table",
+        role="table",
+        **table_properties,
+    )
