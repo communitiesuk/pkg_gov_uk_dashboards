@@ -8057,3 +8057,7 @@ mark.expenditure {
     float: left;
   }
 }
+.loading-div {
+  font-weight: bold;
+  font-size: 30px;
+}
