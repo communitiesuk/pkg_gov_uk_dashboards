@@ -2,6 +2,7 @@
 
 
 import dash
+import os
 
 
 def setup_application_http_response_headers(dash_app: dash.Dash):
@@ -10,13 +11,18 @@ def setup_application_http_response_headers(dash_app: dash.Dash):
 
     @server.after_request
     def add_headers(response):
-        response.headers.add(
-            "Content-Security-Policy",
-            "default-src 'self' 'unsafe-eval' 'unsafe-inline' data:",
-        )
+
+
+        content_security_policy = "default-src 'self' 'unsafe-eval' 'unsafe-inline' data:"
+        frame_ancestors = os.environ.get("ALLOWED_FRAME_ANCESTORS")
+        if frame_ancestors:
+            content_security_policy += '; frame-ancestors ' + frame_ancestors
+        response.headers.add("Content-Security-Policy", content_security_policy)
+
         response.headers.add("X-Content-Type-Options", "nosniff")
-        response.headers.add("X-Frame-Options", "DENY")
         response.headers.add("Referrer-Policy", "no-referrer")
+        response.headers.add("X-Frame-Options", "DENY")
+
         # The below header will disable all browser features for the dashboard website
         response.headers.add(
             "Permission-Policy",
