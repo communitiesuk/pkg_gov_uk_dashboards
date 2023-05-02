@@ -1,8 +1,8 @@
 """http_headers"""
 
 
-import dash
 import os
+import dash
 
 
 def setup_application_http_response_headers(dash_app: dash.Dash):
