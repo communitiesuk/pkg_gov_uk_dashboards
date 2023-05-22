@@ -1093,3 +1093,16 @@ mark.expenditure {
   font-weight: bold;
   font-size: 30px;
 }
+
+.grid-item-css{
+  background-color: #f3f2f1;
+  padding: 50px;
+  text-align: center;
+}
+
+.grid-container-css{
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 50px 300px;
+  gap: 75px 100px; 
+}
