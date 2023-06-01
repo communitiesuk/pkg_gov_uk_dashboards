@@ -59,6 +59,7 @@ Contains:
     visualisation.
 - apply_and_reset_filters_buttons: Add apply filters and reset filters buttons, whcih are aligned to
 the right
+- add_filter_button: Return a 'Compare to additional authority' button which is aligned to the right
 """
 
 from .banners import message_banner
@@ -87,3 +88,4 @@ from .table import table_from_dataframe
 from .tooltip_title import tooltip_title
 from .visualisation_commentary import format_visualisation_commentary
 from .visualisation_title import format_visualisation_title
+from .comparison_la_filter_button import add_filter_button
