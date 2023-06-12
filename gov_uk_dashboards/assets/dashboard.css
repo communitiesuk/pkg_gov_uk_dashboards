@@ -8079,3 +8079,7 @@ mark.expenditure {
   width: max-content;
   margin-top: 50px;
 }
+
+.comparison-button {
+  background: #dbdad9;
+}
