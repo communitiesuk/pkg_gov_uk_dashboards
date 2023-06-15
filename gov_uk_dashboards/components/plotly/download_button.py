@@ -9,7 +9,7 @@ def download_button(button_text: str, button_id: Optional[str] = "download-butto
 
     Args:
     button_text (str): The text to display on the button.
-    id: (str, Optional) = id for dropdown, default to "download-button"
+    button_id: (str, Optional) = id for dropdown, default to "download-button"
     """
     return html.Div(
         [
