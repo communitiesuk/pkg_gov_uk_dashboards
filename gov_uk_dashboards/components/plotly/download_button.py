@@ -3,7 +3,7 @@ from typing import Optional
 from dash import html
 
 
-def download_button(button_text: str, id: Optional[str] = "download-button"):
+def download_button(button_text: str, button_id: Optional[str] = "download-button"):
     """
     Return a download button which is aligned to the right
 
@@ -15,7 +15,7 @@ def download_button(button_text: str, id: Optional[str] = "download-button"):
         [
             html.Button(
                 button_text,
-                id=id,
+                id=button_id,
                 n_clicks=0,
                 className="govuk-button govuk-button--secondary",
             ),
