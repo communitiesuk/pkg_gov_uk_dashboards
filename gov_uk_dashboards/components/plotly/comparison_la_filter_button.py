@@ -16,7 +16,7 @@ def add_filter_button(style: dict, id_string: str):
                 "Compare to additional authority",
                 id=id_string,
                 n_clicks=0,
-                className="govuk-button govuk-button--secondary",
+                className="govuk-button govuk-button--secondary comparison-button-background",
             ),
         ],
         className="govuk-button-group",

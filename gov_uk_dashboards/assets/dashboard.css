@@ -8079,3 +8079,11 @@ mark.expenditure {
   width: max-content;
   margin-top: 50px;
 }
+
+.comparison-button-background {
+  background-color: #dbdad9;
+}
+
+.comparison-button-background:hover {
+  background-color: #c9c8c7;
+}
