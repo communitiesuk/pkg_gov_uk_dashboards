@@ -11,7 +11,6 @@ setup(
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
     version="9.8.0",
-    version="9.7.1",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
