@@ -14,7 +14,10 @@ def key_value_pair(key, value):
         value_can_be_displayed = value is not None
 
     return [
-        html.Dt(key, className="govuk-body-s govuk-!-margin-bottom-0",),
+        html.Dt(
+            key,
+            className="govuk-body-s govuk-!-margin-bottom-0",
+        ),
         html.Dd(
             value if value_can_be_displayed else "-",
             className="govuk-heading-m govuk-!-margin-0 govuk-!-padding-0",

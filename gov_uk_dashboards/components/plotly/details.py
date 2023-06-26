@@ -22,7 +22,12 @@ def details(details_summary: str, details_text: str) -> html.Details:
     return html.Details(
         [
             html.Summary(
-                [html.Span(details_summary, className="govuk-details__summary-text",)],
+                [
+                    html.Span(
+                        details_summary,
+                        className="govuk-details__summary-text",
+                    )
+                ],
                 className="govuk-details__summary",
             ),
             html.Div(details_text, className="govuk-details__text"),

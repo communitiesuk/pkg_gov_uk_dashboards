@@ -6,7 +6,10 @@ def warning_text(text: str):
     """
     Return Gov UK Design component warning text component, ! with text.
     """
-    text = html.Div(format_text(text), className="govuk-warning-text",)
+    text = html.Div(
+        format_text(text),
+        className="govuk-warning-text",
+    )
     return text
 
 
@@ -35,7 +38,12 @@ def format_text(text: str) -> list:
             info_link = segment.replace("<a>", "")
             link_description = info_link.split("|")[0]
             link = info_link.split("|")[1]
-            formatted_text.append(html.A(link_description, href=link,))
+            formatted_text.append(
+                html.A(
+                    link_description,
+                    href=link,
+                )
+            )
         else:
             formatted_text.append(segment)
 
@@ -43,5 +51,8 @@ def format_text(text: str) -> list:
         html.Span(
             ["!"], className="govuk-warning-text__icon", **{"aria-hidden": "true"}
         ),
-        html.Strong(formatted_text, className="govuk-warning-text__text",),
+        html.Strong(
+            formatted_text,
+            className="govuk-warning-text__text",
+        ),
     ]

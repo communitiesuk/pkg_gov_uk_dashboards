@@ -8,7 +8,11 @@ def apply_and_reset_filters_buttons():
     """
     return html.Div(
         [
-            html.A("Reset filters", href="?", className="govuk-link govuk-body",),
+            html.A(
+                "Reset filters",
+                href="?",
+                className="govuk-link govuk-body",
+            ),
             html.Button(
                 "Apply filters",
                 id="submit-button",
