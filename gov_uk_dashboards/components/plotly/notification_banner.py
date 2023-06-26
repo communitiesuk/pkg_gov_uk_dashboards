@@ -19,14 +19,7 @@ def notification_banner(text: str):
                 className="govuk-notification-banner__header",
             ),
             html.Div(
-                [
-                    html.P(
-                        [
-                            text,
-                        ],
-                        className="govuk-notification-banner__heading",
-                    )
-                ],
+                [html.P([text,], className="govuk-notification-banner__heading",)],
                 className="govuk-notification-banner__content",
             ),
         ],

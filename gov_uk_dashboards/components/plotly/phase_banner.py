@@ -15,8 +15,7 @@ def phase_banner_with_feedback(
             html.P(
                 [
                     html.Strong(
-                        [phase],
-                        className="govuk-tag govuk-phase-banner__content__tag",
+                        [phase], className="govuk-tag govuk-phase-banner__content__tag",
                     ),
                     html.Span(
                         [

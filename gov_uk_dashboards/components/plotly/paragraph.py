@@ -35,7 +35,4 @@ def paragraph(
             f"Size {size} is not a valid paragraph size (use ParagraphSize enum)."
         )
 
-    return html.P(
-        children,
-        className=size,
-    )
+    return html.P(children, className=size,)
