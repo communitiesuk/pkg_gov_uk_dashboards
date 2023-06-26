@@ -5,14 +5,12 @@ from dash import html
 def warning_text(text: str):
     """
     Return Gov UK Design component warning text component, ! with text.
-    """    
-    text = html.Div(
-        format_text(text),               
-        className="govuk-warning-text",
-    )
+    """
+    text = html.Div(format_text(text), className="govuk-warning-text",)
     return text
 
-def format_text(text):
+
+def format_text(text: str) -> list:
     """
     Formats a segment of text.
     If the tag <b> is found the process transform the text in bold
@@ -20,9 +18,14 @@ def format_text(text):
 
     Args:
         text (str): The text to be formatted.
+
+    Returns:
+        list of components.
     """
     formatted_text = []
-    formatted_text.append(html.Span(["Warning"], className="govuk-warning-text__assistive"),)
+    formatted_text.append(
+        html.Span(["Warning"], className="govuk-warning-text__assistive"),
+    )
     segments = text.split("$")
     for segment in segments:
         if segment.startswith("<b>"):
@@ -32,12 +35,7 @@ def format_text(text):
             info_link = segment.replace("<a>", "")
             link_description = info_link.split("|")[0]
             link = info_link.split("|")[1]
-            formatted_text.append(
-                html.A(
-                    link_description,
-                    href=link,
-                )
-            )
+            formatted_text.append(html.A(link_description, href=link,))
         else:
             formatted_text.append(segment)
 
@@ -45,8 +43,5 @@ def format_text(text):
         html.Span(
             ["!"], className="govuk-warning-text__icon", **{"aria-hidden": "true"}
         ),
-        html.Strong(
-            formatted_text,
-            className="govuk-warning-text__text",
-        )]
-
+        html.Strong(formatted_text, className="govuk-warning-text__text",),
+    ]
