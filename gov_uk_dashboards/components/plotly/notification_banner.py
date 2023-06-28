@@ -2,7 +2,9 @@
 from dash import html
 
 
-def notification_banner(text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None):
+def notification_banner(
+    text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None
+):
     """
     Return Gov UK Design component notification banner component.
     """
