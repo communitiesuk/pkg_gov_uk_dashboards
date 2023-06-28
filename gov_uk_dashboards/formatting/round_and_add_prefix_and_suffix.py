@@ -28,5 +28,6 @@ def round_and_add_prefix_and_suffix(
         return separator
     if decimal_places is not None:
         value = round(value, decimal_places)
-        value = f"{value:.{decimal_places}f}"
+        if decimal_places > 0:
+            value = f"{value:.{decimal_places}f}"
     return f"{prefix}{value}{suffix}"
