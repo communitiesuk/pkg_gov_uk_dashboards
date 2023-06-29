@@ -30,10 +30,13 @@ def round_and_add_prefix_and_suffix(
 
     if decimal_places is not None:
         decimal_value = decimal.Decimal(str(value))
-        rounded_value = decimal_value.quantize(
-            decimal.Decimal("0.{}".format("0" * decimal_places)),
-            rounding=decimal.ROUND_HALF_UP
-        )
-        value = str(rounded_value)
+
+        if decimal_places >= 0:
+            value = decimal_value.quantize(
+                decimal.Decimal(f"0.{'0' * decimal_places}"),
+                rounding=decimal.ROUND_HALF_UP,
+            )
+        else:
+            value = round(value, decimal_places)
 
     return f"{prefix}{value}{suffix}"
