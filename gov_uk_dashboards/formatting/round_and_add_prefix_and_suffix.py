@@ -3,6 +3,7 @@ Function to add a prefix and suffix to a number and also show the number of deci
 specified.
 """
 import math
+import decimal
 
 
 def round_and_add_prefix_and_suffix(
@@ -26,11 +27,13 @@ def round_and_add_prefix_and_suffix(
     """
     if value is None or math.isnan(value):
         return separator
+
     if decimal_places is not None:
-        value = round(value, decimal_places)
-        if decimal_places == 0:
-            value = round(value)
-        if decimal_places > 0:
-            value = f"{value:.{decimal_places}f}"
+        decimal_value = decimal.Decimal(str(value))
+        rounded_value = decimal_value.quantize(
+            decimal.Decimal("0.{}".format("0" * decimal_places)),
+            rounding=decimal.ROUND_HALF_UP
+        )
+        value = str(rounded_value)
 
     return f"{prefix}{value}{suffix}"

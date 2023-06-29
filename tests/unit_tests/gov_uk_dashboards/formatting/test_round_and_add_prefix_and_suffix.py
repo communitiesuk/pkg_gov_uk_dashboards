@@ -30,11 +30,11 @@ def test_round_and_add_prefix_and_suffix_returns_formatted_value():
         )
         == "ABC"
     )
-    # assert (
-    #     round_and_add_prefix_and_suffix(
-    #         342.2, decimal_places=0, prefix="£", suffix=" per person"
-    #     )
-    #     == "£342 per person"
-    # )
+    assert (
+        round_and_add_prefix_and_suffix(
+            342.2, decimal_places=0, prefix="£", suffix=" per person"
+        )
+        == "£342 per person"
+    )
     assert round_and_add_prefix_and_suffix(None, decimal_places=-1) == "-"
     assert round_and_add_prefix_and_suffix(123, decimal_places=-1) == "120"
