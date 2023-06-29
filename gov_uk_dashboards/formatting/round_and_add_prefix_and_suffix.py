@@ -27,7 +27,10 @@ def round_and_add_prefix_and_suffix(
     if value is None or math.isnan(value):
         return separator
     if decimal_places is not None:
-        value = round(value, decimal_places)
         if decimal_places > 0:
+            value = round(value, decimal_places)
             value = f"{value:.{decimal_places}f}"
+        else:
+            value = round(value)
+            
     return f"{prefix}{value}{suffix}"
