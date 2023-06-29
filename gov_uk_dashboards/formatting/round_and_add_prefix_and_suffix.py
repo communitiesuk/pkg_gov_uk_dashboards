@@ -32,5 +32,5 @@ def round_and_add_prefix_and_suffix(
             value = f"{value:.{decimal_places}f}"
         else:
             value = round(value)
-            
+
     return f"{prefix}{value}{suffix}"
