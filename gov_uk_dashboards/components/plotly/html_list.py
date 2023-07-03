@@ -15,7 +15,6 @@ def html_list(
         classes.append("govuk-list--spaced")
 
     if numbered_list:
-
         classes.append("govuk-list--number")
         return html.Ol(li_items, className=" ".join(classes))
 
