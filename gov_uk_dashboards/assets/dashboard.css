@@ -8066,6 +8066,8 @@ mark.expenditure {
   background-color: #f3f2f1;
   padding: 50px;
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .grid-container-css {
@@ -8073,6 +8075,8 @@ mark.expenditure {
   grid-template-columns: auto auto;
   padding: 50px 300px;
   gap: 75px 100px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 250px;
 }
 
 .combined-table-width {
