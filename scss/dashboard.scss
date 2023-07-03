@@ -1139,6 +1139,10 @@ mark.expenditure {
   margin: 0px;
 }
 
+govuk-link govuk-body.negative-margin{
+  margin-bottom: -10px;
+}
+
 button-group-margin {
-  margin-bottom: 0px;
+  margin-bottom: -10px;
 }
