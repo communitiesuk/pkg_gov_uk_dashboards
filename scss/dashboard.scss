@@ -1100,15 +1100,17 @@ mark.expenditure {
   text-align: center;
   display: flex;
   justify-content: center;
+  align-items: center; 
+  flex-direction: column;
 }
 
 .grid-container-css{
   display: grid;
-  grid-template-columns: auto auto;
-  padding: 50px 300px;
-  gap: 75px 100px; 
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-auto-rows: 250px;
+  padding: 50px 300px;
+  gap: 75px 100px; 
+  align-items: stretch;
 }
 
 .combined-table-width {
