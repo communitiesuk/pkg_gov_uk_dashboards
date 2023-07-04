@@ -17,7 +17,6 @@ def deploy_main_branch_to_pydash_test_environment(
     https://github.com/communitiesuk/plotly_dashboard_docs#dap-hosting-environment-pydash
     """
     with tempfile.TemporaryDirectory() as temporary_cloning_directory:
-
         pydash_repo = _clone_repo(
             url=dap_repo,
             into=temporary_cloning_directory,

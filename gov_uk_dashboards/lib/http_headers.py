@@ -11,7 +11,6 @@ def setup_application_http_response_headers(dash_app: dash.Dash):
 
     @server.after_request
     def add_headers(response):
-
         content_security_policy = (
             "default-src 'self' 'unsafe-eval' 'unsafe-inline' data:"
         )
