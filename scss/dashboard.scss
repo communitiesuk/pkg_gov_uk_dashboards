@@ -549,9 +549,9 @@ thead.govuk-table__head-short th {
 
 @media only screen and (max-width: 600px) {
   html,
-  body {
-    overflow-x: hidden;
-  }
+  // body {
+  //   overflow-x: hidden;
+  // }
 
   body {
     position: relative;
