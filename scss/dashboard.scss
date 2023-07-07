@@ -1142,3 +1142,5 @@ mark.expenditure {
 .govuk-button-group.button-group-margin {
   margin-bottom: -10px;
 }
+
+.container-class::after {    content: "";    display: table;    clear: both;}
