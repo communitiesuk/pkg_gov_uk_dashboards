@@ -20,6 +20,6 @@ def apply_and_reset_filters_buttons():
                 className="govuk-button govuk-!-margin-left-5",
             ),
         ],
-        className="govuk-button-group",
-        style={"float": "right"},
+        className="govuk-button-group horizontal-button-group",
+        
     )

@@ -1148,3 +1148,11 @@ mark.expenditure {
   display: table;
   clear: both;
 }
+
+.horizontal-button-group {
+    float: right;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding-top: 10px;
+}
