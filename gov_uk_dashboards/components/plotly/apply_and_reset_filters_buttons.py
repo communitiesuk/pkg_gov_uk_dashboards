@@ -21,5 +21,4 @@ def apply_and_reset_filters_buttons():
             ),
         ],
         className="govuk-button-group horizontal-button-group",
-        
     )
