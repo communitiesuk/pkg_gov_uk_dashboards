@@ -549,9 +549,6 @@ thead.govuk-table__head-short th {
 
 @media only screen and (max-width: 600px) {
   html,
-  body {
-    overflow-x: hidden;
-  }
 
   body {
     position: relative;
@@ -1142,3 +1139,21 @@ mark.expenditure {
 .govuk-button-group.button-group-margin {
   margin-bottom: -10px;
 }
+
+.container-class::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.horizontal-button-group {
+    float: right;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding-top: 10px;
+}
+
+.padding-bottom-10px {
+    padding-bottom:10px;
+  }
