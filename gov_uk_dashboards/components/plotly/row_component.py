@@ -2,7 +2,7 @@
 from dash import html
 
 
-def row_component(cards):
+def row_component(cards, horizontal_scroll=None):
     """
     Creates a horizontal row used to contain cards.
     The card and row_component work together to create a
@@ -11,6 +11,8 @@ def row_component(cards):
 
     See https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout for more information.
     """
-    return html.Div(
-        cards, className="govuk-list card-container", style={"alignItems": "stretch"}
-    )
+    style = {"alignItems": "stretch"}
+    if horizontal_scroll:
+        style["overflow-x"] = "auto"
+
+    return html.Div(cards, className="govuk-list card-container", style=style)
