@@ -19,30 +19,27 @@ if (typeof attachEventToDash !== 'undefined') {
         isOpen = !isOpen;
     }, false)
 
-// attach click events that close the menu to links in the nav menu 
-for (var i = 0; i < getNumberOfLinks(); i++) {
-    var linkId = 'nav-bar-link-' + i + '-mobile';
-    attachEventToDash(linkId, 'click', function () {
-        if (mobileNav === null) {
-            mobileNav = document.getElementById('nav-section')
-            if (!mobileNav) {
-                return;
+// Wait until the 'mobile-navigation-items' element is loaded
+var checkExist = setInterval(function() {
+    var element = document.getElementById('mobile-navigation-items');
+    if (element) {
+        clearInterval(checkExist);
+        var links = element.getElementsByTagName('a');
+        console.log(links)
+        attachEventsToLinks(links);
+    }
+}, 100);
+
+function attachEventsToLinks(links) {
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        link.addEventListener('click', function() {
+            var mobileNav =document.getElementById('nav-section');
+            if (mobileNav) {
+                mobileNav.style.display = 'none';
             }
-        }
-        mobileNav.style.display = 'none';
-        isOpen = false;
         }, false);
-}
-
-/**
- *
- * @param {function} func
- * @param {number} time
- * @returns
- */
-
-function getNumberOfLinks() {
-    return document.getElementById('mobile-navigation-items').getElementsByTagName('A')
+    }
 }
 
 function debounce(func, time) {
