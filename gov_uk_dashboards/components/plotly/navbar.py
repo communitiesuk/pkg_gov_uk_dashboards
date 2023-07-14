@@ -33,7 +33,7 @@ def navbar_link_active(text, href):
             text,
             href=href,
             className="moj-primary-navigation__link",
-            **{"aria-current": "page"}
+            **{"aria-current": "true"}
         ),
         className="moj-primary-navigation__item",
     )
