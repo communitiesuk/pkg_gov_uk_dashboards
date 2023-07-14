@@ -20,8 +20,7 @@ if (typeof attachEventToDash !== 'undefined') {
     }, false)
 
 // attach click events that close the menu to links in the nav menu 
-var numberOfLinks = 8; // ideally get dynamically but document.querySelectorAll and trying to match id before attaching event to Dash didn't work.. 
-for (var i = 0; i < numberOfLinks; i++) {
+for (var i = 0; i < getNumberOfLinks(); i++) {
     var linkId = 'nav-bar-link-' + i + '-mobile';
     attachEventToDash(linkId, 'click', function () {
         if (mobileNav === null) {
@@ -41,6 +40,11 @@ for (var i = 0; i < numberOfLinks; i++) {
  * @param {number} time
  * @returns
  */
+
+function getNumberOfLinks() {
+    return document.getElementById('mobile-navigation-items').getElementsByTagName('A')
+}
+
 function debounce(func, time) {
     var time = time || 100; // 100 by default if no param
     var timer;
