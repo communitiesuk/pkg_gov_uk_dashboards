@@ -6,7 +6,7 @@ var mobileNav = null;
  * @type {boolean}
  */
 var isOpen = false;
-
+ 
 if (typeof attachEventToDash !== 'undefined') {
     attachEventToDash('mobile-menu-btn', 'click', function () {
         if (mobileNav === null) {
@@ -18,6 +18,21 @@ if (typeof attachEventToDash !== 'undefined') {
         mobileNav.style.display = isOpen ? 'none' : 'inline-block';
         isOpen = !isOpen;
     }, false)
+
+// attach click events that close the menu to links in the nav menu 
+var numberOfLinks = 8; // ideally get dynamically but document.querySelectorAll and trying to match id before attaching event to Dash didn't work.. 
+for (var i = 0; i < numberOfLinks; i++) {
+    var linkId = 'nav-bar-link-' + i + '-mobile';
+    attachEventToDash(linkId, 'click', function () {
+        if (mobileNav === null) {
+            mobileNav = document.getElementById('nav-section')
+            if (!mobileNav) {
+                return;
+            }
+        }
+        mobileNav.style.display = 'none';
+        isOpen = false;
+        }, false);
 }
 
 /**
@@ -46,4 +61,4 @@ window.addEventListener(
             }
         }
     }, 150)
-);
+);}
