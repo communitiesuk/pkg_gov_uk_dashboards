@@ -25,7 +25,6 @@ var checkExist = setInterval(function() {
     if (element) {
         clearInterval(checkExist);
         var links = element.getElementsByTagName('a');
-        console.log(links)
         attachEventsToLinks(links);
     }
 }, 100);
