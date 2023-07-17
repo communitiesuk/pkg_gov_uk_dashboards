@@ -37,6 +37,7 @@ function attachEventsToLinks(links) {
             var mobileNav =document.getElementById('nav-section');
             if (mobileNav) {
                 mobileNav.style.display = 'none';
+                isOpen = false;
             }
         }, false);
     }
