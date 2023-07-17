@@ -20,16 +20,15 @@ def side_navbar(
     )
 
 
-def side_navbar_link(text, href, link_id):
+def side_navbar_link(text, href):
     """A link to another dashboard"""
     return html.Li(
         dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
         className="moj-side-navigation__item govuk-!-margin-bottom-1",
-        id=link_id,
     )
 
 
-def side_navbar_link_active(text, href, link_id):
+def side_navbar_link_active(text, href):
     """
     A link to another dashboard that appears highlighted, suggesting to the user that they are
     already viewing the linked dashboard.
@@ -40,5 +39,4 @@ def side_navbar_link_active(text, href, link_id):
             "moj-side-navigation__item moj-side-navigation__item--active "
             "govuk-!-margin-bottom-1"
         ),
-        id=link_id,
     )
