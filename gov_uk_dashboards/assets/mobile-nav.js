@@ -6,7 +6,7 @@ var mobileNav = null;
  * @type {boolean}
  */
 var isOpen = false;
-
+ 
 if (typeof attachEventToDash !== 'undefined') {
     attachEventToDash('mobile-menu-btn', 'click', function () {
         if (mobileNav === null) {
@@ -18,14 +18,30 @@ if (typeof attachEventToDash !== 'undefined') {
         mobileNav.style.display = isOpen ? 'none' : 'inline-block';
         isOpen = !isOpen;
     }, false)
+
+// Wait until the 'mobile-navigation-items' element is loaded
+var checkExist = setInterval(function() {
+    var element = document.getElementById('mobile-navigation-items');
+    if (element) {
+        clearInterval(checkExist);
+        var links = element.getElementsByTagName('a');
+        attachEventsToLinks(links);
+    }
+}, 100);
+
+function attachEventsToLinks(links) {
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        link.addEventListener('click', function() {
+            var mobileNav =document.getElementById('nav-section');
+            if (mobileNav) {
+                mobileNav.style.display = 'none';
+                isOpen = false;
+            }
+        }, false);
+    }
 }
 
-/**
- *
- * @param {function} func
- * @param {number} time
- * @returns
- */
 function debounce(func, time) {
     var time = time || 100; // 100 by default if no param
     var timer;
@@ -46,4 +62,4 @@ window.addEventListener(
             }
         }
     }, 150)
-);
+);}
