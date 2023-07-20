@@ -34,7 +34,12 @@ def side_navbar_link_active(text, href):
     already viewing the linked dashboard.
     """
     return html.Li(
-        dcc.Link(text, href=href, className="govuk-link govuk-link--no-visited-state"),
+        html.A(
+            text, 
+            href=href, 
+            className="govuk-link govuk-link--no-visited-state",
+            **{"aria-current": "true"}
+        ),
         className=(
             "moj-side-navigation__item moj-side-navigation__item--active "
             "govuk-!-margin-bottom-1"
