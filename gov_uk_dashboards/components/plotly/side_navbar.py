@@ -35,8 +35,8 @@ def side_navbar_link_active(text, href):
     """
     return html.Li(
         html.A(
-            text, 
-            href=href, 
+            text,
+            href=href,
             className="govuk-link govuk-link--no-visited-state",
             **{"aria-current": "true"}
         ),
