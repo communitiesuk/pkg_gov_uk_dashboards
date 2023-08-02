@@ -1156,4 +1156,11 @@ mark.expenditure {
 
 .padding-bottom-10px {
     padding-bottom:10px;
+}
+
+/*Max-width set to 61.99em to fit with min-width of 62em for jitters changing*/
+@media (max-width: 61.99em) {
+  .hide-checkboxes-on-mobile {
+    display: none
   }
+}
