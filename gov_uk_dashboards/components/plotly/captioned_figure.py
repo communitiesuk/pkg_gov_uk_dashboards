@@ -14,6 +14,7 @@ def captioned_figure(
     *,
     graph_style: Optional[dict[str, Any]] = None,
     desktop_only: bool = False,
+    double_click_attribute: Union[str, bool] = True,
 ):
     """
     Return figure with attached caption that can be read by a screen reader.
@@ -33,6 +34,8 @@ def captioned_figure(
             Defaults to None.
         desktop_only (bool, optional): Whether the figure should be replaced with
             the caption when viewed on mobile. Defaults to False.
+        double_click_attribute (Union[str, bool]): Set the doubleClick attribute, which controls
+            the response when a user double clicks on the plot. Defaults to True.
 
     Returns:
         dash.html.Figure: Figure html element containing the graph and its caption.
@@ -51,7 +54,10 @@ def captioned_figure(
                     responsive=True,
                     figure=figure,
                     style=graph_style,
-                    config={"displayModeBar": False},
+                    config={
+                        "displayModeBar": False,
+                        "doubleClick": double_click_attribute,
+                    },
                 ),
                 className="jitter-desktop-only" if desktop_only else "",
                 **{"role": "img", "aria-labelledby": f"{figure_name}-caption"},
