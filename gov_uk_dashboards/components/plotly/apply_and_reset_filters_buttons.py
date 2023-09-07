@@ -12,7 +12,7 @@ def apply_and_reset_filters_buttons():
                 "Reset filters",
                 href="?",
                 className="govuk-link govuk-body",
-                role="button"
+                role="button",
             ),
             html.Button(
                 "Apply filters",
