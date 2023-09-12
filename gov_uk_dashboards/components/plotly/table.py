@@ -75,7 +75,7 @@ def table_from_dataframe(
         html.Tbody(
             [
                 html.Tr(
-                    [html.Th(row[0], scope="row", className="govuk-table__header")]
+                    [html.Th(row.iloc[0], scope="row", className="govuk-table__header")]
                     + [html.Td(cell, className="govuk-table__cell") for cell in row[1:]]
                 )
                 if first_column_is_header and index != last_row_index
