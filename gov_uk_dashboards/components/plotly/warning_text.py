@@ -2,13 +2,14 @@
 from dash import html
 
 
-def warning_text(text: str):
+def warning_text(text: str, style: dict = None) -> html.Div:
     """
     Return Gov UK Design component warning text component, ! with text.
     """
     text = html.Div(
         format_text(text),
         className="govuk-warning-text",
+        style=style,
     )
     return text
 
