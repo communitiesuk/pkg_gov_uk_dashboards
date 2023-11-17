@@ -16,6 +16,7 @@ def captioned_figure(
     desktop_only: bool = False,
     double_click_attribute: Union[str, bool] = True,
 ):
+    # pylint: disable=too-many-arguments
     """
     Return figure with attached caption that can be read by a screen reader.
 

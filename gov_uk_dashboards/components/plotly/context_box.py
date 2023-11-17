@@ -4,7 +4,7 @@ from dash import html
 
 def put_context_banner(
     text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None
-):
+):  # pylint: disable=duplicate-code
     """
     Return Context Box based on Gov UK Design notification banner component.
     """
@@ -31,4 +31,3 @@ def put_context_banner(
         }
     )
     return banner
-
