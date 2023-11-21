@@ -1,8 +1,8 @@
-"""Context_box"""
+"""Context_banner"""
 from dash import html
 
 
-def put_context_banner():
+def context_banner():
     """
     Return context banner based on Gov UK Design component notification banner component.
     """
