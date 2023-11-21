@@ -2,11 +2,9 @@
 from dash import html
 
 
-def put_context_banner(
-    text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None
-):  # pylint: disable=duplicate-code
+def put_context_banner():
     """
-    Return Context Box based on Gov UK Design notification banner component.
+    Return context banner based on Gov UK Design component notification banner component.
     """
     banner = html.Div(
         [
@@ -14,9 +12,11 @@ def put_context_banner(
                 [
                     html.P(
                         [
-                            text,
+                            "Data on its own does not present a complete picture. This explorer"
+                            " should be used to generate questions and not reach judgements."
+                            " See about the data section for more information.",
                         ],
-                        className=text_class_name,
+                        className="govuk-warning-text__text notification-banner-under-filter-panel",
                     )
                 ],
                 className="govuk-notification-banner__content",
@@ -24,10 +24,6 @@ def put_context_banner(
         ],
         className="govuk-notification-banner",
         role="region",
-        style=style,
-        **{
-            "aria-labelledby": "govuk-notification-banner-title",
-            "data-module": "govuk-notification-banner",
-        }
+        style={"maxWidth": "1000px", "margin-top": "20px", "margin-bottom": "20px"},
     )
     return banner

@@ -4,7 +4,7 @@ from dash import html
 
 def notification_banner(
     text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None
-): # pylint: disable=duplicate-code
+): 
     """
     Return Gov UK Design component notification banner component.
     """
