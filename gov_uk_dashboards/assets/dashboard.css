@@ -8063,8 +8063,8 @@ mark.expenditure {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 100px;
-  padding: 50px 50px;
-  gap: 75px 100px;
+  padding: 0px 50px 50px 50px;
+  gap: 20px 100px;
   align-items: stretch;
 }
 
