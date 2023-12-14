@@ -8061,15 +8061,16 @@ mark.expenditure {
 
 .grid-container-css {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 250px;
-  padding: 50px 50px;
-  gap: 75px 100px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 100px;
+  padding: 0px 50px 50px 50px;
+  gap: 20px 100px;
   align-items: stretch;
 }
 
 .grid-item-css {
-  background-color: #f3f2f1;
+  background-color: #1d70b8;
+  color: white;
   padding: 50px;
   text-align: center;
   display: flex;
@@ -8078,6 +8079,7 @@ mark.expenditure {
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
+  font-weight: bold;
 }
 
 @media (max-width: 600px) {
