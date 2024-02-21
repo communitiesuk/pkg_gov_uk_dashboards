@@ -58,3 +58,25 @@ class ONSAccessibleColours(Enum):
     MAROON = "#871a5b"
     # LIGHT_BLUE = "#27a0cc"
     ORANGE = "#f47738"
+
+
+class AFAccessibleColours(Enum):
+    """Analysis Function colour palettes taken from
+    https://analysisfunction.civilservice.gov.uk/policy-store/data-visualisation-colours-in-charts/
+    """
+
+    # categorical colours to be used separately or from CATEGORICAL list - ideally only use first 4
+    DARK_BLUE = "#12436D"
+    TURQUOISE = "#28A197"
+    DARK_PINK = "#801650"
+    ORANGE = "#F46A25"
+    DARK_GREY = "#3D3D3D"
+    LIGHT_PURPLE = "#A285D1"
+
+    CATEGORICAL = [DARK_BLUE, TURQUOISE, DARK_PINK, ORANGE, DARK_GREY, LIGHT_PURPLE]
+
+    # three shades of blue from dark to light to use for sequential data
+    BLUE_SEQUENTIAL = ["#12436D", "#2073BC", "#6BACE6"]
+
+    # focus palette, use dark blue (first element) for focus data and grey for the rest
+    FOCUS_PALETTE = ["#12436D", "#BFBFBF"]
