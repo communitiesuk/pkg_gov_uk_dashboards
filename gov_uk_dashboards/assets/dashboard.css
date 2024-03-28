@@ -8140,3 +8140,7 @@ mark.expenditure {
   height: 1px;
   overflow: hidden;
 }
+
+.default-cursor-graph .draglayer.cursor-crosshair {
+  cursor: default !important;
+}
