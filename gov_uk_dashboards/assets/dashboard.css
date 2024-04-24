@@ -8186,6 +8186,6 @@ mark.expenditure {
   color: inherit !important;
 }
 
-.table-top-padding th {
+.table-header-cell-top-padding th {
   padding-top: 10px !important;
 }
