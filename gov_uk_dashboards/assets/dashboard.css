@@ -8199,3 +8199,24 @@ mark.expenditure {
   display: inline-block;
   vertical-align: middle;
 }
+
+.three_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 100px;
+}
+
+.two_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 100px;
+}
+
+.box_container_layout {
+  background-color: #f3f2f1;
+  padding: 20px 20px 10px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}

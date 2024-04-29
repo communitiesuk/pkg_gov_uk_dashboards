@@ -1238,3 +1238,27 @@ mark.expenditure {
   display: inline-block;
   vertical-align: middle;
 }
+
+.three_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 100px;
+}
+
+.two_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 100px;
+}
+
+.box_container_layout {
+  // GOV UK colours LIGHT_GREY
+  background-color: #f3f2f1;
+  padding: 20px 20px 10px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  // Stack children vertically
+  flex-direction: column; 
+  // Stretch children to match the width of the container
+  align-items: stretch;  
+} 
