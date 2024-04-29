@@ -1262,3 +1262,13 @@ mark.expenditure {
   // Stretch children to match the width of the container
   align-items: stretch;  
 } 
+
+.govuk-table__caption--m.margin-if-subtitle {
+  margin-bottom: 0 !important;
+}
+
+.govuk-table__caption.custom-subtitle {
+  color: #505a5f;
+  font-weight: normal !important;
+  padding: 0;
+}
