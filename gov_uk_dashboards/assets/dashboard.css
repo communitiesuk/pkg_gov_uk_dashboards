@@ -8212,6 +8212,12 @@ mark.expenditure {
   gap: 20px 100px;
 }
 
+.two_column_grid_layout_second_width_twice_first {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px 100px;
+}
+
 .box_container_layout {
   background-color: #f3f2f1;
   padding: 20px 20px 10px 20px;
