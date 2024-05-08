@@ -1257,6 +1257,12 @@ mark.expenditure {
   gap: 20px 100px;
 }
 
+.two_column_grid_layout_first_width_twice_second {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px 100px;
+}
+
 .box_container_layout {
   // GOV UK colours LIGHT_GREY
   background-color: #f3f2f1;
