@@ -8236,3 +8236,7 @@ mark.expenditure {
   font-weight: normal !important;
   padding: 0;
 }
+
+.text-no-transform {
+  text-transform: none !important;
+}
