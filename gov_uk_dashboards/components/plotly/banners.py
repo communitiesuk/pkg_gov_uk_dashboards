@@ -2,7 +2,7 @@
 from dash import html
 
 
-def message_banner(category, message):
+def message_banner(category, message, style=None):
     """
     Return a coronavirus dashboard-style changelog banner to be used to communicate to the user
     when the dashboard was last updated.
@@ -27,4 +27,5 @@ def message_banner(category, message):
             className="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0",
         ),
         className="change-log-banner govuk-!-margin-bottom-2",
+        style=style,
     )
