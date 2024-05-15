@@ -3,10 +3,10 @@
 from dash import html
 
 
-def header(title, strong_class: str=""):
+def header(title: str, strong_class: str = ""):
     """
     The header component, shared across all dashboard views. Includes optional strong_class
-    paramater to provide extra styling in the form of a class.
+    parameter to provide extra styling in the form of a class.
 
     Based on the header component provided by the GOV.UK Design System.
     https://design-system.service.gov.uk/components/header/
