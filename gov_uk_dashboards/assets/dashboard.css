@@ -8233,6 +8233,10 @@ mark.expenditure {
   align-items: stretch;
 }
 
+.bg_white {
+  background-color: #ffffff !important; /* Override default color */
+}
+
 .govuk-table__caption--m.margin-if-subtitle {
   margin-bottom: 0 !important;
 }
