@@ -1275,13 +1275,8 @@ mark.expenditure {
   align-items: stretch;  
 } 
 
-.box_container_layout_white {
-  background-color: #ffffff;
-  padding: 20px 20px 10px 20px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+.bg_white {
+  background-color: #ffffff !important; /* Override default color */
 }
 
 .govuk-table__caption--m.margin-if-subtitle {
