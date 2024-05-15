@@ -8246,3 +8246,8 @@ mark.expenditure {
 .text-no-transform {
   text-transform: none !important;
 }
+
+.fix-width {
+  width: 197px;
+  display: inline-block;
+}
