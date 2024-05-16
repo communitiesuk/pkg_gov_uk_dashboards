@@ -34,10 +34,15 @@ def header(title: str, strong_class: str = ""):
                             ],
                         ),
                     ),
-                    html.Strong(
-                        "OFFICIAL",
-                        className=f"govuk-tag protective-marking {strong_class}",
-                        id="protective-marking",
+                    html.Div(
+                        [
+                            html.Strong(
+                                "OFFICIAL",
+                                className="govuk-tag protective-marking",
+                                id="protective-marking",
+                            )
+                        ],
+                        className=f"{strong_class}",
                     ),
                     html.Button(
                         "Menu ▼",
