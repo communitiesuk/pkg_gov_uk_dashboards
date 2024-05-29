@@ -3,14 +3,17 @@
 from dash import html
 
 
-def header(title: str, strong_class: str = ""):
+def header(title: str, strong_class: str = "", background_colour: str = None):
     """
     The header component, shared across all dashboard views. Includes optional strong_class
     parameter to provide extra styling in the form of a class.
+    Includes optional background_colour parameter to override default black background colour.
 
     Based on the header component provided by the GOV.UK Design System.
     https://design-system.service.gov.uk/components/header/
     """
+    header_style = {"backgroundColor": background_colour} if background_colour else {}
+
     return html.Header(
         html.Div(
             html.Div(
@@ -56,5 +59,6 @@ def header(title: str, strong_class: str = ""):
         ),
         className="govuk-header",
         role="banner",
+        style=header_style,
         **{"data-module": "govuk-header"},
     )
