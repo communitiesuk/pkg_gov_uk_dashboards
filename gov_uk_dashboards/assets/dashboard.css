@@ -8083,7 +8083,7 @@ mark.expenditure {
 }
 
 @media (max-width: 600px) {
-  .grid-container-css, .grid-container-home-page {
+  .grid-container-css {
     grid-template-columns: 1fr;
   }
 }
@@ -8288,4 +8288,10 @@ mark.expenditure {
   padding: 20px 0px;
   gap: 20px 100px;
   align-items: stretch;
+}
+
+@media (max-width: 600px) {
+  .grid-container-home-page {
+    grid-template-columns: 1fr;
+  }
 }
