@@ -19,8 +19,8 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
             html.Div(
                 [
                     html.Img(
-                        src="assets\\images\\DLUHC_WHITE_Master_AW_sm.png",
-                        srcSet="assets\\images\\DLUHC_WHITE_Master_AW_sm.png 490w",
+                        src="assets\\images\\mhclg_white_no_background.png",
+                        srcSet="assets\\images\\mhclg_white_no_background.png 490w",
                         sizes="(min-width: 600px) 200px, 30vw",
                         className="header-image",
                         style={"maxWidth": "200px"},
@@ -43,6 +43,7 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                                 "OFFICIAL",
                                 className="govuk-tag protective-marking",
                                 id="protective-marking",
+                                style={"background-color": "#000000"}
                             )
                         ],
                         className=f"{strong_class}",
@@ -56,9 +57,10 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                 className="govuk-header__content",
             ),
             className="govuk-header__container govuk-width-container",
+            style={"border-bottom": "10px solid #000000"}
         ),
         className="govuk-header",
         role="banner",
-        style=header_style,
+        style=header_style | {"border-color": "#000000"},
         **{"data-module": "govuk-header"},
     )
