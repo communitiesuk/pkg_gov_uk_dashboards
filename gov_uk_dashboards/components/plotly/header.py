@@ -43,7 +43,7 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                                 "OFFICIAL",
                                 className="govuk-tag protective-marking",
                                 id="protective-marking",
-                                style={"background-color": "#000000"}
+                                style={"background-color": "#000000"},
                             )
                         ],
                         className=f"{strong_class}",
@@ -57,10 +57,11 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                 className="govuk-header__content",
             ),
             className="govuk-header__container govuk-width-container",
-            style={"border-bottom": "10px solid #000000"}
+            style={"border-bottom": "10px solid #000000"},
         ),
         className="govuk-header",
         role="banner",
-        style=header_style | {"border-color": "#000000"},
+        style=header_style
+        | {"border-color": "#000000", "background-color": "rgb(0,98,94)"},
         **{"data-module": "govuk-header"},
     )
