@@ -26,7 +26,10 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                         style={"maxWidth": "400px"},
                         alt="Ministry of Housing, Communities & Local Government",
                     ),
-                    html.Div(["Ministry of Housing, Communities & Local Government"]),
+                    html.Div(
+                        ["Ministry of Housing, Communities & Local Government"],
+                        style={"font-size": "28px", "font-weight": "200px"},
+                    ),
                     html.A(
                         title,
                         href="/",
