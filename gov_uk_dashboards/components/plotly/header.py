@@ -24,9 +24,9 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                         sizes="(min-width: 600px) 200px, 30vw",
                         className="header-image",
                         style={"maxWidth": "200px"},
-                        alt="Department for Levelling Up, Housing & Communities",
+                        alt="Ministry of Housing, Communities and Local Government",
                     ),
-                    html.Div(["Test 123"]),
+                    html.Div(["Ministry of Housing, Communities and Local Government"]),
                     html.A(
                         title,
                         href="/",
