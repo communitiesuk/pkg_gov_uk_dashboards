@@ -26,7 +26,7 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                         style={"maxWidth": "200px"},
                         alt="Department for Levelling Up, Housing & Communities",
                     ),
-                    html.Div(["Test 123"])
+                    html.Div(["Test 123"]),
                     html.A(
                         title,
                         href="/",
