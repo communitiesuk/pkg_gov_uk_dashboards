@@ -7137,10 +7137,6 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-.govuk-cookie-banner .govuk-button-group {
-  display: block;
-}
-
 svg.back-to-top {
   display: inline-block;
   width: 0.8em;
