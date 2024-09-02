@@ -16,8 +16,8 @@ def message_banner(category, message, style=None):
                     category,
                     className="govuk-tag",
                     style={
-                        "background": "white",
-                        "color": "#1d70b8",
+                        "background": "black",
+                        "color": "white",
                         "margin": "0 1rem 0 0",
                         "lineHeight": "initial",
                     },
