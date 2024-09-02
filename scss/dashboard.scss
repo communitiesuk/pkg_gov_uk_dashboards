@@ -926,13 +926,13 @@ main {
   display: grid;
   padding: 0.7rem;
   justify-content: center;
-  background-color: $primary-colour;
+  background-color: #f4fa4d;
   margin-bottom: 1px;
 }
 
 .change-log-banner,
 .change-log-banner * {
-  color: #fff;
+  color: black;
   line-height: 25px;
 }
 
