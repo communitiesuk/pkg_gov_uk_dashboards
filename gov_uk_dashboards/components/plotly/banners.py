@@ -24,7 +24,7 @@ def message_banner(category, message, style=None):
                 ),
                 message,
             ],
-            className="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0",
+            className="govuk-body-s govuk-!-margin-bottom-0",
         ),
         className="change-log-banner govuk-!-margin-bottom-2",
         style=style,
