@@ -2,11 +2,10 @@
 from dash import html
 
 
-def card(children):
+def card(children, amend_style=None):
     """A rectangle with a grey background.
     Mostly used to wrap individual visualisations, e.g. a gauge."""
-    style = {"padding-top": "0px",  "padding-left": "0px"}
-    return html.Div(children, className="mini-card", style=style)
+    return html.Div(children, className="mini-card", style=amend_style)
 
 
 def empty_card():
