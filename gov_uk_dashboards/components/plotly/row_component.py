@@ -11,7 +11,7 @@ def row_component(cards, horizontal_scroll=None):
 
     See https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout for more information.
     """
-    style = {"alignItems": "stretch"}
+    style = {"alignItems": "stretch", "padding-top": "0px",  "padding-left": "0px"}
     if horizontal_scroll:
         style["overflow-x"] = "auto"
 

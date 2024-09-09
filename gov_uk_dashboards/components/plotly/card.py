@@ -5,7 +5,8 @@ from dash import html
 def card(children):
     """A rectangle with a grey background.
     Mostly used to wrap individual visualisations, e.g. a gauge."""
-    return html.Div(children, className="mini-card")
+    style = {"padding-top": "0px",  "padding-left": "0px"}
+    return html.Div(children, className="mini-card", style=style)
 
 
 def empty_card():
