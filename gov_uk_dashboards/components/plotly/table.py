@@ -98,6 +98,7 @@ def table_from_dataframe(
         **table_properties,
     )
 
+
 def table_from_polars_dataframe(
     dataframe: DataFrame,
     title: Optional[str] = None,
@@ -137,6 +138,10 @@ def table_from_polars_dataframe(
 
     Returns:
         html.Table: The dash HTML object for the table.
+
+    Raises:
+        ValueError: If the number of column_widths does not equal the number of columns in
+            the dataframe.
     """
     if column_widths is None:
         column_widths = [None] * len(dataframe.columns)
@@ -217,10 +222,17 @@ def table_from_polars_dataframe(
         )
     )
 
-    return row_component(card(html.Table(
-        table_contents,
-        className="govuk-table table-header-cell-top-padding",
-        id=table_id,
-        role="table",
-        **table_properties,
-    ), amend_style={"padding": "0px"}), horizontal_scroll=True, amend_style={"padding": "0px", "margin-top": "0px"})
+    return row_component(
+        card(
+            html.Table(
+                table_contents,
+                className="govuk-table table-header-cell-top-padding",
+                id=table_id,
+                role="table",
+                **table_properties,
+            ),
+            amend_style={"padding": "0px"},
+        ),
+        horizontal_scroll=True,
+        amend_style={"padding": "0px", "margin-top": "0px"},
+    )
