@@ -195,6 +195,12 @@ def table_from_polars_dataframe(
                 className="govuk-table__row",
             ),
             className="govuk-table__head-short" if short_table else "govuk-table__head",
+            style={
+                "position": "sticky",
+                "top": 0,
+                "z-index": 1,
+                "background-color": "#fff",
+            },
         )
     )
 
@@ -222,17 +228,13 @@ def table_from_polars_dataframe(
         )
     )
 
-    return row_component(
-        card(
-            html.Table(
-                table_contents,
-                className="govuk-table table-header-cell-top-padding",
-                id=table_id,
-                role="table",
-                **table_properties,
-            ),
-            amend_style={"padding": "0px"},
+    return card(
+        html.Table(
+            table_contents,
+            className="govuk-table table-header-cell-top-padding",
+            id=table_id,
+            role="table",
+            **table_properties,
         ),
-        horizontal_scroll=True,
-        amend_style={"padding": "0px", "margin-top": "0px"},
+        amend_style={"padding": "0px"},
     )
