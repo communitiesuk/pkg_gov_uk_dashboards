@@ -2,7 +2,6 @@
 from typing import Optional
 from pandas import DataFrame
 from dash import html, dcc
-from gov_uk_dashboards.components.plotly.row_component import row_component
 from gov_uk_dashboards.components.plotly.card import card
 
 
@@ -195,6 +194,12 @@ def table_from_polars_dataframe(
                 className="govuk-table__row",
             ),
             className="govuk-table__head-short" if short_table else "govuk-table__head",
+            style={
+                "position": "sticky",
+                "top": 0,
+                "z-index": 1,
+                "background-color": "#fff",
+            },
         )
     )
 
@@ -222,17 +227,13 @@ def table_from_polars_dataframe(
         )
     )
 
-    return row_component(
-        card(
-            html.Table(
-                table_contents,
-                className="govuk-table table-header-cell-top-padding",
-                id=table_id,
-                role="table",
-                **table_properties,
-            ),
-            amend_style={"padding": "0px"},
+    return card(
+        html.Table(
+            table_contents,
+            className="govuk-table table-header-cell-top-padding",
+            id=table_id,
+            role="table",
+            **table_properties,
         ),
-        horizontal_scroll=True,
-        amend_style={"padding": "0px", "margin-top": "0px"},
+        amend_style={"padding": "0px"},
     )
