@@ -19,8 +19,8 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
             html.Div(
                 [
                     html.Img(
-                        src="assets\\images\\header_picture.png",
-                        srcSet="assets\\images\\header_picture.png 490w",
+                        src="assets\\images\\header_new.png",
+                        srcSet="assets\\images\\header_new.png 490w",
                         sizes="(min-width: 600px) 400px, 30vw",
                         className="header-image",
                         style={"maxWidth": "400px"},
