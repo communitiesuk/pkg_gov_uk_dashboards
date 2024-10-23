@@ -1241,6 +1241,12 @@ mark.expenditure {
   gap: 20px 100px;
 }
 
+@media (max-width: 600px) {
+  .three_column_grid_layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 .two_column_grid_layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

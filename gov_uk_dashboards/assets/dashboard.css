@@ -3366,12 +3366,17 @@ x:-moz-any-link {
   display: inline-block;
   min-width: 125px;
   padding-top: 112px;
-  background-image: url("/assets/images/govuk-crest.svg");
+  background-image: url("/assets/images/govuk-crest.png");
   background-repeat: no-repeat;
   background-position: 50% 0%;
   background-size: 125px 102px;
   text-align: center;
   white-space: nowrap;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .govuk-footer__copyright-logo {
+    background-image: url("/assets/images/govuk-crest-2x.png");
+  }
 }
 
 .govuk-footer__inline-list {
@@ -8197,6 +8202,11 @@ mark.expenditure {
   gap: 20px 100px;
 }
 
+@media (max-width: 600px) {
+  .three_column_grid_layout {
+    grid-template-columns: 1fr;
+  }
+}
 .two_column_grid_layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
