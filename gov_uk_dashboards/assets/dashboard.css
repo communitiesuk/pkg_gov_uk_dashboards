@@ -8198,7 +8198,7 @@ mark.expenditure {
 .three_column_grid_layout {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px 100px;
+  gap: 20px 7%;
 }
 
 @media (max-width: 600px) {
