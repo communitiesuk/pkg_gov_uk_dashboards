@@ -1262,7 +1262,7 @@ mark.expenditure {
 .two_column_grid_layout_second_width_twice_first {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 20px 100px;
+  gap: 20px 7%;
 }
 
 @media (max-width: 600px) {
@@ -1274,7 +1274,13 @@ mark.expenditure {
 .two_column_grid_layout_first_width_twice_second {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 20px 100px;
+  gap: 20px 7%;
+}
+
+@media (max-width: 600px) {
+  .two_column_grid_layout_first_width_twice_second {
+    grid-template-columns: 1fr;
+  }
 }
 
 .box_container_layout {
@@ -1351,4 +1357,17 @@ mark.expenditure {
   .grid-container-home-page {
     grid-template-columns: 1fr; 
   }
+}
+
+.context-card-grid-item{
+  background-color: #f3f2f1;
+    padding: 20px 20px 10px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
 }

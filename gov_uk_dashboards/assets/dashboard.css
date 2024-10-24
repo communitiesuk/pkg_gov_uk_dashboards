@@ -3366,17 +3366,12 @@ x:-moz-any-link {
   display: inline-block;
   min-width: 125px;
   padding-top: 112px;
-  background-image: url("/assets/images/govuk-crest.png");
+  background-image: url("/assets/images/govuk-crest.svg");
   background-repeat: no-repeat;
   background-position: 50% 0%;
   background-size: 125px 102px;
   text-align: center;
   white-space: nowrap;
-}
-@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
-  .govuk-footer__copyright-logo {
-    background-image: url("/assets/images/govuk-crest-2x.png");
-  }
 }
 
 .govuk-footer__inline-list {
@@ -8220,7 +8215,7 @@ mark.expenditure {
 .two_column_grid_layout_second_width_twice_first {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 20px 100px;
+  gap: 20px 7%;
 }
 
 @media (max-width: 600px) {
@@ -8231,9 +8226,14 @@ mark.expenditure {
 .two_column_grid_layout_first_width_twice_second {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 20px 100px;
+  gap: 20px 7%;
 }
 
+@media (max-width: 600px) {
+  .two_column_grid_layout_first_width_twice_second {
+    grid-template-columns: 1fr;
+  }
+}
 .box_container_layout {
   background-color: #f3f2f1;
   padding: 20px 20px 10px 20px;
@@ -8304,4 +8304,16 @@ mark.expenditure {
   .grid-container-home-page {
     grid-template-columns: 1fr;
   }
+}
+.context-card-grid-item {
+  background-color: #f3f2f1;
+  padding: 20px 20px 10px 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
 }
