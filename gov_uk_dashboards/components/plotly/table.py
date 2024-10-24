@@ -229,16 +229,20 @@ def table_from_polars_dataframe(
     )
 
     return row_component(
-    card(row_component(card(
-    html.Table(
-        table_contents,
-        className="govuk-table table-header-cell-top-padding",
-        id=table_id,
-        role="table",
-        **table_properties,
-    ),
-    amend_style={"padding": "0px"}
-),horizontal_scroll=True)),
-    horizontal_scroll=True,
-)
-
+        card(
+            row_component(
+                card(
+                    html.Table(
+                        table_contents,
+                        className="govuk-table table-header-cell-top-padding",
+                        id=table_id,
+                        role="table",
+                        **table_properties,
+                    ),
+                    amend_style={"padding": "0px"},
+                ),
+                horizontal_scroll=True,
+            )
+        ),
+        horizontal_scroll=True,
+    )
