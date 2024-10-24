@@ -1250,11 +1250,11 @@ mark.expenditure {
 .two_column_grid_layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px 100px;
+  gap: 20px 7%;
 }
 
 @media (max-width: 600px) {
-  .three_column_grid_layout {
+  .two_column_grid_layout {
     grid-template-columns: 1fr;
   }
 }
