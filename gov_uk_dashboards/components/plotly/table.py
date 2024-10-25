@@ -3,6 +3,7 @@ from typing import Optional
 from pandas import DataFrame
 from dash import html, dcc
 from gov_uk_dashboards.components.plotly.card import card
+from gov_uk_dashboards.components.plotly.paragraph import paragraph
 from gov_uk_dashboards.components.plotly.row_component import row_component
 
 
@@ -108,6 +109,7 @@ def table_from_polars_dataframe(
     last_row_unbolded: bool = False,
     format_column_headers_as_markdown: bool = False,
     table_id: str = "table",
+    table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     **table_properties,
 ):  # pylint: disable=too-many-arguments
@@ -131,6 +133,7 @@ def table_from_polars_dataframe(
         format_column_headers_as_markdown: (bool, optional): Sets if the column headers should
             be formatted as markdown. Defaults to False.
         table_id: (str, optional): ID for the table Defaults to "table".
+        table_footer: (str, optional): Text to display underneath table as footer.
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
         **table_properties: Any additional arguments for the html.Table object,
@@ -232,13 +235,16 @@ def table_from_polars_dataframe(
         card(
             row_component(
                 card(
-                    html.Table(
-                        table_contents,
-                        className="govuk-table table-header-cell-top-padding",
-                        id=table_id,
-                        role="table",
-                        **table_properties,
-                    ),
+                    [
+                        html.Table(
+                            table_contents,
+                            className="govuk-table table-header-cell-top-padding",
+                            id=table_id,
+                            role="table",
+                            **table_properties,
+                        ),
+                        paragraph(table_footer) if table_footer else None,
+                    ],
                     amend_style={"padding": "0px"},
                 ),
                 horizontal_scroll=True,
