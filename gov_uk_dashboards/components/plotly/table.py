@@ -235,14 +235,16 @@ def table_from_polars_dataframe(
         card(
             row_component(
                 card(
-                    html.Table(
-                        table_contents,
-                        className="govuk-table table-header-cell-top-padding",
-                        id=table_id,
-                        role="table",
-                        **table_properties,
-                    ),
-                    paragraph(table_footer) if table_footer else None,
+                    [
+                        html.Table(
+                            table_contents,
+                            className="govuk-table table-header-cell-top-padding",
+                            id=table_id,
+                            role="table",
+                            **table_properties,
+                        ),
+                        paragraph(table_footer) if table_footer else None,
+                    ],
                     amend_style={"padding": "0px"},
                 ),
                 horizontal_scroll=True,
