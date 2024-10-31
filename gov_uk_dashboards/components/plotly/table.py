@@ -111,10 +111,12 @@ def table_from_polars_dataframe(
     table_id: str = "table",
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
+    columns_to_right_align: Optional[list[str]] = [],
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
-    Displays a Polars DataFrame as a table formatted in the Gov.UK style
+    Displays a Polars DataFrame as a table formatted in the Gov.UK style. By default text is
+    aligned to the left, unless column name is in columns_to_right_align.
 
     Part of the Gov.UK Design System:
     https://design-system.service.gov.uk/components/table/
@@ -136,6 +138,8 @@ def table_from_polars_dataframe(
         table_footer: (str, optional): Text to display underneath table as footer.
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
+        columns_to_right_align: (Optional[list[str]]): List of columns whose content should be
+            right aligned in tables. Defaults to [].
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -190,7 +194,14 @@ def table_from_polars_dataframe(
                             header,
                             scope="col",
                             className="govuk-table__header",
-                            style={"width": width or None},
+                            style={
+                                **({"width": width} if width else {}),
+                                **(
+                                    {"text-align": "right"}
+                                    if header in columns_to_right_align
+                                    else {}
+                                ),
+                            },
                         )
                     )
                     for header, width in zip(dataframe.columns, column_widths)
@@ -216,13 +227,28 @@ def table_from_polars_dataframe(
                     html.Tr(
                         [html.Th(row[0], scope="row", className="govuk-table__header")]
                         + [
-                            html.Td(cell, className="govuk-table__cell")
-                            for cell in row[1:]
+                            html.Td(
+                                cell,
+                                className="govuk-table__cell",
+                                style={"text-align": "right"}
+                                if column_name in columns_to_right_align
+                                else {},
+                            )
+                            for cell, column_name in zip(row[1:], dataframe.columns[1:])
                         ]
                     )
                     if first_column_is_header and index != last_row_index
                     else html.Tr(
-                        [html.Td(cell, className="govuk-table__cell") for cell in row]
+                        [
+                            html.Td(
+                                cell,
+                                className="govuk-table__cell",
+                                style={"text-align": "right"}
+                                if column_name in columns_to_right_align
+                                else {},
+                            )
+                            for cell, column_name in zip(row, dataframe.columns)
+                        ]
                     )
                 )
                 for index, row in enumerate(dataframe.rows())
