@@ -111,7 +111,7 @@ def table_from_polars_dataframe(
     table_id: str = "table",
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
-    columns_to_right_align: Optional[list[str]] = [],
+    columns_to_right_align: Optional[list[str]] = None,
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
@@ -139,7 +139,7 @@ def table_from_polars_dataframe(
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
         columns_to_right_align: (Optional[list[str]]): List of columns whose content should be
-            right aligned in tables. Defaults to [].
+            right aligned in tables. Defaults to None.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -156,6 +156,9 @@ def table_from_polars_dataframe(
         raise ValueError(
             "Number of column_widths must equal number of columns in dataframe."
         )
+
+    if columns_to_right_align is None:
+        columns_to_right_align = []
 
     table_contents = []
 
