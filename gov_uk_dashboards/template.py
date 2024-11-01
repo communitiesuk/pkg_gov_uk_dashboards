@@ -4,7 +4,7 @@ Read government dashboard template
 import os
 
 
-def read_template(favicon_path: str = r"assets\images\gov_favicon.ico") -> str:
+def read_template(favicon_path: str = r"assets\images\MHCLG_favicon.png") -> str:
     """
     Read the government html template.
     Args:
