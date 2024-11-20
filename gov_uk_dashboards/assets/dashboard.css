@@ -9259,7 +9259,7 @@ mark.expenditure {
 }
 
 /* Hover effect */
-.context-card-grid-item-hover:hover {
+.homepage-card-grid-item:hover {
   background-color: #ffdd00; /* Change background color on hover */
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
