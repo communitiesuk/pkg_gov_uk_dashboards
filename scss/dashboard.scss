@@ -1387,9 +1387,7 @@ mark.expenditure {
   transition: all 0.3s ease; /* Smooth transition for hover effect */
 }
 
-/* Hover effect */
 .homepage-card-grid-item:hover {
   border: 2px solid #ffdd00;
-  // border-color: #ffdd00; /* Change background color on hover */
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
