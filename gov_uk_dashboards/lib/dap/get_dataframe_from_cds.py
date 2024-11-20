@@ -32,7 +32,10 @@ def get_data_from_cds_or_fallback_to_csv(
         )
         print("Dataframe has been loaded from CDS using Pydash credentials")
 
-        return pd.read_sql_query(cds_sql_query, conn,)
+        return pd.read_sql_query(
+            cds_sql_query,
+            conn,
+        )
 
     except Exception as credential_error:  # pylint: disable=broad-except
         try:
@@ -49,7 +52,10 @@ def get_data_from_cds_or_fallback_to_csv(
                 "Dataframe has been loaded from CDS using Windows login authentication"
             )
 
-            return pd.read_sql_query(cds_sql_query, conn,)
+            return pd.read_sql_query(
+                cds_sql_query,
+                conn,
+            )
 
         except pyodbc.Error as conn_error_except:
             print(

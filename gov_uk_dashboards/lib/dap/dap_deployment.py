@@ -24,11 +24,15 @@ def deploy_main_branch_to_pydash_test_environment(
         )
 
         _add_git_remote(
-            url=github_repo, name="github", repo_path=pydash_repo,
+            url=github_repo,
+            name="github",
+            repo_path=pydash_repo,
         )
 
         _update_git_reference(
-            branch="Test", to_point_at="github/main", repo_path=pydash_repo,
+            branch="Test",
+            to_point_at="github/main",
+            repo_path=pydash_repo,
         )
 
         _force_push_changes_to_test_branch_of_pydash_repo(
@@ -38,14 +42,22 @@ def deploy_main_branch_to_pydash_test_environment(
 
 def _clone_repo(url: str, path_to_code: str, into: str) -> str:
     subprocess.check_call(
-        ["git", "clone", url], cwd=into,
+        ["git", "clone", url],
+        cwd=into,
     )
     return f"{into}\\{path_to_code}"
 
 
 def _add_git_remote(url: str, name: str, repo_path: str):
     subprocess.check_call(
-        ["git", "remote", "add", name, url,], cwd=repo_path,
+        [
+            "git",
+            "remote",
+            "add",
+            name,
+            url,
+        ],
+        cwd=repo_path,
     )
     subprocess.check_call(["git", "fetch", name], cwd=repo_path)
 
@@ -54,7 +66,8 @@ def _update_git_reference(branch: str, to_point_at: str, repo_path: str):
     _checkout_branch(repo_path, branch=branch)
 
     subprocess.check_call(
-        ["git", "reset", "--hard", to_point_at], cwd=repo_path,
+        ["git", "reset", "--hard", to_point_at],
+        cwd=repo_path,
     )
 
 
@@ -63,8 +76,10 @@ def _checkout_branch(repo_path: str, branch: str):
 
 
 def _force_push_changes_to_test_branch_of_pydash_repo(
-    branch: str, repo_path: str,
+    branch: str,
+    repo_path: str,
 ):
     subprocess.check_call(
-        ["git", "push", "--force-with-lease", "origin", branch], cwd=repo_path,
+        ["git", "push", "--force-with-lease", "origin", branch],
+        cwd=repo_path,
     )

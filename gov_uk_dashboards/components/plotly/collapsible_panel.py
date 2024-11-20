@@ -9,7 +9,8 @@ def collapsible_panel(title, children, default_open=False):
         [
             html.Summary(
                 html.Span(
-                    title, className="govuk-!-margin-0 govuk-details__summary-text",
+                    title,
+                    className="govuk-!-margin-0 govuk-details__summary-text",
                 ),
                 className="govuk-details__summary govuk-!-margin-0",
                 **{"data-module": "govuk-details"}
