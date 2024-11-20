@@ -9245,7 +9245,7 @@ mark.expenditure {
 .homepage-card-grid-item {
   background-color: #f3f2f1;
   padding: 10px 20px 10px 20px;
-  border: 3px;
+  border: 2px solid #f3f2f1;
   border-radius: 10px;
   margin-bottom: 20px;
   text-align: center;
@@ -9261,6 +9261,6 @@ mark.expenditure {
 
 /* Hover effect */
 .homepage-card-grid-item:hover {
-  box-shadow: 0 0 0 0.167rem var(#ffdd00);
+  border-color: purple;
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
