@@ -41,8 +41,7 @@ def test_paragraph_default_class():
 
 
 @pytest.mark.parametrize(
-    "size",
-    [ParagraphSizes.SMALL, ParagraphSizes.LEAD, ParagraphSizes.DEFAULT],
+    "size", [ParagraphSizes.SMALL, ParagraphSizes.LEAD, ParagraphSizes.DEFAULT],
 )
 def test_paragraph_has_expected_class(size):
     """Test component has correct class when lead size is specified"""

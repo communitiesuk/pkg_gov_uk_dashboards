@@ -11,11 +11,7 @@ def tooltip_title(title, tooltiptext):
             html.H1(
                 [
                     title,
-                    html.Span(
-                        " ⓘ",
-                        id="tooltip-target",
-                        style={"cursor": "pointer"},
-                    ),
+                    html.Span(" ⓘ", id="tooltip-target", style={"cursor": "pointer"},),
                 ],
                 className="govuk-heading-m govuk-!-margin-bottom-1",
             ),

@@ -21,14 +21,7 @@ def notification_banner(
                 className="govuk-notification-banner__header",
             ),
             html.Div(
-                [
-                    html.P(
-                        [
-                            text,
-                        ],
-                        className=text_class_name,
-                    )
-                ],
+                [html.P([text,], className=text_class_name,)],
                 className="govuk-notification-banner__content",
             ),
         ],
