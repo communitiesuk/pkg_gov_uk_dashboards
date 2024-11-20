@@ -1369,3 +1369,25 @@ mark.expenditure {
     box-sizing: border-box;
     overflow: hidden;
 }
+
+.homepage-card-grid-item {
+  background-color: #f3f2f1;
+  padding: 10px 20px 10px 20px;
+  border: 2px solid #f3f2f1;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.homepage-card-grid-item:hover {
+  border: 2px solid #ffdd00;
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
