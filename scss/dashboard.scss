@@ -1388,6 +1388,7 @@ mark.expenditure {
 
 /* Hover effect */
 .homepage-card-grid-item:hover {
-  background-color: #ffdd00; /* Change background color on hover */
+  border-color: #ffdd00; /* Change background color on hover */
+  border-width: 3px;
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
