@@ -8747,7 +8747,7 @@ mark.expenditure {
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
 
-.pvis-govuk-footer__copyright-logo {
+.pyvis-govuk-footer__copyright-logo {
   display: inline-block;
   min-width: 125px;
   padding-top: 112px;
