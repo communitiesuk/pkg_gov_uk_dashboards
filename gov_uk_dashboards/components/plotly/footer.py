@@ -56,7 +56,7 @@ def footer(footer_links: Optional[list[any]]):
                     html.Div(
                         html.A(
                             "© Crown copyright",
-                            className="govuk-footer__link govuk-footer__copyright-logo",
+                            className="govuk-footer__link pyvis-govuk-footer__copyright-logo",
                             href="https://www.nationalarchives.gov.uk/information-management/"
                             "re-using-public-sector-information/uk-government-licensing-framework/"
                             "crown-copyright/",

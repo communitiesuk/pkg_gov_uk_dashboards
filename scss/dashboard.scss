@@ -5,7 +5,7 @@ $govuk-secondary-text-colour: #6B7276;
 $govuk-font-family: Arial, sans-serif;
 $font-sans-serif: sans-serif;
 
-@import "../node_modules/govuk-frontend/dist/govuk/all";
+@import "node_modules/govuk-frontend/govuk/all";
 
 .header-image {
   flex: none;
@@ -1390,4 +1390,17 @@ mark.expenditure {
 .homepage-card-grid-item:hover {
   border: 2px solid #ffdd00;
   transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+// add pyvis copyright logo - needs relooking at
+.pyvis-govuk-footer__copyright-logo {
+  display: inline-block;
+  min-width: 125px;
+  padding-top: 112px;
+  background-image: url("/assets/images/govuk-crest.svg");
+  background-repeat: no-repeat;
+  background-position: 50% 0%;
+  background-size: 125px 102px;
+  text-align: center;
+  white-space: nowrap;
 }

@@ -1,16 +1,11 @@
-const sass = require("sass");
-const { writeFileSync } = require("fs");
- 
-// Compile SCSS asynchronously
-const result = sass.compile("scss/dashboard.scss", {
-  style: "compressed",
-  loadPaths: ["node_modules"], // Paths for imports
+const { renderSync } = require("sass");
+const { writeFileSync } = require('fs');
+
+const result = renderSync({
+	style: "compressed",
+	file: 'scss/dashboard.scss',
+	loadPaths: ['node_modules'],
+	includePaths: ['node_modules']
 });
- 
-// Write the compiled CSS to a file
-writeFileSync("gov_uk_dashboards/assets/dashboard.css", result.css, {
-  encoding: "utf8",
-  flag: "w",
-});
- 
-console.log("SCSS compiled successfully to gov_uk_dashboards/assets/dashboard.css");
+
+writeFileSync('gov_uk_dashboards/assets/dashboard.css', result.css, { encoding: 'utf8', flag: 'w' })
