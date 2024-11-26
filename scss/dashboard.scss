@@ -1385,11 +1385,14 @@ mark.expenditure {
   box-sizing: border-box;
   overflow: hidden;
   transition: all 0.3s ease; /* Smooth transition for hover effect */
+  transform-origin: center; /* Ensures scaling is centered */
+  position: relative; /* Makes it independent of surrounding elements */
 }
 
 .homepage-card-grid-item:hover {
-  border: 4px solid #ffdd00;
-  transform: scale(1.03); /* Slightly enlarge the card on hover */
+  border: 3px solid #ffdd00;
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+  z-index: 10; /* Ensures the card is above other elements while scaling */
 }
 
 // add pyvis copyright logo - needs relooking at
