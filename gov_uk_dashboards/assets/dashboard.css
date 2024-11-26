@@ -9259,6 +9259,7 @@ mark.expenditure {
   transition: all 0.3s ease; /* Smooth transition for hover effect */
   transform-origin: center; /* Ensures scaling is centered */
   position: relative; /* Makes it independent of surrounding elements */
+  contain: layout paint; /* Prevents changes from affecting layout */
 }
 
 .homepage-card-grid-item:hover {
