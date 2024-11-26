@@ -9260,7 +9260,7 @@ mark.expenditure {
 }
 
 .homepage-card-grid-item:hover {
-  border: 3px solid #ffdd00;
+  border: 4px solid #ffdd00;
   transform: scale(1.05); /* Slightly enlarge the card on hover */
 }
 
