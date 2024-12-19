@@ -259,21 +259,21 @@ def table_from_polars_dataframe(
             className="govuk-table__body",
         )
     )
-    
+
     # commented below out as prevents sticky header, although now not optimised for mobile devices
     return card(
-                    [
-                        html.Table(
-                            table_contents,
-                            className="govuk-table table-header-cell-top-padding",
-                            id=table_id,
-                            role="table",
-                            **table_properties,
-                        ),
-                        paragraph(table_footer) if table_footer else None,
-                    ],
-                    amend_style={"padding": "0px"},
-                )
+        [
+            html.Table(
+                table_contents,
+                className="govuk-table table-header-cell-top-padding",
+                id=table_id,
+                role="table",
+                **table_properties,
+            ),
+            paragraph(table_footer) if table_footer else None,
+        ],
+        amend_style={"padding": "0px"},
+    )
 
     # return row_component(
     #     card(
