@@ -259,11 +259,9 @@ def table_from_polars_dataframe(
             className="govuk-table__body",
         )
     )
-
-    return row_component(
-        card(
-            row_component(
-                card(
+    
+    # commented below out as prevents sticky header, although now not optimised for mobile devices
+    return card(
                     [
                         html.Table(
                             table_contents,
@@ -275,9 +273,26 @@ def table_from_polars_dataframe(
                         paragraph(table_footer) if table_footer else None,
                     ],
                     amend_style={"padding": "0px"},
-                ),
-                horizontal_scroll=True,
-            )
-        ),
-        horizontal_scroll=True,
-    )
+                )
+
+    # return row_component(
+    #     card(
+    #         row_component(
+    #             card(
+    #                 [
+    #                     html.Table(
+    #                         table_contents,
+    #                         className="govuk-table table-header-cell-top-padding",
+    #                         id=table_id,
+    #                         role="table",
+    #                         **table_properties,
+    #                     ),
+    #                     paragraph(table_footer) if table_footer else None,
+    #                 ],
+    #                 amend_style={"padding": "0px"},
+    #             ),
+    #             horizontal_scroll=True,
+    #         )
+    #     ),
+    #     horizontal_scroll=True,
+    # )
