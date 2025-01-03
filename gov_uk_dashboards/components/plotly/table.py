@@ -199,7 +199,6 @@ def table_from_polars_dataframe(
                                 header,
                                 id={"type": "header-button", "index": idx},
                                 n_clicks=0,
-                                className="govuk-button",
                             ),
                             **{"aria-sort": "none"},
                             scope="col",
