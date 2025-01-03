@@ -195,7 +195,12 @@ def table_from_polars_dataframe(
                         )
                         if format_column_headers_as_markdown
                         else html.Th(
-                            header,
+                            html.Button(
+                                header,
+                                id={"type": "header-button", "index": idx},
+                                n_clicks=0,
+                                className="govuk-button",
+                            ),
                             scope="col",
                             className="govuk-table__header",
                             style={
@@ -208,7 +213,9 @@ def table_from_polars_dataframe(
                             },
                         )
                     )
-                    for header, width in zip(dataframe.columns, column_widths)
+                    for idx, (header, width) in enumerate(
+                        zip(dataframe.columns, column_widths)
+                    )
                 ],
                 className="govuk-table__row",
             ),
