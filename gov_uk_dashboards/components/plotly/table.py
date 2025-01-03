@@ -201,6 +201,7 @@ def table_from_polars_dataframe(
                                 n_clicks=0,
                                 className="govuk-button",
                             ),
+                            **{"aria-sort": "none"},
                             scope="col",
                             className="govuk-table__header",
                             style={
