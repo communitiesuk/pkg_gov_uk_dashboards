@@ -8763,6 +8763,35 @@ mark.expenditure {
   white-space: nowrap;
 }
 
+[aria-sort] button, [aria-sort] button:hover {
+  background-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  -webkit-box-shadow: 0 0 0 0;
+  -moz-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+  color: #005ea5;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0 10px 0 0;
+  position: relative;
+  text-align: inherit;
+  font-size: 1em;
+  margin: 0;
+}
+
+[aria-sort] button:focus {
+  background-color: #fd0;
+  color: #0b0c0c;
+  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  outline: none;
+}
+
+[aria-sort]:first-child button {
+  right: auto;
+}
+
 [aria-sort] button:before {
   content: " ▼";
   position: absolute;
