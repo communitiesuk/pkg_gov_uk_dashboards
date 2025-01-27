@@ -35,17 +35,19 @@ def format_as_human_readable(
     if value_to_format is None or math.isnan(value_to_format):
         return separator
 
-    if value_to_format >= 1_000_000_000:
+    if value_to_format >= 1_000_000_000 or value_to_format <= -1_000_000_000:
         value = value_to_format / 1_000_000_000
         value_suffix = "bn"
-    elif value_to_format >= 1_000_000:
+    elif value_to_format >= 1_000_000 or value_to_format <= -1_000_000:
         value = value_to_format / 1_000_000
         value_suffix = "m"
-    elif value_to_format >= 1_000:
+    elif value_to_format >= 1_000 or value_to_format <= -1_000:
         value = value_to_format / 1_000
         value_suffix = "k"
 
     if decimal_places is not None:
         value = round(value, decimal_places)
-
+    if value < 0:
+        prefix = f"-{prefix}"
+        value = abs(value)
     return f"{prefix}{value:g}{value_suffix}{suffix}"
