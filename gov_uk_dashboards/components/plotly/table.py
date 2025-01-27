@@ -4,7 +4,8 @@ from pandas import DataFrame
 from dash import html, dcc
 from gov_uk_dashboards.components.plotly.card import card
 from gov_uk_dashboards.components.plotly.paragraph import paragraph
-from gov_uk_dashboards.components.plotly.row_component import row_component
+
+# from gov_uk_dashboards.components.plotly.row_component import row_component
 
 
 def table_from_dataframe(
@@ -260,24 +261,39 @@ def table_from_polars_dataframe(
         )
     )
 
-    return row_component(
-        card(
-            row_component(
-                card(
-                    [
-                        html.Table(
-                            table_contents,
-                            className="govuk-table table-header-cell-top-padding",
-                            id=table_id,
-                            role="table",
-                            **table_properties,
-                        ),
-                        paragraph(table_footer) if table_footer else None,
-                    ],
-                    amend_style={"padding": "0px"},
-                ),
-                horizontal_scroll=True,
-            )
-        ),
-        horizontal_scroll=True,
+    # commented below out as prevents sticky header, although now not optimised for mobile devices
+    return card(
+        [
+            html.Table(
+                table_contents,
+                className="govuk-table table-header-cell-top-padding",
+                id=table_id,
+                role="table",
+                **table_properties,
+            ),
+            paragraph(table_footer) if table_footer else None,
+        ],
+        amend_style={"padding": "0px"},
     )
+
+    # return row_component(
+    #     card(
+    #         row_component(
+    #             card(
+    #                 [
+    #                     html.Table(
+    #                         table_contents,
+    #                         className="govuk-table table-header-cell-top-padding",
+    #                         id=table_id,
+    #                         role="table",
+    #                         **table_properties,
+    #                     ),
+    #                     paragraph(table_footer) if table_footer else None,
+    #                 ],
+    #                 amend_style={"padding": "0px"},
+    #             ),
+    #             horizontal_scroll=True,
+    #         )
+    #     ),
+    #     horizontal_scroll=True,
+    # )
