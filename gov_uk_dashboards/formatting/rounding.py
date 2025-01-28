@@ -22,11 +22,11 @@ def round_thousands_to_1dp(value: float) -> float:
         float: Rounded value
     """
     try:
-        if value >= 1_000_000_000:
+        if value >= 1_000_000_000 or value <= -1_000_000_000:
             return round(value, -8)
-        if value >= 1_000_000:
+        if value >= 1_000_000 or value <= -1_000_000:
             return round(value, -5)
-        if value >= 1000:
+        if value >= 1000 or value <= -1_000:
             return round(value, -2)
         return round(value, 1)
 
