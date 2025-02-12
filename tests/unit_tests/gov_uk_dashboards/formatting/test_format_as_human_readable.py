@@ -51,3 +51,9 @@ def test_format_as_human_readable_returns_dash_for_nan():
         format_as_human_readable(float("NaN"), decimal_places=-1, separator="ABC")
         == "ABC"
     )
+
+
+def test_format_as_human_readable_returns_formatted_negative_values():
+    assert format_as_human_readable(-1_234, prefix="£") == "-£1.234k"
+    assert format_as_human_readable(-2_100_000, prefix="£") == "-£2.1m"
+    assert format_as_human_readable(-45_678_987_654, prefix="£") == "-£45.679bn"
