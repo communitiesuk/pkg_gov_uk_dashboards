@@ -114,13 +114,14 @@ def table_from_polars_dataframe(
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
-    sorted_header_dict = None,
-    non_sortable_columns = [],
+    sorted_header_dict: Optional[dict[str:str]] = None,
+    non_sortable_columns: list[str] = [],
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
     Displays a Polars DataFrame as a table formatted in the Gov.UK style. By default text is
-    aligned to the left, unless column name is in columns_to_right_align.
+    aligned to the left, unless column name is in columns_to_right_align. By default table is not
+    sortable, only sortable if sortable_headers = True.
 
     Part of the Gov.UK Design System:
     https://design-system.service.gov.uk/components/table/
@@ -138,12 +139,18 @@ def table_from_polars_dataframe(
             first_column_is_header is True. Defaults to False.
         format_column_headers_as_markdown: (bool, optional): Sets if the column headers should
             be formatted as markdown. Defaults to False.
+        sortable_headers: (bool, optional): Sets if the column headers should be sortable. Defaults
+            to False.
         table_id: (str, optional): ID for the table Defaults to "table".
         table_footer: (str, optional): Text to display underneath table as footer.
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
-        columns_to_right_align: (Optional[list[str]]): List of columns whose content should be
+        columns_to_right_align: (list[str], optional): List of columns whose content should be
             right aligned in tables. Defaults to None.
+        sorted_header_dict: (dict[str:str], optional): Dictionary containing key the column which
+            has been sorted and value "ascending" or "descending". Defaults to None.
+        non_sortable_columns: (list[str], optional): List of columns which should not have sortable
+            ability. Defaults to [].
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -200,13 +207,15 @@ def table_from_polars_dataframe(
                                 n_clicks=0,
                             )
                             if header not in non_sortable_columns
-                            else dcc.Markdown(header) if format_column_headers_as_markdown else header
-                            ,
+                            else dcc.Markdown(header)
+                            if format_column_headers_as_markdown
+                            else header,
                             **(
                                 {"aria-sort": sorted_header_dict.get(header, "none")}
-                                if header not in non_sortable_columns  # Exclude from sorting behavior
+                                if header
+                                not in non_sortable_columns  # Exclude from sorting behavior
                                 else {}
-                            ),  # Adjust aria-sort based on sorting state later
+                            ),
                             scope="col",
                             className="govuk-table__header",
                             style={
