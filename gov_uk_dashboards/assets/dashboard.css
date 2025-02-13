@@ -1,63 +1,9 @@
 @charset "UTF-8";
 /* Styles https://github.com/publichealthengland/coronavirus-dashboard via source: https://coronavirus.data.gov.uk/*/
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 :root {
-  --govuk-frontend-version: "4.9.0";
+  --govuk-frontend-version: "4.7.0";
 }
 
-/*# sourceMappingURL=_govuk-frontend-version.scss.map */
 .govuk-link {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -161,7 +107,6 @@
   color: #0b0c0c;
 }
 
-/*# sourceMappingURL=_links.scss.map */
 .govuk-list {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -242,7 +187,6 @@
   }
 }
 
-/*# sourceMappingURL=_lists.scss.map */
 .govuk-heading-xl {
   color: #0b0c0c;
   font-family: Arial, sans-serif;
@@ -715,7 +659,6 @@
   }
 }
 
-/*# sourceMappingURL=_typography.scss.map */
 .govuk-section-break {
   margin: 0;
   border: 0;
@@ -770,64 +713,6 @@
   border-bottom: 1px solid #b1b4b6;
 }
 
-/*# sourceMappingURL=_section-break.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-button-group {
   margin-bottom: 5px;
   display: -ms-flexbox;
@@ -896,60 +781,6 @@
   }
 }
 
-/*# sourceMappingURL=_button-group.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-form-group {
   margin-bottom: 20px;
 }
@@ -976,60 +807,6 @@
   border: 0;
 }
 
-/*# sourceMappingURL=_form-group.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-grid-row {
   margin-right: -15px;
   margin-left: -15px;
@@ -1178,60 +955,6 @@
   }
 }
 
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-main-wrapper {
   display: block;
   padding-top: 20px;
@@ -1255,60 +978,6 @@
   }
 }
 
-/*# sourceMappingURL=_main-wrapper.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-template {
   background-color: #f3f2f1;
   -webkit-text-size-adjust: 100%;
@@ -1334,60 +1003,6 @@
   background-color: #ffffff;
 }
 
-/*# sourceMappingURL=_template.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-width-container {
   max-width: 1920px;
   margin-right: 15px;
@@ -1424,61 +1039,6 @@
   }
 }
 
-/*# sourceMappingURL=_width-container.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_assets.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_global-styles.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_colours-applied.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_measurements.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-font-families.scss.map */
-/*# sourceMappingURL=_typography-font.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_typography-responsive.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-url.scss.map */
-/*# sourceMappingURL=_warnings.scss.map */
-/*# sourceMappingURL=_ie8.scss.map */
-/*# sourceMappingURL=_image-url.scss.map */
-/*# sourceMappingURL=_px-to-em.scss.map */ /*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_clearfix.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_compatibility.scss.map */
-/*# sourceMappingURL=_colours-palette.scss.map */
-/*# sourceMappingURL=_colours-organisations.scss.map */
-/*# sourceMappingURL=_colour.scss.map */
-/*# sourceMappingURL=_device-pixels.scss.map */
-/*# sourceMappingURL=_focused.scss.map */ /*# sourceMappingURL=_exports.scss.map */
-/*# sourceMappingURL=_font-faces.scss.map */
-/*# sourceMappingURL=_grid.scss.map */
-/*# sourceMappingURL=_links.scss.map */
-/*# sourceMappingURL=_sass-mq.scss.map */
-/*# sourceMappingURL=_media-queries.scss.map */
-/*# sourceMappingURL=_shape-arrow.scss.map */
-/*# sourceMappingURL=_spacing.scss.map */
-/*# sourceMappingURL=_px-to-rem.scss.map */
-/*# sourceMappingURL=_typography.scss.map */
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=_base.scss.map */
 .govuk-accordion {
   margin-bottom: 20px;
 }
@@ -1666,12 +1226,14 @@
   left: 0.375rem;
   width: 0.375rem;
   height: 0.375rem;
+  -webkit-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
   border-top: 0.125rem solid;
   border-right: 0.125rem solid;
 }
 .js-enabled .govuk-accordion-nav__chevron--down {
+  -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
@@ -1821,7 +1383,6 @@
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-back-link {
   font-size: 14px;
   font-size: 0.875rem;
@@ -1893,6 +1454,7 @@
   width: 0.4375em;
   height: 0.4375em;
   margin: auto 0;
+  -webkit-transform: rotate(225deg);
   -ms-transform: rotate(225deg);
   transform: rotate(225deg);
   border: solid;
@@ -1932,7 +1494,6 @@
   border-color: currentcolor;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-breadcrumbs {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -1998,6 +1559,7 @@
   width: 0.4375em;
   height: 0.4375em;
   margin: auto 0;
+  -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
   border: solid;
@@ -2092,7 +1654,6 @@
   border-color: currentcolor;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-button {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -2287,7 +1848,6 @@
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-error-message {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -2321,7 +1881,6 @@
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-fieldset {
   min-width: 0;
   margin: 0;
@@ -2501,7 +2060,6 @@ x:-moz-any-link {
   font-weight: inherit;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-hint {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -2544,7 +2102,6 @@ x:-moz-any-link {
   margin-top: -5px;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-label {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -2700,7 +2257,6 @@ x:-moz-any-link {
   margin: 0;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-checkboxes__item {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -2781,6 +2337,7 @@ x:-moz-any-link {
   left: 9px;
   width: 23px;
   height: 12px;
+  -webkit-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
   border: solid;
@@ -2937,13 +2494,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-textarea {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -3005,7 +2555,6 @@ x:-moz-any-link {
   border-color: #0b0c0c;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-character-count {
   margin-bottom: 20px;
 }
@@ -3023,6 +2572,7 @@ x:-moz-any-link {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-feature-settings: "tnum" 1;
   font-feature-settings: "tnum" 1;
   font-weight: 400;
   margin-top: 0;
@@ -3035,6 +2585,7 @@ x:-moz-any-link {
 }
 @supports (font-variant-numeric: tabular-nums) {
   .govuk-character-count__message {
+    -webkit-font-feature-settings: normal;
     font-feature-settings: normal;
     font-variant-numeric: tabular-nums;
   }
@@ -3047,7 +2598,6 @@ x:-moz-any-link {
   visibility: hidden;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-cookie-banner {
   padding-top: 20px;
   border-bottom: 10px solid transparent;
@@ -3068,11 +2618,6 @@ x:-moz-any-link {
   outline: none;
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-input {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -3143,6 +2688,7 @@ x:-moz-any-link {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-feature-settings: "tnum" 1;
   font-feature-settings: "tnum" 1;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -3154,6 +2700,7 @@ x:-moz-any-link {
 }
 @supports (font-variant-numeric: tabular-nums) {
   .govuk-input--extra-letter-spacing {
+    -webkit-font-feature-settings: normal;
     font-feature-settings: normal;
     font-variant-numeric: tabular-nums;
   }
@@ -3289,9 +2836,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-date-input {
   font-size: 0;
 }
@@ -3315,7 +2859,6 @@ x:-moz-any-link {
   margin-bottom: 0;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-details {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -3435,9 +2978,6 @@ x:-moz-any-link {
   margin-bottom: 0;
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_lists.scss.map */
 .govuk-error-summary {
   color: #0b0c0c;
   padding: 15px;
@@ -3574,8 +3114,6 @@ x:-moz-any-link {
   color: #0b0c0c;
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-exit-this-page {
   margin-bottom: 30px;
   position: -webkit-sticky;
@@ -3656,11 +3194,6 @@ x:-moz-any-link {
   display: block !important;
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-file-upload {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -3715,7 +3248,6 @@ x:-moz-any-link {
   cursor: not-allowed;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-footer {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -3921,14 +3453,17 @@ x:-moz-any-link {
   margin: 0;
   padding: 0;
   list-style: none;
+  -webkit-column-gap: 30px;
   column-gap: 30px;
 }
 
 @media (min-width: 48.0625em) {
   .govuk-footer__list--columns-2 {
+    -webkit-column-count: 2;
     column-count: 2;
   }
   .govuk-footer__list--columns-3 {
+    -webkit-column-count: 3;
     column-count: 3;
   }
 }
@@ -3945,7 +3480,6 @@ x:-moz-any-link {
   margin-bottom: 0;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-header {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -4019,21 +3553,11 @@ x:-moz-any-link {
   vertical-align: top;
 }
 
-.govuk-header__logotype-crown[width="32"] {
-  top: -3px;
-  margin-right: 2px;
-}
-
 .govuk-header__logotype-crown-fallback-image {
   width: 36px;
   height: 32px;
   border: 0;
   vertical-align: bottom;
-}
-
-.govuk-header__logotype-crown-fallback-image[width="32"] {
-  width: 32px;
-  height: 30px;
 }
 
 .govuk-header__product-name {
@@ -4383,12 +3907,6 @@ x:-moz-any-link {
     display: none;
   }
 }
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-inset-text {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -4445,8 +3963,6 @@ x:-moz-any-link {
   margin-bottom: 0;
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-notification-banner {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -4633,7 +4149,6 @@ x:-moz-any-link {
   color: #0b0c0c;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-pagination {
   margin-bottom: 20px;
   display: -ms-flexbox;
@@ -4897,7 +4412,6 @@ x:-moz-any-link {
   margin-right: 10px;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-panel {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -5012,7 +4526,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-tag {
   display: inline-block;
   outline: 2px solid transparent;
@@ -5098,7 +4611,6 @@ x:-moz-any-link {
   background: #cce2d8;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-phase-banner {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -5150,7 +4662,6 @@ x:-moz-any-link {
   vertical-align: middle;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-tabs {
   margin-top: 5px;
   margin-bottom: 20px;
@@ -5390,12 +4901,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-radios__item {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -5645,10 +5150,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-select {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -5710,7 +5211,6 @@ x:-moz-any-link {
   border-color: #0b0c0c;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-skip-link {
   position: absolute !important;
   width: 1px !important;
@@ -5795,7 +5295,6 @@ x:-moz-any-link {
   outline: none;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-summary-list {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -6141,7 +5640,6 @@ x:-moz-any-link {
   border-bottom: none;
 }
 
-/*# sourceMappingURL=_index.scss.map */
 .govuk-table {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -6201,6 +5699,7 @@ x:-moz-any-link {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-feature-settings: "tnum" 1;
   font-feature-settings: "tnum" 1;
   font-weight: 400;
 }
@@ -6211,6 +5710,7 @@ x:-moz-any-link {
 }
 @supports (font-variant-numeric: tabular-nums) {
   .govuk-table__cell--numeric {
+    -webkit-font-feature-settings: normal;
     font-feature-settings: normal;
     font-variant-numeric: tabular-nums;
   }
@@ -6347,11 +5847,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_index.scss.map */
 .govuk-warning-text {
   position: relative;
   margin-bottom: 20px;
@@ -6461,15 +5956,12 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_index.scss.map */
-/*# sourceMappingURL=_all.scss.map */
 .govuk-clearfix:after {
   content: "";
   display: block;
   clear: both;
 }
 
-/*# sourceMappingURL=_clearfix.scss.map */
 .govuk-visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -6513,8 +6005,6 @@ x:-moz-any-link {
   white-space: inherit !important;
 }
 
-/*# sourceMappingURL=_visually-hidden.scss.map */
-/*# sourceMappingURL=_all.scss.map */
 .govuk-\!-display-inline {
   display: inline !important;
 }
@@ -6536,7 +6026,6 @@ x:-moz-any-link {
     display: none !important;
   }
 }
-/*# sourceMappingURL=_display.scss.map */
 .govuk-\!-margin-0 {
   margin: 0 !important;
 }
@@ -7737,7 +7226,6 @@ x:-moz-any-link {
   padding-left: 60px !important;
 }
 
-/*# sourceMappingURL=_spacing.scss.map */
 .govuk-\!-text-align-left {
   text-align: left !important;
 }
@@ -7750,7 +7238,6 @@ x:-moz-any-link {
   text-align: right !important;
 }
 
-/*# sourceMappingURL=_text-align.scss.map */
 .govuk-\!-font-size-80 {
   font-size: 53px !important;
   font-size: 3.3125rem !important;
@@ -7911,7 +7398,6 @@ x:-moz-any-link {
   font-weight: 700 !important;
 }
 
-/*# sourceMappingURL=_typography.scss.map */
 .govuk-\!-width-full {
   width: 100% !important;
 }
@@ -7961,9 +7447,6 @@ x:-moz-any-link {
   }
 }
 
-/*# sourceMappingURL=_width.scss.map */
-/*# sourceMappingURL=_all.scss.map */
-/*# sourceMappingURL=all.scss.map */
 .header-image {
   flex: none;
   padding-right: 10px;
@@ -9278,4 +8761,69 @@ mark.expenditure {
   background-size: 125px 102px;
   text-align: center;
   white-space: nowrap;
+}
+
+[aria-sort] button, [aria-sort] button:hover {
+  background-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  -webkit-box-shadow: 0 0 0 0;
+  -moz-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+  color: #005ea5;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0 10px 0 0;
+  position: relative;
+  text-align: inherit;
+  font-size: 1em;
+  margin: 0;
+}
+
+[aria-sort] button:focus {
+  background-color: #fd0;
+  color: #0b0c0c;
+  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  outline: none;
+}
+
+[aria-sort]:first-child button {
+  right: auto;
+}
+
+[aria-sort] button:before {
+  content: " ▼";
+  position: absolute;
+  right: -1px;
+  top: 9px;
+  font-size: 0.5em;
+}
+
+[aria-sort] button:after {
+  content: " ▲";
+  position: absolute;
+  right: -1px;
+  top: 1px;
+  font-size: 0.5em;
+}
+
+[aria-sort=ascending] button:before, [aria-sort=descending] button:before {
+  content: none;
+}
+
+[aria-sort=ascending] button:after {
+  content: " ▲";
+  font-size: 0.8em;
+  position: absolute;
+  right: -5px;
+  top: 2px;
+}
+
+[aria-sort=descending] button:after {
+  content: " ▼";
+  font-size: 0.8em;
+  position: absolute;
+  right: -5px;
+  top: 2px;
 }
