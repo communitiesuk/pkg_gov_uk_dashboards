@@ -109,6 +109,7 @@ def table_from_polars_dataframe(
     short_table: bool = True,
     last_row_unbolded: bool = False,
     format_column_headers_as_markdown: bool = False,
+    sortable_headers: bool = False,
     table_id: str = "table",
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
@@ -187,20 +188,34 @@ def table_from_polars_dataframe(
             html.Tr(
                 [
                     (
+                        # If sortable_headers is True, use a button for the header with sorting functionality
                         html.Th(
-                            dcc.Markdown(header),
-                            scope="col",
-                            className="govuk-table__header",
-                            style={"width": width or None},
-                        )
-                        if format_column_headers_as_markdown
-                        else html.Th(
                             html.Button(
-                                header,
+                                dcc.Markdown(header)
+                                if format_column_headers_as_markdown
+                                else header,
                                 id={"type": "header-button", "index": idx},
                                 n_clicks=0,
                             ),
-                            **{"aria-sort": "none"},
+                            **{
+                                "aria-sort": "none"
+                            },  # Adjust aria-sort based on sorting state later
+                            scope="col",
+                            className="govuk-table__header",
+                            style={
+                                **({"width": width} if width else {}),
+                                **(
+                                    {"text-align": "right"}
+                                    if header in columns_to_right_align
+                                    else {}
+                                ),
+                            },
+                        )
+                        if sortable_headers
+                        else html.Th(
+                            dcc.Markdown(header)
+                            if format_column_headers_as_markdown
+                            else header,
                             scope="col",
                             className="govuk-table__header",
                             style={
