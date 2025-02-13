@@ -115,9 +115,9 @@ def table_from_polars_dataframe(
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
     sorted_header_dict: Optional[dict[str:str]] = None,
-    non_sortable_columns: list[str] = [],
+    non_sortable_columns: list[str] = None,
     **table_properties,
-):  # pylint: disable=too-many-arguments
+):  # pylint: disable=too-many-arguments disable=too-many-locals
     """
     Displays a Polars DataFrame as a table formatted in the Gov.UK style. By default text is
     aligned to the left, unless column name is in columns_to_right_align. By default table is not
@@ -150,7 +150,7 @@ def table_from_polars_dataframe(
         sorted_header_dict: (dict[str:str], optional): Dictionary containing key the column which
             has been sorted and value "ascending" or "descending". Defaults to None.
         non_sortable_columns: (list[str], optional): List of columns which should not have sortable
-            ability. Defaults to [].
+            ability. Defaults to None.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -170,6 +170,9 @@ def table_from_polars_dataframe(
 
     if columns_to_right_align is None:
         columns_to_right_align = []
+
+    if non_sortable_columns is None:
+        non_sortable_columns = []
 
     table_contents = []
 
@@ -197,7 +200,8 @@ def table_from_polars_dataframe(
             html.Tr(
                 [
                     (
-                        # If sortable_headers is True, use a button for the header with sorting functionality
+                        # If sortable_headers is True, use a button for the header with sorting
+                        # functionality
                         html.Th(
                             html.Button(
                                 dcc.Markdown(header)
