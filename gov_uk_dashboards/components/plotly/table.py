@@ -109,15 +109,19 @@ def table_from_polars_dataframe(
     short_table: bool = True,
     last_row_unbolded: bool = False,
     format_column_headers_as_markdown: bool = False,
+    sortable_headers: bool = False,
     table_id: str = "table",
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
+    sorted_header_dict: Optional[dict[str, str]] = None,
+    non_sortable_columns: list[str] = None,
     **table_properties,
-):  # pylint: disable=too-many-arguments
+):  # pylint: disable=too-many-arguments disable=too-many-locals
     """
     Displays a Polars DataFrame as a table formatted in the Gov.UK style. By default text is
-    aligned to the left, unless column name is in columns_to_right_align.
+    aligned to the left, unless column name is in columns_to_right_align. By default table is not
+    sortable, only sortable if sortable_headers = True.
 
     Part of the Gov.UK Design System:
     https://design-system.service.gov.uk/components/table/
@@ -135,12 +139,18 @@ def table_from_polars_dataframe(
             first_column_is_header is True. Defaults to False.
         format_column_headers_as_markdown: (bool, optional): Sets if the column headers should
             be formatted as markdown. Defaults to False.
+        sortable_headers: (bool, optional): Sets if the column headers should be sortable. Defaults
+            to False.
         table_id: (str, optional): ID for the table Defaults to "table".
         table_footer: (str, optional): Text to display underneath table as footer.
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
-        columns_to_right_align: (Optional[list[str]]): List of columns whose content should be
+        columns_to_right_align: (list[str], optional): List of columns whose content should be
             right aligned in tables. Defaults to None.
+        sorted_header_dict: (dict[str,str], optional): Dictionary containing key the column which
+            has been sorted and value "ascending" or "descending". Defaults to None.
+        non_sortable_columns: (list[str], optional): List of columns which should not have sortable
+            ability. Defaults to None.
         **table_properties: Any additional arguments for the html.Table object,
             such as setting a width or id.
 
@@ -160,6 +170,9 @@ def table_from_polars_dataframe(
 
     if columns_to_right_align is None:
         columns_to_right_align = []
+
+    if non_sortable_columns is None:
+        non_sortable_columns = []
 
     table_contents = []
 
@@ -187,15 +200,42 @@ def table_from_polars_dataframe(
             html.Tr(
                 [
                     (
+                        # If sortable_headers is True, use a button for the header with sorting
+                        # functionality
                         html.Th(
-                            dcc.Markdown(header),
+                            html.Button(
+                                dcc.Markdown(header)
+                                if format_column_headers_as_markdown
+                                else header,
+                                id={"type": "header-button", "index": idx},
+                                n_clicks=0,
+                            )
+                            if header not in non_sortable_columns
+                            else dcc.Markdown(header)
+                            if format_column_headers_as_markdown
+                            else header,
+                            **(
+                                {"aria-sort": sorted_header_dict.get(header, "none")}
+                                if header
+                                not in non_sortable_columns  # Exclude from sorting behavior
+                                else {}
+                            ),
                             scope="col",
                             className="govuk-table__header",
-                            style={"width": width or None},
+                            style={
+                                **({"width": width} if width else {}),
+                                **(
+                                    {"text-align": "right"}
+                                    if header in columns_to_right_align
+                                    else {}
+                                ),
+                            },
                         )
-                        if format_column_headers_as_markdown
+                        if sortable_headers
                         else html.Th(
-                            header,
+                            dcc.Markdown(header)
+                            if format_column_headers_as_markdown
+                            else header,
                             scope="col",
                             className="govuk-table__header",
                             style={
@@ -208,7 +248,9 @@ def table_from_polars_dataframe(
                             },
                         )
                     )
-                    for header, width in zip(dataframe.columns, column_widths)
+                    for idx, (header, width) in enumerate(
+                        zip(dataframe.columns, column_widths)
+                    )
                 ],
                 className="govuk-table__row",
             ),
