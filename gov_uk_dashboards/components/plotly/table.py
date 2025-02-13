@@ -114,7 +114,7 @@ def table_from_polars_dataframe(
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
-    sorted_header_dict: Optional[dict[str:str]] = None,
+    sorted_header_dict: Optional[dict[str,str]] = None,
     non_sortable_columns: list[str] = None,
     **table_properties,
 ):  # pylint: disable=too-many-arguments disable=too-many-locals
@@ -147,7 +147,7 @@ def table_from_polars_dataframe(
             "x%". List must be same length as dataframe columns. Defaults to None.
         columns_to_right_align: (list[str], optional): List of columns whose content should be
             right aligned in tables. Defaults to None.
-        sorted_header_dict: (dict[str:str], optional): Dictionary containing key the column which
+        sorted_header_dict: (dict[str,str], optional): Dictionary containing key the column which
             has been sorted and value "ascending" or "descending". Defaults to None.
         non_sortable_columns: (list[str], optional): List of columns which should not have sortable
             ability. Defaults to None.
