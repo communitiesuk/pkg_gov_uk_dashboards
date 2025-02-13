@@ -114,6 +114,7 @@ def table_from_polars_dataframe(
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
+    sorted_header_dict = None,
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
@@ -198,7 +199,7 @@ def table_from_polars_dataframe(
                                 n_clicks=0,
                             ),
                             **{
-                                "aria-sort": "none"
+                                "aria-sort": sorted_header_dict.get(header, "none")
                             },  # Adjust aria-sort based on sorting state later
                             scope="col",
                             className="govuk-table__header",
