@@ -115,6 +115,7 @@ def table_from_polars_dataframe(
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
     sorted_header_dict = None,
+    non_sortable_columns = [],
     **table_properties,
 ):  # pylint: disable=too-many-arguments
     """
@@ -197,10 +198,15 @@ def table_from_polars_dataframe(
                                 else header,
                                 id={"type": "header-button", "index": idx},
                                 n_clicks=0,
-                            ),
-                            **{
-                                "aria-sort": sorted_header_dict.get(header, "none")
-                            },  # Adjust aria-sort based on sorting state later
+                            )
+                            if header not in non_sortable_columns
+                            else dcc.Markdown(header) if format_column_headers_as_markdown else header
+                            ,
+                            **(
+                                {"aria-sort": sorted_header_dict.get(header, "none")}
+                                if header not in non_sortable_columns  # Exclude from sorting behavior
+                                else {}
+                            ),  # Adjust aria-sort based on sorting state later
                             scope="col",
                             className="govuk-table__header",
                             style={
