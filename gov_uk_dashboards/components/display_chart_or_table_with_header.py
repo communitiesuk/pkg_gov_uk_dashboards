@@ -2,8 +2,12 @@
 
 from dash import html
 from dash.development.base_component import Component
-from gov_uk_dashboards.components.create_download_chart_button import create_download_chart_button
-from gov_uk_dashboards.components.create_download_data_button import create_download_data_button
+from gov_uk_dashboards.components.create_download_chart_button import (
+    create_download_chart_button,
+)
+from gov_uk_dashboards.components.create_download_data_button import (
+    create_download_data_button,
+)
 
 from gov_uk_dashboards.components.plotly.heading import HeadingSizes
 
@@ -19,8 +23,11 @@ def display_chart_or_table_with_header(
 
     Args:
         chart_or_table (Component): the chart or table to display.
+        heading (str, optional): the heading for the chart,
+        sub_heading (str, optional): the sub-heading for the chart,
         download_button_id (str, optional): id for download button if required. Defaults to None.
                                             if None then the button will not be included.
+        download_data_button_id (str, optional): the id to be applied to the download data button.
 
     Returns:
         html.Div: Div containing Header and chart/table.

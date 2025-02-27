@@ -4,7 +4,9 @@ import polars as pl
 import plotly.graph_objects as go
 from dash import dcc
 from gov_uk_dashboards import colours
-from gov_uk_dashboards.components.display_chart_or_table_with_header import display_chart_or_table_with_header
+from gov_uk_dashboards.components.display_chart_or_table_with_header import (
+    display_chart_or_table_with_header,
+)
 
 
 class ChoroplethMap:
@@ -74,8 +76,8 @@ class ChoroplethMap:
         self._remove_background_map()
 
     def _get_dataframe_dict_by_category(self):
-        if self.region is not None and self.region != 'England':
-            self.dataframe = self.dataframe.filter(pl.col('Region') == self.region)
+        if self.region is not None and self.region != "England":
+            self.dataframe = self.dataframe.filter(pl.col("Region") == self.region)
         else:
             self.dataframe = self.dataframe
         grouped_dfs_dict_keys_as_tuples = self.dataframe.partition_by(
@@ -87,7 +89,7 @@ class ChoroplethMap:
         return grouped_dfs_dict
 
     def _get_boundaries_by_area(self, dataframe):
-        las_to_display = dataframe['Area_Code'].to_list()
+        las_to_display = dataframe["Area_Code"].to_list()
         filtered_boundaries = {
             key: (
                 value
@@ -132,6 +134,7 @@ class ChoroplethMap:
         is_missing_data=False,
         marker=None,
     ):
+        # pylint: disable=too-many-positional-arguments
         """Return a chlorepleth trace set up for UK LAs, with optional configuration for markers"""
         if not column_to_plot:
             column_to_plot = self.column_to_plot
@@ -151,18 +154,18 @@ class ChoroplethMap:
         return go.Choropleth(
             geojson=self.geographic_boundaries,
             featureidkey="properties.geo_id",
-            locations=dataframe['Area_Code'],
+            locations=dataframe["Area_Code"],
             locationmode="geojson-id",
             z=dataframe[column_to_plot],
             hovertext=(
-                dataframe['Local authority']
+                dataframe["Local authority"]
                 if not is_missing_data
-                else ['No data available'] * len(dataframe['Local authority'])
+                else ["No data available"] * len(dataframe["Local authority"])
             ),
             customdata=(
                 dataframe[self.custom_data]
                 if not is_missing_data
-                else dataframe[['Local authority']]
+                else dataframe[["Local authority"]]
             ),
             hovertemplate=hovertemplate,
             marker=marker,
@@ -178,7 +181,7 @@ class ChoroplethMap:
             name=(
                 dataframe[self.category_column][0]
                 if not is_missing_data
-                else 'No data available'
+                else "No data available"
             ),
             **self.choropleth_properties,
         )
