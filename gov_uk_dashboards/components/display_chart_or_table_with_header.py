@@ -5,7 +5,7 @@ from dash.development.base_component import Component
 from gov_uk_dashboards.components.create_download_chart_button import create_download_chart_button
 from gov_uk_dashboards.components.create_download_data_button import create_download_data_button
 
-from gov_uk_dashboards.components.plotly.heading import HeadingSizesutton
+from gov_uk_dashboards.components.plotly.heading import HeadingSizes
 
 
 def display_chart_or_table_with_header(
