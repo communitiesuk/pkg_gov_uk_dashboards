@@ -18,6 +18,7 @@ def table_from_dataframe(
     format_column_headers_as_markdown: bool = False,
     **table_properties,
 ):  # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     """
     Displays a pandas DataFrame as a table formatted in the Gov.UK style
 
@@ -118,6 +119,7 @@ def table_from_polars_dataframe(
     non_sortable_columns: list[str] = None,
     **table_properties,
 ):  # pylint: disable=too-many-arguments disable=too-many-locals
+    # pylint: disable=too-many-positional-arguments
     """
     Displays a Polars DataFrame as a table formatted in the Gov.UK style. By default text is
     aligned to the left, unless column name is in columns_to_right_align. By default table is not

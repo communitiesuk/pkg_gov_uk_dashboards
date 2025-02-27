@@ -1,6 +1,11 @@
 [MASTER]
 load-plugins=pylint.extensions.docparams
 
+# df is a common shortening for the term data_frame.
+# The variable df would otherwise fail with error:
+#    df doesn't conform to snake_case naming style
+good-names=df
+
 # Load up this C package when linting so that pylint can generate a list
 # of valid methods is exposes.
 extension-pkg-allow-list = pyodbc
