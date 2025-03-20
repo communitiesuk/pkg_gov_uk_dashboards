@@ -45,6 +45,7 @@ def footer(footer_links: Optional[list[any]]):
                                         href="https://www.nationalarchives.gov.uk/doc/"
                                         "open-government-licence/version/3/",
                                         className="govuk-footer__link",
+                                        target="_blank",
                                     ),
                                     ", except where otherwise stated",
                                 ],
@@ -60,6 +61,7 @@ def footer(footer_links: Optional[list[any]]):
                             href="https://www.nationalarchives.gov.uk/information-management/"
                             "re-using-public-sector-information/uk-government-licensing-framework/"
                             "crown-copyright/",
+                            target="_blank",
                         ),
                         className="govuk-footer__meta-item",
                     ),
