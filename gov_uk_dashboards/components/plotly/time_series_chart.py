@@ -45,6 +45,13 @@ class HoverDataByTrace(TypedDict):
     ]  # Each tracename maps to a HoverDataStructure
 
 
+FILL_TO_PREVIOUS_TRACE = "Fill to previous trace"
+MAIN_TITLE = "main_title"
+SUBTITLE = "subtitle"
+REMOVE_INITIAL_MARKER = "Remove initial marker"
+CHART_LABEL_FONT_SIZE = 19
+
+
 class TimeSeriesChart:
     """Class for use in generating time series charts."""
 
@@ -52,6 +59,7 @@ class TimeSeriesChart:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-locals
     # pylint: disable=too-many-positional-arguments
+
     def __init__(
         self,
         title_data: TitleDataStructure,
