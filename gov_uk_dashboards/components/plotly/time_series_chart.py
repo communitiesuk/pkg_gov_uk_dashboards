@@ -51,6 +51,7 @@ SUBTITLE = "subtitle"
 REMOVE_INITIAL_MARKER = "Remove initial marker"
 CHART_LABEL_FONT_SIZE = 19
 DATE_VALID = "Date valid"
+CUSTOM_DATA = "custom_data"
 
 
 class TimeSeriesChart:
