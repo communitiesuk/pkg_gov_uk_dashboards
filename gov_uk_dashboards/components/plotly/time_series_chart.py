@@ -14,34 +14,6 @@ from gov_uk_dashboards.components.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
 
-from constants import (
-    CUMULATIVE_FORECAST_CENTRAL_SENSITIVE,
-    CUMULATIVE_FORECAST_HIGH_SENSITIVE,
-    CUMULATIVE_FORECAST_LOW_SENSITIVE,
-    CUSTOM_DATA,
-    DATE_VALID,
-    CHART_LABEL_FONT_SIZE,
-    FILL_TO_PREVIOUS_TRACE,
-    LINEAR_TRAJECTORY,
-    HOVER_TEXT_HEADERS,
-    MAIN_TITLE,
-    NET_ADDITIONAL_DWELLINGS_TO_DATE,
-    REMOVE_INITIAL_MARKER,
-    SUBTITLE,
-    YEAR,
-)
-from lib.datetime_functions.datetime_functions import (
-    convert_financial_quarter_to_financial_quarter_text,
-    replace_jun_jul_month_abbreviations,
-)
-from lib.forecast_sensitive.forecast_helper_functions_sensitive import (
-    get_rgba_from_hex_colour_and_alpha,
-)
-from lib.generate_dash_graph_from_figure import generate_dash_graph_from_figure
-
-from lib.plotting_helper_functions import get_legend_configuration
-from lib.update_layout_bgcolor_margin import update_layout_bgcolor_margin
-
 
 class XAxisFormat(Enum):
     """Enum for date format on x axis"""
