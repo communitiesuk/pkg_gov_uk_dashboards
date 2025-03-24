@@ -86,6 +86,28 @@ class StackedBarChart:
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
     ):
+        """Initializes the StackedBarChart instance.
+        To display the chart, call the `get_stacked_bar_chart()` method.
+
+        Args:
+            title_data (TitleDataStructure): Data structure containing the chart title information.
+            y_column (str): The column name representing the Y-axis data.
+            hover_data (HoverDataByTrace): Data structure for hover information.
+            filtered_df (pl.DataFrame): The filtered dataset for the chart.
+            trace_name_list (list[str]): List of trace names for the stacked bars.
+            trace_name_column (Optional[str], optional): Column name representing trace categories,
+                if applicable. Defaults to None.
+            xaxis_tick_text_format (XAxisFormat, optional): Format for X-axis tick labels.
+                Defaults to XAxisFormat.YEAR.value.
+            line_trace_name (Optional[str], optional): Name for an optional line trace overlay.
+                Defaults to None.
+            x_axis_column (_type_, optional): The column used for the X-axis values.
+                Defaults to DATE_VALID.
+            download_chart_button_id (Optional[str], optional): ID for the chart download button,
+                if applicable. Defaults to None.
+            download_data_button_id (Optional[str], optional): ID for the data download button, if
+                applicable. Defaults to None.
+        """
         self.title_data = title_data
         self.y_axis_column = y_column
         self.hover_data = hover_data
