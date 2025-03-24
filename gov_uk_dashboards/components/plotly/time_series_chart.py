@@ -117,8 +117,8 @@ class TimeSeriesChart:
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
+        self.markers = ["square", "diamond", "circle", "triangle-up"]
         self.fig = self.create_time_series_chart()
-        self.marker = ["square", "diamond", "circle", "triangle-up"]
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
