@@ -158,7 +158,7 @@ class TimeSeriesChart:
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
                 colour_list,
-                markers,
+                self.markers,
             )
         ):
             is_last = is_second_last = False
