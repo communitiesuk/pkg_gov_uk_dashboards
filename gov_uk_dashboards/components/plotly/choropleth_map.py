@@ -49,7 +49,7 @@ class ChoroplethMap:
             self.df_dict = self._get_dataframe_dict_by_category()
             self.colours_list = self._get_colour_list()
     
-    def _get_choropleth_map(self):
+    def get_choropleth_map(self):
         """Creates and returns choropleth map chart for display on application.
 
         Returns:
