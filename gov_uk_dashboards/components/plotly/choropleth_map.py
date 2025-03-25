@@ -126,9 +126,7 @@ class ChoroplethMap:
             marker_line_color=colours.GovUKColours.DARK_GREY.value,
             showscale=self._get_scale(),
             showlegend=self._get_legend(),
-            colorscale=colourscale,  # dataframe is grouped by column_to_plot, hence only
-            # contains one value for column_to_plot- this ensures a discrete categorical colourscale
-            # for trace
+            colorscale=colourscale,
             name=self._get_trace_name(
                 dataframe, is_missing_data
             ),
@@ -214,9 +212,9 @@ class ChoroplethMap:
 
         return dict(
             title=self.column_to_plot,
-            thickness=20,   # Adjust the thickness of the colorbar
-            len=0.8,        # Adjust the length of the colorbar
-            x=0.9,          # Position the colorbar horizontally (0-1 scale)
+            thickness=20,
+            len=0.8,
+            x=0.9,
             y=0.5,
         )
 
