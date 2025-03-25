@@ -26,7 +26,9 @@ from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header imp
 from gov_uk_dashboards.components.helpers.generate_dash_graph_from_figure import (
     generate_dash_graph_from_figure,
 )
-from gov_uk_dashboards.components.helpers.plotting_helper_functions import get_legend_configuration
+from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
+    get_legend_configuration,
+)
 from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
