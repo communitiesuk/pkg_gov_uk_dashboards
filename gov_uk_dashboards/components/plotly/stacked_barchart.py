@@ -1,8 +1,7 @@
 """stacked_barchart function"""
 
-from enum import Enum
 import math
-from typing import Optional, TypedDict
+from typing import Optional
 from dash import html
 import polars as pl
 
@@ -29,41 +28,16 @@ from gov_uk_dashboards.components.helpers.generate_dash_graph_from_figure import
 from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
     get_legend_configuration,
 )
+from gov_uk_dashboards.components.plotly.enums import (
+    HoverDataByTrace,
+    TitleDataStructure,
+    XAxisFormat,
+)
 from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
-
-
-class XAxisFormat(Enum):
-    """Enum for date format on x axis"""
-
-    YEAR = "year"
-    MONTH_YEAR = "month_year"
-    FINANCIAL_QUARTER = "financial_quarter"
-
-
-class TitleDataStructure(TypedDict):
-    """A TypedDict representing the structure of title_data"""
-
-    MAIN_TITLE: str
-    SUBTITLE: str
-
-
-class HoverDataStructure(TypedDict):
-    """A TypedDict representing the structure of hover_data"""
-
-    CUSTOM_DATA: list[str]
-    HOVER_TEXT_HEADERS: list[str]
-
-
-class HoverDataByTrace(TypedDict):
-    """A TypedDict representing hover_data organized by tracename"""
-
-    tracename: dict[
-        str, HoverDataStructure
-    ]  # Each tracename maps to a HoverDataStructure
 
 
 class StackedBarChart:

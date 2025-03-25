@@ -1,8 +1,7 @@
 """get_time_series_chart function"""
 
 from datetime import datetime, date
-from enum import Enum
-from typing import Optional, TypedDict
+from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
 import polars as pl
@@ -34,40 +33,15 @@ from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
+from gov_uk_dashboards.components.plotly.enums import (
+    HoverDataByTrace,
+    TitleDataStructure,
+    XAxisFormat,
+)
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_financial_quarter_to_financial_quarter_text,
     replace_jun_jul_month_abbreviations,
 )
-
-
-class XAxisFormat(Enum):
-    """Enum for date format on x axis"""
-
-    YEAR = "year"
-    MONTH_YEAR = "month_year"
-    FINANCIAL_QUARTER = "financial_quarter"
-
-
-class TitleDataStructure(TypedDict):
-    """A TypedDict representing the structure of title_data"""
-
-    MAIN_TITLE: str
-    SUBTITLE: str
-
-
-class HoverDataStructure(TypedDict):
-    """A TypedDict representing the structure of hover_data"""
-
-    CUSTOM_DATA: list[str]
-    HOVER_TEXT_HEADERS: list[str]
-
-
-class HoverDataByTrace(TypedDict):
-    """A TypedDict representing hover_data organized by tracename"""
-
-    tracename: dict[
-        str, HoverDataStructure
-    ]  # Each tracename maps to a HoverDataStructure
 
 
 class TimeSeriesChart:
@@ -128,6 +102,7 @@ class TimeSeriesChart:
         Returns:
             html.Div: Styled div containing title, subtile and chart.
         """
+        # pylint: disable=duplicate-code
         graph_name = self.title_data[MAIN_TITLE].replace(" ", "-")
         return display_chart_or_table_with_header(
             generate_dash_graph_from_figure(
@@ -146,6 +121,7 @@ class TimeSeriesChart:
     ):
         """generates a time series chart"""
         # pylint: disable=too-many-locals
+        # pylint: disable=duplicate-code
         fig = go.Figure()
         colour_list = (
             AFAccessibleColours.CATEGORICAL.value
@@ -264,6 +240,7 @@ class TimeSeriesChart:
         )
         return fig
 
+    # pylint: disable=duplicate-code
     def _format_x_axis(self, fig):
         tick_text, tick_values, range_x = self._get_x_axis_content()
 
@@ -345,6 +322,7 @@ class TimeSeriesChart:
                     trace_name
                 ][HOVER_TEXT_HEADERS]
             )
+        # pylint: disable=duplicate-code
         return (
             f"{trace_name}<br>"
             f"{hover_text_headers[0]}"
