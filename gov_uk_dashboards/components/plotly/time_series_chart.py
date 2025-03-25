@@ -67,6 +67,7 @@ class TimeSeriesChart:
         hover_data: HoverDataByTrace,
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
+        hover_data_for_traces_with_different_hover_for_last_point: Optional[HoverDataByTrace]=None,
         legend_dict: dict[str, str] = None,
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
@@ -81,6 +82,7 @@ class TimeSeriesChart:
         self.title_data = title_data
         self.y_axis_column = y_column
         self.hover_data = hover_data
+        self.hover_data_for_traces_with_different_hover_for_last_point=hover_data_for_traces_with_different_hover_for_last_point
         self.filtered_df = filtered_df
         self.trace_name_list = trace_name_list
         self.legend_dict = legend_dict
@@ -209,7 +211,7 @@ class TimeSeriesChart:
                 line_color="#b3b3b3",
             )
             fig.add_annotation(
-                x=self.vertical_line_x_value,
+                x=self.verticle_line_x_value_and_name,
                 yref="paper",
                 y=0.9,
                 text=self.verticle_line_x_value_and_name[1],
@@ -275,70 +277,17 @@ class TimeSeriesChart:
             marker (dict[str,str]): Properties for marker parameter.
         """
 
-        def _get_hover_template(i):
-            # For last points of trace_name in [], we want different hover text headers.
-            hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
-            if (
-                trace_name
-                in [
-                    CUMULATIVE_FORECAST_CENTRAL_SENSITIVE,
-                    CUMULATIVE_FORECAST_LOW_SENSITIVE,
-                    CUMULATIVE_FORECAST_HIGH_SENSITIVE,
-                ]
-                and i == df.shape[0] - 1
-            ):
-                hover_text_headers = self.hover_data[NET_ADDITIONAL_DWELLINGS_TO_DATE][
-                    HOVER_TEXT_HEADERS
-                ]
-            hover_template = (
-                f"{trace_name}<br>"
-                f"{hover_text_headers[0]}"
-                ": %{customdata[0]}<br>"
-                f"{hover_text_headers[1]}"
-                ": %{customdata[1]}<extra></extra>"
-            )
-            return hover_template
+        
 
-        def _get_custom_data():
-            # For last points of trace_name in [], we want different custom data.
-            customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
-            if trace_name in [
-                CUMULATIVE_FORECAST_CENTRAL_SENSITIVE,
-                CUMULATIVE_FORECAST_LOW_SENSITIVE,
-                CUMULATIVE_FORECAST_HIGH_SENSITIVE,
-            ]:
-
-                customdata = [
-                    (
-                        [df[col][i] for col in self.hover_data[trace_name][CUSTOM_DATA]]
-                        if i < df.shape[0] - 1
-                        else [
-                            df[col][i]
-                            for col in self.hover_data[
-                                NET_ADDITIONAL_DWELLINGS_TO_DATE
-                            ][CUSTOM_DATA]
-                        ]
-                    )  # Use different columns for the last point
-                    for i in range(df.shape[0])
-                ]
-            return customdata
+        
 
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             line=line_style,
             name=self._get_trace_name(trace_name),
-            hovertemplate=[
-                (
-                    ""
-                    if i == 0
-                    and self.trace_names_to_prevent_hover_of_first_point is not None
-                    and trace_name in self.trace_names_to_prevent_hover_of_first_point
-                    else _get_hover_template(i)
-                )
-                for i in range(df.shape[0])  # the number of rows in df
-            ],
-            customdata=_get_custom_data(),
+            hovertemplate=self._get_hover_template(df, trace_name),
+            customdata=self._get_custom_data(df, trace_name),
             marker=marker,
             fill=fill,
             hoverlabel=hover_label,
@@ -353,6 +302,59 @@ class TimeSeriesChart:
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
         )
+    
+        
+    def _get_hover_template(self, df, trace_name):
+        print(df, trace_name)
+        return [
+                (
+                    ""
+                    if i == 0
+                    and self.trace_names_to_prevent_hover_of_first_point is not None
+                    and trace_name in self.trace_names_to_prevent_hover_of_first_point
+                    else self._get_custom_hover_template(i, df,trace_name))
+                for i in range(df.shape[0])  # the number of rows in df
+            ]
+                
+    def _get_custom_hover_template(self,i, df,trace_name):
+        hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
+        if (
+            self.hover_data_for_traces_with_different_hover_for_last_point is not None and
+            trace_name
+            in self.hover_data_for_traces_with_different_hover_for_last_point
+            and i == df.shape[0] - 1
+        ):
+            hover_text_headers = self.hover_data_for_traces_with_different_hover_for_last_point[trace_name][
+                HOVER_TEXT_HEADERS
+            ]
+        return (
+            f"{trace_name}<br>"
+            f"{hover_text_headers[0]}"
+            ": %{customdata[0]}<br>"
+            f"{hover_text_headers[1]}"
+            ": %{customdata[1]}<extra></extra>"
+        )
+    
+    def _get_custom_data(self, df, trace_name):
+        # For last points of trace_name in [], we want different custom data.
+        customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
+        if self.hover_data_for_traces_with_different_hover_for_last_point is not None and trace_name in self.hover_data_for_traces_with_different_hover_for_last_point:
+
+            customdata = [
+                (
+                    [df[col][i] for col in self.hover_data[trace_name][CUSTOM_DATA]]
+                    if i < df.shape[0] - 1
+                    else [
+                        df[col][i]
+                        for col in self.hover_data_for_traces_with_different_hover_for_last_point[
+                            trace_name
+                        ][CUSTOM_DATA]
+                    ]
+                )  # Use different columns for the last point
+                for i in range(df.shape[0])
+            ]
+        return customdata
+        
 
     def _get_trace_name(self, trace_name):
         if self.legend_dict is not None and trace_name in self.legend_dict:
