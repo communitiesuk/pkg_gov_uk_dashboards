@@ -1,6 +1,8 @@
 """test convert_date_string_to_text_string"""
 
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_date_string_to_text_string
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_date_string_to_text_string,
+)
 
 
 def test_convert_date_string_to_text_string_abbreviate_month_include_year():

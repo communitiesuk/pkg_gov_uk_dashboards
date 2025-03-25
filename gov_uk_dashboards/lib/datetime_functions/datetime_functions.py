@@ -5,8 +5,6 @@ import os
 from datetime import datetime, date
 import re
 from typing import Optional
-import polars as pl
-from constants import ACTUAL_VALUES_NOT_FROM_FORECAST_SENSITIVE
 
 
 def convert_date_string_to_text_string(
@@ -43,7 +41,7 @@ def convert_date_obj_to_text_string(
     """Converts date object to text string, with format determined by parameters. If month is June
     or July, abbreviate_month is set to False.
     Args:
-        date (datetime): The datetime object to format, in form YYYY-MM-DD.
+        dt_obj (datetime): The datetime object to format, in form YYYY-MM-DD.
         include_day_of_month (bool, optional): Whether to include the date.
         abbreviate_month (bool, optional): Whether to abbreviate the month eg. Mar over March.
             Defaults to True.
@@ -68,26 +66,6 @@ def convert_date_obj_to_text_string(
     if include_year:
         text_string_format += " %Y"
     return dt_obj.strftime(text_string_format).strip()
-
-
-def get_month_year_from_df(dataframe: pl.DataFrame, date_column: str) -> str:
-    """Get the month and year that has non-null values in a dataframe
-    formatted as e.g. "September 2023"
-
-    Args:
-        dataframe (pl.DataFrame): dataframe containing date_column
-        date_column (str): column in which to find unique dates where values are in the format
-            "YYYY-MM"
-
-    Returns:
-        str: Month and year formatted as e.g. "September 2023"
-    """
-    date_str = (
-        (dataframe.select(pl.col(date_column)).unique())
-        .filter(~(pl.col(date_column) == ACTUAL_VALUES_NOT_FROM_FORECAST_SENSITIVE))
-        .max()[0, 0]
-    )
-    return format_year_month_to_month_year(date_str)
 
 
 def format_year_month_to_month_year(date_string: str):
@@ -294,6 +272,7 @@ def format_date_with_custom_months(date_object: datetime.date, include_day=True)
 
     Args:
         date_object (datetime.date): A `datetime.date` object to format.
+        include_day: Boolean to determine whether to include day of month in output
 
     Returns:
         str: The formatted date string with custom month formatting.
@@ -333,7 +312,7 @@ def convert_date_to_financial_quarter(date_str: str):
     """Convert date string in the format yyyy-mm-dd to a financial quarter
 
     Args:
-        date (str): yyyy-mm-dd
+        date_str (str): yyyy-mm-dd
 
     Returns:
         integer with april-june being 1 and so on
@@ -352,7 +331,7 @@ def convert_financial_quarter_to_financial_quarter_text(quarter: int):
     """Convert quarter integer to financial quarter text including months
 
     Args:
-        date (str): yyyy-mm-dd
+        quarter (str): 1, 2, 3, 4 representing quarters with apr-june being 1
 
     Returns:
         integer with april-june being 1 and so on

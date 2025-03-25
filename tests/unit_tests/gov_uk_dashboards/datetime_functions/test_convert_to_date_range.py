@@ -1,6 +1,8 @@
 """test convert_to_date_range function"""
 
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_to_date_range
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_to_date_range,
+)
 
 
 def test_convert_to_date_range_function():

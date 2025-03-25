@@ -1,7 +1,9 @@
 """test convert_financial_year_to_date"""
 
 from datetime import datetime
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_financial_year_to_date
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_financial_year_to_date,
+)
 
 
 def test_convert_financial_year_to_date():

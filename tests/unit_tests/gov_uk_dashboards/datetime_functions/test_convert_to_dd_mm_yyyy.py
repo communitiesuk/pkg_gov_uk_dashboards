@@ -1,6 +1,8 @@
 """test convert_to_dd_mm_yyyy function"""
 
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_to_dd_mm_yyyy
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_to_dd_mm_yyyy,
+)
 
 
 def test_convert_to_dd_mm_yyyy_with_date_string():

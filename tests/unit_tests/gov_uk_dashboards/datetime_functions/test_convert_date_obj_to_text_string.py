@@ -1,7 +1,9 @@
 """test convert_date_obj_to_text_string"""
 
 from datetime import datetime
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_date_obj_to_text_string
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_date_obj_to_text_string,
+)
 
 
 def test_convert_date_obj_to_text_string_default():

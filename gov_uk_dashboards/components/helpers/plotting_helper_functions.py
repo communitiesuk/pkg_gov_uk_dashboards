@@ -28,6 +28,7 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True):
         "itemdoubleclick": "toggle" if itemdoubleclick else False,
     }
 
+
 def get_rgba_from_hex_colour_and_alpha(hex_code: str, alpha: float = 1.0) -> str:
     """Get the rgba string corresponding to a hex-code colour and its alpha (opacity)
 

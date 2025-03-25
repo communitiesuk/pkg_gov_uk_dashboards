@@ -9,7 +9,17 @@ import polars as pl
 
 import plotly.graph_objects as go
 
-from constants import CHART_LABEL_FONT_SIZE, CUSTOM_DATA, DATE_VALID, FILL_TO_PREVIOUS_TRACE, HOVER_TEXT_HEADERS, MAIN_TITLE, REMOVE_INITIAL_MARKER, SUBTITLE, YEAR
+from constants import (
+    CHART_LABEL_FONT_SIZE,
+    CUSTOM_DATA,
+    DATE_VALID,
+    FILL_TO_PREVIOUS_TRACE,
+    HOVER_TEXT_HEADERS,
+    MAIN_TITLE,
+    REMOVE_INITIAL_MARKER,
+    SUBTITLE,
+    YEAR,
+)
 from gov_uk_dashboards.colours import AFAccessibleColours
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
@@ -17,9 +27,17 @@ from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header imp
 from gov_uk_dashboards.components.helpers.generate_dash_graph_from_figure import (
     generate_dash_graph_from_figure,
 )
-from gov_uk_dashboards.components.helpers.plotting_helper_functions import get_legend_configuration, get_rgba_from_hex_colour_and_alpha
-from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import update_layout_bgcolor_margin
-from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_financial_quarter_to_financial_quarter_text, replace_jun_jul_month_abbreviations
+from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
+    get_legend_configuration,
+    get_rgba_from_hex_colour_and_alpha,
+)
+from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
+    update_layout_bgcolor_margin,
+)
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_financial_quarter_to_financial_quarter_text,
+    replace_jun_jul_month_abbreviations,
+)
 
 
 class XAxisFormat(Enum):
@@ -67,11 +85,13 @@ class TimeSeriesChart:
         hover_data: HoverDataByTrace,
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
-        hover_data_for_traces_with_different_hover_for_last_point: Optional[HoverDataByTrace]=None,
+        hover_data_for_traces_with_different_hover_for_last_point: Optional[
+            HoverDataByTrace
+        ] = None,
         legend_dict: dict[str, str] = None,
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
-        verticle_line_x_value_and_name:tuple=None,
+        verticle_line_x_value_and_name: tuple = None,
         last_2_traces_filled=False,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
@@ -82,7 +102,9 @@ class TimeSeriesChart:
         self.title_data = title_data
         self.y_axis_column = y_column
         self.hover_data = hover_data
-        self.hover_data_for_traces_with_different_hover_for_last_point=hover_data_for_traces_with_different_hover_for_last_point
+        self.hover_data_for_traces_with_different_hover_for_last_point = (
+            hover_data_for_traces_with_different_hover_for_last_point
+        )
         self.filtered_df = filtered_df
         self.trace_name_list = trace_name_list
         self.legend_dict = legend_dict
@@ -180,8 +202,6 @@ class TimeSeriesChart:
                 )
             )
 
-        tick_values = self._format_x_axis(fig)
-
         # if self.average_increment_for_average_trace is not None:
         #     trace_name = LINEAR_TRAJECTORY
         #     dates = [
@@ -277,10 +297,6 @@ class TimeSeriesChart:
             marker (dict[str,str]): Properties for marker parameter.
         """
 
-        
-
-        
-
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
@@ -302,31 +318,33 @@ class TimeSeriesChart:
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
         )
-    
-        
+
     def _get_hover_template(self, df, trace_name):
         print(df, trace_name)
         return [
-                (
-                    ""
-                    if i == 0
-                    and self.trace_names_to_prevent_hover_of_first_point is not None
-                    and trace_name in self.trace_names_to_prevent_hover_of_first_point
-                    else self._get_custom_hover_template(i, df,trace_name))
-                for i in range(df.shape[0])  # the number of rows in df
-            ]
-                
-    def _get_custom_hover_template(self,i, df,trace_name):
+            (
+                ""
+                if i == 0
+                and self.trace_names_to_prevent_hover_of_first_point is not None
+                and trace_name in self.trace_names_to_prevent_hover_of_first_point
+                else self._get_custom_hover_template(i, df, trace_name)
+            )
+            for i in range(df.shape[0])  # the number of rows in df
+        ]
+
+    def _get_custom_hover_template(self, i, df, trace_name):
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
-            self.hover_data_for_traces_with_different_hover_for_last_point is not None and
-            trace_name
+            self.hover_data_for_traces_with_different_hover_for_last_point is not None
+            and trace_name
             in self.hover_data_for_traces_with_different_hover_for_last_point
             and i == df.shape[0] - 1
         ):
-            hover_text_headers = self.hover_data_for_traces_with_different_hover_for_last_point[trace_name][
-                HOVER_TEXT_HEADERS
-            ]
+            hover_text_headers = (
+                self.hover_data_for_traces_with_different_hover_for_last_point[
+                    trace_name
+                ][HOVER_TEXT_HEADERS]
+            )
         return (
             f"{trace_name}<br>"
             f"{hover_text_headers[0]}"
@@ -334,11 +352,15 @@ class TimeSeriesChart:
             f"{hover_text_headers[1]}"
             ": %{customdata[1]}<extra></extra>"
         )
-    
+
     def _get_custom_data(self, df, trace_name):
         # For last points of trace_name in [], we want different custom data.
         customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
-        if self.hover_data_for_traces_with_different_hover_for_last_point is not None and trace_name in self.hover_data_for_traces_with_different_hover_for_last_point:
+        if (
+            self.hover_data_for_traces_with_different_hover_for_last_point is not None
+            and trace_name
+            in self.hover_data_for_traces_with_different_hover_for_last_point
+        ):
 
             customdata = [
                 (
@@ -348,13 +370,14 @@ class TimeSeriesChart:
                         df[col][i]
                         for col in self.hover_data_for_traces_with_different_hover_for_last_point[
                             trace_name
-                        ][CUSTOM_DATA]
+                        ][
+                            CUSTOM_DATA
+                        ]
                     ]
                 )  # Use different columns for the last point
                 for i in range(df.shape[0])
             ]
         return customdata
-        
 
     def _get_trace_name(self, trace_name):
         if self.legend_dict is not None and trace_name in self.legend_dict:
