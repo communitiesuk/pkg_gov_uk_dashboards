@@ -67,7 +67,7 @@ class ChoroplethMap:
             },  # height hard-coded so that map always displays within tab
         )
         return display_chart_or_table_with_header(
-            choropleth_map, download_data_button_id=f"{self.map_name}"
+            choropleth_map, download_data_button_id=self.map_name
         )
     
     def _update_fig(self):
