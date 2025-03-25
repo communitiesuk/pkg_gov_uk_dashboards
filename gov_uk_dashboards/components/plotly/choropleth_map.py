@@ -1,13 +1,16 @@
 """Choropleth map class"""
 
-from constants import DEFAULT_COLOURSCALE
 import polars as pl
 import plotly.graph_objects as go
 from dash import dcc
+
+from constants import DEFAULT_COLOURSCALE
+
 from gov_uk_dashboards import colours
 from gov_uk_dashboards.components.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
+
 
 class ChoroplethMap:
     """Class for  generating choropleth map charts.
@@ -16,9 +19,13 @@ class ChoroplethMap:
     If discrete_category_column & discrete_category_order are None,
     the choropleth map will be a continuos one, otherwise discrete"""
 
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
+    # pylint: disable=too-few-public-methods
     def __init__(
         self,
-        map_name: str, # used for the id in the choropleth map and the data download button
+        map_name: str,  # used for the id in the choropleth map and the data download button
         get_dataframe: callable,
         get_geos: callable,
         region: str,
@@ -29,7 +36,7 @@ class ChoroplethMap:
         discrete_category_column: str = None,
         discrete_category_order: list[str] = None,
         legend_title_text: str = None,
-        **choropleth_properties
+        **choropleth_properties,
     ):
         self.map_name = map_name
         self.dataframe = get_dataframe()
@@ -46,11 +53,14 @@ class ChoroplethMap:
         self.choropleth_properties = choropleth_properties
 
         self.fig = go.Figure()
-        self.discrete_map = (self.discrete_category_column != None and self.discrete_category_order != None)
+        self.discrete_map = (
+            self.discrete_category_column is not None
+            and self.discrete_category_order is not None
+        )
         if self.discrete_map:
             self.df_dict = self._get_dataframe_dict_by_category()
             self.colours_list = self._get_colour_list()
-    
+
     def get_choropleth_map(self):
         """Creates and returns choropleth map chart for display on application.
 
@@ -71,7 +81,7 @@ class ChoroplethMap:
         return display_chart_or_table_with_header(
             choropleth_map, download_data_button_id=self.map_name
         )
-    
+
     def _update_fig(self):
         self._add_traces()
         self._handle_missing_data()
@@ -127,20 +137,14 @@ class ChoroplethMap:
             showscale=self._get_scale(),
             showlegend=self._get_legend(),
             colorscale=colourscale,
-            name=self._get_trace_name(
-                dataframe, is_missing_data
-            ),
+            name=self._get_trace_name(dataframe, is_missing_data),
             **self.choropleth_properties,
         )
 
-
     def _add_traces(self):
-        if(not self.discrete_map):
+        if not self.discrete_map:
             self.fig.add_trace(
-                self._create_choropleth_trace(
-                    self.dataframe,
-                    DEFAULT_COLOURSCALE
-                )
+                self._create_choropleth_trace(self.dataframe, DEFAULT_COLOURSCALE)
             )
         else:
             for count, category in enumerate(self.discrete_category_order):
@@ -150,7 +154,7 @@ class ChoroplethMap:
                     df = self.df_dict[category]
                 colour = [
                     [0, self.colours_list[count % len(self.colours_list)]],
-                    [1, self.colours_list[count % len(self.colours_list)]]
+                    [1, self.colours_list[count % len(self.colours_list)]],
                 ]
                 self.fig.add_trace(
                     self._create_choropleth_trace(
@@ -158,15 +162,15 @@ class ChoroplethMap:
                         colour,
                     )
                 )
-    
+
     def _handle_missing_data(self):
         missing_data = self.dataframe.filter(pl.col(self.column_to_plot).is_null())
         missing_data = missing_data.with_columns(pl.lit(0).alias("data"))
 
         colour = [
-                    [0, colours.GovUKColours.MID_GREY.value],
-                    [1, colours.GovUKColours.MID_GREY.value]
-                ]
+            [0, colours.GovUKColours.MID_GREY.value],
+            [1, colours.GovUKColours.MID_GREY.value],
+        ]
         if not missing_data.is_empty():
             self.fig.add_trace(
                 self._create_choropleth_trace(
@@ -207,30 +211,30 @@ class ChoroplethMap:
         )
 
     def _get_color_bar(self):
-        if self.discrete_map: 
+        if self.discrete_map:
             return None
 
-        return dict(
-            title=self.column_to_plot,
-            thickness=20,
-            len=0.8,
-            x=0.9,
-            y=0.5,
-        )
+        return {
+            "title": self.column_to_plot,
+            "thickness": 20,
+            "len": 0.8,
+            "x": 0.9,
+            "y": 0.5,
+        }
 
     def _get_scale(self):
         return not self.discrete_map
-    
+
     def _get_legend(self):
         return self.discrete_map
 
-    def _get_trace_name(self, dataframe, missing_data = False):
-        if self.discrete_category_column == None:
+    def _get_trace_name(self, dataframe, missing_data=False):
+        if self.discrete_category_column is None:
             return None
 
         if not missing_data:
             return dataframe[self.discrete_category_column][0]
-        
+
         return "No data available"
 
     def _remove_background_map(self):
@@ -247,3 +251,11 @@ class ChoroplethMap:
         if self.discrete_map and len(self.discrete_category_order) == 3:
             colour_list.pop(1)
         return colour_list
+
+    def _create_df_for_empty_trace(self, category):
+        """Method to create df where all columns are empty except for the category column to force
+        all legend items to always appear"""
+        columns = next(iter(self.df_dict.values())).columns
+        data = {col: [None] for col in columns}
+        data[self.discrete_category_column] = [category]
+        return pl.DataFrame(data)
