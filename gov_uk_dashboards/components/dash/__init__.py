@@ -63,7 +63,7 @@ the right
 """
 
 from .banners import message_banner
-from .captioned_figure import captioned_figure
+from ..plotly.captioned_figure import captioned_figure
 from .card import card, empty_card
 from .card_full_width import card_full_width
 from .apply_and_reset_filters_buttons import apply_and_reset_filters_buttons

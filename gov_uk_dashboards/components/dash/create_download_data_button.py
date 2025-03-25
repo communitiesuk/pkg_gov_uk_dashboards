@@ -1,7 +1,7 @@
 """create_download_data_button"""
 
 from dash import html
-from gov_uk_dashboards.components.plotly import download_button_with_icon
+from gov_uk_dashboards.components.dash import download_button_with_icon
 
 
 def create_download_data_button(button_id_name: str) -> html.Div:

@@ -2,7 +2,7 @@
 from typing import Optional
 from dash import html
 
-from gov_uk_dashboards.components.plotly.heading import heading2
+from gov_uk_dashboards.components.dash.heading import heading2
 from .collapsible_panel import collapsible_panel
 from .row_component import row_component
 

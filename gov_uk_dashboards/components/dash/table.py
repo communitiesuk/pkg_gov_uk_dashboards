@@ -2,8 +2,8 @@
 from typing import Optional
 from pandas import DataFrame
 from dash import html, dcc
-from gov_uk_dashboards.components.plotly.card import card
-from gov_uk_dashboards.components.plotly.paragraph import paragraph
+from gov_uk_dashboards.components.dash.card import card
+from gov_uk_dashboards.components.dash.paragraph import paragraph
 
 # from gov_uk_dashboards.components.plotly.row_component import row_component
 

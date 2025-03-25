@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 
 from gov_uk_dashboards.colours import AFAccessibleColours
 from gov_uk_dashboards.components.generate_dash_graph_from_figure import generate_dash_graph_from_figure
-from gov_uk_dashboards.components.display_chart_or_table_with_header import (
+from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
 from gov_uk_dashboards.components.update_layout_bgcolor_margin import update_layout_bgcolor_margin

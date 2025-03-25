@@ -4,7 +4,7 @@ import itertools
 import pytest
 from dash import html
 
-from gov_uk_dashboards.components.plotly.heading import (
+from gov_uk_dashboards.components.dash.heading import (
     heading1,
     HeadingSizes,
     heading2,

@@ -20,16 +20,16 @@ from constants import (
     VALUE,
 )
 from gov_uk_dashboards.colours import AFAccessibleColours
-from gov_uk_dashboards.components.display_chart_or_table_with_header import (
+from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
-from gov_uk_dashboards.components.plotly.generate_dash_graph_from_figure import (
+from gov_uk_dashboards.components.helpers.generate_dash_graph_from_figure import (
     generate_dash_graph_from_figure,
 )
-from gov_uk_dashboards.lib.plotting_helper_functions import get_legend_configuration
+from gov_uk_dashboards.components.helpers.plotting_helper_functions import get_legend_configuration
 from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 
-from gov_uk_dashboards.lib.update_layout_bgcolor_margin import (
+from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
 

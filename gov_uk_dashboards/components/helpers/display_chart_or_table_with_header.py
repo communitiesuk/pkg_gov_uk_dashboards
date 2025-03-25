@@ -9,7 +9,7 @@ from gov_uk_dashboards.components.create_download_data_button import (
     create_download_data_button,
 )
 
-from gov_uk_dashboards.components.plotly.heading import HeadingSizes
+from gov_uk_dashboards.components.dash.heading import HeadingSizes
 
 
 def display_chart_or_table_with_header(
