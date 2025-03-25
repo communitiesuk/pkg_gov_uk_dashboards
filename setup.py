@@ -24,5 +24,4 @@ setup(
         "flask-basicauth~=0.2.0",
     ],
     include_package_data=True,
-    package_data={"package": ["constants.py"]},  # Explicitly include constants.py
 )
