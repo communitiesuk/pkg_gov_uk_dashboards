@@ -272,7 +272,7 @@ def format_date_with_custom_months(date_object: datetime.date, include_day=True)
 
     Args:
         date_object (datetime.date): A `datetime.date` object to format.
-        include_day: Boolean to determine whether to include day of month in output
+        include_day (bool): Boolean to determine whether to include day of month in output
 
     Returns:
         str: The formatted date string with custom month formatting.
