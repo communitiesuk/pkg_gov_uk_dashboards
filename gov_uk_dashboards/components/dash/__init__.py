@@ -1,4 +1,4 @@
-"""Module containing Plotly/Dash components for building GOV.UK Design System dashboards.
+"""Module containing Dash components for building GOV.UK Design System dashboards.
 
 See: https://design-system.service.gov.uk/components/
 
