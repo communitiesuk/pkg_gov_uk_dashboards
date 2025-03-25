@@ -34,7 +34,7 @@ def generate_dash_graph_from_figure(
         graph_style["height"] = "450px"
 
     figure.update_layout(dragmode=False)
-
+    #pylint: disable=duplicate-code
     return dcc.Graph(
         id=f"{graph_name}-graph",
         responsive=True,

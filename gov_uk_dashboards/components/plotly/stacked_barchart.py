@@ -17,7 +17,6 @@ from constants import (
     MAIN_TITLE,
     MEASURE,
     SUBTITLE,
-    TOTAL_INCOME,
     VALUE,
 )
 from gov_uk_dashboards.colours import AFAccessibleColours
@@ -77,7 +76,7 @@ class StackedBarChart:
         title_data: TitleDataStructure,
         y_column: str,
         hover_data: HoverDataByTrace,
-        filtered_df: pl.DataFrame,
+        df: pl.DataFrame,
         trace_name_list: list[str],
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
@@ -93,13 +92,14 @@ class StackedBarChart:
             title_data (TitleDataStructure): Data structure containing the chart title information.
             y_column (str): The column name representing the Y-axis data.
             hover_data (HoverDataByTrace): Data structure for hover information.
-            filtered_df (pl.DataFrame): The filtered dataset for the chart.
+            df (pl.DataFrame): The dataset for the chart.
             trace_name_list (list[str]): List of trace names for the stacked bars.
             trace_name_column (Optional[str], optional): Column name representing trace categories,
                 if applicable. Defaults to None.
             xaxis_tick_text_format (XAxisFormat, optional): Format for X-axis tick labels.
                 Defaults to XAxisFormat.YEAR.value.
-            line_trace_name (Optional[str], optional): Name for an optional line trace overlay.
+            line_trace_name (Optional[str], optional): Name for an optional line trace overlay,
+                must be in MEASURE column of df, line_trace_name will display in legend.
                 Defaults to None.
             x_axis_column (_type_, optional): The column used for the X-axis values.
                 Defaults to DATE_VALID.
@@ -111,7 +111,7 @@ class StackedBarChart:
         self.title_data = title_data
         self.y_axis_column = y_column
         self.hover_data = hover_data
-        self.filtered_df = filtered_df
+        self.df = df
         self.trace_name_list = trace_name_list
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -172,7 +172,7 @@ class StackedBarChart:
 
         if self.line_trace_name is not None:
             colour = AFAccessibleColours.CATEGORICAL.value[len(self.trace_name_list)]
-            df = self.filtered_df.filter(pl.col(MEASURE) == self.line_trace_name)
+            df = self.df.filter(pl.col(MEASURE) == self.line_trace_name)
 
             fig.add_trace(
                 go.Scatter(
@@ -181,14 +181,14 @@ class StackedBarChart:
                     customdata=self._get_custom_data(self.line_trace_name, df),
                     mode="lines",
                     line={"color": colour, "width": 3},
-                    name=TOTAL_INCOME,
+                    name=self.line_trace_name,
                     hovertemplate=self._get_hover_template(self.line_trace_name),
                     legendrank=99999,  # a high number to ensure it is bottom of the legend
                 )
             )
 
         max_y, min_y, tickvals, ticktext = _get_y_range_tickvals_and_ticktext(
-            self.filtered_df, "£", self.trace_name_list
+            self.df, "£", self.trace_name_list
         )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
@@ -269,7 +269,7 @@ class StackedBarChart:
             tuple: A tuple containing tick_text, tick_values and range_x.
         """
         if self.xaxis_tick_text_format == XAxisFormat.YEAR.value:
-            year_list = self.filtered_df[FINANCIAL_YEAR_ENDING].unique().to_list()
+            year_list = self.df[FINANCIAL_YEAR_ENDING].unique().to_list()
             int_min_year = int(min(year_list))
             int_max_year = int(max(year_list))
 
@@ -294,11 +294,11 @@ class StackedBarChart:
     def _get_df_list_for_time_series(self) -> list[pl.DataFrame]:
         if self.trace_name_column is not None:
             df_list = [
-                self.filtered_df.filter(pl.col(self.trace_name_column) == trace_name)
+                self.df.filter(pl.col(self.trace_name_column) == trace_name)
                 for trace_name in self.trace_name_list
             ]
         else:
-            df_list = [self.filtered_df]
+            df_list = [self.df]
         return df_list
 
 
