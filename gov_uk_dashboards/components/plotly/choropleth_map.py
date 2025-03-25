@@ -1,5 +1,6 @@
 """Choropleth map class"""
 
+from constants import DEFAULT_COLOURSCALE
 import polars as pl
 import plotly.graph_objects as go
 from dash import dcc
@@ -8,47 +9,47 @@ from gov_uk_dashboards.components.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
 
-
 class ChoroplethMap:
     """Class for  generating choropleth map charts.
-    Note: dataframe_function must contain columns: 'Region', 'Area_Code', 'Local authority',
+    Note: dataframe_function must contain columns: 'Region', 'Area_Code',
     category_column, column_to_plot, custom_data"""
 
-    # pylint: disable=too-many-instance-attributes
-    # pylint: disable=too-many-arguments
-    # pylint: disable=too-many-positional-arguments
-    # pylint: disable=too-few-public-methods
     def __init__(
         self,
-        dataframe_function,
-        region,
-        get_geos_function,
-        category_column,
-        column_to_plot,
-        desired_category_order,
-        custom_data,
-        hover_header_list,
-        download_data_button_id,
-        legend_title_text=None,
-        **choropleth_properties,
+        map_name: str,
+        get_dataframe: callable,
+        get_geos: callable,
+        region: str,
+        area_focus_level: str,
+        column_to_plot: str,
+        hover_header_list: list[str],
+        hover_data_list: list[str],
+        category_column: str = None,
+        desired_category_order: list[str] = None,
+        legend_title_text: str = None,
+        **choropleth_properties
     ):
-        self.dataframe = dataframe_function()
+        self.map_name = map_name
+        self.dataframe = get_dataframe()
+        self.geographic_boundaries = get_geos()
         self.region = region
-        self.geographic_boundaries = get_geos_function()
-        self.boundaries_by_area = self._get_boundaries_by_area(self.dataframe)
-        self.category_column = category_column
+        self.area_focus_level = area_focus_level
         self.column_to_plot = column_to_plot
-        self.df_dict = self._get_dataframe_dict_by_category()
-        self.desired_category_order = desired_category_order
-        self.colours_list = self._get_colour_list()
-        self.custom_data = custom_data
         self.hover_header_list = hover_header_list
-        self.download_data_button_id = download_data_button_id
+        self.hover_data_list = hover_data_list
+
+        self.category_column = category_column
         self.legend_title_text = legend_title_text
-        self.fig = go.Figure()
+        self.desired_category_order = desired_category_order
         self.choropleth_properties = choropleth_properties
 
-    def get_choropleth_map(self):
+        self.fig = go.Figure()
+        self.discrete_map = (self.category_column != None and self.desired_category_order != None)
+        if self.discrete_map:
+            self.df_dict = self._get_dataframe_dict_by_category()
+            self.colours_list = self._get_colour_list()
+    
+    def _get_choropleth_map(self):
         """Creates and returns choropleth map chart for display on application.
 
         Returns:
@@ -56,7 +57,7 @@ class ChoroplethMap:
         """
         self._update_fig()
         choropleth_map = dcc.Graph(
-            id="local-authority-choropleth",
+            id=f"{self.map_name}-choropleth",
             responsive=True,
             config={"topojsonURL": "/assets/topojson/", "displayModeBar": False},
             figure=self.fig,
@@ -66,70 +67,19 @@ class ChoroplethMap:
             },  # height hard-coded so that map always displays within tab
         )
         return display_chart_or_table_with_header(
-            choropleth_map, download_data_button_id=self.download_data_button_id
+            choropleth_map, download_data_button_id=f"{self.map_name}-download-btn"
         )
-
+    
     def _update_fig(self):
         self._add_traces()
         self._handle_missing_data()
         self._crop_to_region()
         self._remove_background_map()
 
-    def _get_dataframe_dict_by_category(self):
-        if self.region is not None and self.region != "England":
-            self.dataframe = self.dataframe.filter(pl.col("Region") == self.region)
-        else:
-            self.dataframe = self.dataframe
-        grouped_dfs_dict_keys_as_tuples = self.dataframe.partition_by(
-            self.category_column, as_dict=True
-        )
-        grouped_dfs_dict = {
-            key[0]: value for key, value in grouped_dfs_dict_keys_as_tuples.items()
-        }
-        return grouped_dfs_dict
-
-    def _get_boundaries_by_area(self, dataframe):
-        las_to_display = dataframe["Area_Code"].to_list()
-        filtered_boundaries = {
-            key: (
-                value
-                if key != "features"
-                else [
-                    features
-                    for features in value
-                    if features["properties"]["geo_id"] in las_to_display
-                ]
-            )
-            for key, value in self.geographic_boundaries.items()
-        }
-        return filtered_boundaries
-
-    def _add_traces(self):
-        for count, category in enumerate(self.desired_category_order):
-            if category not in self.df_dict:
-                df = self._create_df_for_empty_trace(category)
-            else:
-                df = self.df_dict[category]
-            colour = self.colours_list[count % len(self.colours_list)]
-            self.fig.add_trace(
-                self._create_choropleth_trace(
-                    df,
-                    colour,
-                )
-            )
-
-    def _create_df_for_empty_trace(self, category):
-        """Method to create df where all columns are empty except for the category column to force
-        all legend items to always appear"""
-        columns = next(iter(self.df_dict.values())).columns
-        data = {col: [None] for col in columns}
-        data[self.category_column] = [category]
-        return pl.DataFrame(data)
-
     def _create_choropleth_trace(
         self,
         dataframe,
-        colour,
+        colourscale,
         column_to_plot=None,
         is_missing_data=False,
         marker=None,
@@ -151,6 +101,7 @@ class ChoroplethMap:
             hovertemplate = (
                 "<b>%{customdata[0]}</b><br>" + "%{hovertext}<extra></extra>"
             )
+
         return go.Choropleth(
             geojson=self.geographic_boundaries,
             featureidkey="properties.geo_id",
@@ -158,47 +109,86 @@ class ChoroplethMap:
             locationmode="geojson-id",
             z=dataframe[column_to_plot],
             hovertext=(
-                dataframe["Local authority"]
+                dataframe[self.area_focus_level]
                 if not is_missing_data
-                else ["No data available"] * len(dataframe["Local authority"])
+                else ["No data available"] * len(dataframe[self.area_focus_level])
             ),
             customdata=(
-                dataframe[self.custom_data]
+                dataframe[self.hover_data_list]
                 if not is_missing_data
-                else dataframe[["Local authority"]]
+                else dataframe[[self.area_focus_level]]
             ),
+            colorbar=self._get_color_bar(),
             hovertemplate=hovertemplate,
             marker=marker,
             marker_line_color=colours.GovUKColours.DARK_GREY.value,
-            showscale=False,
-            showlegend=True,
-            colorscale=[
-                [0, colour],
-                [1, colour],
-            ],  # dataframe is grouped by column_to_plot, hence only
+            showscale=self._get_scale(),
+            showlegend=self._get_legend(),
+            colorscale=colourscale,  # dataframe is grouped by column_to_plot, hence only
             # contains one value for column_to_plot- this ensures a discrete categorical colourscale
             # for trace
-            name=(
-                dataframe[self.category_column][0]
-                if not is_missing_data
-                else "No data available"
+            name=self._get_trace_name(
+                dataframe, is_missing_data
             ),
             **self.choropleth_properties,
         )
 
+
+    def _add_traces(self):
+        if(not self.discrete_map):
+            self.fig.add_trace(
+                self._create_choropleth_trace(
+                    self.dataframe,
+                    DEFAULT_COLOURSCALE
+                )
+            )
+        else:
+            for count, category in enumerate(self.desired_category_order):
+                if category not in self.df_dict:
+                    df = self._create_df_for_empty_trace(category)
+                else:
+                    df = self.df_dict[category]
+                colour = [
+                    [0, self.colours_list[count % len(self.colours_list)]],
+                    [1, self.colours_list[count % len(self.colours_list)]]
+                ]
+                self.fig.add_trace(
+                    self._create_choropleth_trace(
+                        df,
+                        colour,
+                    )
+                )
+    
     def _handle_missing_data(self):
         missing_data = self.dataframe.filter(pl.col(self.column_to_plot).is_null())
         missing_data = missing_data.with_columns(pl.lit(0).alias("data"))
 
+        colour = [
+                    [0, colours.GovUKColours.MID_GREY.value],
+                    [1, colours.GovUKColours.MID_GREY.value]
+                ]
         if not missing_data.is_empty():
             self.fig.add_trace(
                 self._create_choropleth_trace(
                     missing_data,
-                    colours.GovUKColours.MID_GREY.value,
+                    colour,
                     column_to_plot="data",
                     is_missing_data=True,
                 )
             )
+
+    def _get_dataframe_dict_by_category(self):
+        if self.region is not None and self.region != "England":
+            self.dataframe = self.dataframe.filter(pl.col("Region") == self.region)
+        else:
+            self.dataframe = self.dataframe
+        grouped_dfs_dict_keys_as_tuples = self.dataframe.partition_by(
+            self.category_column, as_dict=True
+        )
+        grouped_dfs_dict = {
+            key[0]: value for key, value in grouped_dfs_dict_keys_as_tuples.items()
+        }
+        return grouped_dfs_dict
 
     def _crop_to_region(self):
         self.fig.update_layout(
@@ -216,6 +206,33 @@ class ChoroplethMap:
             },
         )
 
+    def _get_color_bar(self):
+        if self.discrete_map: 
+            return None
+
+        return dict(
+            title=self.column_to_plot,
+            thickness=20,   # Adjust the thickness of the colorbar
+            len=0.8,        # Adjust the length of the colorbar
+            x=0.9,          # Position the colorbar horizontally (0-1 scale)
+            y=0.5,
+        )
+
+    def _get_scale(self):
+        return not self.discrete_map
+    
+    def _get_legend(self):
+        return self.discrete_map
+
+    def _get_trace_name(self, dataframe, missing_data = False):
+        if self.category_column == None:
+            return None
+
+        if not missing_data:
+            return dataframe[self.category_column][0]
+        
+        return "No data available"
+
     def _remove_background_map(self):
         self.fig.update_geos(
             center={"lat": 53, "lon": -2},
@@ -226,6 +243,7 @@ class ChoroplethMap:
     def _get_colour_list(self):
         """Amends colour list based on the number of categories"""
         colour_list = ["#217847", "#23BBBE", "#8CCE69", "#FFEA80"]
-        if len(self.desired_category_order) == 3:
+
+        if self.discrete_map and len(self.desired_category_order) == 3:
             colour_list.pop(1)
         return colour_list
