@@ -9,10 +9,17 @@ import polars as pl
 
 import plotly.graph_objects as go
 
+from constants import CHART_LABEL_FONT_SIZE, CUSTOM_DATA, DATE_VALID, FILL_TO_PREVIOUS_TRACE, HOVER_TEXT_HEADERS, MAIN_TITLE, REMOVE_INITIAL_MARKER, SUBTITLE, YEAR
 from gov_uk_dashboards.colours import AFAccessibleColours
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
+from gov_uk_dashboards.components.helpers.generate_dash_graph_from_figure import (
+    generate_dash_graph_from_figure,
+)
+from gov_uk_dashboards.components.helpers.plotting_helper_functions import get_legend_configuration, get_rgba_from_hex_colour_and_alpha
+from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import update_layout_bgcolor_margin
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_financial_quarter_to_financial_quarter_text, replace_jun_jul_month_abbreviations
 
 
 class XAxisFormat(Enum):
@@ -45,15 +52,6 @@ class HoverDataByTrace(TypedDict):
     ]  # Each tracename maps to a HoverDataStructure
 
 
-FILL_TO_PREVIOUS_TRACE = "Fill to previous trace"
-MAIN_TITLE = "main_title"
-SUBTITLE = "subtitle"
-REMOVE_INITIAL_MARKER = "Remove initial marker"
-CHART_LABEL_FONT_SIZE = 19
-DATE_VALID = "Date valid"
-CUSTOM_DATA = "custom_data"
-
-
 class TimeSeriesChart:
     """Class for use in generating time series charts."""
 
@@ -72,8 +70,7 @@ class TimeSeriesChart:
         legend_dict: dict[str, str] = None,
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
-        average_increment_for_average_trace: Optional[int] = None,
-        verticle_line_x_value=None,
+        verticle_line_x_value_and_name:tuple=None,
         last_2_traces_filled=False,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
@@ -89,8 +86,7 @@ class TimeSeriesChart:
         self.legend_dict = legend_dict
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
-        self.average_increment_for_average_trace = average_increment_for_average_trace
-        self.vertical_line_x_value = verticle_line_x_value
+        self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
         self.last_2_traces_filled = last_2_traces_filled
         self.trace_names_to_prevent_hover_of_first_point = (
             trace_names_to_prevent_hover_of_first_point_list
@@ -184,30 +180,30 @@ class TimeSeriesChart:
 
         tick_values = self._format_x_axis(fig)
 
-        if self.average_increment_for_average_trace is not None:
-            trace_name = LINEAR_TRAJECTORY
-            dates = [
-                datetime(2024, 7, 9) + relativedelta(months=1 * i)
-                for i in range(len(tick_values))
-            ]
-            values = [
-                self.average_increment_for_average_trace * i for i in range(len(dates))
-            ]
-            fig.add_trace(
-                go.Scatter(
-                    x=dates,
-                    y=values,
-                    mode="lines",
-                    name=trace_name,
-                    line={"dash": "dash", "color": "darkgray", "width": 2},
-                    hoverinfo="skip",
-                )
-            )
+        # if self.average_increment_for_average_trace is not None:
+        #     trace_name = LINEAR_TRAJECTORY
+        #     dates = [
+        #         datetime(2024, 7, 9) + relativedelta(months=1 * i)
+        #         for i in range(len(tick_values))
+        #     ]
+        #     values = [
+        #         self.average_increment_for_average_trace * i for i in range(len(dates))
+        #     ]
+        #     fig.add_trace(
+        #         go.Scatter(
+        #             x=dates,
+        #             y=values,
+        #             mode="lines",
+        #             name=trace_name,
+        #             line={"dash": "dash", "color": "darkgray", "width": 2},
+        #             hoverinfo="skip",
+        #         )
+        #     )
 
-        if self.vertical_line_x_value is not None:
+        if self.verticle_line_x_value_and_name is not None:
 
             fig.add_vline(
-                x=self.vertical_line_x_value,
+                x=self.verticle_line_x_value_and_name[0],
                 line_width=2,
                 line_dash="dash",
                 line_color="#b3b3b3",
@@ -216,18 +212,14 @@ class TimeSeriesChart:
                 x=self.vertical_line_x_value,
                 yref="paper",
                 y=0.9,
-                text=NET_ADDITIONAL_DWELLINGS_TO_DATE,
+                text=self.verticle_line_x_value_and_name[1],
                 showarrow=False,
                 font={"color": "#414042", "size": 16},
                 xanchor="left",
                 yanchor="bottom",
             )
 
-        y_range = (
-            [0, max(values[-1], self._get_y_axis_range_max())]
-            if self.average_increment_for_average_trace is not None
-            else [0, self._get_y_axis_range_max()]
-        )
+        y_range = [0, self._get_y_axis_range_max()]
 
         fig.update_yaxes(rangemode="tozero", showgrid=True, range=y_range)
         update_layout_bgcolor_margin(fig, "#FFFFFF")
