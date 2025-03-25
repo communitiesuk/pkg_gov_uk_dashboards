@@ -12,11 +12,13 @@ from gov_uk_dashboards.components.display_chart_or_table_with_header import (
 class ChoroplethMap:
     """Class for  generating choropleth map charts.
     Note: dataframe_function must contain columns: 'Region', 'Area_Code',
-    category_column, column_to_plot, custom_data"""
+    discrete_category_column, column_to_plot, hover_data_list
+    If discrete_category_column & discrete_category_order are None,
+    the choropleth map will be a continuos one, otherwise discrete"""
 
     def __init__(
         self,
-        map_name: str,
+        map_name: str, # used for the id in the choropleth map and the data download button
         get_dataframe: callable,
         get_geos: callable,
         region: str,
@@ -24,8 +26,8 @@ class ChoroplethMap:
         column_to_plot: str,
         hover_header_list: list[str],
         hover_data_list: list[str],
-        category_column: str = None,
-        desired_category_order: list[str] = None,
+        discrete_category_column: str = None,
+        discrete_category_order: list[str] = None,
         legend_title_text: str = None,
         **choropleth_properties
     ):
@@ -38,13 +40,13 @@ class ChoroplethMap:
         self.hover_header_list = hover_header_list
         self.hover_data_list = hover_data_list
 
-        self.category_column = category_column
+        self.discrete_category_column = discrete_category_column
         self.legend_title_text = legend_title_text
-        self.desired_category_order = desired_category_order
+        self.discrete_category_order = discrete_category_order
         self.choropleth_properties = choropleth_properties
 
         self.fig = go.Figure()
-        self.discrete_map = (self.category_column != None and self.desired_category_order != None)
+        self.discrete_map = (self.discrete_category_column != None and self.discrete_category_order != None)
         if self.discrete_map:
             self.df_dict = self._get_dataframe_dict_by_category()
             self.colours_list = self._get_colour_list()
@@ -143,7 +145,7 @@ class ChoroplethMap:
                 )
             )
         else:
-            for count, category in enumerate(self.desired_category_order):
+            for count, category in enumerate(self.discrete_category_order):
                 if category not in self.df_dict:
                     df = self._create_df_for_empty_trace(category)
                 else:
@@ -183,7 +185,7 @@ class ChoroplethMap:
         else:
             self.dataframe = self.dataframe
         grouped_dfs_dict_keys_as_tuples = self.dataframe.partition_by(
-            self.category_column, as_dict=True
+            self.discrete_category_column, as_dict=True
         )
         grouped_dfs_dict = {
             key[0]: value for key, value in grouped_dfs_dict_keys_as_tuples.items()
@@ -225,11 +227,11 @@ class ChoroplethMap:
         return self.discrete_map
 
     def _get_trace_name(self, dataframe, missing_data = False):
-        if self.category_column == None:
+        if self.discrete_category_column == None:
             return None
 
         if not missing_data:
-            return dataframe[self.category_column][0]
+            return dataframe[self.discrete_category_column][0]
         
         return "No data available"
 
@@ -244,6 +246,6 @@ class ChoroplethMap:
         """Amends colour list based on the number of categories"""
         colour_list = ["#217847", "#23BBBE", "#8CCE69", "#FFEA80"]
 
-        if self.discrete_map and len(self.desired_category_order) == 3:
+        if self.discrete_map and len(self.discrete_category_order) == 3:
             colour_list.pop(1)
         return colour_list
