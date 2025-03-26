@@ -172,6 +172,7 @@ class TimeSeriesChart:
                     ),
                 )
             )
+        self._format_x_axis(fig)
 
         # if self.average_increment_for_average_trace is not None:
         #     trace_name = LINEAR_TRAJECTORY
@@ -245,8 +246,6 @@ class TimeSeriesChart:
             tickmode="array",
             range=range_x,
         )
-
-        return tick_values
 
     def create_time_series_trace(
         self,
