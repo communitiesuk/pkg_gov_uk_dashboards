@@ -2,7 +2,9 @@
 
 from datetime import date
 import pytest
-from lib.datetime_functions.datetime_functions import format_date_with_custom_months
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    format_date_with_custom_months,
+)
 
 
 @pytest.mark.parametrize(

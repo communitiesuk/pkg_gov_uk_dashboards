@@ -1,7 +1,9 @@
 """Tests for shorten_month_year_range"""
 
 import pytest
-from lib.datetime_functions.datetime_functions import shorten_month_range
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    shorten_month_range,
+)
 
 
 def test_standard_case():

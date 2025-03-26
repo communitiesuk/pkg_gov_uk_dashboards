@@ -8,7 +8,7 @@ import polars as pl
 
 import plotly.graph_objects as go
 
-from constants import (
+from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
     CUSTOM_DATA,
     DATE_VALID,

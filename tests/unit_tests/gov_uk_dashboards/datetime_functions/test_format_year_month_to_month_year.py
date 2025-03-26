@@ -1,7 +1,9 @@
 """test format_year_month_to_month_year"""
 
 import pytest
-from lib.datetime_functions.datetime_functions import format_year_month_to_month_year
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    format_year_month_to_month_year,
+)
 
 
 def test_format_year_month_to_month_year_with_valid_date():

@@ -1,7 +1,9 @@
 """test get_month_year_from_df"""
 
 import polars as pl
-from lib.datetime_functions.datetime_functions import get_month_year_from_df
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    get_month_year_from_df,
+)
 
 
 def test_get_month_year_from_df_one_datetime():

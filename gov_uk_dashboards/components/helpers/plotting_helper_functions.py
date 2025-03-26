@@ -1,7 +1,7 @@
 """Helper functions for use to plot charts"""
 
 
-from constants import (
+from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
 )
 
