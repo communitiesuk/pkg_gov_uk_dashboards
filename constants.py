@@ -14,3 +14,5 @@ FILL_TO_PREVIOUS_TRACE = "Fill to previous trace"
 REMOVE_INITIAL_MARKER = "Remove initial marker"
 
 YEAR = "Year"
+
+UNIT_SIZE = "Unit size"

@@ -72,6 +72,7 @@ class TimeSeriesChart:
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
+        number_of_traces_colour_shift_dict: Optional[dict] = None,
     ):
         self.title_data = title_data
         self.y_axis_column = y_column
@@ -94,6 +95,8 @@ class TimeSeriesChart:
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.markers = ["square", "diamond", "circle", "triangle-up"]
+        self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
+        self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
 
     def get_time_series_chart(self) -> html.Div:
@@ -135,7 +138,7 @@ class TimeSeriesChart:
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
-                colour_list,
+                self.colour_list,
                 self.markers,
             )
         ):
@@ -297,7 +300,6 @@ class TimeSeriesChart:
         )
 
     def _get_hover_template(self, df, trace_name):
-        print(df, trace_name)
         return [
             (
                 ""
@@ -456,3 +458,29 @@ class TimeSeriesChart:
         else:
             df_list = [self.filtered_df]
         return df_list
+    
+    def _get_colour_list(self):
+        """Returns a list of colours."""
+        number_of_traces = len(self.trace_name_list)
+        if number_of_traces == 2:
+            colour_list = [
+                AFAccessibleColours.DARK_BLUE.value,
+                AFAccessibleColours.ORANGE.value,
+            ]  # if 2 lines should use dark blue & orange as have highest contrast ratio
+        else:
+            colour_list = AFAccessibleColours.CATEGORICAL.value.copy()
+        colour_shift_dict = (
+            {"default": 0}
+            if self.number_of_traces_colour_shift_dict is None
+            else self.number_of_traces_colour_shift_dict
+        )
+
+        colour_shift_value = colour_shift_dict.get(
+            number_of_traces, colour_shift_dict["default"]
+        )
+        if isinstance(colour_shift_value, list):
+            return colour_shift_value  # list of colours
+        while colour_shift_value > 0:
+            colour_list.append(colour_list.pop(0))
+            colour_shift_value -= 1
+        return colour_list
