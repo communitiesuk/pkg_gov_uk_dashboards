@@ -7,7 +7,7 @@ from dash import dcc
 from gov_uk_dashboards.constants import DEFAULT_COLOURSCALE
 
 from gov_uk_dashboards import colours
-from gov_uk_dashboards.components.display_chart_or_table_with_header import (
+from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
 

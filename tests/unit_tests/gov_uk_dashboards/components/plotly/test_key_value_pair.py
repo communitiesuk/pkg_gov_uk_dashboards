@@ -1,7 +1,7 @@
 """Tests for key_value_pair component"""
 
 
-from gov_uk_dashboards.components.plotly.key_value_pair import key_value_pair
+from gov_uk_dashboards.components.dash.key_value_pair import key_value_pair
 
 
 def test_key_value_pair_works_for_float():

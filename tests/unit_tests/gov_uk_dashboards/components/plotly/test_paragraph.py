@@ -2,7 +2,7 @@
 import pytest
 from dash import html
 
-from gov_uk_dashboards.components.plotly.paragraph import ParagraphSizes, paragraph
+from gov_uk_dashboards.components.dash.paragraph import ParagraphSizes, paragraph
 
 
 def test_paragraph_returns_html_p():

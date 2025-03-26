@@ -2,14 +2,14 @@
 
 from dash import html
 from dash.development.base_component import Component
-from gov_uk_dashboards.components.create_download_chart_button import (
+
+from gov_uk_dashboards.components.dash.create_download_chart_button import (
     create_download_chart_button,
 )
-from gov_uk_dashboards.components.create_download_data_button import (
+from gov_uk_dashboards.components.dash.create_download_data_button import (
     create_download_data_button,
 )
-
-from gov_uk_dashboards.components.plotly.heading import HeadingSizes
+from gov_uk_dashboards.components.dash.heading import HeadingSizes
 
 
 def display_chart_or_table_with_header(

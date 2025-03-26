@@ -1,7 +1,7 @@
 """Tests for html list component"""
 from dash import html
 
-from gov_uk_dashboards.components.plotly.html_list import html_list
+from gov_uk_dashboards.components.dash.html_list import html_list
 
 
 def test_returns_bulleted_list_by_default():
