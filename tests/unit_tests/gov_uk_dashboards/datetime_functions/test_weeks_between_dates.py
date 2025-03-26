@@ -1,6 +1,8 @@
 """Tests for weeks_between_dates"""
 
-from lib.datetime_functions.datetime_functions import weeks_between_dates
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    weeks_between_dates,
+)
 
 
 def test_weeks_between_dates():

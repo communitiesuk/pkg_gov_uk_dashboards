@@ -1,6 +1,8 @@
 """test convert_to_financial_year_ending function"""
 
-from lib.datetime_functions.datetime_functions import convert_to_financial_year_ending
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
+    convert_to_financial_year_ending,
+)
 
 
 def test_convert_to_financial_year_ending_month_after_april():

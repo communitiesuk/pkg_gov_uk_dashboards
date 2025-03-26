@@ -1,6 +1,6 @@
 """test replace_jun_jul_month_abbreviations"""
 
-from lib.datetime_functions.datetime_functions import (
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     replace_jun_jul_month_abbreviations,
 )
 
