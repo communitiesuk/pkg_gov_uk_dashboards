@@ -9,8 +9,7 @@ VALUE = "Value"
 MAIN_TITLE = "main_title"
 SUBTITLE = "subtitle"
 MEASURE = "measure"
-
 FILL_TO_PREVIOUS_TRACE = "Fill to previous trace"
 REMOVE_INITIAL_MARKER = "Remove initial marker"
-
 YEAR = "Year"
+DEFAULT_COLOURSCALE = "tealgrn"
