@@ -267,7 +267,6 @@ class TimeSeriesChart:
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
-
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
@@ -310,12 +309,14 @@ class TimeSeriesChart:
             in self.hover_data_for_traces_with_different_hover_for_last_point
             and i == df.shape[0] - 1
         ):
+            print(self.hover_data_for_traces_with_different_hover_for_last_point)
             hover_text_headers = (
                 self.hover_data_for_traces_with_different_hover_for_last_point[
                     trace_name
                 ][HOVER_TEXT_HEADERS]
             )
         # pylint: disable=duplicate-code
+       
         return (
             f"{trace_name}<br>"
             f"{hover_text_headers[0]}"
@@ -332,7 +333,7 @@ class TimeSeriesChart:
             and trace_name
             in self.hover_data_for_traces_with_different_hover_for_last_point
         ):
-
+            print(self.hover_data[trace_name][CUSTOM_DATA])
             customdata = [
                 (
                     [df[col][i] for col in self.hover_data[trace_name][CUSTOM_DATA]]
