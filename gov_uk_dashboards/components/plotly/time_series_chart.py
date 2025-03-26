@@ -370,9 +370,7 @@ class TimeSeriesChart:
             )
 
             year_list = df_with_year_column[YEAR].unique().to_list()
-
-            tick_text = [min(year_list) - 1] + year_list + [max(year_list) + 1]
-
+            tick_text = list(range(min(year_list)-1, max(year_list) + 2))
             tick_values = [date(year, 1, 1) for year in tick_text]
 
             range_x = [
