@@ -126,14 +126,6 @@ class TimeSeriesChart:
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
         fig = go.Figure()
-        colour_list = (
-            AFAccessibleColours.CATEGORICAL.value
-            if len(self.trace_name_list) != 2
-            else [
-                AFAccessibleColours.DARK_BLUE.value,
-                AFAccessibleColours.ORANGE.value,
-            ]  # if 2 lines should use dark blue & orange as have highest contrast ratio
-        )
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -458,7 +450,7 @@ class TimeSeriesChart:
         else:
             df_list = [self.filtered_df]
         return df_list
-    
+
     def _get_colour_list(self):
         """Returns a list of colours."""
         number_of_traces = len(self.trace_name_list)
