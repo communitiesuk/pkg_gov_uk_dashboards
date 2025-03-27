@@ -210,12 +210,31 @@ class ChoroplethMap:
             },
         )
 
+    def _wrap_text(self, text, max_chars_per_line):
+        words = text.split()
+        lines = []
+        current_line = ""
+
+        for word in words:
+            if len(current_line) + len(word) + 1 > max_chars_per_line:
+                lines.append(current_line)
+                current_line = word
+            else:
+                if current_line:
+                    current_line += " "
+                current_line += word
+
+        if current_line:
+            lines.append(current_line)
+
+        return "<br>".join(lines)
+
     def _get_color_bar(self):
         if self.discrete_map:
             return None
 
         return {
-            "title": self.column_to_plot,
+            "title": self._wrap_text(self.legend_title_text, 10),
             "thickness": 20,
             "len": 0.8,
             "x": 0.9,
