@@ -193,7 +193,6 @@ class TimeSeriesChart:
         #             hoverinfo="skip",
         #         )
         #     )
-
         if self.verticle_line_x_value_and_name is not None:
 
             fig.add_vline(
@@ -203,7 +202,7 @@ class TimeSeriesChart:
                 line_color="#b3b3b3",
             )
             fig.add_annotation(
-                x=self.verticle_line_x_value_and_name,
+                x=self.verticle_line_x_value_and_name[0],
                 yref="paper",
                 y=0.9,
                 text=self.verticle_line_x_value_and_name[1],
