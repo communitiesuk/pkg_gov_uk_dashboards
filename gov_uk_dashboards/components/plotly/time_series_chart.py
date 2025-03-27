@@ -193,7 +193,6 @@ class TimeSeriesChart:
         #             hoverinfo="skip",
         #         )
         #     )
-
         if self.verticle_line_x_value_and_name is not None:
 
             fig.add_vline(
@@ -203,7 +202,7 @@ class TimeSeriesChart:
                 line_color="#b3b3b3",
             )
             fig.add_annotation(
-                x=self.verticle_line_x_value_and_name,
+                x=self.verticle_line_x_value_and_name[0],
                 yref="paper",
                 y=0.9,
                 text=self.verticle_line_x_value_and_name[1],
@@ -267,7 +266,6 @@ class TimeSeriesChart:
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
-
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
@@ -316,6 +314,7 @@ class TimeSeriesChart:
                 ][HOVER_TEXT_HEADERS]
             )
         # pylint: disable=duplicate-code
+
         return (
             f"{trace_name}<br>"
             f"{hover_text_headers[0]}"
@@ -332,7 +331,6 @@ class TimeSeriesChart:
             and trace_name
             in self.hover_data_for_traces_with_different_hover_for_last_point
         ):
-
             customdata = [
                 (
                     [df[col][i] for col in self.hover_data[trace_name][CUSTOM_DATA]]
@@ -368,16 +366,17 @@ class TimeSeriesChart:
                 .dt.year()
                 .alias(YEAR)
             )
-
+            date_list = df_with_year_column[self.x_axis_column].unique().to_list()
+            min_date_string = min(date_list)
+            max_date_string = max(date_list)
+            min_datetime = datetime.strptime(min_date_string, "%Y-%m-%d")
+            max_datetime = datetime.strptime(max_date_string, "%Y-%m-%d")
             year_list = df_with_year_column[YEAR].unique().to_list()
-
-            tick_text = [min(year_list) - 1] + year_list + [max(year_list) + 1]
-
+            tick_text = list(range(min(year_list) - 1, max(year_list) + 2))
             tick_values = [date(year, 1, 1) for year in tick_text]
-
             range_x = [
-                tick_values[0] + relativedelta(months=6),
-                tick_values[-1] + relativedelta(months=6),
+                min_datetime - relativedelta(months=6),
+                max_datetime + relativedelta(months=6),
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
