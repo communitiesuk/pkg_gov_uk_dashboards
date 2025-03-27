@@ -309,14 +309,13 @@ class TimeSeriesChart:
             in self.hover_data_for_traces_with_different_hover_for_last_point
             and i == df.shape[0] - 1
         ):
-            print(self.hover_data_for_traces_with_different_hover_for_last_point)
             hover_text_headers = (
                 self.hover_data_for_traces_with_different_hover_for_last_point[
                     trace_name
                 ][HOVER_TEXT_HEADERS]
             )
         # pylint: disable=duplicate-code
-       
+
         return (
             f"{trace_name}<br>"
             f"{hover_text_headers[0]}"
@@ -333,7 +332,6 @@ class TimeSeriesChart:
             and trace_name
             in self.hover_data_for_traces_with_different_hover_for_last_point
         ):
-            print(self.hover_data[trace_name][CUSTOM_DATA])
             customdata = [
                 (
                     [df[col][i] for col in self.hover_data[trace_name][CUSTOM_DATA]]
@@ -369,14 +367,17 @@ class TimeSeriesChart:
                 .dt.year()
                 .alias(YEAR)
             )
-
+            date_list = df_with_year_column[self.x_axis_column].unique().to_list()
+            min_date_string = min(date_list)
+            max_date_string = max(date_list)
+            min_datetime = datetime.strptime(min_date_string, "%Y-%m-%d")
+            max_datetime = datetime.strptime(max_date_string, "%Y-%m-%d")
             year_list = df_with_year_column[YEAR].unique().to_list()
-            tick_text = list(range(min(year_list)-1, max(year_list) + 2))
+            tick_text = list(range(min(year_list) - 1, max(year_list) + 2))
             tick_values = [date(year, 1, 1) for year in tick_text]
-
             range_x = [
-                tick_values[0] + relativedelta(months=6),
-                tick_values[-1] + relativedelta(months=6),
+                min_datetime - relativedelta(months=6),
+                max_datetime + relativedelta(months=6),
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
