@@ -416,7 +416,7 @@ class TimeSeriesChart:
                 tick_values[-1] + relativedelta(months=1),
             ]
             tick_text = replace_jun_jul_month_abbreviations(tick_text)
-            
+
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR_MONTHLY_DATA.value:
             df = self.filtered_df.with_columns(
                 pl.col(self.x_axis_column)
