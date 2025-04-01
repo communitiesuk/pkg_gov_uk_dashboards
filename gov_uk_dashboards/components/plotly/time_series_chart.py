@@ -397,7 +397,6 @@ class TimeSeriesChart:
             tick_text_length = len(tick_text)
             total_tick_points = int((tick_text_length / 5) * 7)
             additional_tick_points = total_tick_points - tick_text_length
-            print("tick_text_length:",tick_text_length, "additional_tick_points:",additional_tick_points, "latest_datetime:",latest_datetime)
             last_current_tick_text = datetime.strptime(tick_text[-1], "%b %Y")
 
             for x in range(additional_tick_points):
@@ -406,6 +405,34 @@ class TimeSeriesChart:
                         "%b %Y"
                     )
                 ]
+
+            tick_values = [
+                datetime.strptime(month_year, "%b %Y").replace(day=1)
+                for month_year in tick_text
+            ]
+
+            range_x = [
+                tick_values[0],
+                tick_values[-1] + relativedelta(months=1),
+            ]
+            tick_text = replace_jun_jul_month_abbreviations(tick_text)
+            
+        elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR_MONTHLY_DATA.value:
+            df = self.filtered_df.with_columns(
+                pl.col(self.x_axis_column)
+                .str.strptime(pl.Date, "%Y-%m-%d")
+                .alias(self.x_axis_column)
+            ).sort(self.x_axis_column)
+
+            start_datetime = datetime(2024, 7, 1).date()
+            latest_datetime = df[self.x_axis_column].max()
+            extra_datetime = latest_datetime + relativedelta(months=1)
+
+            tick_text = []
+            current = start_datetime
+            while current <= extra_datetime:
+                tick_text.append(current.strftime("%b %Y"))
+                current += relativedelta(months=1)
 
             tick_values = [
                 datetime.strptime(month_year, "%b %Y").replace(day=1)

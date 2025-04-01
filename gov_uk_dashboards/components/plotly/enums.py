@@ -9,6 +9,7 @@ class XAxisFormat(Enum):
 
     YEAR = "year"
     MONTH_YEAR = "month_year"
+    MONTH_YEAR_MONTHLY_DATA = "month_year_monthly_data"
     FINANCIAL_QUARTER = "financial_quarter"
 
 
