@@ -441,7 +441,7 @@ class TimeSeriesChart:
 
             range_x = [
                 tick_values[0],
-                tick_values[-1] + relativedelta(months=1),
+                tick_values[-1],
             ]
             tick_text = replace_jun_jul_month_abbreviations(tick_text)
         elif self.xaxis_tick_text_format == XAxisFormat.FINANCIAL_QUARTER.value:
