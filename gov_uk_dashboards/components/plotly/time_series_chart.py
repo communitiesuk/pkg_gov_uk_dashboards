@@ -397,7 +397,7 @@ class TimeSeriesChart:
             tick_text_length = len(tick_text)
             total_tick_points = int((tick_text_length / 5) * 7)
             additional_tick_points = total_tick_points - tick_text_length
-
+            print("tick_text_length:",tick_text_length, "additional_tick_points:",additional_tick_points, "latest_datetime:",latest_datetime)
             last_current_tick_text = datetime.strptime(tick_text[-1], "%b %Y")
 
             for x in range(additional_tick_points):
