@@ -1,3 +1,4 @@
+"""home_page_link_button"""
 from typing import Optional
 from dash import html
 
@@ -30,7 +31,7 @@ def home_page_link_button(
         "className": "govuk-body homepage-card-grid-item",
     }
 
-    if pathname_rather_than_url == False:
+    if pathname_rather_than_url is False:
         link_attributes["target"] = "_blank"
         link_attributes["rel"] = "noopener noreferrer"
 
