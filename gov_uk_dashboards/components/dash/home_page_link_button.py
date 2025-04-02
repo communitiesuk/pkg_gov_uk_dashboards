@@ -9,7 +9,20 @@ def home_page_link_button(
     image_path: str,
     info: Optional[str] = None,
 ):
-    """Creates home page link card"""
+    """Creates home page link card.
+
+    Args:
+        title (str): Button title.
+        pathname_or_url_link (str): The target link, either a pathname or full URL.
+        pathname_rather_than_url (bool): If True, `pathname_or_url_link` is treated as a pathname
+            (loading content in the same tab). If False, it is treated as a full URL
+            (opening in a new tab).
+        image_path (str): The path to an SVG image used as an icon for the button.
+        info (Optional[str], optional): Additional text for the button. Defaults to None.
+
+    Returns:
+        dash_html_components.A: A Dash HTML `A` element representing the link button.
+    """
 
     link_attributes = {
         "href": pathname_or_url_link,
