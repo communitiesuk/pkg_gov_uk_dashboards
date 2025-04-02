@@ -9343,3 +9343,7 @@ mark.expenditure {
   right: -5px;
   top: 2px;
 }
+
+.font-wight-normal-override {
+  font-weight: normal !important;
+}  
