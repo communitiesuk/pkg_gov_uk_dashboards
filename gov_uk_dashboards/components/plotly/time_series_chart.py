@@ -69,6 +69,8 @@ class TimeSeriesChart:
         last_2_traces_filled=False,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
+        x_unified_hovermode: Optional[bool] = False,
+        x_hoverformat: Optional[str] = None,
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
@@ -91,6 +93,8 @@ class TimeSeriesChart:
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
+        self.x_unified_hovermode = x_unified_hovermode
+        self.x_hoverformat = x_hoverformat
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
@@ -125,6 +129,12 @@ class TimeSeriesChart:
         """generates a time series chart"""
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
+
+        if not self.x_unified_hovermode and self.x_hoverformat is not None:
+            raise ValueError(
+                "x_hoverformat can only be specified if x_unified_hovermode is True"
+            )
+
         fig = go.Figure()
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
@@ -232,6 +242,8 @@ class TimeSeriesChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
+            hovermode="x unified" if self.x_unified_hovermode is True else "closest",
+            hoverdistance=1000,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -244,6 +256,7 @@ class TimeSeriesChart:
             ticktext=tick_text,
             tickmode="array",
             range=range_x,
+            hoverformat=self.x_hoverformat,
         )
 
     def create_time_series_trace(
@@ -301,6 +314,8 @@ class TimeSeriesChart:
         ]
 
     def _get_custom_hover_template(self, i, df, trace_name):
+        if self.x_unified_hovermode is True:
+            return "%{customdata[0]}"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
