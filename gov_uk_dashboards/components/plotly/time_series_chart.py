@@ -129,6 +129,12 @@ class TimeSeriesChart:
         """generates a time series chart"""
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
+
+        if not self.x_unified_hovermode and self.x_hoverformat is not None:
+            raise ValueError(
+                "x_hoverformat can only be specified if x_unified_hovermode is True"
+            )
+
         fig = go.Figure()
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
@@ -236,7 +242,7 @@ class TimeSeriesChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
-            hovermode="x unified" if self.x_unified_hovermode == True else "closest",
+            hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=1000,  # Increase distance to simulate hover 'always on'
         )
         return fig
@@ -308,7 +314,7 @@ class TimeSeriesChart:
         ]
 
     def _get_custom_hover_template(self, i, df, trace_name):
-        if self.x_unified_hovermode == True:
+        if self.x_unified_hovermode is True:
             return "%{customdata[0]}"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
