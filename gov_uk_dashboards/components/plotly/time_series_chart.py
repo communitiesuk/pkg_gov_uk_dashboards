@@ -126,29 +126,6 @@ class TimeSeriesChart:
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
         fig = go.Figure()    
-        
-        for i, (df, trace_name, colour, marker) in enumerate(
-            zip(
-                self._get_df_list_for_time_series(),
-                self.trace_name_list,
-                self.colour_list,
-                self.markers,
-            )
-        ):
-            fye_labels=["FYE2016","FYE2016","FYE2016","FYE2016","FYE2016","FYE2016","FYE2016","FYE2016","FYE2016"]
-            if i==0:
-                fig.add_trace(
-                    go.Scatter(
-                        x=self.filtered_df[self.x_axis_column],
-                        y=self.filtered_df[self.y_axis_column],
-                        customdata=fye_labels,
-                        hovertemplate="%{customdata}<extra></extra>",
-                        mode="lines",
-                        showlegend=False,
-                        hoverinfo="skip",
-                        line=dict(width=0),
-                    )
-                )
 
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
@@ -270,6 +247,7 @@ class TimeSeriesChart:
             ticktext=tick_text,
             tickmode="array",
             range=range_x,
+            hoverformat="FYE %Y"
         )
 
     def create_time_series_trace(
