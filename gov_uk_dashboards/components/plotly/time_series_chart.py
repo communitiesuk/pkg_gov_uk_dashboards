@@ -126,11 +126,11 @@ class TimeSeriesChart:
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
         fig = go.Figure()
-        df["fye_label"]=df[self.x_axis_column].dt.strftime("FYE %Y")
+        self.filtered_df["fye_label"]=self.filtered_df[self.x_axis_column].dt.strftime("FYE %Y")
         fig.add_trace(
             go.Scatter(
-                x=df[self.x_axis_column],
-                y=df[self.y_axis_column],
+                x=self.filtered_df[self.x_axis_column],
+                y=self.filtered_df[self.y_axis_column],
                 customdata=df[["fye_label"]],
                 hovertemplate="%{customdata[0]}<extra></extra>",
                 mode="lines",
