@@ -126,6 +126,20 @@ class TimeSeriesChart:
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
         fig = go.Figure()
+        df["fye_label"]=df[self.x_axis_column].dt.strftime("FYE %Y")
+        fig.add_trace(
+            go.Scatter(
+                x=df[self.x_axis_column],
+                y=df[self.y_axis_column],
+                customdata=df[["fye_label"]],
+                hovertemplate="%{customdata[0]}<extra></extra>",
+                mode="lines",
+                showlegend=False,
+                hoverinfo="skip",
+                line=dict(width=0),
+            )
+        )
+
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -233,7 +247,7 @@ class TimeSeriesChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
             hovermode="x unified",
-            hoverdistance=1000, # Increase distance to simulate hover 'always on'
+            hoverdistance=1000,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -317,9 +331,8 @@ class TimeSeriesChart:
             )
         # pylint: disable=duplicate-code
 
-        return (
-            "%{customdata[1]}<br>")
-        
+        return "%{customdata[1]}<br>"
+
         # return (
         #     f"{trace_name}<br>"
         #     f"{hover_text_headers[0]}"
