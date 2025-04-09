@@ -232,6 +232,8 @@ class TimeSeriesChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
+            hovermode="x unified",
+            hoverdistance=1000, # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -316,12 +318,15 @@ class TimeSeriesChart:
         # pylint: disable=duplicate-code
 
         return (
-            f"{trace_name}<br>"
-            f"{hover_text_headers[0]}"
-            ": %{customdata[0]}<br>"
-            f"{hover_text_headers[1]}"
-            ": %{customdata[1]}<extra></extra>"
-        )
+            "%{customdata[1]}<br>")
+        
+        # return (
+        #     f"{trace_name}<br>"
+        #     f"{hover_text_headers[0]}"
+        #     ": %{customdata[0]}<br>"
+        #     f"{hover_text_headers[1]}"
+        #     ": %{customdata[1]}<extra></extra>"
+        # )
 
     def _get_custom_data(self, df, trace_name):
         # For last points of trace_name in [], we want different custom data.
