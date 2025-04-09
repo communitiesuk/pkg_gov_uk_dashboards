@@ -69,6 +69,8 @@ class TimeSeriesChart:
         last_2_traces_filled=False,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
+        x_unified_hovermode: Optional[bool] = False,
+        x_hoverformat: Optional[str] = None,
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
@@ -91,6 +93,8 @@ class TimeSeriesChart:
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
+        self.x_unified_hovermode = x_unified_hovermode
+        self.x_hoverformat = x_hoverformat
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
@@ -125,7 +129,7 @@ class TimeSeriesChart:
         """generates a time series chart"""
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
-        fig = go.Figure()    
+        fig = go.Figure()
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -232,11 +236,8 @@ class TimeSeriesChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
-            hovermode="x unified",
+            hovermode="x unified" if self.x_unified_hovermode == True else "closest",
             hoverdistance=1000,  # Increase distance to simulate hover 'always on'
-            # hoverlabel=dict(
-            # font_size=15,  # Set the desired hover text font size
-            # )
         )
         return fig
 
@@ -249,7 +250,7 @@ class TimeSeriesChart:
             ticktext=tick_text,
             tickmode="array",
             range=range_x,
-            hoverformat="FYE %Y"
+            hoverformat=self.x_hoverformat,
         )
 
     def create_time_series_trace(
@@ -307,6 +308,8 @@ class TimeSeriesChart:
         ]
 
     def _get_custom_hover_template(self, i, df, trace_name):
+        if self.x_unified_hovermode == True:
+            return "%{customdata[0]}"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
@@ -321,15 +324,13 @@ class TimeSeriesChart:
             )
         # pylint: disable=duplicate-code
 
-        return "%{customdata[1]}"
-
-        # return (
-        #     f"{trace_name}<br>"
-        #     f"{hover_text_headers[0]}"
-        #     ": %{customdata[0]}<br>"
-        #     f"{hover_text_headers[1]}"
-        #     ": %{customdata[1]}<extra></extra>"
-        # )
+        return (
+            f"{trace_name}<br>"
+            f"{hover_text_headers[0]}"
+            ": %{customdata[0]}<br>"
+            f"{hover_text_headers[1]}"
+            ": %{customdata[1]}<extra></extra>"
+        )
 
     def _get_custom_data(self, df, trace_name):
         # For last points of trace_name in [], we want different custom data.
