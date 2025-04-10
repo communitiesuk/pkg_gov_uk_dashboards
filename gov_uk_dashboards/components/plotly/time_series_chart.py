@@ -315,7 +315,7 @@ class TimeSeriesChart:
 
     def _get_custom_hover_template(self, i, df, trace_name):
         if self.x_unified_hovermode is True:
-            return "%{customdata[0]}"
+            return f"{trace_name}: "+"%{customdata[0]}<extra></extra>"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
