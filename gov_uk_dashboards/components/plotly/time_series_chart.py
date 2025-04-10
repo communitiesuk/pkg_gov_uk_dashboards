@@ -243,7 +243,7 @@ class TimeSeriesChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
-            hoverdistance=1000,  # Increase distance to simulate hover 'always on'
+            hoverdistance=100,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
