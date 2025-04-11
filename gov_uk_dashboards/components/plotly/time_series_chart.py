@@ -76,6 +76,7 @@ class TimeSeriesChart:
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
         number_of_traces_colour_shift_dict: Optional[dict] = None,
+        additional_line: Optional[dict] = None,
     ):
         self.title_data = title_data
         self.y_axis_column = y_column
@@ -102,6 +103,7 @@ class TimeSeriesChart:
         self.download_data_button_id = download_data_button_id
         self.markers = ["square", "diamond", "circle", "triangle-up"]
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
+        self.additional_line = additional_line
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
 
@@ -138,6 +140,22 @@ class TimeSeriesChart:
             )
 
         fig = go.Figure()
+        if self.additional_line:
+            x_0 = self.additional_line["x0"]
+            y_0 = self.additional_line["y0"]
+            x_1 = self.additional_line["x1"]
+            y_1 = self.additional_line["y1"]
+            line_color = self.additional_line["color"]
+            trace_connector = go.Scatter(
+                x=[x_0, x_1],
+                y=[y_0, y_1],
+                mode="lines",
+                name="Transition",
+                line={"color": line_color},
+                hoverinfo="skip",  # 👈 This line disables hover for this trace
+                showlegend=False,  # Optional: hide it from legend too
+            )
+            fig.add_trace(trace_connector)
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -318,9 +336,8 @@ class TimeSeriesChart:
     def _get_custom_hover_template(self, i, df, trace_name):
         if self.x_unified_hovermode is True:
             if self.x_unified_hovertemplate is not None:
-                return self.x_unified_hovertemplate
-            else:
-                return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
+                return self.x_unified_hovertemplate.format(trace_name=trace_name)
+            return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
 
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
