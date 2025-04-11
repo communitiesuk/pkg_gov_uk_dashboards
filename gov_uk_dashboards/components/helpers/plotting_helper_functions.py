@@ -1,9 +1,7 @@
 """Helper functions for use to plot charts"""
 
 
-from gov_uk_dashboards.constants import (
-    CHART_LABEL_FONT_SIZE,
-)
+from gov_uk_dashboards.constants import CHART_LABEL_FONT_SIZE
 
 
 def get_legend_configuration(itemclick=True, itemdoubleclick=True):

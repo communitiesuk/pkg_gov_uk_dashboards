@@ -71,6 +71,7 @@ class TimeSeriesChart:
         x_axis_column=DATE_VALID,
         x_unified_hovermode: Optional[bool] = False,
         x_hoverformat: Optional[str] = None,
+        x_unified_hovertemplate: Optional[str] = None,
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
@@ -95,6 +96,7 @@ class TimeSeriesChart:
         self.x_axis_column = x_axis_column
         self.x_unified_hovermode = x_unified_hovermode
         self.x_hoverformat = x_hoverformat
+        self.x_unified_hovertemplate = x_unified_hovertemplate
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
@@ -315,8 +317,11 @@ class TimeSeriesChart:
 
     def _get_custom_hover_template(self, i, df, trace_name):
         if self.x_unified_hovermode is True:
-            # return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
-            return f"{trace_name} - " + "%{customdata[0]}: " +"%{customdata[1]}<extra></extra>"
+            if self.x_unified_hovertemplate is not None:
+                return self.x_unified_hovertemplate
+            else:
+                return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
+
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
