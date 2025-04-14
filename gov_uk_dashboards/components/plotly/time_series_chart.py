@@ -155,7 +155,7 @@ class TimeSeriesChart:
                 showlegend=False,  # Optional: hide it from legend too
             )
             fig.add_trace(trace_connector)
-        for i, (df, trace_name, colour, marker) in enumerate(
+        for i, (df, trace_name, colour, marker) in enumerate( # pylint: disable=unused-variable
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
@@ -163,7 +163,6 @@ class TimeSeriesChart:
                 self.markers,
             )
         ):
-            is_last = is_second_last = False
             if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
                 REMOVE_INITIAL_MARKER
             ):
@@ -174,22 +173,10 @@ class TimeSeriesChart:
                 self.create_time_series_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
-                    (
-                        {"width": 0}
-                        if is_last or is_second_last
-                        else {"dash": "solid", "color": colour}
-                    ),
-                    hover_label=(
-                        {"bgcolor": AFAccessibleColours.TURQUOISE.value}
-                        if is_last or is_second_last
-                        else None
-                    ),
-                    marker=(
-                        {"opacity": 0}
-                        if is_last or is_second_last
-                        else {"symbol": marker, "size": marker_sizes, "opacity": 1}
-                    ),
-                )
+                    {"dash": "solid", "color": colour},
+                    hover_label=None,
+                    marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
+                ),
             )
 
         if self.upper_and_lower_traces_to_fill:
@@ -213,22 +200,19 @@ class TimeSeriesChart:
             y_upper_formatted_value = fill_df.filter(
                 pl.col(self.trace_name_column) == upper_trace
             )["FORMATTED_VALUE"].to_list()
-            y_upper_formatted_date = fill_df.filter(
-                pl.col(self.trace_name_column) == upper_trace
-            )["FORMATTED_DATE"].to_list()
             y_lower_formatted_value = fill_df.filter(
                 pl.col(self.trace_name_column) == lower_trace
             )["FORMATTED_VALUE"].to_list()
-            y_lower_formatted_date = fill_df.filter(
-                pl.col(self.trace_name_column) == lower_trace
+            formatted_dates = fill_df.filter(
+                pl.col(self.trace_name_column) == upper_trace
             )["FORMATTED_DATE"].to_list()
             hover_text = [
-                f"{self.upper_and_lower_traces_to_fill['name']} - {low_date}: {low_value} - {high_value}<extra></extra>"
-                for low_value, high_value, low_date, high_date in zip(
+                f"{self.upper_and_lower_traces_to_fill['name']} - {date}: "
+                f"{low_value} - {high_value}<extra></extra>"
+                for low_value, high_value, date in zip(
                     y_lower_formatted_value,
                     y_upper_formatted_value,
-                    y_lower_formatted_date,
-                    y_upper_formatted_date,
+                    formatted_dates,
                 )
             ]
 
