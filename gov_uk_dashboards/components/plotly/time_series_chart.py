@@ -155,7 +155,12 @@ class TimeSeriesChart:
                 showlegend=False,  # Optional: hide it from legend too
             )
             fig.add_trace(trace_connector)
-        for i, (df, trace_name, colour, marker) in enumerate( # pylint: disable=unused-variable
+        for i, (
+            df,
+            trace_name,
+            colour,
+            marker,
+        ) in enumerate(  # pylint: disable=unused-variable
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
@@ -173,8 +178,7 @@ class TimeSeriesChart:
                 self.create_time_series_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
-                    {"dash": "solid", "color": colour},
-                    hover_label=None,
+                    line_style={"dash": "solid", "color": colour},
                     marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
                 ),
             )
@@ -314,7 +318,6 @@ class TimeSeriesChart:
         df: pl.DataFrame,
         trace_name: str,
         line_style: dict[str, str],
-        hover_label: dict[str, str],
         marker: dict[str, str],
     ):
         """Creates a trace for the plot.
@@ -324,7 +327,6 @@ class TimeSeriesChart:
             y_value column and columns defined in self.hover_data[CUSTOM_DATA].
             trace_name (str): Name of trace.
             line_style (dict[str, str]): Properties for line_style parameter.
-            hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
         return go.Scatter(
@@ -335,15 +337,7 @@ class TimeSeriesChart:
             hovertemplate=self._get_hover_template(df, trace_name),
             customdata=self._get_custom_data(df, trace_name),
             marker=marker,
-            # fill=fill,
-            hoverlabel=hover_label,
-            # fillcolor=(
-            #     get_rgba_from_hex_colour_and_alpha(
-            #         AFAccessibleColours.TURQUOISE.value, alpha=0.2
-            #     )
-            #     if fill
-            #     else None
-            # ),
+            hoverlabel=None,
             showlegend=(
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
