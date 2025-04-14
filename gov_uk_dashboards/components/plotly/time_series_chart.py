@@ -12,7 +12,6 @@ from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
     CUSTOM_DATA,
     DATE_VALID,
-    FILL_TO_PREVIOUS_TRACE,
     HOVER_TEXT_HEADERS,
     MAIN_TITLE,
     REMOVE_INITIAL_MARKER,
@@ -66,15 +65,17 @@ class TimeSeriesChart:
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         verticle_line_x_value_and_name: tuple = None,
-        last_2_traces_filled=False,
+        filled_traces_dict: dict[str] = None,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
         x_unified_hovermode: Optional[bool] = False,
         x_hoverformat: Optional[str] = None,
+        x_unified_hovertemplate: Optional[str] = None,
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
         number_of_traces_colour_shift_dict: Optional[dict] = None,
+        additional_line: Optional[dict] = None,
     ):
         self.title_data = title_data
         self.y_axis_column = y_column
@@ -88,18 +89,20 @@ class TimeSeriesChart:
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
-        self.last_2_traces_filled = last_2_traces_filled
+        self.filled_traces_dict = filled_traces_dict
         self.trace_names_to_prevent_hover_of_first_point = (
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
         self.x_unified_hovermode = x_unified_hovermode
         self.x_hoverformat = x_hoverformat
+        self.x_unified_hovertemplate = x_unified_hovertemplate
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.markers = ["square", "diamond", "circle", "triangle-up"]
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
+        self.additional_line = additional_line
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
 
@@ -136,7 +139,24 @@ class TimeSeriesChart:
             )
 
         fig = go.Figure()
-        for i, (df, trace_name, colour, marker) in enumerate(
+        if self.additional_line:
+            x_0 = self.additional_line["x0"]
+            y_0 = self.additional_line["y0"]
+            x_1 = self.additional_line["x1"]
+            y_1 = self.additional_line["y1"]
+            line_color = self.additional_line["color"]
+            trace_connector = go.Scatter(
+                x=[x_0, x_1],
+                y=[y_0, y_1],
+                mode="lines",
+                name="Transition",
+                line={"color": line_color},
+                hoverinfo="skip",  # 👈 This line disables hover for this trace
+                showlegend=False,  # Optional: hide it from legend too
+            )
+            fig.add_trace(trace_connector)
+        # pylint: disable=unused-variable
+        for i, (df, trace_name, colour, marker,) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
@@ -144,11 +164,6 @@ class TimeSeriesChart:
                 self.markers,
             )
         ):
-            is_last = is_second_last = False
-            if self.last_2_traces_filled is True:
-                number_of_traces = len(self._get_df_list_for_time_series())
-                is_last = i == number_of_traces - 1
-                is_second_last = i == number_of_traces - 2
             if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
                 REMOVE_INITIAL_MARKER
             ):
@@ -159,27 +174,61 @@ class TimeSeriesChart:
                 self.create_time_series_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
-                    (
-                        {"width": 0}
-                        if is_last or is_second_last
-                        else {"dash": "solid", "color": colour}
+                    line_style={"dash": "solid", "color": colour},
+                    marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
+                ),
+            )
+
+        if self.filled_traces_dict:
+            fill_df = self.filtered_df.filter(
+                pl.col(self.trace_name_column).is_in(
+                    [
+                        self.filled_traces_dict["upper"],
+                        self.filled_traces_dict["lower"],
+                    ]
+                )
+            ).sort(self.x_axis_column)
+            x_series = fill_df[self.x_axis_column].unique().sort().to_list()
+            upper_trace = self.filled_traces_dict["upper"]
+            lower_trace = self.filled_traces_dict["lower"]
+            y_upper = fill_df.filter(pl.col(self.trace_name_column) == upper_trace)[
+                self.y_axis_column
+            ].to_list()
+            y_lower = fill_df.filter(pl.col(self.trace_name_column) == lower_trace)[
+                self.y_axis_column
+            ].to_list()
+            y_upper_formatted_value = fill_df.filter(
+                pl.col(self.trace_name_column) == upper_trace
+            )["FORMATTED_VALUE"].to_list()
+            y_lower_formatted_value = fill_df.filter(
+                pl.col(self.trace_name_column) == lower_trace
+            )["FORMATTED_VALUE"].to_list()
+            formatted_dates = fill_df.filter(
+                pl.col(self.trace_name_column) == upper_trace
+            )["FORMATTED_DATE"].to_list()
+            hover_text = [
+                f"{self.filled_traces_dict['name']} - {date}: "
+                f"{low_value} - {high_value}<extra></extra>"
+                for low_value, high_value, date in zip(
+                    y_lower_formatted_value,
+                    y_upper_formatted_value,
+                    formatted_dates,
+                )
+            ]
+
+            hover_text_full = hover_text + hover_text[::-1]
+            fig.add_trace(
+                go.Scatter(
+                    x=x_series + x_series[::-1],
+                    y=y_upper + y_lower[::-1],
+                    fill="toself",
+                    fillcolor=get_rgba_from_hex_colour_and_alpha(
+                        AFAccessibleColours.TURQUOISE.value, alpha=0.2
                     ),
-                    fill=(
-                        "tonexty"
-                        if FILL_TO_PREVIOUS_TRACE in df.columns
-                        and True in df.get_column(FILL_TO_PREVIOUS_TRACE)
-                        else None
-                    ),
-                    hover_label=(
-                        {"bgcolor": AFAccessibleColours.TURQUOISE.value}
-                        if is_last or is_second_last
-                        else None
-                    ),
-                    marker=(
-                        {"opacity": 0}
-                        if is_last or is_second_last
-                        else {"symbol": marker, "size": marker_sizes, "opacity": 1}
-                    ),
+                    line={"color": "rgba(255,255,255,0)"},
+                    name=self.filled_traces_dict["name"],
+                    hovertemplate=hover_text_full,
+                    hoveron="points",
                 )
             )
         self._format_x_axis(fig)
@@ -243,7 +292,7 @@ class TimeSeriesChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
-            hoverdistance=100,  # Increase distance to simulate hover 'always on'
+            hoverdistance=1,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -264,8 +313,6 @@ class TimeSeriesChart:
         df: pl.DataFrame,
         trace_name: str,
         line_style: dict[str, str],
-        fill: str,
-        hover_label: dict[str, str],
         marker: dict[str, str],
     ):
         """Creates a trace for the plot.
@@ -275,8 +322,6 @@ class TimeSeriesChart:
             y_value column and columns defined in self.hover_data[CUSTOM_DATA].
             trace_name (str): Name of trace.
             line_style (dict[str, str]): Properties for line_style parameter.
-            fill (str): Properties for fill parameter.
-            hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
         return go.Scatter(
@@ -287,15 +332,7 @@ class TimeSeriesChart:
             hovertemplate=self._get_hover_template(df, trace_name),
             customdata=self._get_custom_data(df, trace_name),
             marker=marker,
-            fill=fill,
-            hoverlabel=hover_label,
-            fillcolor=(
-                get_rgba_from_hex_colour_and_alpha(
-                    AFAccessibleColours.TURQUOISE.value, alpha=0.2
-                )
-                if fill
-                else None
-            ),
+            hoverlabel=None,
             showlegend=(
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
@@ -315,7 +352,10 @@ class TimeSeriesChart:
 
     def _get_custom_hover_template(self, i, df, trace_name):
         if self.x_unified_hovermode is True:
+            if self.x_unified_hovertemplate is not None:
+                return self.x_unified_hovertemplate.format(trace_name=trace_name)
             return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
+
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
@@ -494,7 +534,7 @@ class TimeSeriesChart:
     def _get_colour_list(self):
         """Returns a list of colours."""
         number_of_traces = len(self.trace_name_list)
-        if number_of_traces == 2:
+        if number_of_traces == 2 and self.filled_traces_dict is None:
             colour_list = [
                 AFAccessibleColours.DARK_BLUE.value,
                 AFAccessibleColours.ORANGE.value,
