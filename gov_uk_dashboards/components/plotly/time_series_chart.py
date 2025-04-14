@@ -155,7 +155,7 @@ class TimeSeriesChart:
                 showlegend=False,  # Optional: hide it from legend too
             )
             fig.add_trace(trace_connector)
-        for (df, trace_name, colour, marker) in enumerate(
+        for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
