@@ -66,7 +66,7 @@ class TimeSeriesChart:
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         verticle_line_x_value_and_name: tuple = None,
-        last_2_traces_filled=False,
+        upper_and_lower_traces_to_fill:list[str]=None,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
         x_unified_hovermode: Optional[bool] = False,
@@ -90,7 +90,7 @@ class TimeSeriesChart:
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
-        self.last_2_traces_filled = last_2_traces_filled
+        self.upper_and_lower_traces_to_fill = upper_and_lower_traces_to_fill
         self.trace_names_to_prevent_hover_of_first_point = (
             trace_names_to_prevent_hover_of_first_point_list
         )
@@ -156,6 +156,7 @@ class TimeSeriesChart:
                 showlegend=False,  # Optional: hide it from legend too
             )
             fig.add_trace(trace_connector)
+        print("!!!!!!",self.colour_list)
         for i, (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -165,10 +166,10 @@ class TimeSeriesChart:
             )
         ):
             is_last = is_second_last = False
-            if self.last_2_traces_filled is True:
-                number_of_traces = len(self._get_df_list_for_time_series())
-                is_last = i == number_of_traces - 1
-                is_second_last = i == number_of_traces - 2
+            # if self.last_2_traces_filled is True:
+            #     number_of_traces = len(self._get_df_list_for_time_series())
+            #     is_last = i == number_of_traces - 1
+            #     is_second_last = i == number_of_traces - 2
             if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
                 REMOVE_INITIAL_MARKER
             ):
@@ -184,12 +185,12 @@ class TimeSeriesChart:
                         if is_last or is_second_last
                         else {"dash": "solid", "color": colour}
                     ),
-                    fill=(
-                        "tonexty"
-                        if FILL_TO_PREVIOUS_TRACE in df.columns
-                        and True in df.get_column(FILL_TO_PREVIOUS_TRACE)
-                        else None
-                    ),
+                    # fill=(
+                    #     "tonexty"
+                    #     if FILL_TO_PREVIOUS_TRACE in df.columns
+                    #     and True in df.get_column(FILL_TO_PREVIOUS_TRACE)
+                    #     else None
+                    # ),
                     hover_label=(
                         {"bgcolor": AFAccessibleColours.TURQUOISE.value}
                         if is_last or is_second_last
@@ -202,6 +203,32 @@ class TimeSeriesChart:
                     ),
                 )
             )
+            
+        if self.upper_and_lower_traces_to_fill is not None:
+            fill_df = self.filtered_df.filter(pl.col(self.trace_name_column).is_in(self.upper_and_lower_traces_to_fill)).sort(self.x_axis_column)
+            print("$$$",fill_df)
+            x_series = fill_df[self.x_axis_column].unique().sort().to_list()
+            upper_trace = self.upper_and_lower_traces_to_fill[0]
+            lower_trace = self.upper_and_lower_traces_to_fill[1]
+            y_upper = fill_df.filter(pl.col(self.trace_name_column)==upper_trace)[self.y_axis_column].to_list()
+            y_lower = fill_df.filter(pl.col(self.trace_name_column)==lower_trace)[self.y_axis_column].to_list()
+            print("x_series", x_series)
+            print("y_upper", y_upper)
+            print("y_lower", y_lower)
+            
+            fig.add_trace(go.Scatter(
+            x=x_series + x_series[::-1],
+            y=y_upper + y_lower[::-1],
+            fill='toself',
+            fillcolor=get_rgba_from_hex_colour_and_alpha(
+                    AFAccessibleColours.TURQUOISE.value, alpha=0.2
+                ),
+            line=dict(color='rgba(255,255,255,0)'),
+            # text=hover_text_full,
+            hoverinfo='text',
+            name='Range',
+            hovertemplate="Hello"
+            ))
         self._format_x_axis(fig)
 
         # if self.average_increment_for_average_trace is not None:
@@ -284,7 +311,7 @@ class TimeSeriesChart:
         df: pl.DataFrame,
         trace_name: str,
         line_style: dict[str, str],
-        fill: str,
+        # fill: str,
         hover_label: dict[str, str],
         marker: dict[str, str],
     ):
@@ -299,6 +326,7 @@ class TimeSeriesChart:
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
+        print("£££",df[self.x_axis_column] )
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
@@ -307,15 +335,15 @@ class TimeSeriesChart:
             hovertemplate=self._get_hover_template(df, trace_name),
             customdata=self._get_custom_data(df, trace_name),
             marker=marker,
-            fill=fill,
+            # fill=fill,
             hoverlabel=hover_label,
-            fillcolor=(
-                get_rgba_from_hex_colour_and_alpha(
-                    AFAccessibleColours.TURQUOISE.value, alpha=0.2
-                )
-                if fill
-                else None
-            ),
+            # fillcolor=(
+            #     get_rgba_from_hex_colour_and_alpha(
+            #         AFAccessibleColours.TURQUOISE.value, alpha=0.2
+            #     )
+            #     if fill
+            #     else None
+            # ),
             showlegend=(
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
@@ -517,7 +545,7 @@ class TimeSeriesChart:
     def _get_colour_list(self):
         """Returns a list of colours."""
         number_of_traces = len(self.trace_name_list)
-        if number_of_traces == 2:
+        if number_of_traces == 2 and self.upper_and_lower_traces_to_fill is None:
             colour_list = [
                 AFAccessibleColours.DARK_BLUE.value,
                 AFAccessibleColours.ORANGE.value,
