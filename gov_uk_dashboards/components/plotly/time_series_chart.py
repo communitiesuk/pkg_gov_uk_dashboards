@@ -12,7 +12,6 @@ from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
     CUSTOM_DATA,
     DATE_VALID,
-    FILL_TO_PREVIOUS_TRACE,
     HOVER_TEXT_HEADERS,
     MAIN_TITLE,
     REMOVE_INITIAL_MARKER,
@@ -66,7 +65,7 @@ class TimeSeriesChart:
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         verticle_line_x_value_and_name: tuple = None,
-        upper_and_lower_traces_to_fill:dict[str]=None,
+        upper_and_lower_traces_to_fill: dict[str] = None,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
         x_unified_hovermode: Optional[bool] = False,
@@ -156,7 +155,7 @@ class TimeSeriesChart:
                 showlegend=False,  # Optional: hide it from legend too
             )
             fig.add_trace(trace_connector)
-        for i, (df, trace_name, colour, marker) in enumerate(
+        for (df, trace_name, colour, marker) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
@@ -165,10 +164,6 @@ class TimeSeriesChart:
             )
         ):
             is_last = is_second_last = False
-            # if self.last_2_traces_filled is True:
-            #     number_of_traces = len(self._get_df_list_for_time_series())
-            #     is_last = i == number_of_traces - 1
-            #     is_second_last = i == number_of_traces - 2
             if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
                 REMOVE_INITIAL_MARKER
             ):
@@ -184,12 +179,6 @@ class TimeSeriesChart:
                         if is_last or is_second_last
                         else {"dash": "solid", "color": colour}
                     ),
-                    # fill=(
-                    #     "tonexty"
-                    #     if FILL_TO_PREVIOUS_TRACE in df.columns
-                    #     and True in df.get_column(FILL_TO_PREVIOUS_TRACE)
-                    #     else None
-                    # ),
                     hover_label=(
                         {"bgcolor": AFAccessibleColours.TURQUOISE.value}
                         if is_last or is_second_last
@@ -202,40 +191,63 @@ class TimeSeriesChart:
                     ),
                 )
             )
-            
+
         if self.upper_and_lower_traces_to_fill:
-            fill_df = self.filtered_df.filter(pl.col(self.trace_name_column).is_in([self.upper_and_lower_traces_to_fill["upper"],self.upper_and_lower_traces_to_fill["lower"]])).sort(self.x_axis_column)
+            fill_df = self.filtered_df.filter(
+                pl.col(self.trace_name_column).is_in(
+                    [
+                        self.upper_and_lower_traces_to_fill["upper"],
+                        self.upper_and_lower_traces_to_fill["lower"],
+                    ]
+                )
+            ).sort(self.x_axis_column)
             x_series = fill_df[self.x_axis_column].unique().sort().to_list()
             upper_trace = self.upper_and_lower_traces_to_fill["upper"]
             lower_trace = self.upper_and_lower_traces_to_fill["lower"]
-            y_upper = fill_df.filter(pl.col(self.trace_name_column)==upper_trace)[self.y_axis_column].to_list()
-            y_lower = fill_df.filter(pl.col(self.trace_name_column)==lower_trace)[self.y_axis_column].to_list()
-            y_upper_formatted_value = fill_df.filter(pl.col(self.trace_name_column)==upper_trace)["FORMATTED_VALUE"].to_list()
-            y_upper_formatted_date = fill_df.filter(pl.col(self.trace_name_column)==upper_trace)["FORMATTED_DATE"].to_list()
-            y_lower_formatted_value = fill_df.filter(pl.col(self.trace_name_column)==lower_trace)["FORMATTED_VALUE"].to_list()
-            y_lower_formatted_date = fill_df.filter(pl.col(self.trace_name_column)==lower_trace)["FORMATTED_DATE"].to_list()
+            y_upper = fill_df.filter(pl.col(self.trace_name_column) == upper_trace)[
+                self.y_axis_column
+            ].to_list()
+            y_lower = fill_df.filter(pl.col(self.trace_name_column) == lower_trace)[
+                self.y_axis_column
+            ].to_list()
+            y_upper_formatted_value = fill_df.filter(
+                pl.col(self.trace_name_column) == upper_trace
+            )["FORMATTED_VALUE"].to_list()
+            y_upper_formatted_date = fill_df.filter(
+                pl.col(self.trace_name_column) == upper_trace
+            )["FORMATTED_DATE"].to_list()
+            y_lower_formatted_value = fill_df.filter(
+                pl.col(self.trace_name_column) == lower_trace
+            )["FORMATTED_VALUE"].to_list()
+            y_lower_formatted_date = fill_df.filter(
+                pl.col(self.trace_name_column) == lower_trace
+            )["FORMATTED_DATE"].to_list()
             hover_text = [
-                f"{self.upper_and_lower_traces_to_fill['name']} - {low_date}: {low_value} - {high_value}<extra></extra>" 
-                for low_value, high_value, low_date, high_date in zip(y_lower_formatted_value, y_upper_formatted_value, y_lower_formatted_date, y_upper_formatted_date)
+                f"{self.upper_and_lower_traces_to_fill['name']} - {low_date}: {low_value} - {high_value}<extra></extra>"
+                for low_value, high_value, low_date, high_date in zip(
+                    y_lower_formatted_value,
+                    y_upper_formatted_value,
+                    y_lower_formatted_date,
+                    y_upper_formatted_date,
+                )
             ]
 
             # We need to double it (first for upper line, then for lower reversed)
             hover_text_full = hover_text + hover_text[::-1]
-            fig.add_trace(go.Scatter(
-                x=x_series + x_series[::-1],
-                y=y_upper + y_lower[::-1],
-                fill='toself',
-                fillcolor=get_rgba_from_hex_colour_and_alpha(
+            fig.add_trace(
+                go.Scatter(
+                    x=x_series + x_series[::-1],
+                    y=y_upper + y_lower[::-1],
+                    fill="toself",
+                    fillcolor=get_rgba_from_hex_colour_and_alpha(
                         AFAccessibleColours.TURQUOISE.value, alpha=0.2
                     ),
-                line=dict(color='rgba(255,255,255,0)'),
-                # text=hover_text_full,
-                # text=hover_text_full,
-                # hoverinfo='text',
-                name=self.upper_and_lower_traces_to_fill["name"],
-                hovertemplate=hover_text_full,
-                hoveron='points',
-            ))
+                    line={"color": "rgba(255,255,255,0)"},
+                    name=self.upper_and_lower_traces_to_fill["name"],
+                    hovertemplate=hover_text_full,
+                    hoveron="points",
+                )
+            )
         self._format_x_axis(fig)
 
         # if self.average_increment_for_average_trace is not None:
@@ -318,7 +330,6 @@ class TimeSeriesChart:
         df: pl.DataFrame,
         trace_name: str,
         line_style: dict[str, str],
-        # fill: str,
         hover_label: dict[str, str],
         marker: dict[str, str],
     ):
@@ -329,7 +340,6 @@ class TimeSeriesChart:
             y_value column and columns defined in self.hover_data[CUSTOM_DATA].
             trace_name (str): Name of trace.
             line_style (dict[str, str]): Properties for line_style parameter.
-            fill (str): Properties for fill parameter.
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             marker (dict[str,str]): Properties for marker parameter.
         """
