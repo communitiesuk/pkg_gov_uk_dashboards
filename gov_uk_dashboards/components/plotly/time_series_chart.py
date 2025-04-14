@@ -65,7 +65,7 @@ class TimeSeriesChart:
         trace_name_column: Optional[str] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         verticle_line_x_value_and_name: tuple = None,
-        upper_and_lower_traces_to_fill: dict[str] = None,
+        filled_traces_dict: dict[str] = None,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
         x_unified_hovermode: Optional[bool] = False,
@@ -89,7 +89,7 @@ class TimeSeriesChart:
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
-        self.upper_and_lower_traces_to_fill = upper_and_lower_traces_to_fill
+        self.filled_traces_dict = filled_traces_dict
         self.trace_names_to_prevent_hover_of_first_point = (
             trace_names_to_prevent_hover_of_first_point_list
         )
@@ -179,18 +179,18 @@ class TimeSeriesChart:
                 ),
             )
 
-        if self.upper_and_lower_traces_to_fill:
+        if self.filled_traces_dict:
             fill_df = self.filtered_df.filter(
                 pl.col(self.trace_name_column).is_in(
                     [
-                        self.upper_and_lower_traces_to_fill["upper"],
-                        self.upper_and_lower_traces_to_fill["lower"],
+                        self.filled_traces_dict["upper"],
+                        self.filled_traces_dict["lower"],
                     ]
                 )
             ).sort(self.x_axis_column)
             x_series = fill_df[self.x_axis_column].unique().sort().to_list()
-            upper_trace = self.upper_and_lower_traces_to_fill["upper"]
-            lower_trace = self.upper_and_lower_traces_to_fill["lower"]
+            upper_trace = self.filled_traces_dict["upper"]
+            lower_trace = self.filled_traces_dict["lower"]
             y_upper = fill_df.filter(pl.col(self.trace_name_column) == upper_trace)[
                 self.y_axis_column
             ].to_list()
@@ -207,7 +207,7 @@ class TimeSeriesChart:
                 pl.col(self.trace_name_column) == upper_trace
             )["FORMATTED_DATE"].to_list()
             hover_text = [
-                f"{self.upper_and_lower_traces_to_fill['name']} - {date}: "
+                f"{self.filled_traces_dict['name']} - {date}: "
                 f"{low_value} - {high_value}<extra></extra>"
                 for low_value, high_value, date in zip(
                     y_lower_formatted_value,
@@ -227,7 +227,7 @@ class TimeSeriesChart:
                         AFAccessibleColours.TURQUOISE.value, alpha=0.2
                     ),
                     line={"color": "rgba(255,255,255,0)"},
-                    name=self.upper_and_lower_traces_to_fill["name"],
+                    name=self.filled_traces_dict["name"],
                     hovertemplate=hover_text_full,
                     hoveron="points",
                 )
@@ -535,7 +535,7 @@ class TimeSeriesChart:
     def _get_colour_list(self):
         """Returns a list of colours."""
         number_of_traces = len(self.trace_name_list)
-        if number_of_traces == 2 and self.upper_and_lower_traces_to_fill is None:
+        if number_of_traces == 2 and self.filled_traces_dict is None:
             colour_list = [
                 AFAccessibleColours.DARK_BLUE.value,
                 AFAccessibleColours.ORANGE.value,
