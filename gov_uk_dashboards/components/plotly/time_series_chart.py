@@ -216,7 +216,6 @@ class TimeSeriesChart:
                 )
             ]
 
-            # We need to double it (first for upper line, then for lower reversed)
             hover_text_full = hover_text + hover_text[::-1]
             fig.add_trace(
                 go.Scatter(
