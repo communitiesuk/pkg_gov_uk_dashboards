@@ -20,7 +20,7 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True):
         "y": -0.22,
         "yanchor": "top",
         "traceorder": "normal",
-        "orientation": "v",
+        "orientation": "h",
         "font": {"size": CHART_LABEL_FONT_SIZE},
         "itemclick": "toggle" if itemclick else False,
         "itemdoubleclick": "toggle" if itemdoubleclick else False,
