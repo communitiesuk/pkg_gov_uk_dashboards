@@ -13,6 +13,7 @@ from gov_uk_dashboards.constants import (
     CUSTOM_DATA,
     DATE_VALID,
     HOVER_TEXT_HEADERS,
+    LEGEND_SPACING,
     MAIN_TITLE,
     REMOVE_INITIAL_MARKER,
     SUBTITLE,
@@ -228,7 +229,7 @@ class TimeSeriesChart:
                         AFAccessibleColours.TURQUOISE.value, alpha=0.2
                     ),
                     line={"color": "rgba(255,255,255,0)"},
-                    name=self.filled_traces_dict["name"] + "\u00A0" * 5,
+                    name=self.filled_traces_dict["name"] + LEGEND_SPACING,
                     hovertemplate=hover_text_full,
                     hoveron="points",
                 )
@@ -330,7 +331,7 @@ class TimeSeriesChart:
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             line=line_style,
-            name=self._get_trace_name(trace_name) + "\u00A0" * 5,
+            name=self._get_trace_name(trace_name) + LEGEND_SPACING,
             hovertemplate=self._get_hover_template(df, trace_name),
             customdata=self._get_custom_data(df, trace_name),
             marker=marker,
