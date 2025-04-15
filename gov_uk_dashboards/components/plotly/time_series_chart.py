@@ -240,7 +240,6 @@ class TimeSeriesChart:
                 )
             )
         self._format_x_axis(fig)
-        fig.update_layout(legend_tracegroupgap=5)
 
         # if self.average_increment_for_average_trace is not None:
         #     trace_name = LINEAR_TRAJECTORY
