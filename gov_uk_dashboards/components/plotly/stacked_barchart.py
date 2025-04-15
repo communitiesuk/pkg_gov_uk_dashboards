@@ -158,7 +158,7 @@ class StackedBarChart:
                     customdata=self._get_custom_data(self.line_trace_name, df),
                     mode="lines",
                     line={"color": colour, "width": 3},
-                    name=self.line_trace_name + LEGEND_SPACING,,
+                    name=self.line_trace_name + LEGEND_SPACING,
                     hovertemplate=self._get_hover_template(self.line_trace_name),
                     legendrank=99999,  # a high number to ensure it is bottom of the legend
                 )
