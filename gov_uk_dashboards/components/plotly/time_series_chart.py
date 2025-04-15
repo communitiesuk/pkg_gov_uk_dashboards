@@ -156,7 +156,7 @@ class TimeSeriesChart:
                 line={"color": line_color},
                 hoverinfo="skip",  # 👈 This line disables hover for this trace
                 showlegend=False,  # Optional: hide it from legend too
-                legendgroup=self.additional_line["legend_group"]
+                legendgroup=self.additional_line["legend_group"],
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
@@ -181,7 +181,7 @@ class TimeSeriesChart:
                     trace_name,
                     line_style={"dash": "solid", "color": colour},
                     marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
-                    legendgroup=legendgroup
+                    legendgroup=legendgroup,
                 ),
             )
 
@@ -236,7 +236,7 @@ class TimeSeriesChart:
                     name=self.filled_traces_dict["name"] + LEGEND_SPACING,
                     hovertemplate=hover_text_full,
                     hoveron="points",
-                    legendgroup=legendgroup
+                    legendgroup=legendgroup,
                 )
             )
         self._format_x_axis(fig)
@@ -353,7 +353,7 @@ class TimeSeriesChart:
             showlegend=(
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
-            legendgroup=legendgroup
+            legendgroup=legendgroup,
         )
 
     def _get_hover_template(self, df, trace_name):
