@@ -76,6 +76,7 @@ class TimeSeriesChart:
         download_data_button_id: Optional[str] = None,
         number_of_traces_colour_shift_dict: Optional[dict] = None,
         additional_line: Optional[dict] = None,
+        hover_distance: Optional[int] = 1,
     ):
         self.title_data = title_data
         self.y_axis_column = y_column
@@ -103,6 +104,7 @@ class TimeSeriesChart:
         self.markers = ["square", "diamond", "circle", "triangle-up"]
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
         self.additional_line = additional_line
+        self.hover_distance = hover_distance
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
 
@@ -226,7 +228,7 @@ class TimeSeriesChart:
                         AFAccessibleColours.TURQUOISE.value, alpha=0.2
                     ),
                     line={"color": "rgba(255,255,255,0)"},
-                    name=self.filled_traces_dict["name"],
+                    name=self.filled_traces_dict["name"]+'\u00A0' * 5,  # 5 non-breaking spaces
                     hovertemplate=hover_text_full,
                     hoveron="points",
                 )
@@ -281,10 +283,10 @@ class TimeSeriesChart:
                 xref="x domain",
                 yref="y domain",
                 x=1,
-                y=-0.25,
+                y=-0.2,
                 text=self.x_axis_title,
                 showarrow=False,
-                font={"size": CHART_LABEL_FONT_SIZE},
+                font={"size": 16},
             )
 
         fig.update_layout(
@@ -292,7 +294,7 @@ class TimeSeriesChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
-            hoverdistance=1,  # Increase distance to simulate hover 'always on'
+            hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -328,7 +330,7 @@ class TimeSeriesChart:
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             line=line_style,
-            name=self._get_trace_name(trace_name),
+            name=self._get_trace_name(trace_name)+ '\u00A0' * 5,  # 5 non-breaking spaces
             hovertemplate=self._get_hover_template(df, trace_name),
             customdata=self._get_custom_data(df, trace_name),
             marker=marker,
