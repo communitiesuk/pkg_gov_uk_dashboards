@@ -340,6 +340,7 @@ class TimeSeriesChart:
             trace_name (str): Name of trace.
             line_style (dict[str, str]): Properties for line_style parameter.
             marker (dict[str,str]): Properties for marker parameter.
+            legendgroup (str): Name to group by in legend,
         """
         return go.Scatter(
             x=df[self.x_axis_column],
