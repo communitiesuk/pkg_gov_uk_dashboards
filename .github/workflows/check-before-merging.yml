@@ -7,7 +7,7 @@ on:
 jobs:
   format:
     name: 'Check code formatting'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash -l {0}
@@ -23,7 +23,7 @@ jobs:
 
   lint:
     name: 'Check code for linting errors'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash -l {0}
@@ -39,7 +39,7 @@ jobs:
 
   test:
     name: 'Run tests'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash -l {0}
@@ -55,7 +55,7 @@ jobs:
 
   setup_check:
     name: 'Check setup.py is formatted correctly'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - run: python setup.py check
