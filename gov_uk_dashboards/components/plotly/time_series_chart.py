@@ -156,6 +156,7 @@ class TimeSeriesChart:
                 line={"color": line_color},
                 hoverinfo="skip",  # 👈 This line disables hover for this trace
                 showlegend=False,  # Optional: hide it from legend too
+                legendgroup=self.additional_line["legend_group"]
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
@@ -173,12 +174,14 @@ class TimeSeriesChart:
                 marker_sizes = [0] + [12] * (len(df.with_row_count()) - 1)
             else:
                 marker_sizes = [12] * (len(df.with_row_count()))
+            legendgroup = self._get_legend_group(df)
             fig.add_trace(
                 self.create_time_series_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
                     line_style={"dash": "solid", "color": colour},
                     marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
+                    legendgroup=legendgroup
                 ),
             )
 
@@ -220,6 +223,7 @@ class TimeSeriesChart:
             ]
 
             hover_text_full = hover_text + hover_text[::-1]
+            legendgroup = self._get_legend_group(fill_df)
             fig.add_trace(
                 go.Scatter(
                     x=x_series + x_series[::-1],
@@ -232,9 +236,11 @@ class TimeSeriesChart:
                     name=self.filled_traces_dict["name"] + LEGEND_SPACING,
                     hovertemplate=hover_text_full,
                     hoveron="points",
+                    legendgroup=legendgroup
                 )
             )
         self._format_x_axis(fig)
+        fig.update_layout(legend_tracegroupgap=5)
 
         # if self.average_increment_for_average_trace is not None:
         #     trace_name = LINEAR_TRAJECTORY
@@ -299,6 +305,14 @@ class TimeSeriesChart:
         )
         return fig
 
+    def _get_legend_group(self, df):
+        if "legend_group" in df.columns and len(df) > 0:
+            value = df["legend_group"][0]
+            legendgroup = value if value is not None else None
+        else:
+            legendgroup = None
+        return legendgroup
+
     # pylint: disable=duplicate-code
     def _format_x_axis(self, fig):
         tick_text, tick_values, range_x = self._get_x_axis_content()
@@ -317,6 +331,7 @@ class TimeSeriesChart:
         trace_name: str,
         line_style: dict[str, str],
         marker: dict[str, str],
+        legendgroup: str,
     ):
         """Creates a trace for the plot.
 
@@ -339,6 +354,7 @@ class TimeSeriesChart:
             showlegend=(
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
+            legendgroup=legendgroup
         )
 
     def _get_hover_template(self, df, trace_name):
