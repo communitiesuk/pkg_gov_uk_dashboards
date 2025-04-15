@@ -13,6 +13,7 @@ from gov_uk_dashboards.constants import (
     DATE_VALID,
     FINANCIAL_YEAR_ENDING,
     HOVER_TEXT_HEADERS,
+    LEGEND_SPACING,
     MAIN_TITLE,
     MEASURE,
     SUBTITLE,
@@ -157,7 +158,7 @@ class StackedBarChart:
                     customdata=self._get_custom_data(self.line_trace_name, df),
                     mode="lines",
                     line={"color": colour, "width": 3},
-                    name=self.line_trace_name,
+                    name=self.line_trace_name + LEGEND_SPACING,,
                     hovertemplate=self._get_hover_template(self.line_trace_name),
                     legendrank=99999,  # a high number to ensure it is bottom of the legend
                 )
@@ -214,7 +215,7 @@ class StackedBarChart:
         return go.Bar(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
-            name=trace_name,
+            name=trace_name + LEGEND_SPACING,
             hovertemplate=[
                 self._get_hover_template(trace_name) for i in range(df.shape[0])
             ],
