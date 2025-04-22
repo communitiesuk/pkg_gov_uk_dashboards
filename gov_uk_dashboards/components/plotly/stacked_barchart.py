@@ -7,6 +7,7 @@ import polars as pl
 
 import plotly.graph_objects as go
 
+from gov_uk_dashboards.components.helpers.get_chart_for_download import get_chart_for_download
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
     CUSTOM_DATA,
@@ -116,6 +117,9 @@ class StackedBarChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+        
+    def get_stacked_bar_chart_for_download(self):        
+        return get_chart_for_download(self, self.create_stacked_bar_chart())
 
     def create_stacked_bar_chart(
         self,

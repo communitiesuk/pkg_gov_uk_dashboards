@@ -30,6 +30,7 @@ from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
     get_legend_configuration,
     get_rgba_from_hex_colour_and_alpha,
 )
+from gov_uk_dashboards.components.helpers.get_chart_for_download import get_chart_for_download
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
@@ -129,26 +130,9 @@ class TimeSeriesChart:
             self.download_data_button_id,
         )
 
-    def get_time_series_chart_for_download(self):
-        from gov_uk_dashboards.components.plotly.test import test
+    def get_time_series_chart_for_download(self):        
+        return get_chart_for_download(self, self.create_time_series_chart())
         
-        return test(self, self.create_time_series_chart())
-        
-        # main_title = self.title_data[MAIN_TITLE]
-        # subtitle = self.title_data[SUBTITLE]
-        
-        # fig.update_layout(
-        #     title=dict(
-        #         text=f"<b><span style='color: black; margin: 0px 0px 5px'>{main_title}</span></b>",
-        #         x=0.01,
-        #         xanchor="left",
-        #     ),
-        #     title_subtitle=dict(
-        #         text=f"<b><span style='color: black; margin: 0px 0px 5px'>{subtitle}</span></b>"
-        #     ),
-        #     margin=dict(t=100),
-        # )
-        # return fig
 
     def create_time_series_chart(self,):
         """generates a time series chart"""

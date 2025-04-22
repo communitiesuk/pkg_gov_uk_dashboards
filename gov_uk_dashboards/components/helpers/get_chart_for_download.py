@@ -1,7 +1,7 @@
 from gov_uk_dashboards.constants import MAIN_TITLE, SUBTITLE
 
 
-def test(self, fig):
+def get_chart_for_download(self, fig):
     main_title = self.title_data[MAIN_TITLE]
     subtitle = self.title_data[SUBTITLE]
     

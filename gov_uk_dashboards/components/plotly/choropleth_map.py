@@ -4,6 +4,7 @@ import polars as pl
 import plotly.graph_objects as go
 from dash import dcc
 
+from gov_uk_dashboards.components.helpers.get_chart_for_download import get_chart_for_download
 from gov_uk_dashboards.constants import DEFAULT_COLOURSCALE
 
 from gov_uk_dashboards import colours
@@ -81,6 +82,9 @@ class ChoroplethMap:
         return display_chart_or_table_with_header(
             choropleth_map, download_data_button_id=self.map_name
         )
+        
+    def get_choropleth_map_for_download(self):        
+        return get_chart_for_download(self, self.fig)
 
     def _update_fig(self):
         self._add_traces()
