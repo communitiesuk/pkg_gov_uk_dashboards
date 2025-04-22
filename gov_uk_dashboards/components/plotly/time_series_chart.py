@@ -128,25 +128,29 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+
     def get_time_series_chart_for_download(self):
-        main_title = self.title_data['main_title']
-        subtitle = self.title_data['subtitle']
+        from gov_uk_dashboards.components.plotly.test import test
+        
+        return test(self, self.create_time_series_chart())
+        
+        # main_title = self.title_data[MAIN_TITLE]
+        # subtitle = self.title_data[SUBTITLE]
+        
+        # fig.update_layout(
+        #     title=dict(
+        #         text=f"<b><span style='color: black; margin: 0px 0px 5px'>{main_title}</span></b>",
+        #         x=0.01,
+        #         xanchor="left",
+        #     ),
+        #     title_subtitle=dict(
+        #         text=f"<b><span style='color: black; margin: 0px 0px 5px'>{subtitle}</span></b>"
+        #     ),
+        #     margin=dict(t=100),
+        # )
+        # return fig
 
-        fig = self.create_time_series_chart()
-        fig.update_layout(
-            title=dict(
-                text=f"<span style='font-size:24px; font-weight:bold;'>{main_title}</span><br>"
-                    f"<span style='font-size:18px; color:gray;'>{subtitle}</span>",
-                x=0.01,
-                xanchor="left"
-            ),
-            margin=dict(t=100)
-        )
-        return fig
-
-    def create_time_series_chart(
-        self,
-    ):
+    def create_time_series_chart(self,):
         """generates a time series chart"""
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
@@ -231,9 +235,7 @@ class TimeSeriesChart:
                 f"{self.filled_traces_dict['name']} - {date}: "
                 f"{low_value} - {high_value}<extra></extra>"
                 for low_value, high_value, date in zip(
-                    y_lower_formatted_value,
-                    y_upper_formatted_value,
-                    formatted_dates,
+                    y_lower_formatted_value, y_upper_formatted_value, formatted_dates,
                 )
             ]
 
@@ -397,11 +399,11 @@ class TimeSeriesChart:
             in self.hover_data_for_traces_with_different_hover_for_last_point
             and i == df.shape[0] - 1
         ):
-            hover_text_headers = (
-                self.hover_data_for_traces_with_different_hover_for_last_point[
-                    trace_name
-                ][HOVER_TEXT_HEADERS]
-            )
+            hover_text_headers = self.hover_data_for_traces_with_different_hover_for_last_point[
+                trace_name
+            ][
+                HOVER_TEXT_HEADERS
+            ]
         # pylint: disable=duplicate-code
 
         return (
