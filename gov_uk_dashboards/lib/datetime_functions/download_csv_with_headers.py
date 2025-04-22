@@ -1,4 +1,7 @@
+"""download_csv_with_headers"""
 import io
+import polars as pl
+from dash import dcc
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     get_todays_date_for_downloaded_csv,
 )
