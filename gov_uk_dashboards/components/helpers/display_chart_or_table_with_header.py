@@ -36,11 +36,6 @@ def display_chart_or_table_with_header(
         [
             html.Div(
                 [
-                    (
-                        create_download_chart_button(button_id_name=download_button_id)
-                        if download_button_id
-                        else None
-                    ),
                     html.Div(
                         [
                             html.H2(
@@ -71,6 +66,13 @@ def display_chart_or_table_with_header(
                         ),
                         create_download_data_button(
                             button_id_name=download_data_button_id
+                        ),
+                        (
+                            create_download_chart_button(
+                                button_id_name=download_button_id
+                            )
+                            if download_button_id
+                            else None
                         ),
                     ]
                     if download_data_button_id
