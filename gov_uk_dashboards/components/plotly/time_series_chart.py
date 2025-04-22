@@ -30,7 +30,9 @@ from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
     get_legend_configuration,
     get_rgba_from_hex_colour_and_alpha,
 )
-from gov_uk_dashboards.components.helpers.get_chart_for_download import get_chart_for_download
+from gov_uk_dashboards.components.helpers.get_chart_for_download import (
+    get_chart_for_download,
+)
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
@@ -130,11 +132,13 @@ class TimeSeriesChart:
             self.download_data_button_id,
         )
 
-    def get_time_series_chart_for_download(self):        
+    def get_time_series_chart_for_download(self):
+        """Return fig with title and subtitle for download as png"""
         return get_chart_for_download(self, self.create_time_series_chart())
-        
 
-    def create_time_series_chart(self,):
+    def create_time_series_chart(
+        self,
+    ):
         """generates a time series chart"""
         # pylint: disable=too-many-locals
         # pylint: disable=duplicate-code
@@ -219,7 +223,9 @@ class TimeSeriesChart:
                 f"{self.filled_traces_dict['name']} - {date}: "
                 f"{low_value} - {high_value}<extra></extra>"
                 for low_value, high_value, date in zip(
-                    y_lower_formatted_value, y_upper_formatted_value, formatted_dates,
+                    y_lower_formatted_value,
+                    y_upper_formatted_value,
+                    formatted_dates,
                 )
             ]
 
@@ -383,11 +389,11 @@ class TimeSeriesChart:
             in self.hover_data_for_traces_with_different_hover_for_last_point
             and i == df.shape[0] - 1
         ):
-            hover_text_headers = self.hover_data_for_traces_with_different_hover_for_last_point[
-                trace_name
-            ][
-                HOVER_TEXT_HEADERS
-            ]
+            hover_text_headers = (
+                self.hover_data_for_traces_with_different_hover_for_last_point[
+                    trace_name
+                ][HOVER_TEXT_HEADERS]
+            )
         # pylint: disable=duplicate-code
 
         return (

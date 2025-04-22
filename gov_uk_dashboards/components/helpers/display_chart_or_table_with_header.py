@@ -3,11 +3,8 @@
 from dash import html
 from dash.development.base_component import Component
 
-from gov_uk_dashboards.components.dash.create_download_chart_button import (
-    create_download_chart_button,
-)
-from gov_uk_dashboards.components.dash.create_download_data_button import (
-    create_download_data_button,
+from gov_uk_dashboards.components.dash.create_download_button_with_icon import (
+    create_download_button_with_icon,
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
 
@@ -32,11 +29,6 @@ def display_chart_or_table_with_header(
     Returns:
         html.Div: Div containing Header and chart/table.
     """
-    classes = (
-        "govuk-button govuk-button--primary "
-        "govuk-!-margin-bottom-0 govuk-!-margin-top-4 "
-        "flex w-auto items-center gap-2 print:hidden"
-    )
     return html.Div(
         [
             html.Div(
@@ -61,52 +53,22 @@ def display_chart_or_table_with_header(
             html.Div(
                 (
                     [
-                        # html.H3(
-                        #     "Download this data",
-                        #     className=HeadingSizes.SMALL,
-                        #     style={
-                        #         **{"color": "black", "margin": "0px 0px 5px"},
-                        #         **{"padding-top": "20px"},
-                        #     },
-                        # ),
-                        html.Div([
-                            html.Button(
-                                [html.Div("", className="download-icon"), "Download chart"],
-                                id={
-                                    "download-type": "download-chart",
-                                    "name": download_button_id,
-                                },
-                                n_clicks=0,
-                                className=classes,
-                                type="submit",
-                                style={"display": "flex", "alignItems": "center", "gap": "8px"},
-                            )
-                            if download_button_id
-                            else [] ,
-                            html.Button(
-                                [html.Div("", className="download-icon"), "Download data"],
-                                id={
-                                    "download-type": "download-data",
-                                    "name": download_data_button_id,
-                                },
-                                n_clicks=0,
-                                className=classes,
-                                type="submit",
-                                style={"display": "flex", "alignItems": "center", "gap": "8px"},
-                            )
-                            if download_data_button_id
-                            else [],
-                        ], className="govuk-button-group",style={"padding-top":"20px"}),
-                        # create_download_data_button(
-                        #     button_id_name=download_data_button_id
-                        # ),
-                        # (
-                        #     create_download_chart_button(
-                        #         button_id_name=download_button_id
-                        #     )
-                        #     if download_button_id
-                        #     else None
-                        # ),
+                        html.Div(
+                            [
+                                create_download_button_with_icon(
+                                    "Download chart", download_button_id
+                                )
+                                if download_button_id
+                                else [],
+                                create_download_button_with_icon(
+                                    "Download data", download_data_button_id
+                                )
+                                if download_data_button_id
+                                else [],
+                            ],
+                            className="govuk-button-group",
+                            style={"padding-top": "20px"},
+                        ),
                     ]
                 ),
             ),
