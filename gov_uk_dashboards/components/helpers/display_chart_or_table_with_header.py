@@ -32,6 +32,11 @@ def display_chart_or_table_with_header(
     Returns:
         html.Div: Div containing Header and chart/table.
     """
+    classes = (
+        "govuk-button govuk-button--primary "
+        "govuk-!-margin-bottom-0 govuk-!-margin-top-4 "
+        "flex w-auto items-center gap-2 print:hidden"
+    )
     return html.Div(
         [
             html.Div(
@@ -56,27 +61,53 @@ def display_chart_or_table_with_header(
             html.Div(
                 (
                     [
-                        html.H3(
-                            "Download this data",
-                            className=HeadingSizes.SMALL,
-                            style={
-                                **{"color": "black", "margin": "0px 0px 5px"},
-                                **{"padding-top": "20px"},
-                            },
-                        ),
-                        create_download_data_button(
-                            button_id_name=download_data_button_id
-                        ),
-                        (
-                            create_download_chart_button(
-                                button_id_name=download_button_id
+                        # html.H3(
+                        #     "Download this data",
+                        #     className=HeadingSizes.SMALL,
+                        #     style={
+                        #         **{"color": "black", "margin": "0px 0px 5px"},
+                        #         **{"padding-top": "20px"},
+                        #     },
+                        # ),
+                        html.Div([
+                            html.Button(
+                                [html.Div("", className="download-icon"), "Download chart"],
+                                id={
+                                    "download-type": "download-chart",
+                                    "name": download_button_id,
+                                },
+                                n_clicks=0,
+                                className=classes,
+                                type="submit",
+                                style={"display": "flex", "alignItems": "center", "gap": "8px"},
                             )
                             if download_button_id
-                            else None
-                        ),
+                            else [] ,
+                            html.Button(
+                                [html.Div("", className="download-icon"), "Download data"],
+                                id={
+                                    "download-type": "download-data",
+                                    "name": download_data_button_id,
+                                },
+                                n_clicks=0,
+                                className=classes,
+                                type="submit",
+                                style={"display": "flex", "alignItems": "center", "gap": "8px"},
+                            )
+                            if download_data_button_id
+                            else [],
+                        ], className="govuk-button-group",style={"padding-top":"20px"}),
+                        # create_download_data_button(
+                        #     button_id_name=download_data_button_id
+                        # ),
+                        # (
+                        #     create_download_chart_button(
+                        #         button_id_name=download_button_id
+                        #     )
+                        #     if download_button_id
+                        #     else None
+                        # ),
                     ]
-                    if download_data_button_id
-                    else []
                 ),
             ),
         ],

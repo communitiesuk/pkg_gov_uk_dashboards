@@ -128,6 +128,21 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+    def get_time_series_chart_for_download(self):
+        main_title = self.title_data['main_title']
+        subtitle = self.title_data['subtitle']
+
+        fig = self.create_time_series_chart()
+        fig.update_layout(
+            title=dict(
+                text=f"<span style='font-size:24px; font-weight:bold;'>{main_title}</span><br>"
+                    f"<span style='font-size:18px; color:gray;'>{subtitle}</span>",
+                x=0.01,
+                xanchor="left"
+            ),
+            margin=dict(t=100)
+        )
+        return fig
 
     def create_time_series_chart(
         self,
