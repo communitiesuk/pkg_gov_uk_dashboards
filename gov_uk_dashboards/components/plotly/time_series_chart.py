@@ -30,6 +30,9 @@ from gov_uk_dashboards.components.helpers.plotting_helper_functions import (
     get_legend_configuration,
     get_rgba_from_hex_colour_and_alpha,
 )
+from gov_uk_dashboards.components.helpers.get_chart_for_download import (
+    get_chart_for_download,
+)
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
 )
@@ -128,6 +131,10 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+
+    def get_time_series_chart_for_download(self):
+        """Return fig with title and subtitle for download as png"""
+        return get_chart_for_download(self, self.create_time_series_chart())
 
     def create_time_series_chart(
         self,

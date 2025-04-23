@@ -3,11 +3,8 @@
 from dash import html
 from dash.development.base_component import Component
 
-from gov_uk_dashboards.components.dash.create_download_chart_button import (
-    create_download_chart_button,
-)
-from gov_uk_dashboards.components.dash.create_download_data_button import (
-    create_download_data_button,
+from gov_uk_dashboards.components.dash.download_button import (
+    create_download_button_with_icon,
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
 
@@ -36,11 +33,6 @@ def display_chart_or_table_with_header(
         [
             html.Div(
                 [
-                    (
-                        create_download_chart_button(button_id_name=download_button_id)
-                        if download_button_id
-                        else None
-                    ),
                     html.Div(
                         [
                             html.H2(
@@ -61,20 +53,23 @@ def display_chart_or_table_with_header(
             html.Div(
                 (
                     [
-                        html.H3(
-                            "Download this data",
-                            className=HeadingSizes.SMALL,
-                            style={
-                                **{"color": "black", "margin": "0px 0px 5px"},
-                                **{"padding-top": "20px"},
-                            },
-                        ),
-                        create_download_data_button(
-                            button_id_name=download_data_button_id
+                        html.Div(
+                            [
+                                create_download_button_with_icon(
+                                    "Download chart", download_button_id
+                                )
+                                if download_button_id
+                                else [],
+                                create_download_button_with_icon(
+                                    "Download data", download_data_button_id
+                                )
+                                if download_data_button_id
+                                else [],
+                            ],
+                            className="govuk-button-group",
+                            style={"padding-top": "20px"},
                         ),
                     ]
-                    if download_data_button_id
-                    else []
                 ),
             ),
         ],

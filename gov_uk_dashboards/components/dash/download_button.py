@@ -2,6 +2,8 @@
 import warnings
 from dash import html
 
+from gov_uk_dashboards.constants import DOWNLOAD_BUTTON_CLASSES
+
 
 def download_button(button_text: str, button_id: str = "download-button"):
     """
@@ -13,7 +15,7 @@ def download_button(button_text: str, button_id: str = "download-button"):
     """
     warnings.warn(
         "Note there is an alternative function to download_button() called "
-        "download_button_with_icon() which includes a download icon and improved styling.",
+        "create_download_button_with_icon() which includes a download icon and improved styling.",
         Warning,
         stacklevel=2,
     )
@@ -32,31 +34,33 @@ def download_button(button_text: str, button_id: str = "download-button"):
     )
 
 
-def download_button_with_icon(button_text: str, button_id: str = "download-button"):
-    """
-    Return a download button styled with additional classes and an SVG icon,
-    aligned to the right.
+def create_download_button_with_icon(
+    button_text: str, button_id_name: str
+) -> html.Button:
+    """Create a download button with icon, aligned to the left.
 
-    Args:
-    button_text (str): The text to display on the button.
-    button_id (str, Optional): ID for the button, defaults to "download-button".
+    Parameters:
+    - button_id_name (str): A unique identifier for the button.
+
+    Returns:
+    - html.Button: Download button.
     """
-    classes = (
-        "govuk-button govuk-button--primary "
-        "govuk-!-margin-bottom-0 govuk-!-margin-top-4 "
-        "flex w-auto items-center gap-2 print:hidden"
-    )
-    return html.Div(
+    download_type = button_text.lower().replace(" ", "-")
+    return html.Button(
         [
-            html.Button(
-                [html.Div("", className="download-icon"), button_text],
-                id=button_id,
-                n_clicks=0,
-                className=classes,
-                type="submit",
-                style={"display": "flex", "alignItems": "center", "gap": "8px"},
-            ),
+            html.Div("", className="download-icon"),
+            button_text,
         ],
-        className="govuk-button-group",
-        style={"float": "right"},
+        id={
+            "download-type": download_type,
+            "name": button_id_name,
+        },
+        n_clicks=0,
+        className=DOWNLOAD_BUTTON_CLASSES,
+        type="submit",
+        style={
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+        },
     )

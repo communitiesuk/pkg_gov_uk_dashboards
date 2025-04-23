@@ -18,3 +18,9 @@ UNIT_SIZE = "Unit size"
 DEFAULT_COLOURSCALE = "tealgrn"
 
 LEGEND_SPACING = "\u00A0" * 5
+
+DOWNLOAD_BUTTON_CLASSES = (
+    "govuk-button govuk-button--primary "
+    "govuk-!-margin-bottom-0 govuk-!-margin-top-4 "
+    "flex w-auto items-center gap-2 print:hidden"
+)
