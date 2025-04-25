@@ -96,7 +96,7 @@ class LeafletChoroplethMap:
             minZoom=6,
             maxZoom=7,
             maxBounds=[[49.8, -6.5], [55.9, 1.8]],
-            style={"width": "600px", "height": "600px"},
+            style={"width": "700px", "height": "600px"},
         )
     def _add_data_to_geojson(self):
         info_map = {
