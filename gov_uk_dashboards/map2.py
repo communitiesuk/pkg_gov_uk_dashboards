@@ -9,8 +9,9 @@ from data.get_regional_housing_supply_summary_df import (
     get_regional_housing_supply_summary_df,
 )
 from data.get_rhs_map_boundaries import get_rhs_map_boundaries_json
+from gov_uk_dashboards.assets import get_assets_folder
 from lib.number_formatting import format_number_into_thousands_or_millions
-
+import os
 df = get_regional_housing_supply_summary_df()
 
 geojson_data = get_rhs_map_boundaries_json()
@@ -56,33 +57,34 @@ style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
 hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
 
 # --- 5. JS dynamic style handler ---
-style_handle = assign(
-    """function(feature, context){
-    const {colorscale, colorProp, style, min, max} = context.hideout;
-    const value = feature.properties[colorProp];
-    const colors = Array.from(colorscale);  // defensive copy
-    // Normalize value to 0-1
-    const t = (value - min) / (max - min);
+# style_handle = assign(
+#     """function(feature, context){
+#     const {colorscale, colorProp, style, min, max} = context.hideout;
+#     const value = feature.properties[colorProp];
+#     const colors = Array.from(colorscale);  // defensive copy
+#     // Normalize value to 0-1
+#     const t = (value - min) / (max - min);
 
-    // Helper: interpolate between two hex colors
-    function interpolateColor(color1, color2, t) {
-        const c1 = parseInt(color1.slice(1), 16);
-        const c2 = parseInt(color2.slice(1), 16);
-        const r = Math.round(((c2 >> 16) - (c1 >> 16)) * t + (c1 >> 16));
-        const g = Math.round((((c2 >> 8) & 0xFF) - ((c1 >> 8) & 0xFF)) * t + ((c1 >> 8) & 0xFF));
-        const b = Math.round(((c2 & 0xFF) - (c1 & 0xFF)) * t + (c1 & 0xFF));
-        return `rgb(${r},${g},${b})`;
-    }
+#     // Helper: interpolate between two hex colors
+#     function interpolateColor(color1, color2, t) {
+#         const c1 = parseInt(color1.slice(1), 16);
+#         const c2 = parseInt(color2.slice(1), 16);
+#         const r = Math.round(((c2 >> 16) - (c1 >> 16)) * t + (c1 >> 16));
+#         const g = Math.round((((c2 >> 8) & 0xFF) - ((c1 >> 8) & 0xFF)) * t + ((c1 >> 8) & 0xFF));
+#         const b = Math.round(((c2 & 0xFF) - (c1 & 0xFF)) * t + (c1 & 0xFF));
+#         return `rgb(${r},${g},${b})`;
+#     }
 
-    // Find segment and interpolate
-    const n = colors.length - 1;
-    const idx = Math.min(Math.floor(t * n), n - 1);
-    const local_t = (t * n) - idx;
-    const fillColor = interpolateColor(colors[idx], colors[idx + 1], local_t);
+#     // Find segment and interpolate
+#     const n = colors.length - 1;
+#     const idx = Math.min(Math.floor(t * n), n - 1);
+#     const local_t = (t * n) - idx;
+#     const fillColor = interpolateColor(colors[idx], colors[idx + 1], local_t);
 
-    return {...style, fillColor: fillColor};
-}"""
-)
+#     return {...style, fillColor: fillColor};
+# }"""
+# )
+style_handle = "dashExtensions.continuousColorScale"
 # B0F2BC
 # 257D98
 # --- 6. GeoJSON Component ---
@@ -162,6 +164,7 @@ colorbar = dl.Colorbar(
 # --- 8. App Setup ---
 def get_leaflet_choropleth_map(geo_function, df_function):
     df = df_function()
+    geojson_data = geo_function()
     info_map = {
         row["Area_Code"]: {
             "value": row["Value"],
@@ -230,7 +233,6 @@ def get_leaflet_choropleth_map(geo_function, df_function):
         return {...style, fillColor: fillColor};
     }"""
     )
-    geojson_data = geo_function()
     geojson = dl.GeoJSON(
         data=geojson_data,
         id="geojson",
