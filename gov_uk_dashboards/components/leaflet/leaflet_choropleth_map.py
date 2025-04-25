@@ -40,7 +40,6 @@ class LeafletChoroplethMap:
             position="topright",
         )
 
-        # OPTIONALLY CAN SET TICK VALUES AND TICK TEXT
         min_value = self.df.select(pl.min("Value")).item()
         colorbar_min = min(min_value, 0)
         max_value = self.df.select(pl.max("Value")).item()
@@ -86,11 +85,6 @@ class LeafletChoroplethMap:
                 "boxShadow": "0 0 6px rgba(0,0,0,0.2)",
                 "marginTop": "20px",  # adjust as needed to sit just below zoom buttons
             },
-            # position="topright",
-            # style={
-            #     "backgroundColor": "white","padding": "5px",
-            #     "borderRadius": "4px",
-            #     "boxShadow": "0 0 6px rgba(0,0,0,0.2)"},
             tickValues=tick_values,
             # tickText=tick_text,  # Optional, makes labels look cleaner
         )
@@ -117,11 +111,9 @@ class LeafletChoroplethMap:
             for row in self.df.iter_rows(named=True)
         }
 
-        # Step 2: Merge into GeoJSON
         for feature in self.geojson_data["features"]:
             region_code = feature["properties"]["geo_id"]
             info = info_map.get(region_code)
-            print(info)
             if info:
                 feature["properties"]["density"] = info["value"]
                 feature["properties"]["region"] = info["region"]
