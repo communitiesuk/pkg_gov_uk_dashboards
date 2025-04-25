@@ -161,6 +161,7 @@ colorbar = dl.Colorbar(
 
 # --- 8. App Setup ---
 def get_leaflet_choropleth_map(geo_function, df_function):
+    df = df_function()
     info_map = {
         row["Area_Code"]: {
             "value": row["Value"],
@@ -230,7 +231,6 @@ def get_leaflet_choropleth_map(geo_function, df_function):
     }"""
     )
     geojson_data = geo_function()
-    df = df_function()
     geojson = dl.GeoJSON(
         data=geojson_data,
         id="geojson",
