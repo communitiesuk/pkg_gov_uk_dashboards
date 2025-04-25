@@ -1,4 +1,4 @@
-from dash_extensions.javascript import arrow_function
+from dash_extensions.javascript import arrow_function, Namespace
 import dash_leaflet as dl
 from dash import html
 import polars as pl
@@ -8,7 +8,8 @@ class LeafletChoroplethMap:
         self.df = get_df_function()
         self._add_data_to_geojson()
     def get_leaflet_choropleth_map(self):
-        style_handle = "dashExtensions.continuousColorScale"
+        ns = Namespace("myNamespace", "mySubNamespace")
+        style_handle = ns("continuousColorScale")
         colorscale = ["#B0F2BC", "#257D98"]
         style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
         hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
