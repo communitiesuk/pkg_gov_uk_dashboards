@@ -4,9 +4,9 @@ from dash import html
 import polars as pl
 class LeafletChoroplethMap:
     def __init__(self, get_geojson_function, get_df_function):
-        self.geojson_boundaries = get_geojson_function()
+        self.geojson_data = get_geojson_function()
         self.df = get_df_function()
-        self.geojson_data = self._add_data_to_geojson()
+        self._add_data_to_geojson()
     def get_leaflet_choropleth_map(self):
         style_handle = "dashExtensions.continuousColorScale"
         colorscale = ["#B0F2BC", "#257D98"]
