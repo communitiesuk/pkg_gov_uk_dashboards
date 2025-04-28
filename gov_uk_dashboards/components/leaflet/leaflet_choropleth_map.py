@@ -12,70 +12,9 @@ class LeafletChoroplethMap:
         self.dl_geojson = self._get_dl_geojson()
         # self.colorbar = self._get_colorbar()
     def get_leaflet_choropleth_map(self):
-        
-        min_value = self.df.select(pl.min("Value")).item()
-        colorbar_min = min(min_value, 0)
-        max_value = self.df.select(pl.max("Value")).item()
-        colorbar = dl.Colorbar(
-            colorscale=self._get_colorscale(),
-            width=20,
-            height=200,
-            min=colorbar_min,
-            max=max_value,
-            position="topright",
-        )
-
-        min_value = self.df.select(pl.min("Value")).item()
-        colorbar_min = min(min_value, 0)
-        max_value = self.df.select(pl.max("Value")).item()
-        mid_value = (colorbar_min + max_value) / 2
-        quarter_value = (colorbar_min + max_value) / 4
-        three_quarter_value = 3 * (colorbar_min + max_value) / 4
-        tick_values = [
-            colorbar_min,
-            quarter_value,
-            mid_value,
-            three_quarter_value,
-            max_value,
-        ]
-        # tick_text = [
-        #     format_number_into_thousands_or_millions(x) for x in tick_values
-        # ]  # Optional, for formatting
-
-        colorbar_title = html.Div(
-            "Number of homes delivered",
-            style={
-                "position": "absolute",
-                "bottom": "240px",  # Adjusted to place above the colorbar
-                "left": "10px",  # Align with the left side of the colorbar
-                "background": "white",
-                "padding": "2px 6px",
-                "borderRadius": "5px",
-                "fontWeight": "bold",
-                "fontSize": "14px",
-                "zIndex": "999",  # Ensure it appears above map elements
-            },
-        )
-        colorbar = dl.Colorbar(
-            colorscale=self._get_colorscale(),
-            width=20,
-            height=200,
-            min=colorbar_min,
-            max=max_value,
-            position="bottomleft",
-            style={
-                "backgroundColor": "white",
-                "padding": "5px",
-                "borderRadius": "4px",
-                "boxShadow": "0 0 6px rgba(0,0,0,0.2)",
-                "marginTop": "20px",  # adjust as needed to sit just below zoom buttons
-            },
-            tickValues=tick_values,
-            # tickText=tick_text,  # Optional, makes labels look cleaner
-        )
 
         return dl.Map(
-            children=[dl.TileLayer(), colorbar, colorbar_title, self.dl_geojson],
+            children=[dl.TileLayer(), self._get_colorbar(), self._get_colorbar_title(), self.dl_geojson],
             center=[54.5, -2.5],  # Centered on the UK
             zoom=5,
             minZoom=6,
@@ -142,3 +81,54 @@ class LeafletChoroplethMap:
             pass
         else:
             return ["#B0F2BC", "#257D98"]
+    def _get_colorbar(self):
+        min_value = self.df.select(pl.min("Value")).item()
+        colorbar_min = min(min_value, 0)
+        max_value = self.df.select(pl.max("Value")).item()
+        mid_value = (colorbar_min + max_value) / 2
+        quarter_value = (colorbar_min + max_value) / 4
+        three_quarter_value = 3 * (colorbar_min + max_value) / 4
+        tick_values = [
+            colorbar_min,
+            quarter_value,
+            mid_value,
+            three_quarter_value,
+            max_value,
+        ]
+        # tick_text = [
+        #     format_number_into_thousands_or_millions(x) for x in tick_values
+        # ]  # Optional, for formatting
+
+        
+        return dl.Colorbar(
+            colorscale=self._get_colorscale(),
+            width=20,
+            height=200,
+            min=colorbar_min,
+            max=max_value,
+            position="bottomleft",
+            style={
+                "backgroundColor": "white",
+                "padding": "5px",
+                "borderRadius": "4px",
+                "boxShadow": "0 0 6px rgba(0,0,0,0.2)",
+                "marginTop": "20px",  # adjust as needed to sit just below zoom buttons
+            },
+            tickValues=tick_values,
+            # tickText=tick_text,  # Optional, makes labels look cleaner
+        )
+    def _get_colorbar_title(self):
+        return html.Div(
+            self.hover_text_columns[0],
+            style={
+                "position": "absolute",
+                "bottom": "240px",  # Adjusted to place above the colorbar
+                "left": "10px",  # Align with the left side of the colorbar
+                "background": "white",
+                "padding": "2px 6px",
+                "borderRadius": "5px",
+                "fontWeight": "bold",
+                "fontSize": "14px",
+                "zIndex": "999",  # Ensure it appears above map elements
+            },
+        )
