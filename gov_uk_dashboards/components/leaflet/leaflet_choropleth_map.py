@@ -2,6 +2,8 @@ from dash_extensions.javascript import arrow_function, Namespace
 import dash_leaflet as dl
 from dash import html
 import polars as pl
+
+from gov_uk_dashboards.lib.number_formatting import format_number_into_thousands_or_millions
 class LeafletChoroplethMap:
     def __init__(self, get_geojson_function, get_df_function, hover_text_columns, color_scale_is_discrete=True):
         self.geojson_data = get_geojson_function()
@@ -9,18 +11,16 @@ class LeafletChoroplethMap:
         self.hover_text_columns = hover_text_columns
         self.color_scale_is_discrete = color_scale_is_discrete
         self._add_data_to_geojson()
-        self.dl_geojson = self._get_dl_geojson()
-        # self.colorbar = self._get_colorbar()
     def get_leaflet_choropleth_map(self):
 
         return dl.Map(
-            children=[dl.TileLayer(), self._get_colorbar(), self._get_colorbar_title(), self.dl_geojson],
+            children=[dl.TileLayer(), self._get_colorbar(), self._get_colorbar_title(), self._get_dl_geojson()],
             center=[54.5, -2.5],  # Centered on the UK
-            zoom=5,
-            minZoom=6,
-            maxZoom=7,
+            zoom=6.5,
+            minZoom=6.5,
+            maxZoom=6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
-            style={"width": "900px", "height": "600px"},
+            style={"width": "100%", "height": "800px", "background":"white"},
         )
     def _add_data_to_geojson(self):
         self.hover_text_columns
@@ -95,9 +95,9 @@ class LeafletChoroplethMap:
             three_quarter_value,
             max_value,
         ]
-        # tick_text = [
-        #     format_number_into_thousands_or_millions(x) for x in tick_values
-        # ]  # Optional, for formatting
+        tick_text = [
+            format_number_into_thousands_or_millions(x) for x in tick_values
+        ]  # Optional, for formatting
 
         
         return dl.Colorbar(
@@ -115,7 +115,7 @@ class LeafletChoroplethMap:
                 "marginTop": "20px",  # adjust as needed to sit just below zoom buttons
             },
             tickValues=tick_values,
-            # tickText=tick_text,  # Optional, makes labels look cleaner
+            tickText=tick_text,  # Optional, makes labels look cleaner
         )
     def _get_colorbar_title(self):
         return html.Div(
