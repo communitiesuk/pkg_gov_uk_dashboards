@@ -20,6 +20,7 @@ class LeafletChoroplethMap:
             minZoom=6.5,
             maxZoom=6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
+            zoomControl=False,
             style={"width": "100%", "height": "800px", "background":"white"},
         )
     def _add_data_to_geojson(self):
@@ -53,7 +54,7 @@ class LeafletChoroplethMap:
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
         colorscale = self._get_colorscale()
-        style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
+        style = dict(weight=2, opacity=1, color="white", fillOpacity=0.7)
         hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
         return dl.GeoJSON(
             data=self.geojson_data,
@@ -106,13 +107,12 @@ class LeafletChoroplethMap:
             height=200,
             min=colorbar_min,
             max=max_value,
-            position="bottomleft",
+            position="topleft",
             style={
                 "backgroundColor": "white",
                 "padding": "5px",
                 "borderRadius": "4px",
-                "boxShadow": "0 0 6px rgba(0,0,0,0.2)",
-                "marginTop": "20px",  # adjust as needed to sit just below zoom buttons
+                "marginTop": "100px",
             },
             tickValues=tick_values,
             tickText=tick_text,  # Optional, makes labels look cleaner
@@ -122,7 +122,7 @@ class LeafletChoroplethMap:
             self.hover_text_columns[0],
             style={
                 "position": "absolute",
-                "bottom": "240px",  # Adjusted to place above the colorbar
+                "bottom": "700px",  # Adjusted to place above the colorbar
                 "left": "10px",  # Align with the left side of the colorbar
                 "background": "white",
                 "padding": "2px 6px",
