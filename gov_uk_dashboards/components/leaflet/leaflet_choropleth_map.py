@@ -25,6 +25,7 @@ class LeafletChoroplethMap:
             zoomControl=False,      # Hide the zoom buttons (+/-)
             doubleClickZoom=False,  # Prevent double click zoom
             touchZoom=False,        # Prevent pinch zoom
+            attributionControl=False,
             style={"width": "100%", "height": "800px", "background":"white"},
         )
     def _add_data_to_geojson(self):
