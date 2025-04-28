@@ -1,3 +1,6 @@
+"""Functions to add formatting to number values"""
+
+
 def format_number_into_thousands_or_millions(
     number: int, thousand_decimal_places: int = 0
 ) -> str:

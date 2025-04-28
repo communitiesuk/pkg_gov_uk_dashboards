@@ -1,3 +1,5 @@
+"""Leaflet choropleth map class"""
+
 from dash_extensions.javascript import arrow_function, Namespace
 import dash_leaflet as dl
 from dash import html
@@ -9,6 +11,14 @@ from gov_uk_dashboards.formatting.number_formatting import (
 
 
 class LeafletChoroplethMap:
+    """Class for  generating leaflet choropleth map charts.
+    Note: dataframe_function must contain columns: 'Region', 'Area_Code',
+    column_to_plot, hover_text_columns
+    If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
+    discrete"""
+
+    # pylint: disable=too-few-public-methods
+
     def __init__(
         self,
         get_geojson_function,
@@ -23,7 +33,11 @@ class LeafletChoroplethMap:
         self._add_data_to_geojson()
 
     def get_leaflet_choropleth_map(self):
+        """Creates and returns leaflet choropleth map chart for display on application.
 
+        Returns:
+            dl.Map: A dash leaflet map chart.
+        """
         return dl.Map(
             children=[
                 dl.TileLayer(),
@@ -46,7 +60,6 @@ class LeafletChoroplethMap:
         )
 
     def _add_data_to_geojson(self):
-        self.hover_text_columns
         info_map = {
             row["Area_Code"]: {
                 "value": row["Value"],
@@ -66,7 +79,7 @@ class LeafletChoroplethMap:
 
                 tooltip_parts = [f"<b>{info['region']}</b>"]
                 if info["value"] is None:
-                    tooltip_parts.append(f"<br>No data available")
+                    tooltip_parts.append("<br>No data available")
                 else:
                     for col in self.hover_text_columns:
                         tooltip_parts.append(f"<br>{col}: {info[col]}")
@@ -80,8 +93,8 @@ class LeafletChoroplethMap:
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
         colorscale = self._get_colorscale()
-        style = dict(weight=2, opacity=1, color="white", fillOpacity=1)
-        hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
+        style = {"weight": 2, "opacity": 1, "color": "white", "fillOpacity": 1}
+        hover_style = arrow_function({"weight": 5, "color": "#666", "dashArray": ""})
         return dl.GeoJSON(
             data=self.geojson_data,
             id="geojson",
@@ -89,27 +102,25 @@ class LeafletChoroplethMap:
             zoomToBoundsOnClick=True,
             style=style_handle,
             hoverStyle=hover_style,
-            hideout=dict(
-                colorscale=colorscale,  # Use hex strings
-                style=style,
-                colorProp="density",
-                min=self.df["Value"].min(),
-                max=self.df["Value"].max(),
-            ),
+            hideout={
+                "colorscale": colorscale,  # Use hex strings
+                "style": style,
+                "colorProp": "density",
+                "min": self.df["Value"].min(),
+                "max": self.df["Value"].max(),
+            },
         )
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
         if self.color_scale_is_discrete:
-            pass
-        else:
-            return ns("continuousColorScale")
+            return ""
+        return ns("continuousColorScale")
 
     def _get_colorscale(self):
         if self.color_scale_is_discrete:
-            pass
-        else:
-            return ["#B0F2BC", "#257D98"]
+            return ""
+        return ["#B0F2BC", "#257D98"]
 
     def _get_colorbar(self):
         min_value = self.df.select(pl.min("Value")).item()
