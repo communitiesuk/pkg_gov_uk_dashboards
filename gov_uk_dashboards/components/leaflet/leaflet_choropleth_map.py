@@ -20,7 +20,11 @@ class LeafletChoroplethMap:
             minZoom=6.5,
             maxZoom=6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
-            zoomControl=False,
+            scrollWheelZoom=False,  # Disable zooming via mouse scroll
+            dragging=False,         # Optional: prevent dragging too if you want
+            zoomControl=False,      # Hide the zoom buttons (+/-)
+            doubleClickZoom=False,  # Prevent double click zoom
+            touchZoom=False,        # Prevent pinch zoom
             style={"width": "100%", "height": "800px", "background":"white"},
         )
     def _add_data_to_geojson(self):
