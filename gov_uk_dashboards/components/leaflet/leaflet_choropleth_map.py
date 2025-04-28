@@ -3,37 +3,21 @@ import dash_leaflet as dl
 from dash import html
 import polars as pl
 class LeafletChoroplethMap:
-    def __init__(self, get_geojson_function, get_df_function, hover_text_columns):
+    def __init__(self, get_geojson_function, get_df_function, hover_text_columns, color_scale_is_discrete=True):
         self.geojson_data = get_geojson_function()
         self.df = get_df_function()
         self.hover_text_columns = hover_text_columns
+        self.color_scale_is_discrete = color_scale_is_discrete
         self._add_data_to_geojson()
+        self.dl_geojson = self._get_dl_geojson()
+        # self.colorbar = self._get_colorbar()
     def get_leaflet_choropleth_map(self):
-        ns = Namespace("myNamespace", "mySubNamespace")
-        style_handle = ns("continuousColorScale")
-        colorscale = ["#B0F2BC", "#257D98"]
-        style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
-        hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
-        geojson = dl.GeoJSON(
-            data=self.geojson_data,
-            id="geojson",
-            zoomToBounds=True,
-            zoomToBoundsOnClick=True,
-            style=style_handle,
-            hoverStyle=hover_style,
-            hideout=dict(
-                colorscale=colorscale,  # Use hex strings
-                style=style,
-                colorProp="density",
-                min=self.df["Value"].min(),
-                max=self.df["Value"].max(),
-            ),
-        )
+        
         min_value = self.df.select(pl.min("Value")).item()
         colorbar_min = min(min_value, 0)
         max_value = self.df.select(pl.max("Value")).item()
         colorbar = dl.Colorbar(
-            colorscale=colorscale,
+            colorscale=self._get_colorscale(),
             width=20,
             height=200,
             min=colorbar_min,
@@ -73,7 +57,7 @@ class LeafletChoroplethMap:
             },
         )
         colorbar = dl.Colorbar(
-            colorscale=colorscale,
+            colorscale=self._get_colorscale(),
             width=20,
             height=200,
             min=colorbar_min,
@@ -91,7 +75,7 @@ class LeafletChoroplethMap:
         )
 
         return dl.Map(
-            children=[dl.TileLayer(), colorbar, colorbar_title, geojson],
+            children=[dl.TileLayer(), colorbar, colorbar_title, self.dl_geojson],
             center=[54.5, -2.5],  # Centered on the UK
             zoom=5,
             minZoom=6,
@@ -126,3 +110,35 @@ class LeafletChoroplethMap:
                 feature["properties"]["density"] = None
                 feature["properties"]["region"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data"
+
+    def _get_dl_geojson(self):
+        style_handle = self._get_style_handle()
+        colorscale = self._get_colorscale()
+        style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
+        hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
+        return dl.GeoJSON(
+            data=self.geojson_data,
+            id="geojson",
+            zoomToBounds=True,
+            zoomToBoundsOnClick=True,
+            style=style_handle,
+            hoverStyle=hover_style,
+            hideout=dict(
+                colorscale=colorscale,  # Use hex strings
+                style=style,
+                colorProp="density",
+                min=self.df["Value"].min(),
+                max=self.df["Value"].max(),
+            ),
+        )
+    def _get_style_handle(self):
+        ns = Namespace("myNamespace", "mapColorScaleFunctions")
+        if self.color_scale_is_discrete:
+            pass
+        else:
+            return ns("continuousColorScale")
+    def _get_colorscale(self):
+        if self.color_scale_is_discrete:
+            pass
+        else:
+            return ["#B0F2BC", "#257D98"]

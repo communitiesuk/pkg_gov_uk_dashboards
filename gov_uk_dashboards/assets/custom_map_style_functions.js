@@ -1,5 +1,5 @@
 window.myNamespace = Object.assign({}, window.myNamespace, {  
-    mySubNamespace: {  
+    mapColorScaleFunctions: {  
         continuousColorScale: function(feature, context) {
             const {
                 colorscale,
