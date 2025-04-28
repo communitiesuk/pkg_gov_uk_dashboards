@@ -10,6 +10,12 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
             } = context.hideout;
             const value = feature.properties[colorProp];
             const colors = Array.from(colorscale); // defensive copy
+            if (value === null || value === undefined) {
+                return {
+                    ...style,
+                    fillColor: "#b1b4b6"
+                };
+            }
             // Normalize value to 0-1
             const t = (value - min) / (max - min);
 

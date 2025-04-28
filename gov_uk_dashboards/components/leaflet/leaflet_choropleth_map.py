@@ -3,7 +3,7 @@ import dash_leaflet as dl
 from dash import html
 import polars as pl
 
-from gov_uk_dashboards.formatting.number_formatting import format_number_into_thousands_or_millions
+from gov_uk_dashboards.lib.number_formatting import format_number_into_thousands_or_millions
 class LeafletChoroplethMap:
     def __init__(self, get_geojson_function, get_df_function, hover_text_columns, color_scale_is_discrete=True):
         self.geojson_data = get_geojson_function()
@@ -37,23 +37,27 @@ class LeafletChoroplethMap:
             region_code = feature["properties"]["geo_id"]
             info = info_map.get(region_code)
             if info:
+
                 feature["properties"]["density"] = info["value"]
                 feature["properties"]["region"] = info["region"]
 
                 tooltip_parts = [f"<b>{info['region']}</b>"]
-                for col in self.hover_text_columns:
-                    tooltip_parts.append(f"<br>{col}: {info[col]}")
+                if info["value"] is None:
+                    tooltip_parts.append(f"<br>No data available")
+                else:
+                    for col in self.hover_text_columns:
+                        tooltip_parts.append(f"<br>{col}: {info[col]}")
 
                 feature["properties"]["tooltip"] = "".join(tooltip_parts)
             else:
                 feature["properties"]["density"] = None
                 feature["properties"]["region"] = "Unknown"
-                feature["properties"]["tooltip"] = "No data"
+                feature["properties"]["tooltip"] = "No data available"
 
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
         colorscale = self._get_colorscale()
-        style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=0.7)
+        style = dict(weight=2, opacity=1, color="white", dashArray="3", fillOpacity=1)
         hover_style = arrow_function(dict(weight=5, color="#666", dashArray=""))
         return dl.GeoJSON(
             data=self.geojson_data,
