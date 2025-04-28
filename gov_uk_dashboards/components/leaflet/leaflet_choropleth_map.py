@@ -3,9 +3,10 @@ import dash_leaflet as dl
 from dash import html
 import polars as pl
 class LeafletChoroplethMap:
-    def __init__(self, get_geojson_function, get_df_function):
+    def __init__(self, get_geojson_function, get_df_function, hover_text_columns):
         self.geojson_data = get_geojson_function()
         self.df = get_df_function()
+        self.hover_text_columns = hover_text_columns
         self._add_data_to_geojson()
     def get_leaflet_choropleth_map(self):
         ns = Namespace("myNamespace", "mySubNamespace")
@@ -95,18 +96,16 @@ class LeafletChoroplethMap:
             zoom=5,
             minZoom=6,
             maxZoom=7,
-            maxBounds=[[49.8, -6.5], [55.9, 1.8]],
-            style={"width": "700px", "height": "600px"},
+            maxBounds=[[49.8, -10], [55.9, 1.8]],
+            style={"width": "900px", "height": "600px"},
         )
     def _add_data_to_geojson(self):
+        self.hover_text_columns
         info_map = {
             row["Area_Code"]: {
                 "value": row["Value"],
-                "value_for_display": row["Number of homes delivered"],
                 "region": row["Region"],
-                "percentage_contribution": row[
-                    "Percentage contribution to national estimate"
-                ],
+                **{col: row[col] for col in self.hover_text_columns}
             }
             for row in self.df.iter_rows(named=True)
         }
@@ -117,10 +116,12 @@ class LeafletChoroplethMap:
             if info:
                 feature["properties"]["density"] = info["value"]
                 feature["properties"]["region"] = info["region"]
-                feature["properties"]["tooltip"] = (
-                    f"<b>{info['region']}</b><br>Number of homes delivered: {info['value_for_display']}"
-                    f"<br>Percentage contribution to national estimate: {info['percentage_contribution']}"
-                )
+
+                tooltip_parts = [f"<b>{info['region']}</b>"]
+                for col in self.hover_text_columns:
+                    tooltip_parts.append(f"<br>{col}: {info[col]}")
+
+                feature["properties"]["tooltip"] = "".join(tooltip_parts)
             else:
                 feature["properties"]["density"] = None
                 feature["properties"]["region"] = "Unknown"
