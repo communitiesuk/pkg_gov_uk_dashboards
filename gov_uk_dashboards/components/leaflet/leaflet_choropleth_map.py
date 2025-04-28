@@ -3,7 +3,7 @@ import dash_leaflet as dl
 from dash import html
 import polars as pl
 
-from gov_uk_dashboards.lib.number_formatting import format_number_into_thousands_or_millions
+from gov_uk_dashboards.formatting.number_formatting import format_number_into_thousands_or_millions
 class LeafletChoroplethMap:
     def __init__(self, get_geojson_function, get_df_function, hover_text_columns, color_scale_is_discrete=True):
         self.geojson_data = get_geojson_function()
