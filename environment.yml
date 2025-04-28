@@ -20,3 +20,6 @@ dependencies:
   - pip
   - pip:
     - polars==1.23.0
+    - dash_leaflet
+    - dash_extensions
+    - dash[testing]
