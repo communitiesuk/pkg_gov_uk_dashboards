@@ -1,6 +1,8 @@
 """test_number_formatting"""
 
-from gov_uk_dashboards.formatting.number_formatting import format_number_into_thousands_or_millions
+from gov_uk_dashboards.formatting.number_formatting import (
+    format_number_into_thousands_or_millions,
+)
 
 
 def test_format_number_into_thousands_or_millions_less_than_thousand():
