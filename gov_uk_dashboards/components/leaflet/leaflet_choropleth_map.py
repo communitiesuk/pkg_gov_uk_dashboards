@@ -1,10 +1,14 @@
 """Leaflet choropleth map class"""
 
+from typing import Callable, Optional
 from dash_extensions.javascript import arrow_function, Namespace
 import dash_leaflet as dl
 from dash import html
 import polars as pl
 
+from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
+    display_chart_or_table_with_header,
+)
 from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
@@ -18,18 +22,30 @@ class LeafletChoroplethMap:
     discrete"""
 
     # pylint: disable=too-few-public-methods
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
+
 
     def __init__(
         self,
-        get_geojson_function,
-        get_df_function,
-        hover_text_columns,
-        color_scale_is_discrete=True,
+        get_geojson_function: Callable[[], dict],
+        get_df_function: Callable[[], pl.DataFrame],
+        hover_text_columns: list[str],
+        title: str,
+        subtitle: Optional[str] = None,
+        download_chart_button_id: Optional[str] = None,
+        download_data_button_id: Optional[str] = None,
+        color_scale_is_discrete: bool = True,
         show_tile_layer: bool = False,
     ):
         self.geojson_data = get_geojson_function()
         self.df = get_df_function()
         self.hover_text_columns = hover_text_columns
+        self.title = title
+        self.subtitle = subtitle
+        self.download_chart_button_id = download_chart_button_id
+        self.download_data_button_id = download_data_button_id
         self.color_scale_is_discrete = color_scale_is_discrete
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson()
@@ -40,7 +56,7 @@ class LeafletChoroplethMap:
         Returns:
             dl.Map: A dash leaflet map chart.
         """
-        return dl.Map(
+        choropleth_map = dl.Map(
             children=[
                 dl.TileLayer() if self.show_tile_layer else None,
                 self._get_colorbar(),
@@ -59,6 +75,13 @@ class LeafletChoroplethMap:
             touchZoom=False,  # Prevent pinch zoom
             attributionControl=False,
             style={"width": "100%", "height": "800px", "background": "white"},
+        )
+        return display_chart_or_table_with_header(
+            choropleth_map,
+            self.title,
+            self.subtitle,
+            self.download_chart_button_id,
+            self.download_data_button_id,
         )
 
     def _add_data_to_geojson(self):
