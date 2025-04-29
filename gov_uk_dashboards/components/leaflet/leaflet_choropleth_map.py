@@ -39,8 +39,8 @@ class LeafletChoroplethMap:
         color_scale_is_discrete: bool = True,
         show_tile_layer: bool = False,
     ):
-        self.geojson_data = geojson()
-        self.df = df()
+        self.geojson_data = geojson
+        self.df = df
         self.hover_text_columns = hover_text_columns
         self.title = title
         self.subtitle = subtitle
