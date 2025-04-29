@@ -1,6 +1,6 @@
 """Leaflet choropleth map class"""
 
-from typing import Callable, Optional
+from typing import Optional
 from dash_extensions.javascript import arrow_function, Namespace
 import dash_leaflet as dl
 from dash import html
@@ -25,7 +25,6 @@ class LeafletChoroplethMap:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-positional-arguments
-
 
     def __init__(
         self,
