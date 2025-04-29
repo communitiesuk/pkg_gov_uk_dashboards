@@ -25,11 +25,13 @@ class LeafletChoroplethMap:
         get_df_function,
         hover_text_columns,
         color_scale_is_discrete=True,
+        show_tile_layer: bool = False,
     ):
         self.geojson_data = get_geojson_function()
         self.df = get_df_function()
         self.hover_text_columns = hover_text_columns
         self.color_scale_is_discrete = color_scale_is_discrete
+        self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson()
 
     def get_leaflet_choropleth_map(self):
@@ -40,7 +42,7 @@ class LeafletChoroplethMap:
         """
         return dl.Map(
             children=[
-                dl.TileLayer(),
+                dl.TileLayer() if self.show_tile_layer else None,
                 self._get_colorbar(),
                 self._get_colorbar_title(),
                 self._get_dl_geojson(),
@@ -93,7 +95,12 @@ class LeafletChoroplethMap:
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
         colorscale = self._get_colorscale()
-        style = {"weight": 2, "opacity": 1, "color": "white", "fillOpacity": 1}
+        style = {
+            "weight": 2,
+            "opacity": 1,
+            "color": "white",
+            "fillOpacity": 0.7 if self.show_tile_layer else 1,
+        }
         hover_style = arrow_function({"weight": 5, "color": "#666", "dashArray": ""})
         return dl.GeoJSON(
             data=self.geojson_data,
