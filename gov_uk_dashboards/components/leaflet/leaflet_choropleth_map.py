@@ -29,8 +29,8 @@ class LeafletChoroplethMap:
 
     def __init__(
         self,
-        get_geojson_function: Callable[[], dict],
-        get_df_function: Callable[[], pl.DataFrame],
+        geojson: dict,
+        df: pl.DataFrame,
         hover_text_columns: list[str],
         title: str,
         subtitle: Optional[str] = None,
@@ -39,8 +39,8 @@ class LeafletChoroplethMap:
         color_scale_is_discrete: bool = True,
         show_tile_layer: bool = False,
     ):
-        self.geojson_data = get_geojson_function()
-        self.df = get_df_function()
+        self.geojson_data = geojson()
+        self.df = df()
         self.hover_text_columns = hover_text_columns
         self.title = title
         self.subtitle = subtitle
