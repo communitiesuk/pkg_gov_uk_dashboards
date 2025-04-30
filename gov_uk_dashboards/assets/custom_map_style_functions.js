@@ -39,6 +39,35 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 ...style,
                 fillColor: fillColor
             };
+        },
+        discreteColorScale: function(feature, context) {
+            const {
+                colorscale,  // e.g., ["#d7191c", "#fdae61", "#abdda4", "#2b83ba"]
+                colorProp,   // e.g., "category"
+                style,
+                min          // e.g., 1
+            } = context.hideout;
+        
+            const value = feature.properties[colorProp];
+            const colors = Array.from(colorscale); // ensure no mutation
+        
+            if (value === null || value === undefined) {
+                return {
+                    ...style,
+                    fillColor: "#b1b4b6"  // default gray
+                };
+            }
+        
+            // Convert value to zero-based index
+            const idx = value - min;
+        
+            // Defensive check
+            const fillColor = colors[idx] || "#b1b4b6";
+        
+            return {
+                ...style,
+                fillColor: fillColor
+            };
         }
     }
 });

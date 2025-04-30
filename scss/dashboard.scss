@@ -1478,3 +1478,7 @@ mark.expenditure {
 .font-weight-normal-override {
   font-weight: normal !important;
 }  
+
+.leaflet-interactive:focus {
+  outline: none !important;
+}
