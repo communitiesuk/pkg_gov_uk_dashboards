@@ -62,6 +62,9 @@ class StackedBarChart:
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         line_trace_name: Optional[str] = None,
         x_axis_column=DATE_VALID,
+        x_unified_hovermode: Optional[bool] = False,
+        x_hoverformat: Optional[str] = None,
+        hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
     ):
@@ -97,6 +100,9 @@ class StackedBarChart:
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.line_trace_name = line_trace_name
         self.x_axis_column = x_axis_column
+        self.x_unified_hovermode = x_unified_hovermode
+        self.x_hoverformat = x_hoverformat
+        self.hover_distance = hover_distance
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.fig = self.create_stacked_bar_chart()
@@ -129,6 +135,12 @@ class StackedBarChart:
     ):
         """generates a stacked bar chart"""
         # pylint: disable=too-many-locals
+        
+        if not self.x_unified_hovermode and self.x_hoverformat is not None:
+            raise ValueError(
+                "x_hoverformat can only be specified if x_unified_hovermode is True"
+            )
+        
         fig = go.Figure()
         colour_list = (
             AFAccessibleColours.CATEGORICAL.value
@@ -188,6 +200,9 @@ class StackedBarChart:
             showlegend=True,
             barmode="relative",
             xaxis={"categoryorder": "category ascending"},
+            ## copied from timeseries
+            hovermode="x unified" if self.x_unified_hovermode is True else "closest",
+            hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
         return fig
 
@@ -198,6 +213,7 @@ class StackedBarChart:
             ticktext=tick_text,
             tickmode="array",
             range=range_x,
+            hoverformat=self.x_hoverformat,
         )
 
         return tick_values
