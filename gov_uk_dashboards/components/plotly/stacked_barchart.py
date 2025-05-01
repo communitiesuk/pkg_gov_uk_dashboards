@@ -189,7 +189,7 @@ class StackedBarChart:
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
-            legend=get_legend_configuration(),
+            legend=get_legend_configuration(reverse_order=True),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 "range": [min_y * 1.1, max_y * 1.1],
