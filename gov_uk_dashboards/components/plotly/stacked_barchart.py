@@ -124,7 +124,7 @@ class StackedBarChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
-    def is_json_serializable(value):
+    def is_json_serializable(self, value):
         try:
             json.dumps(value)
             return True
