@@ -184,12 +184,13 @@ class LeafletChoroplethMap:
                 categories=self._get_color_bar_categories(),  # reversed order
                 colorscale=self._get_colorscale()[::-1],
                 width=30,
-                height=300,
+                height=200,
                 position="topleft",
                 style={
                     "padding": "6px",
                     "backgroundColor": "white",
                     "borderRadius": "4px",
+                    "fontSize": "16px",
                 },
             )
         min_value = self.df.select(pl.min(self.column_to_plot)).item()
