@@ -248,6 +248,8 @@ class StackedBarChart:
         )
 
     def _get_hover_template(self, trace_name):
+        if self.x_unified_hovermode is True:
+            return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         hover_template = (
             f"{trace_name}<br>"
