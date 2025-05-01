@@ -16,7 +16,7 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True, reverse_order
     Returns:
         dict: A dictionary containing the configuration settings for the legend.
     """
-    traceorder={} if not reverse_order else {"traceorder":"reversed"}
+    traceorder = {} if not reverse_order else {"traceorder": "reversed"}
     return {
         "x": 0,
         "y": -0.22,
@@ -26,7 +26,7 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True, reverse_order
         "font": {"size": CHART_LABEL_FONT_SIZE},
         "itemclick": "toggle" if itemclick else False,
         "itemdoubleclick": "toggle" if itemdoubleclick else False,
-        **traceorder
+        **traceorder,
     }
 
 
