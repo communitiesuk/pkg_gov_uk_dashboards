@@ -1,5 +1,6 @@
 """stacked_barchart function"""
 
+import json
 import math
 from typing import Optional
 from dash import html
@@ -123,7 +124,19 @@ class StackedBarChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
-
+    def is_json_serializable(value):
+        try:
+            json.dumps(value)
+            return True
+        except (TypeError, OverflowError):
+            return False    
+        
+    def to_dict(self):
+        return {k: v for k, v in self.__dict__.items() if self.is_json_serializable(v)}
+        
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
     def get_stacked_bar_chart_for_download(self):
         """Return fig with title and subtitle for download as png"""
         return get_chart_for_download(self, self.create_stacked_bar_chart())

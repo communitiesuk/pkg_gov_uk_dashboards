@@ -113,20 +113,6 @@ class TimeSeriesChart:
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
         
-    def is_json_serializable(value):
-        try:
-            json.dumps(value)
-            return True
-        except (TypeError, OverflowError):
-            return False    
-        
-    def to_dict(self):
-        return {k: v for k, v in self.__dict__.items() if self.is_json_serializable(v)}
-        
-    @classmethod
-    def from_dict(cls, data):
-        return cls(**data)
-        
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
