@@ -55,7 +55,7 @@ class StackedBarChart:
     def __init__(
         self,
         title_data: TitleDataStructure,
-        y_column: str,
+        y_axis_column: str,
         hover_data: HoverDataByTrace,
         df: pl.DataFrame,
         trace_name_list: list[str],
@@ -92,7 +92,7 @@ class StackedBarChart:
                 applicable. Defaults to None.
         """
         self.title_data = title_data
-        self.y_axis_column = y_column
+        self.y_axis_column = y_axis_column
         self.hover_data = hover_data
         self.df = df
         self.trace_name_list = trace_name_list
@@ -132,6 +132,7 @@ class StackedBarChart:
             return False    
         
     def to_dict(self):
+        print({k: v for k, v in self.__dict__.items() if self.is_json_serializable(v)})
         return {k: v for k, v in self.__dict__.items() if self.is_json_serializable(v)}
         
     @classmethod
