@@ -134,29 +134,33 @@ class StackedBarChart:
             return False
 
     def to_dict(self):
-        "Converts class attributes to json format."
-        result = {}
-        for k, v in self.__dict__.items():
+        def clean_value(v):
             if self.is_json_serializable(v):
-                result[k] = v
+                return v
             elif isinstance(v, pl.DataFrame):
-                result[k] = {"_type": "polars_df", "data": v.to_dicts()}
+                return {"_type": "polars_df", "data": v.to_dicts()}
             elif hasattr(v, "to_dict"):
-                result[k] = {"_type": "custom", "data": v.to_dict()}
+                return {"_type": "custom", "data": v.to_dict()}
+            elif isinstance(v, dict):
+                return {k: clean_value(val) for k, val in v.items()}
+            elif isinstance(v, list):
+                return [clean_value(val) for val in v]
             else:
-                result[k] = f"<<non-serializable: {type(v).__name__}>>"
-        return result
+                return f"<<non-serializable: {type(v).__name__}>>"
+
+        return {k: clean_value(v) for k, v in self.__dict__.items()}
 
     @classmethod
     def from_dict(cls, data):
-        "Creates a class instance from dict of attributes."
         restored = {}
         for k, v in data.items():
+            if k in ['markers', 'colour_list']:
+                continue  # Skip or handle separately
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
                     restored[k] = pl.DataFrame(v["data"])
                 elif v["_type"] == "custom":
-                    # optionally restore known nested types here
+                    # If you want to restore specific custom types
                     pass
             else:
                 restored[k] = v
