@@ -96,7 +96,7 @@ class TimeSeriesChart:
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
         self.filled_traces_dict = filled_traces_dict
-        self.trace_names_to_prevent_hover_of_first_point = (
+        self.trace_names_to_prevent_hover_of_first_point_list = (
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
@@ -407,8 +407,8 @@ class TimeSeriesChart:
             (
                 ""
                 if i == 0
-                and self.trace_names_to_prevent_hover_of_first_point is not None
-                and trace_name in self.trace_names_to_prevent_hover_of_first_point
+                and self.trace_names_to_prevent_hover_of_first_point_list is not None
+                and trace_name in self.trace_names_to_prevent_hover_of_first_point_list
                 else self._get_custom_hover_template(i, df, trace_name)
             )
             for i in range(df.shape[0])  # the number of rows in df
