@@ -1,5 +1,6 @@
 """stacked_barchart function"""
 
+import json
 import math
 from typing import Optional
 from dash import html
@@ -54,7 +55,7 @@ class StackedBarChart:
     def __init__(
         self,
         title_data: TitleDataStructure,
-        y_column: str,
+        y_axis_column: str,
         hover_data: HoverDataByTrace,
         df: pl.DataFrame,
         trace_name_list: list[str],
@@ -62,6 +63,8 @@ class StackedBarChart:
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         line_trace_name: Optional[str] = None,
         x_axis_column=DATE_VALID,
+        x_unified_hovermode: Optional[bool] = False,
+        hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
     ):
@@ -89,7 +92,7 @@ class StackedBarChart:
                 applicable. Defaults to None.
         """
         self.title_data = title_data
-        self.y_axis_column = y_column
+        self.y_axis_column = y_axis_column
         self.hover_data = hover_data
         self.df = df
         self.trace_name_list = trace_name_list
@@ -97,6 +100,8 @@ class StackedBarChart:
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.line_trace_name = line_trace_name
         self.x_axis_column = x_axis_column
+        self.x_unified_hovermode = x_unified_hovermode
+        self.hover_distance = hover_distance
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.fig = self.create_stacked_bar_chart()
@@ -120,6 +125,43 @@ class StackedBarChart:
             self.download_data_button_id,
         )
 
+    def is_json_serializable(self, value):
+        "Determines whether value can be converted to json format."
+        try:
+            json.dumps(value)
+            return True
+        except (TypeError, OverflowError):
+            return False
+
+    def to_dict(self):
+        "Converts class attributes to json format."
+        result = {}
+        for k, v in self.__dict__.items():
+            if self.is_json_serializable(v):
+                result[k] = v
+            elif isinstance(v, pl.DataFrame):
+                result[k] = {"_type": "polars_df", "data": v.to_dicts()}
+            elif hasattr(v, "to_dict"):
+                result[k] = {"_type": "custom", "data": v.to_dict()}
+            else:
+                result[k] = f"<<non-serializable: {type(v).__name__}>>"
+        return result
+
+    @classmethod
+    def from_dict(cls, data):
+        "Creates a class instance from dict of attributes."
+        restored = {}
+        for k, v in data.items():
+            if isinstance(v, dict) and "_type" in v:
+                if v["_type"] == "polars_df":
+                    restored[k] = pl.DataFrame(v["data"])
+                elif v["_type"] == "custom":
+                    # optionally restore known nested types here
+                    pass
+            else:
+                restored[k] = v
+        return cls(**restored)
+
     def get_stacked_bar_chart_for_download(self):
         """Return fig with title and subtitle for download as png"""
         return get_chart_for_download(self, self.create_stacked_bar_chart())
@@ -129,6 +171,7 @@ class StackedBarChart:
     ):
         """generates a stacked bar chart"""
         # pylint: disable=too-many-locals
+
         fig = go.Figure()
         colour_list = (
             AFAccessibleColours.CATEGORICAL.value
@@ -140,7 +183,7 @@ class StackedBarChart:
         )
         for _, (df, trace_name, colour) in enumerate(
             zip(
-                self._get_df_list_for_time_series(),
+                self._get_df_list_for_bar_chart(),
                 self.trace_name_list,
                 colour_list,
             )
@@ -177,7 +220,7 @@ class StackedBarChart:
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
-            legend=get_legend_configuration(),
+            legend=get_legend_configuration(reverse_order=True),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 "range": [min_y * 1.1, max_y * 1.1],
@@ -188,19 +231,11 @@ class StackedBarChart:
             showlegend=True,
             barmode="relative",
             xaxis={"categoryorder": "category ascending"},
+            ## copied from timeseries
+            hovermode="x unified" if self.x_unified_hovermode is True else "closest",
+            hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
         return fig
-
-    def _format_x_axis(self, fig):
-        tick_text, tick_values, range_x = self._get_x_axis_content()
-        fig.update_xaxes(
-            tickvals=tick_values,
-            ticktext=tick_text,
-            tickmode="array",
-            range=range_x,
-        )
-
-        return tick_values
 
     def create_bar_chart_trace(
         self,
@@ -232,6 +267,8 @@ class StackedBarChart:
         )
 
     def _get_hover_template(self, trace_name):
+        if self.x_unified_hovermode is True:
+            return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
         hover_template = (
             f"{trace_name}<br>"
@@ -246,36 +283,7 @@ class StackedBarChart:
         customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
         return customdata
 
-    def _get_x_axis_content(self):
-        """Generates tick text and values for the x-axis based on the unique years calculated from
-        the FINANCIAL_YEAR_ENDING column in the dataframe.
-        Returns:
-            tuple: A tuple containing tick_text, tick_values and range_x.
-        """
-        if self.xaxis_tick_text_format == XAxisFormat.YEAR.value:
-            year_list = self.df[FINANCIAL_YEAR_ENDING].unique().to_list()
-            int_min_year = int(min(year_list))
-            int_max_year = int(max(year_list))
-
-            tick_text = []
-            year = int_min_year
-            while year <= int_max_year:
-                tick_text.append(str(year + 1))
-                year = year + 1
-
-            tick_values = tick_text
-
-            range_x = [
-                tick_values[0],
-                tick_values[-1],
-            ]
-        else:
-            raise ValueError(
-                f"Invalid xaxis_tick_text_format: {self.xaxis_tick_text_format}"
-            )
-        return tick_text, tick_values, range_x
-
-    def _get_df_list_for_time_series(self) -> list[pl.DataFrame]:
+    def _get_df_list_for_bar_chart(self) -> list[pl.DataFrame]:
         if self.trace_name_column is not None:
             df_list = [
                 self.df.filter(pl.col(self.trace_name_column) == trace_name)

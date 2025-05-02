@@ -17,8 +17,8 @@ from gov_uk_dashboards.formatting.number_formatting import (
 
 class LeafletChoroplethMap:
     """Class for  generating leaflet choropleth map charts.
-    Note: dataframe_function must contain columns: 'Region', 'Area_Code',
-    column_to_plot, hover_text_columns
+    Note: Values in the numeric column should use 1 for the highest value, with larger numbers
+    representing lower values.
     If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
     discrete"""
 

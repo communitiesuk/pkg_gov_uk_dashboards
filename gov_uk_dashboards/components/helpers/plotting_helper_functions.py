@@ -4,7 +4,7 @@
 from gov_uk_dashboards.constants import CHART_LABEL_FONT_SIZE
 
 
-def get_legend_configuration(itemclick=True, itemdoubleclick=True):
+def get_legend_configuration(itemclick=True, itemdoubleclick=True, reverse_order=False):
     """
     Returns the legend configuration for charts with customizable interaction settings.
     Args:
@@ -12,9 +12,11 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True):
                           Set to True by default, allowing click interactions.
         itemdoubleclick (bool): Determines the behavior when double-clicking on a legend item.
                                 Set to True by default, allowing double-click interactions.
+        reverse_order (bool): Whether to reverse legend order. Defaults to False.
     Returns:
         dict: A dictionary containing the configuration settings for the legend.
     """
+    traceorder = {} if not reverse_order else {"traceorder": "reversed"}
     return {
         "x": 0,
         "y": -0.22,
@@ -24,6 +26,7 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True):
         "font": {"size": CHART_LABEL_FONT_SIZE},
         "itemclick": "toggle" if itemclick else False,
         "itemdoubleclick": "toggle" if itemdoubleclick else False,
+        **traceorder,
     }
 
 
