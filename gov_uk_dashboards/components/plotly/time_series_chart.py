@@ -160,6 +160,8 @@ class TimeSeriesChart:
         "Creates a class instance from dict of attributes."
         restored = {}
         for k, v in data.items():
+            if k == 'markers':  # Ignore or handle this key differently
+                continue
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
                     restored[k] = pl.DataFrame(v["data"])
