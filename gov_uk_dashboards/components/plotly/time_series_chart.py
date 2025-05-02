@@ -84,7 +84,7 @@ class TimeSeriesChart:
         hover_distance: Optional[int] = 1,
     ):
         self.title_data = title_data
-        self.y_axis_column = y_column
+        self.y_column = y_column
         self.hover_data = hover_data
         self.hover_data_for_traces_with_different_hover_for_last_point = (
             hover_data_for_traces_with_different_hover_for_last_point
@@ -243,10 +243,10 @@ class TimeSeriesChart:
             upper_trace = self.filled_traces_dict["upper"]
             lower_trace = self.filled_traces_dict["lower"]
             y_upper = fill_df.filter(pl.col(self.trace_name_column) == upper_trace)[
-                self.y_axis_column
+                self.y_column
             ].to_list()
             y_lower = fill_df.filter(pl.col(self.trace_name_column) == lower_trace)[
-                self.y_axis_column
+                self.y_column
             ].to_list()
             y_upper_formatted_value = fill_df.filter(
                 pl.col(self.trace_name_column) == upper_trace
@@ -389,7 +389,7 @@ class TimeSeriesChart:
         """
         return go.Scatter(
             x=df[self.x_axis_column],
-            y=df[self.y_axis_column],
+            y=df[self.y_column],
             line=line_style,
             name=self._get_trace_name(trace_name) + LEGEND_SPACING,
             hovertemplate=self._get_hover_template(df, trace_name),
@@ -580,7 +580,7 @@ class TimeSeriesChart:
     def _get_y_axis_range_max(self):
         """Get the y axis range maximum value to ensure there is an axis label greater than the
         maximum y value."""
-        largest_number_of_weeks = self.filtered_df[self.y_axis_column].max()
+        largest_number_of_weeks = self.filtered_df[self.y_column].max()
 
         y_axis_max = largest_number_of_weeks + (0.3 * largest_number_of_weeks)
         return y_axis_max
