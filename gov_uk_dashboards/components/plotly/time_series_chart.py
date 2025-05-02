@@ -1,7 +1,6 @@
 """get_time_series_chart function"""
 
 from datetime import datetime, date
-import json
 from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
@@ -112,7 +111,6 @@ class TimeSeriesChart:
         self.hover_distance = hover_distance
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
-        
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
