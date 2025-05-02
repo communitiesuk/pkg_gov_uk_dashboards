@@ -1,6 +1,7 @@
 """get_time_series_chart function"""
 
 from datetime import datetime, date
+import json
 from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
