@@ -131,6 +131,43 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+        
+    def is_json_serializable(self, value):
+        "Determines whether value can be converted to json format."
+        try:
+            json.dumps(value)
+            return True
+        except (TypeError, OverflowError):
+            return False
+
+    def to_dict(self):
+        "Converts class attributes to json format."
+        result = {}
+        for k, v in self.__dict__.items():
+            if self.is_json_serializable(v):
+                result[k] = v
+            elif isinstance(v, pl.DataFrame):
+                result[k] = {"_type": "polars_df", "data": v.to_dicts()}
+            elif hasattr(v, "to_dict"):
+                result[k] = {"_type": "custom", "data": v.to_dict()}
+            else:
+                result[k] = f"<<non-serializable: {type(v).__name__}>>"
+        return result
+
+    @classmethod
+    def from_dict(cls, data):
+        "Creates a class instance from dict of attributes."
+        restored = {}
+        for k, v in data.items():
+            if isinstance(v, dict) and "_type" in v:
+                if v["_type"] == "polars_df":
+                    restored[k] = pl.DataFrame(v["data"])
+                elif v["_type"] == "custom":
+                    # optionally restore known nested types here
+                    pass
+            else:
+                restored[k] = v
+        return cls(**restored)
 
     def get_time_series_chart_for_download(self):
         """Return fig with title and subtitle for download as png"""
