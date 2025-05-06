@@ -67,7 +67,7 @@ class StackedBarChart:
         hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
-        total_trace_name: Optional[str] = None
+        total_trace_name: Optional[str] = None,
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -91,8 +91,8 @@ class StackedBarChart:
                 if applicable. Defaults to None.
             download_data_button_id (Optional[str], optional): ID for the data download button, if
                 applicable. Defaults to None.
-            total_trace_name (Optional[str], optional): Name for an optional total to be added to 
-                bottom of hover text, must be in MEASURE column of df, line_trace_name will display 
+            total_trace_name (Optional[str], optional): Name for an optional total to be added to
+                bottom of hover text, must be in MEASURE column of df, line_trace_name will display
                 in legend. Defaults to None.
         """
         self.title_data = title_data
@@ -187,7 +187,7 @@ class StackedBarChart:
                     y=df[self.y_axis_column],
                     customdata=self._get_custom_data(self.total_trace_name, df),
                     mode="markers",
-                    marker=dict(color="white",opacity=0),
+                    marker={"color": 'white', "opacity": 0},
                     name=self.total_trace_name + LEGEND_SPACING,
                     hovertemplate="Total income: %{customdata[0]}<extra></extra>",
                     showlegend=False,
