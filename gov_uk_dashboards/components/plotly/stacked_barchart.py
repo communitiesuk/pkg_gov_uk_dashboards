@@ -187,7 +187,7 @@ class StackedBarChart:
                     y=df[self.y_axis_column],
                     customdata=self._get_custom_data(self.total_trace_name, df),
                     mode="markers",
-                    marker={"color": 'white', "opacity": 0},
+                    marker={"color": "white", "opacity": 0},
                     name=self.total_trace_name + LEGEND_SPACING,
                     hovertemplate="Total income: %{customdata[0]}<extra></extra>",
                     showlegend=False,
