@@ -151,7 +151,7 @@ class TimeSeriesChart:
                 result[k] = {"_type": "polars_df", "data": v.to_dicts()}
             elif hasattr(v, "to_dict"):
                 result[k] = {"_type": "custom", "data": v.to_dict()}
-            elif isinstance(v, (pd.Series, pl.Series)):
+            elif isinstance(v, pl.Series):
                 result[k] = {"_type": "series", "data": v.to_list()}
             else:
                 result[k] = f"<<non-serializable: {type(v).__name__}>>"
