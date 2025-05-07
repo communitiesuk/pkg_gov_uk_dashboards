@@ -141,6 +141,7 @@ class TimeSeriesChart:
         except (TypeError, OverflowError):
             return False
 
+
     def to_dict(self):
         "Converts class attributes to json format."
         result = {}
@@ -165,14 +166,17 @@ class TimeSeriesChart:
         for k, v in data.items():
             if k in ['markers','colour_list']:  # Ignore or handle this key differently
                 continue
-            if v["_type"] == "polars_series":
-                restored[k] = pl.Series(v["data"])  # or pd.Series(...) if you're using pandas
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
                     restored[k] = pl.DataFrame(v["data"])
+                elif v["_type"] == "polars_series":
+                    restored[k] = pl.Series(v["data"])
                 elif v["_type"] == "custom":
                     # optionally restore known nested types here
                     pass
+                else:
+                    # Unknown type - leave it as is or log a warning
+                    restored[k] = v
             else:
                 restored[k] = v
         return cls(**restored)
