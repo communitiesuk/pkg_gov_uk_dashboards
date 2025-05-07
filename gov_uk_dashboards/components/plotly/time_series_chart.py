@@ -1,6 +1,7 @@
 """get_time_series_chart function"""
 
 from datetime import datetime, date
+import json
 from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
@@ -58,7 +59,7 @@ class TimeSeriesChart:
     def __init__(
         self,
         title_data: TitleDataStructure,
-        y_column: str,
+        y_axis_column: str,
         hover_data: HoverDataByTrace,
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
@@ -83,7 +84,7 @@ class TimeSeriesChart:
         hover_distance: Optional[int] = 1,
     ):
         self.title_data = title_data
-        self.y_axis_column = y_column
+        self.y_axis_column = y_axis_column
         self.hover_data = hover_data
         self.hover_data_for_traces_with_different_hover_for_last_point = (
             hover_data_for_traces_with_different_hover_for_last_point
@@ -95,7 +96,7 @@ class TimeSeriesChart:
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.verticle_line_x_value_and_name = verticle_line_x_value_and_name
         self.filled_traces_dict = filled_traces_dict
-        self.trace_names_to_prevent_hover_of_first_point = (
+        self.trace_names_to_prevent_hover_of_first_point_list = (
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
@@ -114,7 +115,6 @@ class TimeSeriesChart:
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
-
         Returns:
             html.Div: Styled div containing title, subtile and chart.
         """
@@ -131,6 +131,49 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+
+    def is_json_serializable(self, value):
+        "Determines whether value can be converted to json format."
+        # pylint: disable=duplicate-code
+        try:
+            json.dumps(value)
+            return True
+        except (TypeError, OverflowError):
+            return False
+
+    def to_dict(self):
+        "Converts class attributes to json format."
+        # pylint: disable=duplicate-code
+        result = {}
+        for k, v in self.__dict__.items():
+            if self.is_json_serializable(v):
+                result[k] = v
+            elif isinstance(v, pl.DataFrame):
+                result[k] = {"_type": "polars_df", "data": v.to_dicts()}
+            elif isinstance(v, pl.Series):
+                result[k] = {"_type": "series", "data": v.to_list()}
+            else:
+                result[k] = f"<<non-serializable: {type(v).__name__}>>"
+        return result
+
+    @classmethod
+    def from_dict(cls, data):
+        "Creates a class instance from dict of attributes."
+        restored = {}
+        for k, v in data.items():
+            if k in ["markers", "colour_list", "fig"]:
+                continue
+            if isinstance(v, dict) and "_type" in v:
+                if v["_type"] == "polars_df":
+                    restored[k] = pl.DataFrame(v["data"])
+                elif v["_type"] == "polars_series":
+                    restored[k] = pl.Series(v["data"])
+                else:
+                    # Fallback for unknown _type
+                    restored[k] = v.get("data", None)
+            else:
+                restored[k] = v
+        return cls(**restored)
 
     def get_time_series_chart_for_download(self):
         """Return fig with title and subtitle for download as png"""
@@ -340,7 +383,6 @@ class TimeSeriesChart:
         legendgroup: str,
     ):
         """Creates a trace for the plot.
-
         Args:
             df (pl.DataFrame): Dataframe to use to create trace. Must contain "Date valid" column,
             y_value column and columns defined in self.hover_data[CUSTOM_DATA].
@@ -369,8 +411,8 @@ class TimeSeriesChart:
             (
                 ""
                 if i == 0
-                and self.trace_names_to_prevent_hover_of_first_point is not None
-                and trace_name in self.trace_names_to_prevent_hover_of_first_point
+                and self.trace_names_to_prevent_hover_of_first_point_list is not None
+                and trace_name in self.trace_names_to_prevent_hover_of_first_point_list
                 else self._get_custom_hover_template(i, df, trace_name)
             )
             for i in range(df.shape[0])  # the number of rows in df
