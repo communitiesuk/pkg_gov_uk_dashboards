@@ -140,7 +140,6 @@ class TimeSeriesChart:
         except (TypeError, OverflowError):
             return False
 
-
     def to_dict(self):
         "Converts class attributes to json format."
         result = {}
@@ -160,7 +159,7 @@ class TimeSeriesChart:
         "Creates a class instance from dict of attributes."
         restored = {}
         for k, v in data.items():
-            if k in ['markers', 'colour_list','fig']:
+            if k in ["markers", "colour_list", "fig"]:
                 continue
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
