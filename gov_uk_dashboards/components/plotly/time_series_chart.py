@@ -134,6 +134,7 @@ class TimeSeriesChart:
 
     def is_json_serializable(self, value):
         "Determines whether value can be converted to json format."
+        # pylint: disable=duplicate-code
         try:
             json.dumps(value)
             return True
@@ -142,6 +143,7 @@ class TimeSeriesChart:
 
     def to_dict(self):
         "Converts class attributes to json format."
+        # pylint: disable=duplicate-code
         result = {}
         for k, v in self.__dict__.items():
             if self.is_json_serializable(v):
