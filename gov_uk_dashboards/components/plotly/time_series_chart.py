@@ -149,13 +149,10 @@ class TimeSeriesChart:
                 result[k] = v
             elif isinstance(v, pl.DataFrame):
                 result[k] = {"_type": "polars_df", "data": v.to_dicts()}
-            elif hasattr(v, "to_dict"):
-                result[k] = {"_type": "custom", "data": v.to_dict()}
             elif isinstance(v, pl.Series):
                 result[k] = {"_type": "series", "data": v.to_list()}
             else:
                 result[k] = f"<<non-serializable: {type(v).__name__}>>"
-                # raise error?
         return result
 
     @classmethod
@@ -170,9 +167,6 @@ class TimeSeriesChart:
                     restored[k] = pl.DataFrame(v["data"])
                 elif v["_type"] == "polars_series":
                     restored[k] = pl.Series(v["data"])
-                elif v["_type"] == "custom":
-                    # Add custom object reconstruction here if needed
-                    restored[k] = v["data"]  # or call appropriate .from_dict()
                 else:
                     # Fallback for unknown _type
                     restored[k] = v.get("data", None)
