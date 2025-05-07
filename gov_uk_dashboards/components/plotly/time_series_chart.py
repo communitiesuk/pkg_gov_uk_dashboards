@@ -6,6 +6,7 @@ from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
 import polars as pl
+import pandas as pd
 
 import plotly.graph_objects as go
 
@@ -115,7 +116,6 @@ class TimeSeriesChart:
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
-
         Returns:
             html.Div: Styled div containing title, subtile and chart.
         """
@@ -132,7 +132,7 @@ class TimeSeriesChart:
             self.download_chart_button_id,
             self.download_data_button_id,
         )
-        
+
     def is_json_serializable(self, value):
         "Determines whether value can be converted to json format."
         try:
@@ -151,8 +151,11 @@ class TimeSeriesChart:
                 result[k] = {"_type": "polars_df", "data": v.to_dicts()}
             elif hasattr(v, "to_dict"):
                 result[k] = {"_type": "custom", "data": v.to_dict()}
+            elif isinstance(v, (pd.Series, pl.Series)):
+                return {"_type": "series", "data": v.to_list()}
             else:
                 result[k] = f"<<non-serializable: {type(v).__name__}>>"
+                # raise error?
         return result
 
     @classmethod
@@ -162,6 +165,8 @@ class TimeSeriesChart:
         for k, v in data.items():
             if k in ['markers','colour_list']:  # Ignore or handle this key differently
                 continue
+            if v["_type"] == "polars_series":
+                restored[k] = pl.Series(v["data"])  # or pd.Series(...) if you're using pandas
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
                     restored[k] = pl.DataFrame(v["data"])
@@ -207,6 +212,7 @@ class TimeSeriesChart:
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
+        print("***",self.trace_name_list)
         for i, (df, trace_name, colour, marker,) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -380,7 +386,6 @@ class TimeSeriesChart:
         legendgroup: str,
     ):
         """Creates a trace for the plot.
-
         Args:
             df (pl.DataFrame): Dataframe to use to create trace. Must contain "Date valid" column,
             y_value column and columns defined in self.hover_data[CUSTOM_DATA].
@@ -389,6 +394,7 @@ class TimeSeriesChart:
             marker (dict[str,str]): Properties for marker parameter.
             legendgroup (str): Name to group by in legend,
         """
+        print(self._get_custom_data(df, trace_name))
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_column],
@@ -446,7 +452,10 @@ class TimeSeriesChart:
 
     def _get_custom_data(self, df, trace_name):
         # For last points of trace_name in [], we want different custom data.
+        print("%%%",self.hover_data)
+        print(trace_name)
         customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
+        print("custom_data",customdata)
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
             and trace_name
