@@ -146,6 +146,7 @@ class TimeSeriesChart:
         "Converts class attributes to json format."
         result = {}
         for k, v in self.__dict__.items():
+            print("k:",k,"v:",v)
             if self.is_json_serializable(v):
                 result[k] = v
             elif isinstance(v, pl.DataFrame):
@@ -153,7 +154,7 @@ class TimeSeriesChart:
             elif hasattr(v, "to_dict"):
                 result[k] = {"_type": "custom", "data": v.to_dict()}
             elif isinstance(v, (pd.Series, pl.Series)):
-                return {"_type": "series", "data": v.to_list()}
+                result[k] = {"_type": "series", "data": v.to_list()}
             else:
                 result[k] = f"<<non-serializable: {type(v).__name__}>>"
                 # raise error?
