@@ -6,7 +6,6 @@ from typing import Optional
 from dateutil.relativedelta import relativedelta
 from dash import html
 import polars as pl
-import pandas as pd
 
 import plotly.graph_objects as go
 
@@ -216,7 +215,6 @@ class TimeSeriesChart:
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
-        print("***",self.trace_name_list)
         for i, (df, trace_name, colour, marker,) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
@@ -398,7 +396,6 @@ class TimeSeriesChart:
             marker (dict[str,str]): Properties for marker parameter.
             legendgroup (str): Name to group by in legend,
         """
-        print(self._get_custom_data(df, trace_name))
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_column],
@@ -456,10 +453,7 @@ class TimeSeriesChart:
 
     def _get_custom_data(self, df, trace_name):
         # For last points of trace_name in [], we want different custom data.
-        print("%%%",self.hover_data)
-        print(trace_name)
         customdata = df[self.hover_data[trace_name][CUSTOM_DATA]]
-        print("custom_data",customdata)
         if (
             self.hover_data_for_traces_with_different_hover_for_last_point is not None
             and trace_name
