@@ -146,7 +146,6 @@ class TimeSeriesChart:
         "Converts class attributes to json format."
         result = {}
         for k, v in self.__dict__.items():
-            print("k:",k,"v:",v)
             if self.is_json_serializable(v):
                 result[k] = v
             elif isinstance(v, pl.DataFrame):
@@ -165,7 +164,7 @@ class TimeSeriesChart:
         "Creates a class instance from dict of attributes."
         restored = {}
         for k, v in data.items():
-            if k in ['markers','colour_list']:  # Ignore or handle this key differently
+            if k in ['markers', 'colour_list','fig']:
                 continue
             if isinstance(v, dict) and "_type" in v:
                 if v["_type"] == "polars_df":
@@ -173,11 +172,11 @@ class TimeSeriesChart:
                 elif v["_type"] == "polars_series":
                     restored[k] = pl.Series(v["data"])
                 elif v["_type"] == "custom":
-                    # optionally restore known nested types here
-                    pass
+                    # Add custom object reconstruction here if needed
+                    restored[k] = v["data"]  # or call appropriate .from_dict()
                 else:
-                    # Unknown type - leave it as is or log a warning
-                    restored[k] = v
+                    # Fallback for unknown _type
+                    restored[k] = v.get("data", None)
             else:
                 restored[k] = v
         return cls(**restored)
