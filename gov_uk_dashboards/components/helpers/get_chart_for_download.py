@@ -17,7 +17,19 @@ def get_chart_for_download(self, fig):
         title_subtitle={
             "text": f"<b><span style='color: black; margin: 0px 0px 5px'>{subtitle}</span></b>"
         },
-        footnote={"text": f"<span style='color: black; margin: 0px 0px 5px'>{footnote}</span>","y":0.8},
-        margin={"t": 100},
+        annotations=[
+            dict(
+                text=f"<span style='color: black; font-size: 18px;'>{footnote}</span>",
+                x=-0.01,
+                y=-0.4,  # Bottom of the plotting area
+                xref="paper",
+                yref="paper",
+                xanchor="left",
+                yanchor="top",
+                showarrow=False,
+                align="left",
+            )
+        ],
     )
+    # fig.update_layout(margin=dict(b=500))
     return fig
