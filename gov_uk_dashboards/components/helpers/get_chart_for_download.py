@@ -6,6 +6,7 @@ def get_chart_for_download(self, fig):
     """Returns a fig with title and subtitle for download as png"""
     main_title = self.title_data[MAIN_TITLE]
     subtitle = self.title_data[SUBTITLE]
+    footnote = self.footnote
 
     fig.update_layout(
         title={
@@ -16,6 +17,7 @@ def get_chart_for_download(self, fig):
         title_subtitle={
             "text": f"<b><span style='color: black; margin: 0px 0px 5px'>{subtitle}</span></b>"
         },
+        footnote={"text": f"<span style='color: black; margin: 0px 0px 5px'>{footnote}</span>","y":0.8},
         margin={"t": 100},
     )
     return fig

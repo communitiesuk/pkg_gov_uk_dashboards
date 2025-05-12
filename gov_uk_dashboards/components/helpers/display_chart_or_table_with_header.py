@@ -52,7 +52,7 @@ def display_chart_or_table_with_header(
                 ]
             ),
             chart_or_table,
-            paragraph(footnote),
+            html.Div([paragraph(footnote)],style={"padding-top":"20px"}),
             html.Div(
                 (
                     [
