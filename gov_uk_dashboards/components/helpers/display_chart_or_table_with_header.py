@@ -7,6 +7,7 @@ from gov_uk_dashboards.components.dash.download_button import (
     create_download_button_with_icon,
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
+from gov_uk_dashboards.components.dash.paragraph import paragraph
 
 
 def display_chart_or_table_with_header(
@@ -15,6 +16,7 @@ def display_chart_or_table_with_header(
     sub_heading: str = None,
     download_button_id: str = None,
     download_data_button_id: str = None,
+    footnote: str = None
 ) -> html.Div:
     """Generate the wrapping information/header for a chart or table.
 
@@ -50,6 +52,7 @@ def display_chart_or_table_with_header(
                 ]
             ),
             chart_or_table,
+            paragraph(footnote),
             html.Div(
                 (
                     [

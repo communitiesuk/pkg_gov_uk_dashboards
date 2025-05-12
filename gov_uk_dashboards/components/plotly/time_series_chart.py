@@ -82,6 +82,7 @@ class TimeSeriesChart:
         number_of_traces_colour_shift_dict: Optional[dict] = None,
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
+        footnote = Optional[str]=None
     ):
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -112,6 +113,7 @@ class TimeSeriesChart:
         self.hover_distance = hover_distance
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
+        self.footnote = footnote
 
     def get_time_series_chart(self) -> html.Div:
         """Creates and returns time series chart for display on application.
@@ -130,6 +132,7 @@ class TimeSeriesChart:
             self.title_data[SUBTITLE],
             self.download_chart_button_id,
             self.download_data_button_id,
+            self.footnote
         )
 
     def is_json_serializable(self, value):
