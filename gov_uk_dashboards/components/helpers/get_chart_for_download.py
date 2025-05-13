@@ -6,7 +6,7 @@ def get_chart_for_download(self, fig):
     """Returns a fig with title and subtitle for download as png"""
     main_title = self.title_data[MAIN_TITLE]
     subtitle = self.title_data[SUBTITLE]
-    footnote = self.footnote
+    footnote = getattr(self, "footnote", None)
 
     fig.update_layout(
         title={
@@ -29,6 +29,8 @@ def get_chart_for_download(self, fig):
                 "showarrow": False,
                 "align": "left",
             }
-        ],
+        ]
+        if footnote is not None
+        else [],
     )
     return fig
