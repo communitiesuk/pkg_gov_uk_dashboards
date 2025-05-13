@@ -64,6 +64,7 @@ class StackedBarChart:
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         line_trace_name: Optional[str] = None,
         x_axis_column=DATE_VALID,
+        show_x_axis_title=False,
         x_unified_hovermode: Optional[bool] = False,
         hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
@@ -81,8 +82,6 @@ class StackedBarChart:
             trace_name_list (list[str]): List of trace names for the stacked bars.
             trace_name_column (Optional[str], optional): Column name representing trace categories,
                 if applicable. Defaults to None.
-            initially_hidden_trace (Optional[str], optional): Trace name to be hidden on initial 
-                load. Inintially greyed out in legend but displays when clicked.
             xaxis_tick_text_format (XAxisFormat, optional): Format for X-axis tick labels.
                 Defaults to XAxisFormat.YEAR.value.
             line_trace_name (Optional[str], optional): Name for an optional line trace overlay,
@@ -108,6 +107,7 @@ class StackedBarChart:
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.line_trace_name = line_trace_name
         self.x_axis_column = x_axis_column
+        self.show_x_axis_title=show_x_axis_title
         self.x_unified_hovermode = x_unified_hovermode
         self.hover_distance = hover_distance
         self.download_chart_button_id = download_chart_button_id
@@ -257,6 +257,7 @@ class StackedBarChart:
             showlegend=True,
             barmode="relative",
             xaxis={"categoryorder": "category ascending"},
+            xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
             ## copied from timeseries
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
