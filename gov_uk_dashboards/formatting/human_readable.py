@@ -46,8 +46,13 @@ def format_as_human_readable(
         value_suffix = "k"
 
     if decimal_places is not None:
-        value = round(value, decimal_places)
-    if value < 0:
-        prefix = f"-{prefix}"
+        is_negative = value < 0
         value = abs(value)
-    return f"{prefix}{value:g}{value_suffix}{suffix}"
+        formatted_value = f"{value:.{decimal_places}f}"
+    else:
+        is_negative = value < 0
+        formatted_value = f"{abs(value):g}"
+
+    if is_negative:
+        prefix = f"-{prefix}"
+    return f"{prefix}{formatted_value}{value_suffix}{suffix}"
