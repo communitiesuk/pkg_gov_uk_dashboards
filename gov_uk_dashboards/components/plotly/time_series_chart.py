@@ -82,7 +82,7 @@ class TimeSeriesChart:
         number_of_traces_colour_shift_dict: Optional[dict] = None,
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
-        footnote: Optional[str]=None
+        footnote: Optional[str] = None,
     ):
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -132,7 +132,7 @@ class TimeSeriesChart:
             self.title_data[SUBTITLE],
             self.download_chart_button_id,
             self.download_data_button_id,
-            self.footnote
+            self.footnote,
         )
 
     def is_json_serializable(self, value):

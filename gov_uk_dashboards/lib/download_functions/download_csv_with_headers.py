@@ -38,7 +38,7 @@ def download_csv_with_headers(
     }  # range is missing columns in first df compared to max columns across all dfs
 
     subtitle = list_of_df_title_subtitle_dicts[0]["subtitle"]
-
+    footnote = list_of_df_title_subtitle_dicts[0]["footnote"]
     header_data = [
         {column_list[0]: "Date downloaded: " + get_todays_date_for_downloaded_csv()},
         *(
@@ -53,6 +53,7 @@ def download_csv_with_headers(
         ),  # Uses unpacking (*) to add the subtitle row if subtitle is not None. If subtitle is
         # None, it unpacks an empty list, effectively skipping the row.
         {column_list[0]: None},  # Blank row
+        *([{column_list[0]: footnote}] if footnote is not None else []),
         {**column_dict, **blank_dict},
     ]
 
@@ -60,12 +61,11 @@ def download_csv_with_headers(
         header_data = [{column_list[0]: sensitivity_label}] + header_data
 
     pl.DataFrame(header_data).write_csv(csv_buffer, include_header=False)
-
     for i, data in enumerate(list_of_df_title_subtitle_dicts):
         df = data["df"]
         title = data["title"]
         subtitle = data["subtitle"]
-
+        footnote = data.get("footnote")
         if i > 0 and title is not None:
             column_dict = {column_name: column_name for column_name in list(df.columns)}
             header_data = [
@@ -75,6 +75,7 @@ def download_csv_with_headers(
                 ),  # Uses unpacking (*) to add the subtitle row if subtitle is not None. If
                 # subtitle is None, it unpacks an empty list, effectively skipping the row.
                 {column_list[0]: None},  # Blank row
+                *([{column_list[0]: footnote}] if footnote is not None else []),
             ]
             pl.DataFrame(header_data).write_csv(csv_buffer, include_header=False)
         df.write_csv(csv_buffer, include_header=i > 0)
