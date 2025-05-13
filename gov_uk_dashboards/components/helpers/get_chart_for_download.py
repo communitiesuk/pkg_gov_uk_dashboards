@@ -31,5 +31,4 @@ def get_chart_for_download(self, fig):
             }
         ],
     )
-    # fig.update_layout(margin=dict(b=500))
     return fig
