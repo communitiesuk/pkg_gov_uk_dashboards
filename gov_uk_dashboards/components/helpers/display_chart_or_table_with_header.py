@@ -10,6 +10,8 @@ from gov_uk_dashboards.components.dash.heading import HeadingSizes
 from gov_uk_dashboards.components.dash.paragraph import paragraph
 
 
+# pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
 def display_chart_or_table_with_header(
     chart_or_table: Component,
     heading: str = None,
@@ -27,6 +29,7 @@ def display_chart_or_table_with_header(
         download_button_id (str, optional): id for download button if required. Defaults to None.
                                             if None then the button will not be included.
         download_data_button_id (str, optional): the id to be applied to the download data button.
+        footnote (str, optional): the footnote to be added to charts and downloads.
 
     Returns:
         html.Div: Div containing Header and chart/table.
