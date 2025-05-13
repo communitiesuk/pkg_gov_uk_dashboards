@@ -29,6 +29,8 @@ def get_chart_for_download(self, fig):
                 "showarrow": False,
                 "align": "left",
             }
-        ] if footnote is not None else [],
+        ]
+        if footnote is not None
+        else [],
     )
     return fig
