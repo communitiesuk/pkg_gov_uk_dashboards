@@ -280,11 +280,19 @@ class StackedBarChart:
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             colour (str): Colour for bar.
         """
+        if (
+            self.initially_hidden_traces is not None
+            and trace_name in self.initially_hidden_traces
+        ):
+            visible = "legendonly"
+        else:
+            visible = True
+
         return go.Bar(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             name=trace_name + LEGEND_SPACING,
-            visible="legendonly" if trace_name in self.initially_hidden_traces else True,
+            visible=visible,
             hovertemplate=[
                 self._get_hover_template(trace_name) for i in range(df.shape[0])
             ],
