@@ -60,7 +60,7 @@ class StackedBarChart:
         df: pl.DataFrame,
         trace_name_list: list[str],
         trace_name_column: Optional[str] = None,
-        initially_hidden_trace: Optional[list[str]] = None,
+        initially_hidden_traces: Optional[list[str]] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         line_trace_name: Optional[str] = None,
         x_axis_column=DATE_VALID,
@@ -103,7 +103,7 @@ class StackedBarChart:
         self.df = df
         self.trace_name_list = trace_name_list
         self.trace_name_column = trace_name_column
-        self.initially_hidden_trace = initially_hidden_trace
+        self.initially_hidden_traces = initially_hidden_traces
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.line_trace_name = line_trace_name
         self.x_axis_column = x_axis_column
@@ -284,7 +284,7 @@ class StackedBarChart:
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             name=trace_name + LEGEND_SPACING,
-            visible="legendonly" if trace_name in self.initially_hidden_trace else True,
+            visible="legendonly" if trace_name in self.initially_hidden_traces else True,
             hovertemplate=[
                 self._get_hover_template(trace_name) for i in range(df.shape[0])
             ],
