@@ -60,9 +60,11 @@ class StackedBarChart:
         df: pl.DataFrame,
         trace_name_list: list[str],
         trace_name_column: Optional[str] = None,
+        initially_hidden_traces: Optional[list[str]] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
         line_trace_name: Optional[str] = None,
         x_axis_column=DATE_VALID,
+        show_x_axis_title=False,
         x_unified_hovermode: Optional[bool] = False,
         hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
@@ -101,9 +103,11 @@ class StackedBarChart:
         self.df = df
         self.trace_name_list = trace_name_list
         self.trace_name_column = trace_name_column
+        self.initially_hidden_traces = initially_hidden_traces
         self.xaxis_tick_text_format = xaxis_tick_text_format
         self.line_trace_name = line_trace_name
         self.x_axis_column = x_axis_column
+        self.show_x_axis_title = show_x_axis_title
         self.x_unified_hovermode = x_unified_hovermode
         self.hover_distance = hover_distance
         self.download_chart_button_id = download_chart_button_id
@@ -253,6 +257,7 @@ class StackedBarChart:
             showlegend=True,
             barmode="relative",
             xaxis={"categoryorder": "category ascending"},
+            xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
             ## copied from timeseries
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
@@ -275,11 +280,19 @@ class StackedBarChart:
             hover_label (dict[str,str]): Properties for hoverlabel parameter.
             colour (str): Colour for bar.
         """
+        if (
+            self.initially_hidden_traces is not None
+            and trace_name in self.initially_hidden_traces
+        ):
+            visible = "legendonly"
+        else:
+            visible = True
 
         return go.Bar(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
             name=trace_name + LEGEND_SPACING,
+            visible=visible,
             hovertemplate=[
                 self._get_hover_template(trace_name) for i in range(df.shape[0])
             ],

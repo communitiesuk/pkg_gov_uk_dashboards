@@ -45,9 +45,25 @@ def format_as_human_readable(
         value = value_to_format / 1_000
         value_suffix = "k"
 
-    if decimal_places is not None:
-        value = round(value, decimal_places)
-    if value < 0:
+    # Handle negative numbers
+    is_negative = value < 0
+    if is_negative:
         prefix = f"-{prefix}"
         value = abs(value)
-    return f"{prefix}{value:g}{value_suffix}{suffix}"
+
+    if decimal_places is not None:
+        if decimal_places < 0:
+            # Round to significant digits when decimal_places is negative
+            magnitude = 10 ** (-decimal_places)
+            value = round(value / magnitude) * magnitude
+            formatted_value = (
+                f"{value:g}"  # Use general format to show significant digits
+            )
+        else:
+            # Round to the specified number of decimal places
+            value = round(value, decimal_places)
+            formatted_value = f"{value:.{decimal_places}f}"
+    else:
+        formatted_value = f"{value:g}"
+
+    return f"{prefix}{formatted_value}{value_suffix}{suffix}"
