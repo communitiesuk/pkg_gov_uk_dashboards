@@ -46,6 +46,9 @@ def create_download_button_with_icon(
     - html.Button: Download button.
     """
     download_type = button_text.lower().replace(" ", "-")
+    if "map" in button_id_name:
+        download_type = "download-map"
+    print(download_type, button_id_name)
     return html.Button(
         [
             html.Div("", className="download-icon"),
