@@ -13,12 +13,15 @@ from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header imp
 from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
+from gov_uk_dashboards.components.helpers.get_chart_for_download import (
+    get_chart_for_download,
+)
 
 
 class LeafletChoroplethMap:
     """Class for  generating leaflet choropleth map charts.
-    Note: Values in the numeric column should use 1 for the highest value, with larger numbers
-    representing lower values.
+    Note: dataframe_function must contain columns: 'Region', 'Area_Code',
+    column_to_plot, hover_text_columns
     If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
     discrete"""
 
@@ -64,6 +67,17 @@ class LeafletChoroplethMap:
         Returns:
             dl.Map: A dash leaflet map chart.
         """
+        
+        
+        choropleth_map = self.get_map_fig()
+        return display_chart_or_table_with_header(
+            choropleth_map,
+            self.title,
+            self.subtitle,
+            self.download_chart_button_id,
+            self.download_data_button_id,
+        )
+    def get_map_fig(self):
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
             "dragging": False,
@@ -72,7 +86,7 @@ class LeafletChoroplethMap:
             "touchZoom": False,
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
-        choropleth_map = dl.Map(
+        return dl.Map(
             children=[
                 dl.TileLayer() if self.show_tile_layer else None,
                 self._get_colorbar(),
@@ -88,13 +102,9 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "100%", "height": "800px", "background": "white"},
         )
-        return display_chart_or_table_with_header(
-            choropleth_map,
-            self.title,
-            self.subtitle,
-            self.download_chart_button_id,
-            self.download_data_button_id,
-        )
+    def get_map_for_download(self):
+        """Return fig with title and subtitle for download as png"""
+        return get_chart_for_download(self, self.get_map_fig())
 
     def _add_data_to_geojson(self):
         info_map = {
