@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       btn.addEventListener("click", () => {
-        const mapDiv = document.getElementById("map-container");
+        const mapDiv = document.getElementById("hidden-map-container");
         if (!mapDiv) {
           alert("Map container not found");
           return;
