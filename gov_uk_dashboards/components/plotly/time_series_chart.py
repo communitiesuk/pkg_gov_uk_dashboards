@@ -107,7 +107,14 @@ class TimeSeriesChart:
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
-        self.markers = ["square", "diamond", "circle", "triangle-up", "x", "triangle-down"]
+        self.markers = [
+            "square",
+            "diamond",
+            "circle",
+            "triangle-up",
+            "x",
+            "triangle-down",
+        ]
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
         self.additional_line = additional_line
         self.hover_distance = hover_distance
