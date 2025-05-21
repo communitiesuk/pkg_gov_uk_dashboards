@@ -88,13 +88,49 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "100%", "height": "800px", "background": "white"},
         )
-        return display_chart_or_table_with_header(
+        download_choropleth_map = dl.Map(
+            children=[
+                dl.TileLayer() if self.show_tile_layer else None,
+                self._get_colorbar(),
+                self._get_colorbar_title(),
+                self._get_dl_geojson(),
+            ],
+            # center=[74.5, -12.5],  # Centered on the UK
+            center=[53.5,-10.5],
+            zoom=8,
+            # minZoom=6.5,
+            # maxZoom=10 if self.enable_zoom else 6.5,
+            maxBounds=[[49.5, -40], [55.5, 2]],
+            # **zoom_controls,
+            zoomControl=False,
+            attributionControl=False,
+            style={"width": "80%", "height": "1200px", "background": "white"},
+        )
+        choropleth_map=display_chart_or_table_with_header(
             choropleth_map,
             self.title,
             self.subtitle,
             self.download_chart_button_id,
             self.download_data_button_id,
         )
+        download_choropleth_map_display=display_chart_or_table_with_header(
+            download_choropleth_map,
+            self.title,
+            self.subtitle,
+        )
+        
+        return [
+            html.Button("Download Map as PNG", id="btn-download", n_clicks=0),
+            choropleth_map, 
+            html.Div(
+                [download_choropleth_map_display],id="hidden-map-container",style={
+                            "position": "absolute",
+                            "top": "-10000px",
+                            "left": "-10000px",
+                        },#hide off screen
+                    ),
+            ]
+
 
     def _add_data_to_geojson(self):
         info_map = {
