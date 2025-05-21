@@ -38,7 +38,7 @@ def download_csv_with_headers(
     }  # range is missing columns in first df compared to max columns across all dfs
 
     subtitle = list_of_df_title_subtitle_dicts[0]["subtitle"]
-    footnote = list_of_df_title_subtitle_dicts[0]["footnote"]
+    footnote = list_of_df_title_subtitle_dicts[0].get("footnote")
     header_data = [
         {column_list[0]: "Date downloaded: " + get_todays_date_for_downloaded_csv()},
         *(
