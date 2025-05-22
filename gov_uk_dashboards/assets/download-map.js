@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         html2canvas(mapDiv,{ useCORS: true, scale: 1 }).then(originalCanvas => {
           const cropHeight = originalCanvas.height - 300;
+          const cropWidth = originalCanvas.width;
 
           const croppedCanvas = document.createElement("canvas");
           croppedCanvas.width = cropWidth;
