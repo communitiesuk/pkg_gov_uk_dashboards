@@ -121,7 +121,6 @@ class LeafletChoroplethMap:
         )
         
         return [
-            html.Button("Download Map as PNG", id="btn-download", n_clicks=0),
             choropleth_map, 
             html.Div(
                 [download_choropleth_map_display],id=f"{self.download_chart_button_id}-hidden-map-container",style={
