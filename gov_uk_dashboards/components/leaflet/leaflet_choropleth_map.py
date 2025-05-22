@@ -96,15 +96,15 @@ class LeafletChoroplethMap:
                 self._get_dl_geojson(),
             ],
             # center=[74.5, -12.5],  # Centered on the UK
-            center=[54.5, -20.0],
-            zoom=8,
+            center=[54.5, -25.0],
+            zoom=7.5,
             # minZoom=6.5,
             # maxZoom=10 if self.enable_zoom else 6.5,
-            maxBounds=[[49.5, -20], [60, 10]],
+            maxBounds=[[49.5, -30], [60, 2]],
             # **zoom_controls,
             zoomControl=False,
             attributionControl=False,
-            style={"width": "80%", "height": "1200px", "background": "white"},
+            style={"width": "1200px", "height": "1200px", "background": "white"},
         )
         choropleth_map=display_chart_or_table_with_header(
             choropleth_map,
