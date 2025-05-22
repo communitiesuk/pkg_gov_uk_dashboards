@@ -18,10 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
   
-        html2canvas(mapDiv,{ useCORS: true }).then(canvas => {
+        html2canvas(mapDiv,{ useCORS: true, scale: 1 }).then(originalCanvas => {
+          const cropHeight = originalCanvas.height - 300;
+
+          const croppedCanvas = document.createElement("canvas");
+          croppedCanvas.width = cropWidth;
+          croppedCanvas.height = cropHeight;
+
+          const ctx = croppedCanvas.getContext("2d");
+
+          // Draw only the top portion (no scaling)
+          ctx.drawImage(
+            originalCanvas,
+            0, 0,                     // source x, y
+            originalCanvas.width, cropHeight,    // source width, height (cut off bottom)
+            0, 0,                     // destination x, y
+            originalCanvas.width, cropHeight     // destination size = source size (no scaling)
+          );
           const link = document.createElement("a");
           link.download = "map.png";
-          link.href = canvas.toDataURL("image/png");
+          link.href = croppedCanvas.toDataURL("image/png");
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
