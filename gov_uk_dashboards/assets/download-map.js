@@ -1,14 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-    function waitForButton() {
-      const btn = document.getElementById("btn-download");
-      if (!btn) {
-        console.error("Button with id 'btn-download' not found, retrying...");
-        setTimeout(waitForButton, 100); // Retry after 100ms
-        return;
-      }
-  
-      btn.addEventListener("click", () => {
-        const mapDiv = document.getElementById("hidden-map-container");
+  function waitForDownloadButtons() {
+    const buttons = document.querySelectorAll("button[id*='-map']");
+
+    if (buttons.length === 0) {
+      console.warn("No buttons found, retrying...");
+      setTimeout(waitForDownloadButtons, 100); // Retry after 100ms
+      return;
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        const clickedButton = event.currentTarget;
+        const id = clickedButton.id;  
+
+        const mapDiv = document.getElementById(`${id}-hidden-map-container`);
         if (!mapDiv) {
           alert("Map container not found");
           return;
@@ -17,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("html2canvas is not loaded");
           return;
         }
-  
-        html2canvas(mapDiv,{ useCORS: true, scale: 1 }).then(originalCanvas => {
+
+        html2canvas(mapDiv, { useCORS: true, scale: 1 }).then(originalCanvas => {
           const cropHeight = originalCanvas.height - 300;
           const cropWidth = originalCanvas.width;
 
@@ -27,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
           croppedCanvas.height = cropHeight;
 
           const ctx = croppedCanvas.getContext("2d");
-
+          
           // Draw only the top portion (no scaling)
           ctx.drawImage(
             originalCanvas,
@@ -36,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
             0, 0,                     // destination x, y
             originalCanvas.width, cropHeight     // destination size = source size (no scaling)
           );
+
           const link = document.createElement("a");
-          link.download = "map.png";
+          link.download = `${id}.png`;  // Use button name for filename
           link.href = croppedCanvas.toDataURL("image/png");
           document.body.appendChild(link);
           link.click();
@@ -47,8 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Failed to capture the map.");
         });
       });
-    }
-  
-    waitForButton();
-  });
-  
+    });
+  }
+
+  waitForDownloadButtons();
+});

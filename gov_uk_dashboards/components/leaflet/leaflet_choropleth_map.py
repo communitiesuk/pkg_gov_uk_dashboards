@@ -110,8 +110,9 @@ class LeafletChoroplethMap:
             choropleth_map,
             self.title,
             self.subtitle,
-            self.download_chart_button_id,
+            None,
             self.download_data_button_id,
+            self.download_chart_button_id,
         )
         download_choropleth_map_display=display_chart_or_table_with_header(
             download_choropleth_map,
@@ -123,7 +124,7 @@ class LeafletChoroplethMap:
             html.Button("Download Map as PNG", id="btn-download", n_clicks=0),
             choropleth_map, 
             html.Div(
-                [download_choropleth_map_display],id="hidden-map-container",style={
+                [download_choropleth_map_display],id=f"{self.download_chart_button_id}-hidden-map-container",style={
                             "position": "absolute",
                             "top": "-10000px",
                             "left": "-10000px",
