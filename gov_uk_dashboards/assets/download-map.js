@@ -1,13 +1,21 @@
 window.mynamespace = window.mynamespace || {};
 
-window.mynamespace.downloadMap = function(id) {
-    const mapDiv = document.getElementById(`${id}-hidden-map-container`);
-    if (!mapDiv || typeof html2canvas !== "function") {
-        alert("Map container not found or html2canvas not loaded");
-        return;
-    }
+window.mynamespace = {
+  downloadMap: function(index) {
+      if (typeof index !== "string") {
+          console.warn("Invalid index passed to downloadMap:", index);
+          return;
+      }
 
-    html2canvas(mapDiv, { useCORS: true, scale: 1 }).then(originalCanvas => {
+      const buttonId = `${index}-map`;
+      const mapDiv = document.getElementById(`${buttonId}-hidden-map-container`);
+
+      if (!mapDiv) {
+          alert("Map container not found");
+          return;
+      }
+
+      html2canvas(mapDiv, { useCORS: true, scale: 1 }).then(originalCanvas => {
         const cropHeight = originalCanvas.height - 300;
         const cropWidth = originalCanvas.width;
 
@@ -24,8 +32,9 @@ window.mynamespace.downloadMap = function(id) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }).catch(error => {
-        console.error("html2canvas error:", error);
-        alert("Failed to capture the map.");
-    });
+      }).catch(error => {
+          console.error("html2canvas error:", error);
+          alert("Failed to capture the map.");
+      });
+  }
 };
