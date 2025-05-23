@@ -69,5 +69,73 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 fillColor: fillColor
             };
         }
-    }
+    },
+    mapExportFunctions: {
+        setupDownloadMapButton: function(buttonId, mapContainerId, cropPixels = 300) {
+            function waitForDownloadButtons() {
+                const buttons = document.querySelectorAll("button[id*='-map']");
+
+                if (buttons.length === 0) {
+                    console.warn("No map download buttons found yet, retrying...");
+                    setTimeout(waitForDownloadButtons, 200); // Wait and retry
+                    return;
+                }
+
+                buttons.forEach(btn => {
+                    // Avoid duplicate event listeners
+                    if (btn.dataset.listenerAttached === "true") return;
+
+                    btn.dataset.listenerAttached = "true"; // mark as attached
+
+                    btn.addEventListener("click", (event) => {
+                    const clickedButton = event.currentTarget;
+                    const id = clickedButton.id;
+
+                    const mapDiv = document.getElementById(`${id}-hidden-map-container`);
+                    if (!mapDiv) {
+                        alert("Map container not found");
+                        return;
+                    }
+
+                    if (typeof html2canvas !== "function") {
+                        alert("html2canvas is not loaded");
+                        return;
+                    }
+
+                    html2canvas(mapDiv, { useCORS: true, scale: 1 }).then(originalCanvas => {
+                        const cropHeight = originalCanvas.height - 300;
+                        const cropWidth = originalCanvas.width;
+
+                        const croppedCanvas = document.createElement("canvas");
+                        croppedCanvas.width = cropWidth;
+                        croppedCanvas.height = cropHeight;
+
+                        const ctx = croppedCanvas.getContext("2d");
+
+                        ctx.drawImage(
+                        originalCanvas,
+                        0, 0,
+                        cropWidth, cropHeight,
+                        0, 0,
+                        cropWidth, cropHeight
+                        );
+
+                        const link = document.createElement("a");
+                        link.download = `${id}.png`;
+                        link.href = croppedCanvas.toDataURL("image/png");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }).catch(error => {
+                        console.error("html2canvas error:", error);
+                        alert("Failed to capture the map.");
+                    });
+                    });
+                });
+                }
+
+                waitForDownloadButtons();
+            }
+        }
+    
 });
