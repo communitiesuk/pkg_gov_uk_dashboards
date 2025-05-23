@@ -5,7 +5,7 @@ from dash.development.base_component import Component
 
 from gov_uk_dashboards.components.dash.download_button import (
     create_download_button_with_icon,
-    create_download_map_button_with_icon
+    create_download_map_button_with_icon,
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
 from gov_uk_dashboards.components.dash.paragraph import paragraph

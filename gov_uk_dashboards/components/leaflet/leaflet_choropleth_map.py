@@ -106,7 +106,7 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "1200px", "height": "1200px", "background": "white"},
         )
-        choropleth_map=display_chart_or_table_with_header(
+        choropleth_map = display_chart_or_table_with_header(
             choropleth_map,
             self.title,
             self.subtitle,
@@ -114,23 +114,24 @@ class LeafletChoroplethMap:
             self.download_data_button_id,
             self.download_chart_button_id,
         )
-        download_choropleth_map_display=display_chart_or_table_with_header(
+        download_choropleth_map_display = display_chart_or_table_with_header(
             download_choropleth_map,
             self.title,
             self.subtitle,
         )
-        
-        return [
-            choropleth_map, 
-            html.Div(
-                [download_choropleth_map_display],id=f"{self.download_chart_button_id}-hidden-map-container",style={
-                            "position": "absolute",
-                            "top": "-10000px",
-                            "left": "-10000px",
-                        },#hide off screen
-                    ),
-            ]
 
+        return [
+            choropleth_map,
+            html.Div(
+                [download_choropleth_map_display],
+                id=f"{self.download_chart_button_id}-hidden-map-container",
+                style={
+                    "position": "absolute",
+                    "top": "-10000px",
+                    "left": "-10000px",
+                },  # hide off screen
+            ),
+        ]
 
     def _add_data_to_geojson(self):
         info_map = {

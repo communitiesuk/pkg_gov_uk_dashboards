@@ -64,7 +64,8 @@ def create_download_button_with_icon(
             "gap": "8px",
         },
     )
-    
+
+
 def create_download_map_button_with_icon(
     button_text: str, button_id_name: str
 ) -> html.Button:
@@ -82,11 +83,11 @@ def create_download_map_button_with_icon(
             html.Div("", className="download-icon"),
             button_text,
         ],
-        id=button_id_name,
-        # id={
-        #     "download-type": download_type,
-        #     "name": button_id_name,
-        # },
+        # id=button_id_name,
+        id={
+            "type": "map-download-button",
+            "index": button_id_name,
+        },
         n_clicks=0,
         className=DOWNLOAD_BUTTON_CLASSES,
         type="submit",
