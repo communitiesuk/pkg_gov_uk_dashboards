@@ -271,7 +271,7 @@ class LeafletChoroplethMap:
             self.hover_text_columns[0],
             style={
                 "position": "absolute",
-                "bottom": "700px",  # Adjusted to place above the colorbar
+                "top": "70px",  # Adjusted to place above the colorbar
                 "left": "10px",  # Align with the left side of the colorbar
                 "background": "white",
                 "padding": "2px 6px",
