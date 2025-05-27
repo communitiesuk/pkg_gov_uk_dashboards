@@ -95,13 +95,9 @@ class LeafletChoroplethMap:
                 self._get_colorbar_title(),
                 self._get_dl_geojson(),
             ],
-            # center=[74.5, -12.5],  # Centered on the UK
             center=[54.5, -25.0],
             zoom=7.5,
-            # minZoom=6.5,
-            # maxZoom=10 if self.enable_zoom else 6.5,
             maxBounds=[[49.5, -30], [60, 2]],
-            # **zoom_controls,
             zoomControl=False,
             attributionControl=False,
             style={"width": "1200px", "height": "1200px", "background": "white"},
