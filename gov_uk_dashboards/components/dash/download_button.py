@@ -1,4 +1,5 @@
 """download_button"""
+from typing import Union
 import warnings
 from dash import html
 
@@ -35,31 +36,34 @@ def download_button(button_text: str, button_id: str = "download-button"):
 
 
 def create_download_button_with_icon(
-    button_text: str, button_id_name: str, instance=None
+    button_text: str, button_id_name: str, instance: Union[str, int] = None
 ) -> html.Button:
     """Create a download button with icon, aligned to the left.
 
     Parameters:
+    - button_text (str): Text to display on button.
     - button_id_name (str): A unique identifier for the button.
+    - instance (Union[int,str]): Optional additional id parameter for when button_text is
+        "Download map".
 
     Returns:
     - html.Button: Download button.
     """
     download_type = button_text.lower().replace(" ", "-")
     if button_text == "Download map":
-        id = {
+        id_dict = {
             "download-type": download_type,
             "name": button_id_name,
             "instance": instance,
         }
     else:
-        id = {"download-type": download_type, "name": button_id_name}
+        id_dict = {"download-type": download_type, "name": button_id_name}
     return html.Button(
         [
             html.Div("", className="download-icon"),
             button_text,
         ],
-        id=id,
+        id=id_dict,
         n_clicks=0,
         className=DOWNLOAD_BUTTON_CLASSES,
         type="submit",
