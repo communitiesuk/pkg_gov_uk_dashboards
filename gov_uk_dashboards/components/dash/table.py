@@ -209,7 +209,7 @@ def table_from_polars_dataframe(
                                 dcc.Markdown(header)
                                 if format_column_headers_as_markdown
                                 else header,
-                                id={"type": "header-button", "index": idx},
+                                id={"type": f"{table_id}-header-button", "index": idx},
                                 n_clicks=0,
                             )
                             if header not in non_sortable_columns
