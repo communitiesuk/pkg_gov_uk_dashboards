@@ -21,6 +21,7 @@ def display_chart_or_table_with_header(
     download_map_button_id: str = None,
     footnote: str = None,
     instance=1,
+    text_below_subheading: str=None
 ) -> html.Div:
     """Generate the wrapping information/header for a chart or table.
 
@@ -57,6 +58,7 @@ def display_chart_or_table_with_header(
                     ),
                 ]
             ),
+            paragraph(text_below_subheading),
             chart_or_table,
             html.Div([paragraph(footnote)], style={"padding-top": "20px"}),
             html.Div(
