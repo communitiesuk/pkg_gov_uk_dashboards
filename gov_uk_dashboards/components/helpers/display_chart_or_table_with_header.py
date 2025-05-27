@@ -4,8 +4,7 @@ from dash import html
 from dash.development.base_component import Component
 
 from gov_uk_dashboards.components.dash.download_button import (
-    create_download_button_with_icon,
-    create_download_map_button_with_icon,
+    create_download_button_with_icon
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
 from gov_uk_dashboards.components.dash.paragraph import paragraph
@@ -69,7 +68,7 @@ def display_chart_or_table_with_header(
                                 )
                                 if download_button_id
                                 else [],
-                                create_download_map_button_with_icon(
+                                create_download_button_with_icon(
                                     "Download map", download_map_button_id
                                 )
                                 if download_map_button_id
