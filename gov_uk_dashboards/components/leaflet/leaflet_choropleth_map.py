@@ -36,12 +36,14 @@ class LeafletChoroplethMap:
         legend_column: str,
         area_column: str,
         title: str,
+        instance: int,
         subtitle: Optional[str] = None,
         enable_zoom: bool = True,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
         color_scale_is_discrete: bool = True,
         show_tile_layer: bool = False,
+        
     ):
         self.geojson_data = geojson
         self.df = df
@@ -57,6 +59,7 @@ class LeafletChoroplethMap:
         self.color_scale_is_discrete = color_scale_is_discrete
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson()
+        self.instance=instance
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns leaflet choropleth map chart for display on application.
@@ -109,6 +112,8 @@ class LeafletChoroplethMap:
             None,
             self.download_data_button_id,
             self.download_chart_button_id,
+            None,
+            self.instance
         )
         download_choropleth_map_display = display_chart_or_table_with_header(
             download_choropleth_map,

@@ -35,7 +35,7 @@ def download_button(button_text: str, button_id: str = "download-button"):
 
 
 def create_download_button_with_icon(
-    button_text: str, button_id_name: str
+    button_text: str, button_id_name: str,instance
 ) -> html.Button:
     """Create a download button with icon, aligned to the left.
 
@@ -54,6 +54,7 @@ def create_download_button_with_icon(
         id={
             "download-type": download_type,
             "name": button_id_name,
+            "instance":instance
         },
         n_clicks=0,
         className=DOWNLOAD_BUTTON_CLASSES,
