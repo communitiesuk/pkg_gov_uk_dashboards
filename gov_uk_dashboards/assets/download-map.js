@@ -10,7 +10,7 @@ window.mynamespace = {
       const mapDiv = document.getElementById(`${buttonId}-hidden-map-container`);
 
       if (!mapDiv) {
-          alert("Map container not found");
+          console.error("Map container not found");
           return;
       }
 
