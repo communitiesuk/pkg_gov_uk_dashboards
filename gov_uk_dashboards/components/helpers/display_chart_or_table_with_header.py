@@ -31,6 +31,7 @@ def display_chart_or_table_with_header(
         download_button_id (str, optional): id for download button if required. Defaults to None.
                                             if None then the button will not be included.
         download_data_button_id (str, optional): the id to be applied to the download data button.
+        download_map_button_id (str, optional): the id to be applied to the download map button.
         footnote (str, optional): the footnote to be added to charts and downloads.
 
     Returns:

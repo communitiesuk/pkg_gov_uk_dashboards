@@ -1,13 +1,12 @@
 window.mynamespace = window.mynamespace || {};
 
 window.mynamespace = {
-  downloadMap: function(index) {
-      if (typeof index !== "string") {
-          console.warn("Invalid index passed to downloadMap:", index);
+  downloadMap: function(buttonId) {
+      if (typeof buttonId !== "string") {
+          console.warn("Invalid buttonId passed to downloadMap:", buttonId);
           return;
       }
 
-      const buttonId = `${index}-map`;
       const mapDiv = document.getElementById(`${buttonId}-hidden-map-container`);
 
       if (!mapDiv) {
@@ -27,7 +26,7 @@ window.mynamespace = {
         ctx.drawImage(originalCanvas, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
         const link = document.createElement("a");
-        link.download = `${id}.png`;
+        link.download = `${buttonId}.png`;
         link.href = croppedCanvas.toDataURL("image/png");
         document.body.appendChild(link);
         link.click();
