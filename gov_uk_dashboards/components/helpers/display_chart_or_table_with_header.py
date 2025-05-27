@@ -4,7 +4,7 @@ from dash import html
 from dash.development.base_component import Component
 
 from gov_uk_dashboards.components.dash.download_button import (
-    create_download_button_with_icon
+    create_download_button_with_icon,
 )
 from gov_uk_dashboards.components.dash.heading import HeadingSizes
 from gov_uk_dashboards.components.dash.paragraph import paragraph
@@ -20,7 +20,7 @@ def display_chart_or_table_with_header(
     download_data_button_id: str = None,
     download_map_button_id: str = None,
     footnote: str = None,
-    instance=1
+    instance=1,
 ) -> html.Div:
     """Generate the wrapping information/header for a chart or table.
 
@@ -65,17 +65,17 @@ def display_chart_or_table_with_header(
                         html.Div(
                             [
                                 create_download_button_with_icon(
-                                    "Download chart", download_button_id,instance
+                                    "Download chart", download_button_id, instance
                                 )
                                 if download_button_id
                                 else [],
                                 create_download_button_with_icon(
-                                    "Download map", download_map_button_id,instance
+                                    "Download map", download_map_button_id, instance
                                 )
                                 if download_map_button_id
                                 else [],
                                 create_download_button_with_icon(
-                                    "Download data", download_data_button_id,instance
+                                    "Download data", download_data_button_id, instance
                                 )
                                 if download_data_button_id
                                 else [],
