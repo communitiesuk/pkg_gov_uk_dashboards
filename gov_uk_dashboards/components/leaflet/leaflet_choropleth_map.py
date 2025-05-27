@@ -36,6 +36,7 @@ class LeafletChoroplethMap:
         legend_column: str,
         area_column: str,
         title: str,
+        instance: int,
         subtitle: Optional[str] = None,
         enable_zoom: bool = True,
         download_chart_button_id: Optional[str] = None,
@@ -57,6 +58,7 @@ class LeafletChoroplethMap:
         self.color_scale_is_discrete = color_scale_is_discrete
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson()
+        self.instance = instance
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns leaflet choropleth map chart for display on application.
@@ -88,13 +90,48 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "100%", "height": "800px", "background": "white"},
         )
-        return display_chart_or_table_with_header(
+        download_choropleth_map = dl.Map(
+            children=[
+                dl.TileLayer() if self.show_tile_layer else None,
+                self._get_colorbar(),
+                self._get_colorbar_title(),
+                self._get_dl_geojson(),
+            ],
+            center=[54.5, -25.0],
+            zoom=7.5,
+            maxBounds=[[49.5, -30], [60, 2]],
+            zoomControl=False,
+            attributionControl=False,
+            style={"width": "1200px", "height": "1200px", "background": "white"},
+        )
+        choropleth_map = display_chart_or_table_with_header(
             choropleth_map,
             self.title,
             self.subtitle,
-            self.download_chart_button_id,
+            None,
             self.download_data_button_id,
+            self.download_chart_button_id,
+            None,
+            self.instance,
         )
+        download_choropleth_map_display = display_chart_or_table_with_header(
+            download_choropleth_map,
+            self.title,
+            self.subtitle,
+        )
+
+        return [
+            choropleth_map,
+            html.Div(
+                [download_choropleth_map_display],
+                id=f"{self.download_chart_button_id}-hidden-map-container",
+                style={
+                    "position": "absolute",
+                    "top": "-10000px",
+                    "left": "-10000px",
+                },  # hide off screen
+            ),
+        ]
 
     def _add_data_to_geojson(self):
         info_map = {
@@ -234,7 +271,7 @@ class LeafletChoroplethMap:
             self.hover_text_columns[0],
             style={
                 "position": "absolute",
-                "bottom": "700px",  # Adjusted to place above the colorbar
+                "top": "70px",  # Adjusted to place above the colorbar
                 "left": "10px",  # Align with the left side of the colorbar
                 "background": "white",
                 "padding": "2px 6px",

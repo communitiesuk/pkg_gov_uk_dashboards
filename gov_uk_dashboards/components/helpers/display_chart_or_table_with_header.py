@@ -18,7 +18,10 @@ def display_chart_or_table_with_header(
     sub_heading: str = None,
     download_button_id: str = None,
     download_data_button_id: str = None,
+    download_map_button_id: str = None,
     footnote: str = None,
+    instance=1,
+    text_below_subheading: str = None,
 ) -> html.Div:
     """Generate the wrapping information/header for a chart or table.
 
@@ -29,7 +32,11 @@ def display_chart_or_table_with_header(
         download_button_id (str, optional): id for download button if required. Defaults to None.
                                             if None then the button will not be included.
         download_data_button_id (str, optional): the id to be applied to the download data button.
+        download_map_button_id (str, optional): the id to be applied to the download map button.
         footnote (str, optional): the footnote to be added to charts and downloads.
+        instance (int or str): Optional additional paramter for id dict.
+        text_below_subheading (str, optional): Optional text to go below subheading but above
+            chart_or_table.
 
     Returns:
         html.Div: Div containing Header and chart/table.
@@ -54,6 +61,7 @@ def display_chart_or_table_with_header(
                     ),
                 ]
             ),
+            paragraph(text_below_subheading),
             chart_or_table,
             html.Div([paragraph(footnote)], style={"padding-top": "20px"}),
             html.Div(
@@ -62,12 +70,17 @@ def display_chart_or_table_with_header(
                         html.Div(
                             [
                                 create_download_button_with_icon(
-                                    "Download chart", download_button_id
+                                    "Download chart", download_button_id, instance
                                 )
                                 if download_button_id
                                 else [],
                                 create_download_button_with_icon(
-                                    "Download data", download_data_button_id
+                                    "Download map", download_map_button_id, instance
+                                )
+                                if download_map_button_id
+                                else [],
+                                create_download_button_with_icon(
+                                    "Download data", download_data_button_id, instance
                                 )
                                 if download_data_button_id
                                 else [],
