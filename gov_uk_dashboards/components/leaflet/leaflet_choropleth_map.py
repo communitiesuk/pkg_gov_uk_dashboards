@@ -267,11 +267,12 @@ class LeafletChoroplethMap:
     def _get_colorbar_title(self):
         if self.color_scale_is_discrete:
             return None
+        top = "70px" if self.enable_zoom is False else "140px"
         return html.Div(
             self.hover_text_columns[0],
             style={
                 "position": "absolute",
-                "top": "70px",  # Adjusted to place above the colorbar
+                "top": top,  # Adjusted to place above the colorbar
                 "left": "10px",  # Align with the left side of the colorbar
                 "background": "white",
                 "padding": "2px 6px",
