@@ -264,7 +264,7 @@ class LeafletChoroplethMap:
             tickText=tick_text,  # Optional, makes labels look cleaner
         )
 
-    def _get_colorbar_title(self, enable_zoom: bool=False):
+    def _get_colorbar_title(self, enable_zoom: bool = False):
         if self.color_scale_is_discrete:
             return None
         top = "70px" if enable_zoom is False else "140px"
