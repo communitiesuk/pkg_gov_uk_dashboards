@@ -78,7 +78,7 @@ class LeafletChoroplethMap:
             children=[
                 dl.TileLayer() if self.show_tile_layer else None,
                 self._get_colorbar(),
-                self._get_colorbar_title(),
+                self._get_colorbar_title(self.enable_zoom),
                 self._get_dl_geojson(),
             ],
             center=[54.5, -2.5],  # Centered on the UK
@@ -264,10 +264,10 @@ class LeafletChoroplethMap:
             tickText=tick_text,  # Optional, makes labels look cleaner
         )
 
-    def _get_colorbar_title(self):
+    def _get_colorbar_title(self, enable_zoom: bool=False):
         if self.color_scale_is_discrete:
             return None
-        top = "70px" if self.enable_zoom is False else "140px"
+        top = "70px" if enable_zoom is False else "140px"
         return html.Div(
             self.hover_text_columns[0],
             style={
