@@ -6,6 +6,7 @@ import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash import html
 import polars as pl
+from shapely.geometry import shape
 
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
@@ -80,6 +81,7 @@ class LeafletChoroplethMap:
                 self._get_colorbar(),
                 self._get_colorbar_title(self.enable_zoom),
                 self._get_dl_geojson(),
+                *self._get_centroid_tooltips(),
             ],
             center=[54.5, -2.5],  # Centered on the UK
             zoom=6.5,
@@ -88,7 +90,7 @@ class LeafletChoroplethMap:
             maxBounds=[[49.8, -10], [55.9, 1.8]],
             **zoom_controls,
             attributionControl=False,
-            style={"width": "100%", "height": "800px", "background": "white"},
+            style={"width": "100%", "height": "900px", "background": "white"},
         )
         download_choropleth_map = dl.Map(
             children=[
@@ -146,6 +148,10 @@ class LeafletChoroplethMap:
         for feature in self.geojson_data["features"]:
             region_code = feature["properties"]["geo_id"]
             info = info_map.get(region_code)
+            geom = shape(feature["geometry"])
+            centroid = geom.centroid
+            feature["properties"]["centroid_lat"] = centroid.y
+            feature["properties"]["centroid_lon"] = centroid.x
             if info:
 
                 feature["properties"]["density"] = info["value"]
@@ -163,7 +169,25 @@ class LeafletChoroplethMap:
                 feature["properties"]["density"] = None
                 feature["properties"]["area"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data available"
+    def _get_centroid_tooltips(self):
+        tooltip_markers = []
+        for feature in self.geojson_data["features"]:
+            lat = feature["properties"].get("centroid_lat")
+            lon = feature["properties"].get("centroid_lon")
+            if lat is None or lon is None:
+                continue
+            tooltip_text = feature["properties"].get("tooltip", "No data")
 
+            marker = dl.Marker(
+                position=(lat, lon),
+                children=[
+                    dl.Tooltip(tooltip_text, permanent=True, direction="center", opacity=0.9)
+                ],
+                opacity=0,  # hide marker icon
+            )
+            tooltip_markers.append(marker)
+
+        return tooltip_markers
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
         colorscale = self._get_colorscale()
