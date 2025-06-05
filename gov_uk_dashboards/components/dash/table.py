@@ -5,6 +5,7 @@ from dash import html, dcc
 from gov_uk_dashboards.components.dash.card import card
 from gov_uk_dashboards.components.dash.paragraph import paragraph
 
+
 def table_from_polars_dataframe(
     dataframe: pl.DataFrame,
     title: Optional[str] = None,

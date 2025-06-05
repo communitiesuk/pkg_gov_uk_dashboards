@@ -1,8 +1,8 @@
 """ Returns a dataframe after connecting to CDS, otherwise uses a csv already saved in the file"""
-import os
-import json
-import pyodbc
-import boto3
+# import os
+# import json
+# import pyodbc
+# import boto3
 
 
 # def get_data_from_cds_or_fallback_to_csv(
@@ -98,7 +98,8 @@ import boto3
 #     # Create a Secrets Manager client
 #     session = boto3.session.Session()
 #     client = session.client(service_name="secretsmanager", region_name=region_name)
-#     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/secretsmanager.html#SecretsManager.Client.get_secret_value
+#     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/secretsmanager
+# .html#SecretsManager.Client.get_secret_value
 
 #     get_secret_value_response = client.get_secret_value(SecretId=secret_name)
 
