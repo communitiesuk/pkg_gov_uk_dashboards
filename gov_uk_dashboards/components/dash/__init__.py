@@ -84,7 +84,7 @@ from .paragraph import paragraph, ParagraphSizes
 from .phase_banner import phase_banner_with_feedback
 from .row_component import row_component
 from .side_navbar import side_navbar
-from .table import table_from_dataframe
+# from .table import table_from_dataframe
 from .tooltip_title import tooltip_title
 from .visualisation_commentary import format_visualisation_commentary
 from .visualisation_title import format_visualisation_title
