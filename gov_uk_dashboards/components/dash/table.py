@@ -4,6 +4,7 @@ import polars as pl
 from dash import html, dcc
 from gov_uk_dashboards.components.dash.card import card
 from gov_uk_dashboards.components.dash.paragraph import paragraph
+from gov_uk_dashboards.formatting.text_functions import create_id_from_string
 
 
 def table_from_polars_dataframe(
@@ -16,6 +17,7 @@ def table_from_polars_dataframe(
     format_column_headers_as_markdown: bool = False,
     sortable_headers: bool = False,
     table_id: str = "table",
+    assign_ids_to_rows: bool = False,
     table_footer: str = None,
     column_widths: Optional[list[str]] = None,
     columns_to_right_align: Optional[list[str]] = None,
@@ -48,6 +50,7 @@ def table_from_polars_dataframe(
         sortable_headers: (bool, optional): Sets if the column headers should be sortable. Defaults
             to False.
         table_id: (str, optional): ID for the table Defaults to "table".
+        assign_ids_to_rows: (bool, optional): Adds id's to table rows when True. Defaults to False.
         table_footer: (str, optional): Text to display underneath table as footer.
         column_widths: (list[str], optional): Determines width of table columns. Format as a list,
             "x%". List must be same length as dataframe columns. Defaults to None.
@@ -187,7 +190,14 @@ def table_from_polars_dataframe(
                                 else {},
                             )
                             for cell, column_name in zip(row[1:], dataframe.columns[1:])
-                        ]
+                        ],
+                        **(
+                            {
+                                "id": create_id_from_string(row[0])
+                                if assign_ids_to_rows and create_id_from_string(row[0])
+                                else {}
+                            }
+                        ),
                     )
                     if first_column_is_header and index != last_row_index
                     else html.Tr(
@@ -200,7 +210,14 @@ def table_from_polars_dataframe(
                                 else {},
                             )
                             for cell, column_name in zip(row, dataframe.columns)
-                        ]
+                        ],
+                        **(
+                            {
+                                "id": create_id_from_string(row[0])
+                                if assign_ids_to_rows and create_id_from_string(row[0])
+                                else {}
+                            }
+                        ),
                     )
                 )
                 for index, row in enumerate(dataframe.rows())
