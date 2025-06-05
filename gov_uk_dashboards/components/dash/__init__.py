@@ -52,7 +52,6 @@ Contains:
 - phase_banner_with_feedback: Return a phase banner with a feedback link,
     which can be specified.
 - row_component: Returns a horizontal row used to contain cards.
-- table_from_dataframe: Return a html table created from a pandas DataFrame.
 - tooltip_title: Return a tooltip component for explaining details.
 - format_visualisation_commentary: Return paragraph styling commentary.
 - format_visualisation_title: Return a default formatted title for a
@@ -84,7 +83,6 @@ from .paragraph import paragraph, ParagraphSizes
 from .phase_banner import phase_banner_with_feedback
 from .row_component import row_component
 from .side_navbar import side_navbar
-from .table import table_from_dataframe
 from .tooltip_title import tooltip_title
 from .visualisation_commentary import format_visualisation_commentary
 from .visualisation_title import format_visualisation_title
