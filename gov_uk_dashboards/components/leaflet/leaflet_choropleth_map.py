@@ -88,7 +88,7 @@ class LeafletChoroplethMap:
             maxBounds=[[49.8, -10], [55.9, 1.8]],
             **zoom_controls,
             attributionControl=False,
-            style={"width": "100%", "height": "950px", "background": "white"},
+            style={"width": "100%", "height": "960px", "background": "white"},
         )
         download_choropleth_map = dl.Map(
             children=[
