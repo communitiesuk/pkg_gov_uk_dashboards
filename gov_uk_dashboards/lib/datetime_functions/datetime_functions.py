@@ -162,6 +162,9 @@ def get_todays_date_for_downloaded_csv() -> str:
         return "25/12/2023"
     return str(datetime.today().strftime("%d/%m/%Y"))
 
+def convert_datetime_to_dd_mm_yyy_string(input_datetime: datetime):
+    """convert datetime to DD/MM/YYYY string"""
+    return str(input_datetime.strftime("%d/%m/%Y"))
 
 def date_string_is_full_month_and_full_year_format(date_string: str):
     """checks if a date string is in the format $B $Y"""
