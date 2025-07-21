@@ -11,7 +11,7 @@ def download_csv_with_headers(
     list_of_df_title_subtitle_dicts: list[dict[str, str]],
     name: str,
     sensitivity_label: str,
-    last_updated_date: str,
+    last_updated_date: str=None,
     additional_text: list[str] = None,
 ):  # pylint: disable=too-many-locals
     """Adds a header above multiple dataframes,
