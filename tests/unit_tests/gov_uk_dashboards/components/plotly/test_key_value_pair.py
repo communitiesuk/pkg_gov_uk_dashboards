@@ -1,6 +1,5 @@
 """Tests for key_value_pair component"""
 
-
 from gov_uk_dashboards.components.dash.key_value_pair import key_value_pair
 
 

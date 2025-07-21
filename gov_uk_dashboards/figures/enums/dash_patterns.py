@@ -1,4 +1,5 @@
 """DashPatterns enum"""
+
 from enum import Enum
 
 

@@ -1,4 +1,5 @@
 """Tests for paragraph component"""
+
 import pytest
 from dash import html
 

@@ -1,4 +1,5 @@
 """HTML components for displaying messages to the user in a banner format"""
+
 from dash import html
 
 

@@ -1,4 +1,5 @@
 """format_visualisation_title"""
+
 from dash import html
 
 

@@ -1,4 +1,5 @@
 """Function for creating a table component from a dataframe"""
+
 from typing import Optional
 import polars as pl
 from dash import html, dcc
@@ -112,17 +113,26 @@ def table_from_polars_dataframe(
                         # If sortable_headers is True, use a button for the header with sorting
                         # functionality
                         html.Th(
-                            html.Button(
-                                dcc.Markdown(header)
-                                if format_column_headers_as_markdown
-                                else header,
-                                id={"type": f"{table_id}-header-button", "index": idx},
-                                n_clicks=0,
-                            )
-                            if header not in non_sortable_columns
-                            else dcc.Markdown(header)
-                            if format_column_headers_as_markdown
-                            else header,
+                            (
+                                html.Button(
+                                    (
+                                        dcc.Markdown(header)
+                                        if format_column_headers_as_markdown
+                                        else header
+                                    ),
+                                    id={
+                                        "type": f"{table_id}-header-button",
+                                        "index": idx,
+                                    },
+                                    n_clicks=0,
+                                )
+                                if header not in non_sortable_columns
+                                else (
+                                    dcc.Markdown(header)
+                                    if format_column_headers_as_markdown
+                                    else header
+                                )
+                            ),
                             **(
                                 {"aria-sort": sorted_header_dict.get(header, "none")}
                                 if header
@@ -142,9 +152,11 @@ def table_from_polars_dataframe(
                         )
                         if sortable_headers
                         else html.Th(
-                            dcc.Markdown(header)
-                            if format_column_headers_as_markdown
-                            else header,
+                            (
+                                dcc.Markdown(header)
+                                if format_column_headers_as_markdown
+                                else header
+                            ),
                             scope="col",
                             className="govuk-table__header",
                             style={
@@ -185,17 +197,22 @@ def table_from_polars_dataframe(
                             html.Td(
                                 cell,
                                 className="govuk-table__cell",
-                                style={"text-align": "right"}
-                                if column_name in columns_to_right_align
-                                else {},
+                                style=(
+                                    {"text-align": "right"}
+                                    if column_name in columns_to_right_align
+                                    else {}
+                                ),
                             )
                             for cell, column_name in zip(row[1:], dataframe.columns[1:])
                         ],
                         **(
                             {
-                                "id": create_id_from_string(row[0])
-                                if assign_ids_to_rows and create_id_from_string(row[0])
-                                else {}
+                                "id": (
+                                    create_id_from_string(row[0])
+                                    if assign_ids_to_rows
+                                    and create_id_from_string(row[0])
+                                    else {}
+                                )
                             }
                         ),
                     )
@@ -205,17 +222,22 @@ def table_from_polars_dataframe(
                             html.Td(
                                 cell,
                                 className="govuk-table__cell",
-                                style={"text-align": "right"}
-                                if column_name in columns_to_right_align
-                                else {},
+                                style=(
+                                    {"text-align": "right"}
+                                    if column_name in columns_to_right_align
+                                    else {}
+                                ),
                             )
                             for cell, column_name in zip(row, dataframe.columns)
                         ],
                         **(
                             {
-                                "id": create_id_from_string(row[0])
-                                if assign_ids_to_rows and create_id_from_string(row[0])
-                                else {}
+                                "id": (
+                                    create_id_from_string(row[0])
+                                    if assign_ids_to_rows
+                                    and create_id_from_string(row[0])
+                                    else {}
+                                )
                             }
                         ),
                     )

@@ -69,21 +69,29 @@ def display_chart_or_table_with_header(
                     [
                         html.Div(
                             [
-                                create_download_button_with_icon(
-                                    "Download chart", download_button_id, instance
-                                )
-                                if download_button_id
-                                else [],
-                                create_download_button_with_icon(
-                                    "Download map", download_map_button_id, instance
-                                )
-                                if download_map_button_id
-                                else [],
-                                create_download_button_with_icon(
-                                    "Download data", download_data_button_id, instance
-                                )
-                                if download_data_button_id
-                                else [],
+                                (
+                                    create_download_button_with_icon(
+                                        "Download chart", download_button_id, instance
+                                    )
+                                    if download_button_id
+                                    else []
+                                ),
+                                (
+                                    create_download_button_with_icon(
+                                        "Download map", download_map_button_id, instance
+                                    )
+                                    if download_map_button_id
+                                    else []
+                                ),
+                                (
+                                    create_download_button_with_icon(
+                                        "Download data",
+                                        download_data_button_id,
+                                        instance,
+                                    )
+                                    if download_data_button_id
+                                    else []
+                                ),
                             ],
                             className="govuk-button-group",
                             style={"padding-top": "20px"},

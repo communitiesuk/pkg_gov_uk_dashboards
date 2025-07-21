@@ -1,4 +1,5 @@
 """home_page_link_button"""
+
 from typing import Optional
 from dash import html
 
@@ -43,9 +44,9 @@ def home_page_link_button(
                         [
                             html.Div(
                                 [title],
-                                className="govuk-heading-l"
-                                if info is not None
-                                else None,
+                                className=(
+                                    "govuk-heading-l" if info is not None else None
+                                ),
                             ),
                             (
                                 html.Div(

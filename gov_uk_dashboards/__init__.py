@@ -22,6 +22,7 @@ Contains the following modules:
 Contains the following function:
 - read_template: Return the government html template as a str for Plotly.
 """
+
 from . import components
 from . import figures
 from . import axes

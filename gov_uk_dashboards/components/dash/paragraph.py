@@ -1,4 +1,5 @@
 """paragraph component"""
+
 from enum import Enum
 from typing import Union
 

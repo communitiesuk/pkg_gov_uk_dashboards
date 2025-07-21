@@ -1,4 +1,5 @@
 """notification_banner"""
+
 from dash import html
 
 

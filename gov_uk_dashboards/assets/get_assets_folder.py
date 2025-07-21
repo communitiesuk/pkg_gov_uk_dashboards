@@ -1,4 +1,5 @@
 """get_assets_folder"""
+
 import os
 
 

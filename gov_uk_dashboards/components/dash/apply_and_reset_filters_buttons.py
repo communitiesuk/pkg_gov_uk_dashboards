@@ -1,4 +1,5 @@
 """apply_and_reset_filters_buttons"""
+
 from dash import html
 
 

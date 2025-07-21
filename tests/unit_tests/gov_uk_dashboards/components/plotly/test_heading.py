@@ -1,4 +1,5 @@
 """Tests for heading components"""
+
 import itertools
 
 import pytest

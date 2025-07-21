@@ -1,4 +1,5 @@
 """Tests for html list component"""
+
 from dash import html
 
 from gov_uk_dashboards.components.dash.html_list import html_list

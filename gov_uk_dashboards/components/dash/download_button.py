@@ -1,4 +1,5 @@
 """download_button"""
+
 from typing import Union
 import warnings
 from dash import html

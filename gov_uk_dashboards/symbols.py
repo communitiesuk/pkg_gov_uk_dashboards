@@ -4,6 +4,7 @@ Contains:
 - Symbols from the Plotly graphing library
 https://plotly.com/python/marker-style/#custom-marker-symbols
 """
+
 from enum import Enum
 
 

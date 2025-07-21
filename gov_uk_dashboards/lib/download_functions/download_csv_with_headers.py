@@ -1,4 +1,5 @@
 """download_csv_with_headers"""
+
 import io
 import polars as pl
 from dash import dcc
@@ -11,6 +12,7 @@ def download_csv_with_headers(
     list_of_df_title_subtitle_dicts: list[dict[str, str]],
     name: str,
     sensitivity_label: str,
+    last_updated_date: str = None,
     additional_text: list[str] = None,
 ):  # pylint: disable=too-many-locals
     """Adds a header above multiple dataframes,
@@ -21,6 +23,7 @@ def download_csv_with_headers(
         "title" and "subtitle"
         name (str): Filename for CSV.
         sensitivity_label (str): Sensitivity label. Str or None.
+        last_updated_date (str): Date data was last updated.
         additional_text (list[str]): Additional text to inlcude in headers after data downloaded.
             Str or None.
     """
@@ -41,6 +44,12 @@ def download_csv_with_headers(
     footnote = list_of_df_title_subtitle_dicts[0].get("footnote")
     header_data = [
         {column_list[0]: "Date downloaded: " + get_todays_date_for_downloaded_csv()},
+        (
+            {column_list[0]: "Last updated: " + last_updated_date}
+            if last_updated_date
+            else None
+        ),
+        {column_list[0]: None},
         *(
             [{column_list[0]: text} for text in additional_text]
             + [{column_list[0]: None}]
