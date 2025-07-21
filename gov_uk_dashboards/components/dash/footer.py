@@ -39,7 +39,10 @@ def footer(footer_links: Optional[list[any]]):
                                         )
                                         for item in footer_links
                                     ],
-                                    className="govuk-footer__inline-list govuk-!-display-none-print",
+                                    className=(
+                                        "govuk-footer__inline-list "
+                                        "govuk-!-display-none-print"
+                                    ),
                                 )
                                 if footer_links
                                 else None
