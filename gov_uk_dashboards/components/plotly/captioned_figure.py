@@ -1,4 +1,5 @@
 """captioned_figure function"""
+
 from typing import Any, Optional, Union
 import plotly
 import dash
@@ -67,9 +68,11 @@ def captioned_figure(
             dash.html.Figcaption(
                 children=captions,
                 id=f"{figure_name}-caption",
-                className="govuk-visually-hidden-desktop-only"
-                if desktop_only
-                else "govuk-visually-hidden",
+                className=(
+                    "govuk-visually-hidden-desktop-only"
+                    if desktop_only
+                    else "govuk-visually-hidden"
+                ),
             ),
         ]
     )

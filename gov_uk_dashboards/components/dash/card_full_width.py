@@ -1,4 +1,5 @@
 """card_full_width"""
+
 from dash import html
 
 

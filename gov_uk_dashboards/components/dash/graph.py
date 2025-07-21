@@ -1,4 +1,5 @@
 """Create a graph"""
+
 import warnings
 from dash import dcc
 

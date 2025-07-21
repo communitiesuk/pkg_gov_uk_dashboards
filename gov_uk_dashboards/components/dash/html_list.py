@@ -1,4 +1,5 @@
 """html list component"""
+
 from dash import html
 
 

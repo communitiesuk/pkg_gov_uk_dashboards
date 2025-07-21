@@ -1,4 +1,5 @@
 """phase_banner"""
+
 from dash import html
 
 
@@ -31,9 +32,11 @@ def phase_banner_with_feedback(
                                 className="govuk-link",
                                 id=link_id,
                                 target=link_target,
-                                rel="noopener noreferrer"
-                                if link_target == "_blank"
-                                else "",  # conditional attribute for security
+                                rel=(
+                                    "noopener noreferrer"
+                                    if link_target == "_blank"
+                                    else ""
+                                ),  # conditional attribute for security
                             ),
                             " will help us to improve it.",
                         ],

@@ -1,4 +1,5 @@
 """collapsible_panel"""
+
 from dash import html
 
 

@@ -1,4 +1,5 @@
 """filter_panel"""
+
 from typing import Optional
 from dash import html
 

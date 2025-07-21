@@ -1,4 +1,5 @@
 """details"""
+
 from dash import html
 
 

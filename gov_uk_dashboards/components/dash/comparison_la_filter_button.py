@@ -1,4 +1,5 @@
 """comparison_la_filter_button"""
+
 from dash import html
 
 

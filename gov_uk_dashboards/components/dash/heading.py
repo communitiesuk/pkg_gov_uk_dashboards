@@ -1,4 +1,5 @@
 """heading components"""
+
 from enum import Enum
 
 from dash import html

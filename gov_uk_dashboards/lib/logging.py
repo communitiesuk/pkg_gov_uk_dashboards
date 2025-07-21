@@ -1,4 +1,5 @@
 """Module for logging configuration"""
+
 import os
 
 import logging

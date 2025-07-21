@@ -1,4 +1,5 @@
 """row_component"""
+
 from dash import html
 
 

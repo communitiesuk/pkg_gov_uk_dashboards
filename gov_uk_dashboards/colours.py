@@ -5,6 +5,7 @@ Contains:
     https://design-system.service.gov.uk/styles/colour/
 - ONSAccessibleColours: ONS colours taken from the Subnational Indicators Explorer.
 """
+
 from enum import Enum
 
 

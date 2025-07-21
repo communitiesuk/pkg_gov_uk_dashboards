@@ -1,4 +1,5 @@
 """LineStyle dataclass"""
+
 from dataclasses import dataclass
 from typing import Union
 from ..enums.dash_patterns import DashPatterns

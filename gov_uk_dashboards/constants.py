@@ -17,7 +17,7 @@ YEAR = "Year"
 UNIT_SIZE = "Unit size"
 DEFAULT_COLOURSCALE = "tealgrn"
 
-LEGEND_SPACING = "\u00A0" * 5
+LEGEND_SPACING = "\u00a0" * 5
 
 DOWNLOAD_BUTTON_CLASSES = (
     "govuk-button govuk-button--primary "

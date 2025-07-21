@@ -2,6 +2,7 @@
 Function to add a prefix and suffix to a number and also show the number of decimal places
 specified.
 """
+
 import math
 import decimal
 
