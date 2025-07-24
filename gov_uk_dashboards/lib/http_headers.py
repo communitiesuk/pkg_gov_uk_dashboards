@@ -11,7 +11,15 @@ def setup_application_http_response_headers(dash_app: dash.Dash):
     @server.after_request
     def add_headers(response):
         content_security_policy = (
-            "default-src 'self' 'unsafe-eval' 'unsafe-inline' data:"
+            "default-src 'self' 'unsafe-eval' 'unsafe-inline' data:; "
+            "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com "
+            "https://cdn.jsdelivr.net/npm/web-vitals@4.2.4/dist/web-vitals.min.js "
+            "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js "
+            "https://*.google-analytics.com;"
+            "connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com "
+            "https://*.analytics.google.com; "
+            "img-src 'self' https://*.googletagmanager.com https://*.google-analytics.com "
+            "https://*.analytics.google.com data: https://*.tile.openstreetmap.org; "
         )
         frame_ancestors = os.environ.get("ALLOWED_FRAME_ANCESTORS")
         if frame_ancestors:
