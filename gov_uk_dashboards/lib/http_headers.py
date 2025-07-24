@@ -19,7 +19,7 @@ def setup_application_http_response_headers(dash_app: dash.Dash):
             "connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com "
             "https://*.analytics.google.com; "
             "img-src 'self' https://*.googletagmanager.com https://*.google-analytics.com "
-            "https://*.analytics.google.com data:; "
+            "https://*.analytics.google.com data: https://*.tile.openstreetmap.org; "
         )
         frame_ancestors = os.environ.get("ALLOWED_FRAME_ANCESTORS")
         if frame_ancestors:
