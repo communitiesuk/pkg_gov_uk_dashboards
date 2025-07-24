@@ -18,9 +18,7 @@
     </script>
     <script type="module">
       import {onCLS, onINP, onLCP} from 'https://cdn.jsdelivr.net/npm/web-vitals@4.2.4/dist/web-vitals.min.js';
-      console.log("****************************")
       function sendToGoogleAnalytics({name, delta, value, id}) {
-        console.log(name, delta, value, id)
         // Assumes the global `gtag()` function exists, see:
         // https://developers.google.com/analytics/devguides/collection/ga4
         gtag('event', name, {
