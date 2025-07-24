@@ -44,10 +44,10 @@ def download_csv_with_headers(
     footnote = list_of_df_title_subtitle_dicts[0].get("footnote")
     header_data = [
         {column_list[0]: "Date downloaded: " + get_todays_date_for_downloaded_csv()},
-        (
+        *(
             {column_list[0]: "Last updated: " + last_updated_date}
-            if last_updated_date
-            else None
+            if last_updated_date is not None
+            else []
         ),
         {column_list[0]: None},
         *(
