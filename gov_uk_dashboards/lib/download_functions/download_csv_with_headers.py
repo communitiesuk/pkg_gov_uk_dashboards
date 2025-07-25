@@ -45,7 +45,7 @@ def download_csv_with_headers(
     header_data = [
         {column_list[0]: "Date downloaded: " + get_todays_date_for_downloaded_csv()},
         *(
-            {column_list[0]: "Last updated: " + last_updated_date}
+            [{column_list[0]: "Last updated: " + last_updated_date}]
             if last_updated_date is not None
             else []
         ),
