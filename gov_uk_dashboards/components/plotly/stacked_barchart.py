@@ -333,7 +333,7 @@ def _get_y_range_tickvals_and_ticktext(
     dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
 ):
     barchart_df = dataframe.pivot(
-        index=FINANCIAL_YEAR_ENDING, columns=MEASURE, values=VALUE
+        index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
     )
     positive_sum = sum(
         pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
