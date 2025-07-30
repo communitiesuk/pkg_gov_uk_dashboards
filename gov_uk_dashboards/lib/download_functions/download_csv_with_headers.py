@@ -14,74 +14,34 @@ def download_csv_with_headers(
     sensitivity_label: str,
     last_updated_date: str = None,
     additional_text: list[str] = None,
-):  # pylint: disable=too-many-locals
-    """Adds a header above multiple dataframes,
-    separates them with blank rows, and downloads as CSV.
-
-    Args:
-        list_of_df_title_subtitle_dicts (list[dict[]]): List of dictionaries containing keys: "df",
-        "title" and "subtitle"
-        name (str): Filename for CSV.
-        sensitivity_label (str): Sensitivity label. Str or None.
-        last_updated_date (str): Date data was last updated.
-        additional_text (list[str]): Additional text to inlcude in headers after data downloaded.
-            Str or None.
-    """
+):
+    """Adds a CSV header above multiple DataFrames, with optional metadata."""
 
     csv_buffer = io.StringIO()
-    max_columns = _get_number_of_max_columns_from_all_dfs(
-        list_of_df_title_subtitle_dicts
-    )
+    max_columns = _get_number_of_max_columns_from_all_dfs(list_of_df_title_subtitle_dicts)
     first_df = list_of_df_title_subtitle_dicts[0]["df"]
     first_col = first_df.columns[0]
-    column_list = list(first_df.columns)
-    column_dict = {col: col for col in column_list}
-    blank_dict = {str(i): None for i in range(max_columns - len(column_list))}
 
+    # --- Build initial header section
     header_data = []
 
     if sensitivity_label:
         header_data.append({first_col: sensitivity_label})
 
-    header_data.extend(
-        [
-            {first_col: f"Date downloaded: {get_todays_date_for_downloaded_csv()}"},
-            *(
-                [{first_col: f"Last updated: {last_updated_date}"}]
-                if last_updated_date
-                else []
-            ),
-            {first_col: None},
-            *(
-                [{first_col: text} for text in additional_text] + [{first_col: None}]
-                if additional_text
-                else []
-            ),
-            {first_col: list_of_df_title_subtitle_dicts[0]["title"]},
-            *(
-                [{first_col: list_of_df_title_subtitle_dicts[0]["subtitle"]}]
-                if list_of_df_title_subtitle_dicts[0]["subtitle"]
-                else []
-            ),
-            {first_col: None},
-            *(
-                [{first_col: list_of_df_title_subtitle_dicts[0].get("footnote")}]
-                if list_of_df_title_subtitle_dicts[0].get("footnote")
-                else []
-            ),
-            {**column_dict, **blank_dict},
-        ]
-    )
-
+    header_data.extend([
+        {first_col: f"Date downloaded: {get_todays_date_for_downloaded_csv()}"},
+        *([{first_col: f"Last updated: {last_updated_date}"}] if last_updated_date else []),
+        {first_col: None},
+        *([{first_col: text} for text in additional_text] + [{first_col: None}] if additional_text else []),
+        {first_col: list_of_df_title_subtitle_dicts[0]["title"]},
+        *([{first_col: list_of_df_title_subtitle_dicts[0]["subtitle"]}] if list_of_df_title_subtitle_dicts[0]["subtitle"] else []),
+        {first_col: None},
+        *([{first_col: list_of_df_title_subtitle_dicts[0].get("footnote")}] if list_of_df_title_subtitle_dicts[0].get("footnote") else []),
+    ])
     _write_padded_rows_to_buffer(header_data, max_columns, csv_buffer)
-
+    # --- Loop over each DF
     for i, data in enumerate(list_of_df_title_subtitle_dicts):
-        df, title, subtitle, footnote = (
-            data["df"],
-            data["title"],
-            data["subtitle"],
-            data.get("footnote"),
-        )
+        df, title, subtitle, footnote = data["df"], data["title"], data["subtitle"], data.get("footnote")
 
         if i > 0 and title:
             meta_rows = [
@@ -92,16 +52,25 @@ def download_csv_with_headers(
             ]
             _write_padded_rows_to_buffer(meta_rows, max_columns, csv_buffer)
 
+        # Pad DF if needed
         if df.shape[1] < max_columns:
-            for j in range(max_columns - df.shape[1]):
-                df = df.with_columns(pl.lit(None).alias(str(df.shape[1] + j)))
+            column_names = list(df.columns)
+            header_row = {col: col for col in column_names}
+            data_rows = df.to_dicts()
+            data_rows.insert(0, header_row)
+            padded_rows = [pad_row(row, max_columns) for row in data_rows]
+            output_df = pl.DataFrame(padded_rows)
+            output_df.columns = [str(i) for i in range(max_columns)]
+            output_df.write_csv(csv_buffer, include_header=False)
+        else:
 
-        df.write_csv(csv_buffer, include_header=(i > 0))
+            df.write_csv(csv_buffer)
 
         if i < len(list_of_df_title_subtitle_dicts) - 1:
             blank_row = pl.DataFrame([pad_row({}, max_columns)])
             blank_row.write_csv(csv_buffer, include_header=False)
 
+    # Return CSV for download
     csv_buffer.seek(0)
     csv_data = "\ufeff" + csv_buffer.getvalue()
     return dcc.send_string(csv_data, f"{name}.csv")
@@ -113,9 +82,7 @@ def pad_row(row: dict, max_columns: int) -> dict:
     return {str(i): val for i, val in enumerate(padded)}
 
 
-def _write_padded_rows_to_buffer(
-    rows: list[dict], max_columns: int, buffer: io.StringIO
-):
+def _write_padded_rows_to_buffer(rows: list[dict], max_columns: int, buffer: io.StringIO):
     """Pad and write a list of rows to the CSV buffer."""
     padded_rows = [pad_row(row, max_columns) for row in rows]
     pl.DataFrame(padded_rows).write_csv(buffer, include_header=False)
