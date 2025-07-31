@@ -186,7 +186,7 @@ def table_from_polars_dataframe(
     )
 
     last_row_index = len(dataframe) - 1 if last_row_unbolded else len(dataframe)
-
+    
     table_contents.append(
         html.Tbody(
             [
@@ -206,14 +206,9 @@ def table_from_polars_dataframe(
                             for cell, column_name in zip(row[1:], dataframe.columns[1:])
                         ],
                         **(
-                            {
-                                "id": (
-                                    create_id_from_string(row[0])
-                                    if assign_ids_to_rows
-                                    and create_id_from_string(row[0])
-                                    else {}
-                                )
-                            }
+                            {"id": create_id_from_string(row[0])}
+                            if assign_ids_to_rows and create_id_from_string(row[0])
+                            else {}
                         ),
                     )
                     if first_column_is_header and index != last_row_index
