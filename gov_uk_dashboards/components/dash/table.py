@@ -144,7 +144,7 @@ def table_from_polars_dataframe(
                             style={
                                 **({"width": width} if width else {}),
                                 **(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if header in columns_to_right_align
                                     else {}
                                 ),
@@ -162,7 +162,7 @@ def table_from_polars_dataframe(
                             style={
                                 **({"width": width} if width else {}),
                                 **(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if header in columns_to_right_align
                                     else {}
                                 ),
@@ -198,7 +198,7 @@ def table_from_polars_dataframe(
                                 cell,
                                 className="govuk-table__cell",
                                 style=(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if column_name in columns_to_right_align
                                     else {}
                                 ),
@@ -218,7 +218,7 @@ def table_from_polars_dataframe(
                                 cell,
                                 className="govuk-table__cell",
                                 style=(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if column_name in columns_to_right_align
                                     else {}
                                 ),
