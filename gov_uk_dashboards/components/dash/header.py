@@ -28,7 +28,7 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                     ),
                     html.Div(
                         ["Ministry of Housing, Communities & Local Government"],
-                        style={"font-size": "20px", "font-weight": "200px"},
+                        style={"fontSize": "20px", "fontWeight": "200px"},
                     ),
                     html.A(
                         title,
@@ -47,7 +47,7 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                                 "OFFICIAL",
                                 className="govuk-tag protective-marking",
                                 id="protective-marking",
-                                style={"background-color": "#000000"},
+                                style={"backgroundColor": "#000000"},
                             )
                         ],
                         className=f"{strong_class}",
@@ -61,11 +61,11 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                 className="govuk-header__content",
             ),
             className="govuk-header__container govuk-width-container",
-            style={"border-bottom": "10px solid #000000"},
+            style={"borderBottom": "10px solid #000000"},
         ),
         className="govuk-header",
         role="banner",
         style=header_style
-        | {"border-color": "#000000", "background-color": "rgb(0,98,94)"},
+        | {"borderColor": "#000000", "backgroundColor": "rgb(0,98,94)"},
         **{"data-module": "govuk-header"},
     )

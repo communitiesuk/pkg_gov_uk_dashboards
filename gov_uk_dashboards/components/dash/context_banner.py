@@ -25,6 +25,6 @@ def context_banner():
         ],
         className="govuk-notification-banner",
         role="region",
-        style={"maxWidth": "1000px", "margin-top": "20px", "margin-bottom": "20px"},
+        style={"maxWidth": "1000px", "marginTop": "20px", "marginBottom": "20px"},
     )
     return banner

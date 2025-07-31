@@ -24,7 +24,7 @@ def tooltip_title(title, tooltiptext):
                 tooltiptext,
                 target="tooltip-target",
                 class_name="tooltip tooltiptext",
-                style={"color": "white", "font-size": 12, "width": "10px"},
+                style={"color": "white", "fontSize": 12, "width": "10px"},
             ),
         ]
     )
