@@ -16,7 +16,7 @@ def download_csv_with_headers(
     additional_text: list[str] = None,
 ):
     """Adds a CSV header above multiple DataFrames, with optional metadata."""
-
+    # pylint: disable=too-many-locals
     csv_buffer = io.StringIO()
     max_columns = _get_number_of_max_columns_from_all_dfs(
         list_of_df_title_subtitle_dicts
