@@ -16,20 +16,20 @@ def download_csv_with_headers(
     additional_text: list[str] = None,
 ):
     """
-    Prepares and returns a CSV download with one or more DataFrames, each optionally preceded by 
+    Prepares and returns a CSV download with one or more DataFrames, each optionally preceded by
     titles, subtitles, footnotes, and metadata headers (e.g. sensitivity label, download date).
 
     Parameters:
-        list_of_df_title_subtitle_dicts (list[dict]): 
-            A list of dictionaries, each containing a Polars DataFrame ('df'), a title, 
+        list_of_df_title_subtitle_dicts (list[dict]):
+            A list of dictionaries, each containing a Polars DataFrame ('df'), a title,
             and optionally a subtitle and footnote.
-        name (str): 
+        name (str):
             The filename (without extension) for the downloaded CSV.
-        sensitivity_label (str): 
+        sensitivity_label (str):
             A label (e.g. OFFICIAL-SENSITIVE) to prepend at the top of the file.
-        last_updated_date (str, optional): 
+        last_updated_date (str, optional):
             A string to indicate when the data was last updated.
-        additional_text (list[str], optional): 
+        additional_text (list[str], optional):
             Extra lines to include before the data sections (e.g. disclaimers).
 
     Returns:
