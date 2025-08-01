@@ -77,7 +77,6 @@ def download_csv_with_headers(
         ]
     )
     _write_padded_rows_to_buffer(header_data, max_columns, csv_buffer)
-    # --- Loop over each DF
     for i, data in enumerate(list_of_df_title_subtitle_dicts):
         df, title, subtitle, footnote = (
             data["df"],
