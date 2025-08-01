@@ -40,6 +40,7 @@ def download_csv_with_headers(
     max_columns = _get_number_of_max_columns_from_all_dfs(
         list_of_df_title_subtitle_dicts
     )
+    # Get first df and first col to use to add header data
     first_df = list_of_df_title_subtitle_dicts[0]["df"]
     first_col = first_df.columns[0]
 
