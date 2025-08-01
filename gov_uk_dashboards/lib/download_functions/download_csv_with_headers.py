@@ -18,7 +18,9 @@ def download_csv_with_headers(
     """Adds a CSV header above multiple DataFrames, with optional metadata."""
 
     csv_buffer = io.StringIO()
-    max_columns = _get_number_of_max_columns_from_all_dfs(list_of_df_title_subtitle_dicts)
+    max_columns = _get_number_of_max_columns_from_all_dfs(
+        list_of_df_title_subtitle_dicts
+    )
     first_df = list_of_df_title_subtitle_dicts[0]["df"]
     first_col = first_df.columns[0]
 
@@ -28,20 +30,43 @@ def download_csv_with_headers(
     if sensitivity_label:
         header_data.append({first_col: sensitivity_label})
 
-    header_data.extend([
-        {first_col: f"Date downloaded: {get_todays_date_for_downloaded_csv()}"},
-        *([{first_col: f"Last updated: {last_updated_date}"}] if last_updated_date else []),
-        {first_col: None},
-        *([{first_col: text} for text in additional_text] + [{first_col: None}] if additional_text else []),
-        {first_col: list_of_df_title_subtitle_dicts[0]["title"]},
-        *([{first_col: list_of_df_title_subtitle_dicts[0]["subtitle"]}] if list_of_df_title_subtitle_dicts[0]["subtitle"] else []),
-        {first_col: None},
-        *([{first_col: list_of_df_title_subtitle_dicts[0].get("footnote")}] if list_of_df_title_subtitle_dicts[0].get("footnote") else []),
-    ])
+    header_data.extend(
+        [
+            {first_col: f"Date downloaded: {get_todays_date_for_downloaded_csv()}"},
+            *(
+                [{first_col: f"Last updated: {last_updated_date}"}]
+                if last_updated_date
+                else []
+            ),
+            {first_col: None},
+            *(
+                [{first_col: text} for text in additional_text] + [{first_col: None}]
+                if additional_text
+                else []
+            ),
+            {first_col: list_of_df_title_subtitle_dicts[0]["title"]},
+            *(
+                [{first_col: list_of_df_title_subtitle_dicts[0]["subtitle"]}]
+                if list_of_df_title_subtitle_dicts[0]["subtitle"]
+                else []
+            ),
+            {first_col: None},
+            *(
+                [{first_col: list_of_df_title_subtitle_dicts[0].get("footnote")}]
+                if list_of_df_title_subtitle_dicts[0].get("footnote")
+                else []
+            ),
+        ]
+    )
     _write_padded_rows_to_buffer(header_data, max_columns, csv_buffer)
     # --- Loop over each DF
     for i, data in enumerate(list_of_df_title_subtitle_dicts):
-        df, title, subtitle, footnote = data["df"], data["title"], data["subtitle"], data.get("footnote")
+        df, title, subtitle, footnote = (
+            data["df"],
+            data["title"],
+            data["subtitle"],
+            data.get("footnote"),
+        )
 
         if i > 0 and title:
             meta_rows = [
@@ -82,7 +107,9 @@ def pad_row(row: dict, max_columns: int) -> dict:
     return {str(i): val for i, val in enumerate(padded)}
 
 
-def _write_padded_rows_to_buffer(rows: list[dict], max_columns: int, buffer: io.StringIO):
+def _write_padded_rows_to_buffer(
+    rows: list[dict], max_columns: int, buffer: io.StringIO
+):
     """Pad and write a list of rows to the CSV buffer."""
     padded_rows = [pad_row(row, max_columns) for row in rows]
     pl.DataFrame(padded_rows).write_csv(buffer, include_header=False)
