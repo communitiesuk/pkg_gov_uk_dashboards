@@ -1,4 +1,4 @@
-name: pkg_gov_uk_dashboards_new
+name: pkg_gov_uk_dashboards
 channels:
   - conda-forge
   - nodefaults
