@@ -144,7 +144,7 @@ def table_from_polars_dataframe(
                             style={
                                 **({"width": width} if width else {}),
                                 **(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if header in columns_to_right_align
                                     else {}
                                 ),
@@ -162,7 +162,7 @@ def table_from_polars_dataframe(
                             style={
                                 **({"width": width} if width else {}),
                                 **(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if header in columns_to_right_align
                                     else {}
                                 ),
@@ -179,8 +179,8 @@ def table_from_polars_dataframe(
             style={
                 "position": "sticky",
                 "top": 0,
-                "z-index": 1,
-                "background-color": "#fff",
+                "zIndex": 1,
+                "backgroundColor": "#fff",
             },
         )
     )
@@ -198,7 +198,7 @@ def table_from_polars_dataframe(
                                 cell,
                                 className="govuk-table__cell",
                                 style=(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if column_name in columns_to_right_align
                                     else {}
                                 ),
@@ -206,14 +206,9 @@ def table_from_polars_dataframe(
                             for cell, column_name in zip(row[1:], dataframe.columns[1:])
                         ],
                         **(
-                            {
-                                "id": (
-                                    create_id_from_string(row[0])
-                                    if assign_ids_to_rows
-                                    and create_id_from_string(row[0])
-                                    else {}
-                                )
-                            }
+                            {"id": create_id_from_string(row[0])}
+                            if assign_ids_to_rows and create_id_from_string(row[0])
+                            else {}
                         ),
                     )
                     if first_column_is_header and index != last_row_index
@@ -223,7 +218,7 @@ def table_from_polars_dataframe(
                                 cell,
                                 className="govuk-table__cell",
                                 style=(
-                                    {"text-align": "right"}
+                                    {"textAlign": "right"}
                                     if column_name in columns_to_right_align
                                     else {}
                                 ),

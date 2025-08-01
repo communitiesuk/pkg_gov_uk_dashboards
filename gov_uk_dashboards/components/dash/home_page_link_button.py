@@ -57,17 +57,17 @@ def home_page_link_button(
                             ),
                         ],
                         style={
-                            "text-align": "left",
-                            "text-decoration": "none",
-                            "padding-left": "5%",
+                            "textAlign": "left",
+                            "textDecoration": "none",
+                            "paddingLeft": "5%",
                         },
                     ),
                     html.Img(src=image_path, style={"width": "100%"}),
                 ],
                 style={
                     "display": "grid",
-                    "grid-template-columns": "5fr 1fr",
-                    "align-items": "center",
+                    "gridTemplateColumns": "5fr 1fr",
+                    "alignItems": "center",
                 },
             )
         ],

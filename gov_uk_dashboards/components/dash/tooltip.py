@@ -26,7 +26,7 @@ def tooltip(
                 tooltip_text,
                 target=tooltip_id,
                 class_name="tooltip tooltiptext",
-                style={"color": color, "font-size": font_size},
+                style={"color": color, "fontSize": font_size},
             ),
         ],
         id=tooltip_id,

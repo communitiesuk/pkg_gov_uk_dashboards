@@ -220,7 +220,12 @@ class TimeSeriesChart:
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
-        for i, (df, trace_name, colour, marker,) in enumerate(
+        for i, (
+            df,
+            trace_name,
+            colour,
+            marker,
+        ) in enumerate(
             zip(
                 self._get_df_list_for_time_series(),
                 self.trace_name_list,
@@ -231,9 +236,9 @@ class TimeSeriesChart:
             if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
                 REMOVE_INITIAL_MARKER
             ):
-                marker_sizes = [0] + [12] * (len(df.with_row_count()) - 1)
+                marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
             else:
-                marker_sizes = [12] * (len(df.with_row_count()))
+                marker_sizes = [12] * (len(df.with_row_index()))
             legendgroup = self._get_legend_group(df)
             fig.add_trace(
                 self.create_time_series_trace(

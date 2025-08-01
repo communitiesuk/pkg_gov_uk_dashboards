@@ -21,7 +21,7 @@ def get_chart_for_download(self, fig):
         annotations=(
             [
                 {
-                    "text": f"<span style='color: black; font-size: 18px;'>{footnote}</span>",
+                    "text": f"<span style='color: black; fontSize: 18px;'>{footnote}</span>",
                     "x": -0.01,
                     "y": -0.4,  # Bottom of the plotting area
                     "xref": "paper",

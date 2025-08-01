@@ -63,7 +63,7 @@ def display_chart_or_table_with_header(
             ),
             paragraph(text_below_subheading),
             chart_or_table,
-            html.Div([paragraph(footnote)], style={"padding-top": "20px"}),
+            html.Div([paragraph(footnote)], style={"paddingTop": "20px"}),
             html.Div(
                 (
                     [
@@ -94,7 +94,7 @@ def display_chart_or_table_with_header(
                                 ),
                             ],
                             className="govuk-button-group",
-                            style={"padding-top": "20px"},
+                            style={"paddingTop": "20px"},
                         ),
                     ]
                 ),
