@@ -43,7 +43,6 @@ def download_csv_with_headers(
     first_df = list_of_df_title_subtitle_dicts[0]["df"]
     first_col = first_df.columns[0]
 
-    # --- Build initial header section
     header_data = []
 
     if sensitivity_label:
