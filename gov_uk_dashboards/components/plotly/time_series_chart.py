@@ -139,7 +139,7 @@ class TimeSeriesChart:
             self.title_data[SUBTITLE],
             self.download_chart_button_id,
             self.download_data_button_id,
-            self.footnote,
+            footnote=self.footnote,
         )
 
     def is_json_serializable(self, value):
