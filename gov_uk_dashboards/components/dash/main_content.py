@@ -22,10 +22,10 @@ def main_content(children, id_fragment=None):
     else:
         slug = ""
         warnings.warn(
-            "WARNING: No id_fragment provided to main_content(). This is usually the page title and"
-            " helps create a unique and consistent id attribute. Providing an id_fragment improves "
-            "accessibility, aids automated testing, and prevents issues with duplicate or missing "
-            "page headings.",
+            "WARNING: No id_fragment provided to main_content(). This is usually the page heading "
+            "and helps create a unique and consistent id attribute. Providing an id_fragment "
+            "improves accessibility, aids automated testing, and prevents issues with duplicate or "
+            "missing page headings.",
             UserWarning,
             stacklevel=2,
         )
