@@ -69,6 +69,9 @@ class StackedBarChart:
         hover_distance: Optional[int] = 1,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
+        download_all_data_button_id: Optional[str] = None,
+        alternative_data_button_text: Optional[str] = None,
+        alternative_all_data_button_text: Optional[str] = None,
         total_trace_name: Optional[str] = None,
     ):
         """Initializes the StackedBarChart instance.
@@ -112,6 +115,9 @@ class StackedBarChart:
         self.hover_distance = hover_distance
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
+        self.download_all_data_button_id = download_all_data_button_id
+        self.alternative_data_button_text = alternative_data_button_text
+        self.alternative_all_data_button_text = alternative_all_data_button_text
         self.total_trace_name = total_trace_name
         self.fig = self.create_stacked_bar_chart()
 
@@ -132,6 +138,9 @@ class StackedBarChart:
             self.title_data[SUBTITLE],
             self.download_chart_button_id,
             self.download_data_button_id,
+            download_all_data_button_id=self.download_all_data_button_id,
+            alternative_data_button_text=self.alternative_data_button_text,
+            alternative_all_data_button_text=self.alternative_all_data_button_text,
         )
 
     def is_json_serializable(self, value):
