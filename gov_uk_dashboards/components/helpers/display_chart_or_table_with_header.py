@@ -88,20 +88,28 @@ def display_chart_or_table_with_header(
                                 ),
                                 (
                                     create_download_button_with_icon(
-                                        alternative_data_button_text if alternative_data_button_text else "Download data",
+                                        (
+                                            alternative_data_button_text
+                                            if alternative_data_button_text
+                                            else "Download data"
+                                        ),
                                         download_data_button_id,
                                         instance,
-                                        "data"
+                                        "data",
                                     )
                                     if download_data_button_id
                                     else []
                                 ),
                                 (
                                     create_download_button_with_icon(
-                                        alternative_all_data_button_text if alternative_all_data_button_text else "Download all data",
+                                        (
+                                            alternative_all_data_button_text
+                                            if alternative_all_data_button_text
+                                            else "Download all data"
+                                        ),
                                         download_all_data_button_id,
                                         instance,
-                                        "data"
+                                        "data",
                                     )
                                     if download_all_data_button_id
                                     else []

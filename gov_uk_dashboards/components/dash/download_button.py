@@ -37,7 +37,10 @@ def download_button(button_text: str, button_id: str = "download-button"):
 
 
 def create_download_button_with_icon(
-    button_text: str, button_id_name: str,instance: Union[str, int] = None, download_type: str = None
+    button_text: str,
+    button_id_name: str,
+    instance: Union[str, int] = None,
+    download_type: str = None,
 ) -> html.Button:
     """Create a download button with icon, aligned to the left.
 
