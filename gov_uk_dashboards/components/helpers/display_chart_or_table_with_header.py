@@ -19,6 +19,9 @@ def display_chart_or_table_with_header(
     download_button_id: str = None,
     download_data_button_id: str = None,
     download_map_button_id: str = None,
+    download_all_data_button_id: str = None,
+    alternative_data_button_text: str = None,
+    alternative_all_data_button_text: str = None,
     footnote: str = None,
     instance=1,
     text_below_subheading: str = None,
@@ -33,6 +36,12 @@ def display_chart_or_table_with_header(
                                             if None then the button will not be included.
         download_data_button_id (str, optional): the id to be applied to the download data button.
         download_map_button_id (str, optional): the id to be applied to the download map button.
+        download_all_data_button_id (str, optional): the id to be applied to the download all data
+            button
+        alternative_data_button_text (str, optional): Optional alternative to button text
+            "Download data"
+        alternative_all_data_button_text (str, optional): Optional alternative to button text
+            "Download all data"
         footnote (str, optional): the footnote to be added to charts and downloads.
         instance (int or str): Optional additional paramter for id dict.
         text_below_subheading (str, optional): Optional text to go below subheading but above
@@ -85,11 +94,30 @@ def display_chart_or_table_with_header(
                                 ),
                                 (
                                     create_download_button_with_icon(
-                                        "Download data",
+                                        (
+                                            alternative_data_button_text
+                                            if alternative_data_button_text
+                                            else "Download data"
+                                        ),
                                         download_data_button_id,
                                         instance,
+                                        "data",
                                     )
                                     if download_data_button_id
+                                    else []
+                                ),
+                                (
+                                    create_download_button_with_icon(
+                                        (
+                                            alternative_all_data_button_text
+                                            if alternative_all_data_button_text
+                                            else "Download all data"
+                                        ),
+                                        download_all_data_button_id,
+                                        instance,
+                                        "data",
+                                    )
+                                    if download_all_data_button_id
                                     else []
                                 ),
                             ],

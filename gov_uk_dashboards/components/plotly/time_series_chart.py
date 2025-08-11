@@ -79,11 +79,14 @@ class TimeSeriesChart:
         x_axis_title: Optional[str] = None,
         download_chart_button_id: Optional[str] = None,
         download_data_button_id: Optional[str] = None,
+        download_all_data_button_id: Optional[str] = None,
+        alternative_data_button_text: Optional[str] = None,
+        alternative_all_data_button_text: Optional[str] = None,
         number_of_traces_colour_shift_dict: Optional[dict] = None,
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
         footnote: Optional[str] = None,
-    ):
+    ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
         self.hover_data = hover_data
@@ -107,6 +110,9 @@ class TimeSeriesChart:
         self.x_axis_title = x_axis_title
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
+        self.download_all_data_button_id = download_all_data_button_id
+        self.alternative_data_button_text = alternative_data_button_text
+        self.alternative_all_data_button_text = alternative_all_data_button_text
         self.markers = [
             "square",
             "diamond",
@@ -139,6 +145,9 @@ class TimeSeriesChart:
             self.title_data[SUBTITLE],
             self.download_chart_button_id,
             self.download_data_button_id,
+            download_all_data_button_id=self.download_all_data_button_id,
+            alternative_data_button_text=self.alternative_data_button_text,
+            alternative_all_data_button_text=self.alternative_all_data_button_text,
             footnote=self.footnote,
         )
 

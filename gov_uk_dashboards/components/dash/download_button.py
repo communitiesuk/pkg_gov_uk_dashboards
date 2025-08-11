@@ -37,7 +37,10 @@ def download_button(button_text: str, button_id: str = "download-button"):
 
 
 def create_download_button_with_icon(
-    button_text: str, button_id_name: str, instance: Union[str, int] = None
+    button_text: str,
+    button_id_name: str,
+    instance: Union[str, int] = None,
+    download_type: str = None,
 ) -> html.Button:
     """Create a download button with icon, aligned to the left.
 
@@ -50,7 +53,10 @@ def create_download_button_with_icon(
     Returns:
     - html.Button: Download button.
     """
-    download_type = button_text.lower().replace(" ", "-")
+    if download_type:
+        download_type = f"download-{download_type}"
+    else:
+        download_type = button_text.lower().replace(" ", "-")
     if button_text == "Download map":
         id_dict = {
             "download-type": download_type,
