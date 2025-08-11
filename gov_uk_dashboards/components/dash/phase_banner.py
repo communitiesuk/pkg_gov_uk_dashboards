@@ -5,7 +5,7 @@ from dash import html
 
 def phase_banner_with_feedback(
     phase: str,
-    feedback_link: str,
+    feedback_link: str = None,
     link_id: str = "feedback-link",
     link_target: str = "_self",
 ):
