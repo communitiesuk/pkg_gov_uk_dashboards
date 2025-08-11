@@ -86,7 +86,7 @@ class TimeSeriesChart:
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
         footnote: Optional[str] = None,
-    ):
+    ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
         self.hover_data = hover_data

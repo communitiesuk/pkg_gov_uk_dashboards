@@ -36,6 +36,12 @@ def display_chart_or_table_with_header(
                                             if None then the button will not be included.
         download_data_button_id (str, optional): the id to be applied to the download data button.
         download_map_button_id (str, optional): the id to be applied to the download map button.
+        download_all_data_button_id (str, optional): the id to be applied to the download all data
+            button
+        alternative_data_button_text (str, optional): Optional alternative to button text
+            "Download data"
+        alternative_all_data_button_text (str, optional): Optional alternative to button text
+            "Download all data"
         footnote (str, optional): the footnote to be added to charts and downloads.
         instance (int or str): Optional additional paramter for id dict.
         text_below_subheading (str, optional): Optional text to go below subheading but above
