@@ -112,7 +112,7 @@ class LeafletChoroplethMap:
             self.download_data_button_id,
             self.download_chart_button_id,
             None,
-            self.instance_number,
+            instance=self.instance_number,
         )
         download_choropleth_map_display = display_chart_or_table_with_header(
             download_choropleth_map,
