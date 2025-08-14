@@ -1,0 +1,15 @@
+if (!window.pageMaps) window.pageMaps = {};
+
+function tryRegisterMaps() {
+    document.querySelectorAll(".leaflet-container").forEach(el => {
+        if (el.id && !window.pageMaps[el.id]) {
+            const mapInstance = el._leaflet_map || el._leaflet;
+            if (mapInstance) {
+                window.pageMaps[el.id] = mapInstance;
+                console.log("Registered Leaflet map:", el.id);
+            }
+        }
+    });
+}
+
+setInterval(tryRegisterMaps, 500);
