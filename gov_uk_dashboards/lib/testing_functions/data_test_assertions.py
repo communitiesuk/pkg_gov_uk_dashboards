@@ -5,8 +5,9 @@ from typing import Type
 import polars as pl
 from pydantic import BaseModel, ValidationError
 
-from data.get_data import load_data
-from gov_uk_dashboards.lib.testing_functions.data_test_helper_functions import extract_main_type
+from gov_uk_dashboards.lib.testing_functions.data_test_helper_functions import (
+    extract_main_type,
+)
 from lib.absolute_path import absolute_path
 
 PYDANTIC_TO_POLARS = {
@@ -53,7 +54,9 @@ def cvs_contains_no_duplicate_rows(csv_relative_filepath: str):
     ), f"cvs_contains_no_duplicate_rows test failed for {csv_relative_filepath.split("/")[-1]}"
 
 
-def inferred_df_has_correct_column_types(csv_relative_filepath: str, schema: Type[BaseModel]):
+def inferred_df_has_correct_column_types(
+    csv_relative_filepath: str, schema: Type[BaseModel]
+):
     """
     Test to check that a df infers the correct column types as defined in schema.
 
@@ -68,9 +71,7 @@ def inferred_df_has_correct_column_types(csv_relative_filepath: str, schema: Typ
         for field, typ in schema.__annotations__.items()
     }
 
-    df = load_data(absolute_path(f"{csv_relative_filepath}"), "csv")
-    print(df.schema)
-    print(expected_schema)
+    df = pl.read_csv(absolute_path(f"{csv_relative_filepath}"))
     assert df.schema == expected_schema
 
 
@@ -85,7 +86,7 @@ def df_has_valid_schema(csv_relative_filepath: str, schema: Type[BaseModel]):
         schema (Type[BaseModel]): Pydantic model class to extract the expected column types
     """
 
-    df = load_data(absolute_path(f"{csv_relative_filepath}"), "csv")
+    df = pl.read_csv(absolute_path(f"{csv_relative_filepath}"))
 
     if hasattr(schema, "from_polars"):  # column level validation
         try:

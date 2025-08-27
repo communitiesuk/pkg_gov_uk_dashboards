@@ -1,10 +1,7 @@
 """test_barchart_data"""
 
 import polars as pl
-from dotenv import load_dotenv
 from gov_uk_dashboards.components.plotly.stacked_barchart import StackedBarChart
-
-load_dotenv(override=True)
 
 
 def validate_barchart_instance(
