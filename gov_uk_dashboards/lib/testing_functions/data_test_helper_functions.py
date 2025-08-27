@@ -67,6 +67,10 @@ def date_is_valid_format(
             "format": "%Y-%m-%dT%H:%M:%S.%f",
             "regex": r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}$",
         },
+        "FYE YYYY": {
+            "format": "FYE %Y",
+            "regex": r"^FYE \d{4}$",
+        },
     }
 
     if alternative_value is not None and date_value == alternative_value:
@@ -153,6 +157,26 @@ def date_is_last_day_of_month(cls, date_str: str, date_format: str):
     raise ValueError(f"Date {date_str} must be the last day of a month")
 
 
+def date_is_last_day_of_financial_year(cls, date_str: str, date_format: str):
+    """Validates that the date provided is the last day of the financial year, eg. 31 March.
+
+    Args:
+        date_value (str): Date to be checked
+        date_format (str): Format of the date passed in.
+
+    Raises:
+        ValueError: Raises ValueError if date is not the last day of the financial year.
+    """
+    # pylint: disable=unused-argument
+    date_obj = datetime.strptime(date_str, date_format)
+
+    # Check if the date is March 31
+    if date_obj.month == 3 and date_obj.day == 31:
+        return True
+
+    raise ValueError(f"Date {date_str} must be March 31")
+
+
 def financial_year_is_greater_or_equal_to_2009_10(cls, date_value: str):
     # pylint: disable=unused-argument
     """Validates that the provided financial year is greater than or equal to '2009-10'.
@@ -193,7 +217,7 @@ def date_is_greater_than_year_2000(cls, date_value: str, date_format: str):
 
 
 def value_matches_regex_pattern_or_alternative_value(
-    cls, value: str, regex_pattern_type: str, alternative_value: str = None
+    cls, value: str, regex_pattern_type: str, alternative_values: list[str] = None
 ):
     # pylint: disable=unused-argument
     """alidates if the given value matches a specified regex pattern or the alternative value.
@@ -201,12 +225,12 @@ def value_matches_regex_pattern_or_alternative_value(
     Args:
         value (str): The value to validate.
         regex_pattern_type (str): The key that determines which regex pattern to use.
-        alternative_value (str, optional): An alternative value that will pass the validation
-            even if it doesn't match the regex pattern. Defaults to None.
+        alternative_values (list[str, optional): A list of alternative values that will pass the
+            validation even if it doesn't match the regex pattern. Defaults to None.
 
     Raises:
-        ValueError: If the `value` doesn't match the specified regex pattern or the
-            `alternative_value`.
+        ValueError: If the `value` doesn't match the specified regex pattern or isn't in
+            alternative_values.
 
     Returns:
         str: The valid value (either the `value` or the `alternative_value`).
@@ -215,19 +239,19 @@ def value_matches_regex_pattern_or_alternative_value(
         "email": r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",
         "url": r"https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",  # pylint: disable=line-too-long
         "x_weeks_and_y_days": r"^\d+\s+weeks\s+and\s+\d+\s+days$",
-        "area_code": r"^E0[6789]\d{6}$",
+        "area_code": r"^^E(?:0[6789]|[01][06789])\d{6}$",
         "YYYY-YY": r"^\d{4}-\d{2}$",
         "YYYY-MM": r"^\d{4}-(0[1-9]|1[0-2])$",
     }
     if value is not None and not re.fullmatch(
         regex_pattern_dict[regex_pattern_type], value, re.IGNORECASE
     ):
-        if alternative_value is not None and value == alternative_value:
+        if alternative_values is not None and value in alternative_values:
             return value
 
         raise ValueError(
             f"Value '{value}' is invalid: doesn't match '{regex_pattern_type}' regex or "
-            f"allowed alternative '{alternative_value}'."
+            f"allowed alternatives '{alternative_values}'."
         )
     return value
 
@@ -621,3 +645,4 @@ def get_list_of_regions(schema=None):
     if schema == "housing_delivery_test":
         region_list.extend(["Check region"])
     return region_list
+
