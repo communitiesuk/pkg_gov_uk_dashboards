@@ -139,7 +139,7 @@ def date_is_last_day_of_month(cls, date_str: str, date_format: str):
     """Validates that the date provided is the last day of a month.
 
     Args:
-        date_value (str): Date to be checked
+        date_str (str): Date to be checked
         date_format (str): Format of the date passed in.
 
     Raises:
@@ -161,7 +161,7 @@ def date_is_last_day_of_financial_year(cls, date_str: str, date_format: str):
     """Validates that the date provided is the last day of the financial year, eg. 31 March.
 
     Args:
-        date_value (str): Date to be checked
+        date_str (str): Date to be checked
         date_format (str): Format of the date passed in.
 
     Raises:
@@ -220,12 +220,12 @@ def value_matches_regex_pattern_or_alternative_value(
     cls, value: str, regex_pattern_type: str, alternative_values: list[str] = None
 ):
     # pylint: disable=unused-argument
-    """alidates if the given value matches a specified regex pattern or the alternative value.
+    """Validates if the given value matches a specified regex pattern or the alternative value.
 
     Args:
         value (str): The value to validate.
         regex_pattern_type (str): The key that determines which regex pattern to use.
-        alternative_values (list[str, optional): A list of alternative values that will pass the
+        alternative_values (list[str], optional): A list of alternative values that will pass the
             validation even if it doesn't match the regex pattern. Defaults to None.
 
     Raises:
@@ -233,7 +233,7 @@ def value_matches_regex_pattern_or_alternative_value(
             alternative_values.
 
     Returns:
-        str: The valid value (either the `value` or the `alternative_value`).
+        str: The valid value (either the `value` or the `alternative_values`).
     """
     regex_pattern_dict = {
         "email": r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",

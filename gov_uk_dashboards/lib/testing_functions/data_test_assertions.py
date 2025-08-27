@@ -60,7 +60,8 @@ def inferred_df_has_correct_column_types(
     Test to check that a df infers the correct column types as defined in schema.
 
     Parameters:
-    csv_absolute_filepath (str): local csv absolute filepath to file to test for correct column types
+    csv_absolute_filepath (str): local csv absolute filepath to file to test for correct column
+        types
     schema (Type[BaseModel]): Pydantic model class to extract the expected column types
 
     Returns: bool: True if the inferred column types are correct, False otherwise.
