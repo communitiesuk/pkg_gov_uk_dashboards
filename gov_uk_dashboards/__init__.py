@@ -25,7 +25,6 @@ Contains the following function:
 
 from . import components
 from . import figures
-from . import axes
 from . import formatting
 from . import colours
 from . import assets
