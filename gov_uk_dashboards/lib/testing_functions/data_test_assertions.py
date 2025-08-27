@@ -8,7 +8,6 @@ from pydantic import BaseModel, ValidationError
 from gov_uk_dashboards.lib.testing_functions.data_test_helper_functions import (
     extract_main_type,
 )
-from lib.absolute_path import absolute_path
 
 PYDANTIC_TO_POLARS = {
     str: pl.Utf8,
@@ -18,15 +17,15 @@ PYDANTIC_TO_POLARS = {
 }
 
 
-def csv_columns_are_valid(csv_relative_filepath: str, desired_column_names: list[str]):
+def csv_columns_are_valid(csv_absolute_filepath: str, desired_column_names: list[str]):
     """Checks csv columns are equal to desired_column_names.
 
     Args:
-        csv_relative_filepath (str): local csv relative filepath to file to test
+        csv_absolute_filepath (str): local csv absolute filepath to file to test
         desired_column_names (list[str]): list of desired column names
     """
     with open(
-        absolute_path(f"{csv_relative_filepath}"),
+        csv_absolute_filepath,
         newline="",
         encoding="utf-8-sig",
     ) as file:
@@ -34,34 +33,34 @@ def csv_columns_are_valid(csv_relative_filepath: str, desired_column_names: list
         actual_column_names = reader.fieldnames
         assert sorted(actual_column_names) == sorted(
             desired_column_names
-        ), f"csv_columns_are_valid test failed for {csv_relative_filepath.split("/")[-1]}"
+        ), f"csv_columns_are_valid test failed for {csv_absolute_filepath.split("/")[-1]}"
 
 
-def cvs_contains_no_duplicate_rows(csv_relative_filepath: str):
+def cvs_contains_no_duplicate_rows(csv_absolute_filepath: str):
     """
     Test to check that the csv has no duplicate rows.
 
     Parameters:
-    csv_relative_filepath (str): local csv relative filepath to file to test for duplicate rows
+    csv_absolute_filepath (str): local csv absolute filepath to file to test for duplicate rows
 
     Returns: bool: True if there were no duplicates in the df, False otherwise.
     """
 
-    df = pl.read_csv(absolute_path(f"{csv_relative_filepath}"))
+    df = pl.read_csv(csv_absolute_filepath)
     num_duplicate_rows = df.is_duplicated().sum()
     assert (
         num_duplicate_rows == 0
-    ), f"cvs_contains_no_duplicate_rows test failed for {csv_relative_filepath.split("/")[-1]}"
+    ), f"cvs_contains_no_duplicate_rows test failed for {csv_absolute_filepath.split("/")[-1]}"
 
 
 def inferred_df_has_correct_column_types(
-    csv_relative_filepath: str, schema: Type[BaseModel]
+    csv_absolute_filepath: str, schema: Type[BaseModel]
 ):
     """
     Test to check that a df infers the correct column types as defined in schema.
 
     Parameters:
-    csv_relative_filepath (str): local csv relative filepath to file to test for correct column types
+    csv_absolute_filepath (str): local csv absolute filepath to file to test for correct column types
     schema (Type[BaseModel]): Pydantic model class to extract the expected column types
 
     Returns: bool: True if the inferred column types are correct, False otherwise.
@@ -71,22 +70,22 @@ def inferred_df_has_correct_column_types(
         for field, typ in schema.__annotations__.items()
     }
 
-    df = pl.read_csv(absolute_path(f"{csv_relative_filepath}"))
+    df = pl.read_csv(csv_absolute_filepath)
     assert df.schema == expected_schema
 
 
-def df_has_valid_schema(csv_relative_filepath: str, schema: Type[BaseModel]):
+def df_has_valid_schema(csv_absolute_filepath: str, schema: Type[BaseModel]):
     """If schema has attribute "from_polars":
             - Validates specified columns contain specific values.
         Else:
             - Validates each row in a Polars DataFrame against a Pydantic model schema.
 
     Args:
-        csv_relative_filepath (str): local csv relative filepath to file to test
+        csv_absolute_filepath (str): local csv absolute filepath to file to test
         schema (Type[BaseModel]): Pydantic model class to extract the expected column types
     """
 
-    df = pl.read_csv(absolute_path(f"{csv_relative_filepath}"))
+    df = pl.read_csv(csv_absolute_filepath)
 
     if hasattr(schema, "from_polars"):  # column level validation
         try:
