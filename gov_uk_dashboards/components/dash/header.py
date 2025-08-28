@@ -3,7 +3,12 @@
 from dash import html
 
 
-def header(title: str, strong_class: str = "", background_colour: str = None):
+def header(
+    title: str,
+    strong_class: str = "",
+    background_colour: str = None,
+    show_mobile_menu_button: bool = True,
+):
     """
     The header component, shared across all dashboard views. Includes optional strong_class
     parameter to provide extra styling in the form of a class.
@@ -52,10 +57,14 @@ def header(title: str, strong_class: str = "", background_colour: str = None):
                         ],
                         className=f"{strong_class}",
                     ),
-                    html.Button(
-                        "Menu ▼",
-                        id="mobile-menu-btn",
-                        className="mobile-menu-button govuk-button",
+                    (
+                        html.Button(
+                            "Menu ▼",
+                            id="mobile-menu-btn",
+                            className="mobile-menu-button govuk-button",
+                        )
+                        if show_mobile_menu_button
+                        else None
                     ),
                 ],
                 className="govuk-header__content",
