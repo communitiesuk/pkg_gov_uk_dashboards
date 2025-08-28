@@ -106,7 +106,9 @@ class StackedBarChart:
         self.hover_data = hover_data
         self.df = df
         self.trace_name_list = trace_name_list
-        self.legend_order = legend_order if legend_order is not None else trace_name_list[::-1]
+        self.legend_order = (
+            legend_order if legend_order is not None else trace_name_list[::-1]
+        )
         self.trace_name_column = trace_name_column
         self.initially_hidden_traces = initially_hidden_traces
         self.xaxis_tick_text_format = xaxis_tick_text_format
