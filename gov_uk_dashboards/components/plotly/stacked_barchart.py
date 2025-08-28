@@ -310,7 +310,7 @@ class StackedBarChart:
             customdata=self._get_custom_data(trace_name, df),
             hoverlabel=hover_label,
             marker={"color": colour},
-            legendrank=self.legend_order.index(trace_name)
+            legendrank=self.legend_order.index(trace_name),
         )
 
     def _get_hover_template(self, trace_name):
@@ -340,11 +340,12 @@ class StackedBarChart:
             df_list = [self.df]
         return df_list
 
-
     def _get_y_range_tickvals_and_ticktext(
-        self,dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
+        self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
     ):
-        barchart_df = dataframe.pivot(index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE)
+        barchart_df = dataframe.pivot(
+            index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
+        )
         positive_sum = sum(
             pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
             for col in yaxis_with_values
@@ -358,9 +359,10 @@ class StackedBarChart:
         maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
         miny = barchart_df.select([pl.col("Negative sum").min()]).item()
         tickvals = self._generate_tickvals(maxy, miny)
-        ticktext = [format_as_human_readable(val, prefix=tick_prefix) for val in tickvals]
+        ticktext = [
+            format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
+        ]
         return tickvals[-1], tickvals[0], tickvals, ticktext
-
 
     def _generate_tickvals(self, maxy, miny):
         range_size = maxy - miny
@@ -390,7 +392,31 @@ class StackedBarChart:
         tickvals = list(range(int(start), int(end) + 1, int(step_size)))
         return tickvals
 
+
 def get_tracenamelist_and_legend_order(df_function, barchart_measures=None):
+    """
+    Build the trace name list (stacking order) and legend order for a stacked bar chart.
+
+    This function aggregates values by measure, splits measures into positive and negative
+    groups based on their total value, and returns two lists:
+
+    - trace_name_list: the order in which traces should be added to the chart
+      (positives first, in reverse order so they stack top-to-bottom,
+      followed by negatives).
+    - legend_order: the order in which measures should appear in the legend
+      (positives in original order, then negatives).
+
+    Args:
+        df_function (callable): A function that returns a Polars DataFrame
+            containing at least [MEASURE, VALUE] columns.
+        barchart_measures (list[str], optional): Subset of measures to include.
+            If provided, the DataFrame will be filtered to these measures.
+
+    Returns:
+        tuple[list[str], list[str]]:
+            trace_name_list (for stacking order),
+            legend_order (for legend display).
+    """
     df = df_function()
     if barchart_measures:
         df = df.filter(pl.col(MEASURE).is_in(barchart_measures))
