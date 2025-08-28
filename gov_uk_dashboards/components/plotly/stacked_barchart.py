@@ -216,23 +216,19 @@ class StackedBarChart:
                 AFAccessibleColours.ORANGE.value,
             ]  # if 2 lines should use dark blue & orange as have highest contrast ratio
         )
-        for i, (df, trace_name, colour) in enumerate(
+        for _, (df, trace_name, colour) in enumerate(
             zip(
                 self._get_df_list_for_bar_chart(),
                 self.trace_name_list,
                 colour_list,
             )
         ):
-            neg_fraction = (df[self.y_axis_column] < 0).mean()
-            is_negative = neg_fraction > 0.5
-            rank = -1000 - i if not is_negative else i
             fig.add_trace(
                 self.create_bar_chart_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
                     hover_label=None,
                     colour=colour,
-                    legendrank=rank,
                 )
             )
 
@@ -259,7 +255,7 @@ class StackedBarChart:
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
-            legend=get_legend_configuration(),
+            legend=get_legend_configuration(reverse_order=True),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 "range": [min_y * 1.1, max_y * 1.1],
@@ -283,7 +279,6 @@ class StackedBarChart:
         trace_name: str,
         hover_label: dict[str, str],
         colour: str,
-        legendrank: int,
     ):
         """Creates a trace for the plot.
 
@@ -313,7 +308,6 @@ class StackedBarChart:
             customdata=self._get_custom_data(trace_name, df),
             hoverlabel=hover_label,
             marker={"color": colour},
-            legendrank=legendrank
         )
 
     def _get_hover_template(self, trace_name):
