@@ -59,6 +59,7 @@ class StackedBarChart:
         hover_data: HoverDataByTrace,
         df: pl.DataFrame,
         trace_name_list: list[str],
+        legend_order: list[str],
         trace_name_column: Optional[str] = None,
         initially_hidden_traces: Optional[list[str]] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
@@ -105,6 +106,7 @@ class StackedBarChart:
         self.hover_data = hover_data
         self.df = df
         self.trace_name_list = trace_name_list
+        self.legend_order = legend_order
         self.trace_name_column = trace_name_column
         self.initially_hidden_traces = initially_hidden_traces
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -205,7 +207,7 @@ class StackedBarChart:
                     hovertemplate="Total income: %{customdata[0]}<extra></extra>",
                     showlegend=False,
                     hoverinfo="skip",
-                    legendrank=1,
+                    legendrank=999,
                 )
             )
         colour_list = (
@@ -255,7 +257,7 @@ class StackedBarChart:
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
-            legend=get_legend_configuration(reverse_order=True),
+            legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 "range": [min_y * 1.1, max_y * 1.1],
@@ -308,6 +310,7 @@ class StackedBarChart:
             customdata=self._get_custom_data(trace_name, df),
             hoverlabel=hover_label,
             marker={"color": colour},
+            legendrank=self.legend_order.index(trace_name)
         )
 
     def _get_hover_template(self, trace_name):
