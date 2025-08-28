@@ -59,6 +59,7 @@ class StackedBarChart:
         hover_data: HoverDataByTrace,
         df: pl.DataFrame,
         trace_name_list: list[str],
+        legend_order: list[str],
         trace_name_column: Optional[str] = None,
         initially_hidden_traces: Optional[list[str]] = None,
         xaxis_tick_text_format: XAxisFormat = XAxisFormat.YEAR.value,
@@ -105,6 +106,7 @@ class StackedBarChart:
         self.hover_data = hover_data
         self.df = df
         self.trace_name_list = trace_name_list
+        self.legend_order = legend_order
         self.trace_name_column = trace_name_column
         self.initially_hidden_traces = initially_hidden_traces
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -205,7 +207,7 @@ class StackedBarChart:
                     hovertemplate="Total income: %{customdata[0]}<extra></extra>",
                     showlegend=False,
                     hoverinfo="skip",
-                    legendrank=1,
+                    legendrank=999,
                 )
             )
         colour_list = (
@@ -249,13 +251,13 @@ class StackedBarChart:
                 )
             )
 
-        max_y, min_y, tickvals, ticktext = _get_y_range_tickvals_and_ticktext(
+        max_y, min_y, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
             self.df, "£", self.trace_name_list
         )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
-            legend=get_legend_configuration(reverse_order=True),
+            legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 "range": [min_y * 1.1, max_y * 1.1],
@@ -308,6 +310,7 @@ class StackedBarChart:
             customdata=self._get_custom_data(trace_name, df),
             hoverlabel=hover_label,
             marker={"color": colour},
+            legendrank=self.legend_order.index(trace_name),
         )
 
     def _get_hover_template(self, trace_name):
@@ -337,52 +340,92 @@ class StackedBarChart:
             df_list = [self.df]
         return df_list
 
+    def _get_y_range_tickvals_and_ticktext(
+        self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
+    ):
+        barchart_df = dataframe.pivot(
+            index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
+        )
+        positive_sum = sum(
+            pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
+            for col in yaxis_with_values
+        )
+        negative_sum = sum(
+            pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
+            for col in yaxis_with_values
+        )
+        barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
+        barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
+        maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
+        miny = barchart_df.select([pl.col("Negative sum").min()]).item()
+        tickvals = self._generate_tickvals(maxy, miny)
+        ticktext = [
+            format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
+        ]
+        return tickvals[-1], tickvals[0], tickvals, ticktext
 
-def _get_y_range_tickvals_and_ticktext(
-    dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
-):
-    barchart_df = dataframe.pivot(index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE)
-    positive_sum = sum(
-        pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
-        for col in yaxis_with_values
-    )
-    negative_sum = sum(
-        pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
-        for col in yaxis_with_values
-    )
-    barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
-    barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
-    maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
-    miny = barchart_df.select([pl.col("Negative sum").min()]).item()
-    tickvals = _generate_tickvals(maxy, miny)
-    ticktext = [format_as_human_readable(val, prefix=tick_prefix) for val in tickvals]
-    return tickvals[-1], tickvals[0], tickvals, ticktext
+    def _generate_tickvals(self, maxy, miny):
+        range_size = maxy - miny
 
+        # Determine the order of magnitude of the range
+        order = int(math.log10(range_size))
 
-def _generate_tickvals(maxy, miny):
-    range_size = maxy - miny
+        # Start with an initial step size
+        step_size = 10**order
 
-    # Determine the order of magnitude of the range
-    order = int(math.log10(range_size))
-
-    # Start with an initial step size
-    step_size = 10**order
-
-    # Calculate the number of ticks based on the step size
-    num_ticks = math.ceil(range_size / step_size)
-
-    # Adjust step size to ensure the number of ticks is between 6 and 10
-    while num_ticks < 6 or num_ticks > 10:
-        if num_ticks < 6:  # Too few ticks -> decrease step size
-            step_size /= 2
-        elif num_ticks > 10:  # Too many ticks -> increase step size
-            step_size *= 2
+        # Calculate the number of ticks based on the step size
         num_ticks = math.ceil(range_size / step_size)
 
-    # Adjust the start and end of the range to align with the step size
-    start = math.floor(miny / step_size) * step_size
-    end = math.ceil(maxy / step_size) * step_size
+        # Adjust step size to ensure the number of ticks is between 6 and 10
+        while num_ticks < 6 or num_ticks > 10:
+            if num_ticks < 6:  # Too few ticks -> decrease step size
+                step_size /= 2
+            elif num_ticks > 10:  # Too many ticks -> increase step size
+                step_size *= 2
+            num_ticks = math.ceil(range_size / step_size)
 
-    # Generate tick values
-    tickvals = list(range(int(start), int(end) + 1, int(step_size)))
-    return tickvals
+        # Adjust the start and end of the range to align with the step size
+        start = math.floor(miny / step_size) * step_size
+        end = math.ceil(maxy / step_size) * step_size
+
+        # Generate tick values
+        tickvals = list(range(int(start), int(end) + 1, int(step_size)))
+        return tickvals
+
+
+def get_tracenamelist_and_legend_order(df_function, barchart_measures=None):
+    """
+    Build the trace name list (stacking order) and legend order for a stacked bar chart.
+
+    This function aggregates values by measure, splits measures into positive and negative
+    groups based on their total value, and returns two lists:
+
+    - trace_name_list: the order in which traces should be added to the chart
+      (positives first, in reverse order so they stack top-to-bottom,
+      followed by negatives).
+    - legend_order: the order in which measures should appear in the legend
+      (positives in original order, then negatives).
+
+    Args:
+        df_function (callable): A function that returns a Polars DataFrame
+            containing at least [MEASURE, VALUE] columns.
+        barchart_measures (list[str], optional): Subset of measures to include.
+            If provided, the DataFrame will be filtered to these measures.
+
+    Returns:
+        tuple[list[str], list[str]]:
+            trace_name_list (for stacking order),
+            legend_order (for legend display).
+    """
+    df = df_function()
+    if barchart_measures:
+        df = df.filter(pl.col(MEASURE).is_in(barchart_measures))
+    grouped_df = df.group_by(MEASURE).agg(pl.col(VALUE).sum()).sort(VALUE)
+
+    positive_measures = grouped_df.filter(pl.col(VALUE) >= 0)[MEASURE].to_list()[::-1]
+    negative_measures = grouped_df.filter(pl.col(VALUE) < 0)[MEASURE].to_list()
+
+    trace_name_list = positive_measures + negative_measures
+    legend_order = positive_measures[::-1] + negative_measures
+
+    return trace_name_list, legend_order
