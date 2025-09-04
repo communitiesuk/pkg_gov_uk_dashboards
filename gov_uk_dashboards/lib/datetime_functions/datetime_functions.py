@@ -364,7 +364,7 @@ def financial_year_january(date_str: str) -> str:
         date_str (str): Date string in the format "YYYY-MM-DD".
 
     Returns:
-        str: A string in the format "YYYY-MM-DD" representing January 1st 
+        str: A string in the format "YYYY-MM-DD" representing January 1st
              of the relevant financial year.
 
     Examples:
