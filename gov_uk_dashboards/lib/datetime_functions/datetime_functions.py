@@ -350,10 +350,10 @@ def convert_financial_quarter_to_financial_quarter_text(quarter: int):
     return quarter_map[quarter]
 
 
-def financial_year_january(date_str: str) -> date:
+def financial_year_january(date_str: str) -> str:
     """
-    Given a date string, return the 1st of January for the financial year
-    that the date falls into.
+    Given a date string, return the 1st of January (formatted as "YYYY-MM-DD")
+    for the financial year that the date falls into.
 
     UK financial years run from April 1st to March 31st:
     - If the date is between January 1st and March 31st (inclusive),
@@ -364,14 +364,15 @@ def financial_year_january(date_str: str) -> date:
         date_str (str): Date string in the format "YYYY-MM-DD".
 
     Returns:
-        date: A date object representing January 1st of the relevant financial year.
+        str: A string in the format "YYYY-MM-DD" representing January 1st 
+             of the relevant financial year.
 
     Examples:
         >>> financial_year_january("2024-02-15")
-        datetime.date(2024, 1, 1)
+        '2024-01-01'
         >>> financial_year_january("2024-05-10")
-        datetime.date(2025, 1, 1)
+        '2025-01-01'
     """
     dt = datetime.strptime(date_str, "%Y-%m-%d").date()
     year = dt.year if dt.month < 4 else dt.year + 1
-    return date(year, 1, 1)
+    return f"{year}-01-01"
