@@ -262,7 +262,7 @@ class StackedBarChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
-                "range": [min_y * 1.1, max_y * 1.1],
+                # "range": [min_y * 1.1, max_y * 1.1],
                 "tickmode": "array",
                 "tickvals": tickvals,
                 "ticktext": ticktext,
