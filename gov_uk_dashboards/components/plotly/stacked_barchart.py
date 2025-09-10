@@ -253,7 +253,7 @@ class StackedBarChart:
                 )
             )
 
-        max_y, min_y, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
+        _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
             self.df, "£", self.trace_name_list
         )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
@@ -262,7 +262,7 @@ class StackedBarChart:
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
-                "range": [min_y * 1.1, max_y * 1.1],
+                # "range": [min_y * 1.1, max_y * 1.1],
                 "tickmode": "array",
                 "tickvals": tickvals,
                 "ticktext": ticktext,
@@ -368,7 +368,9 @@ class StackedBarChart:
 
     def _generate_tickvals(self, maxy, miny):
         range_size = maxy - miny
-
+        if range_size <= 0:
+            center = maxy if maxy is not None else 0
+            return [center - 1, center, center + 1]
         # Determine the order of magnitude of the range
         order = int(math.log10(range_size))
 
