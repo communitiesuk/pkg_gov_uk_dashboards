@@ -368,7 +368,9 @@ class StackedBarChart:
 
     def _generate_tickvals(self, maxy, miny):
         range_size = maxy - miny
-
+        if range_size <= 0:
+            center = maxy if maxy is not None else 0
+            return [center - 1, center, center + 1]
         # Determine the order of magnitude of the range
         order = int(math.log10(range_size))
 
