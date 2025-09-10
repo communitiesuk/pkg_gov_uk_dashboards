@@ -253,7 +253,7 @@ class StackedBarChart:
                 )
             )
 
-        max_y, min_y, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
+        _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
             self.df, "£", self.trace_name_list
         )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
