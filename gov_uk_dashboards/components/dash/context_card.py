@@ -320,6 +320,7 @@ def get_data_for_context_card(
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
     include_2019: bool = True,
+    data_expected_for_previous_year_and_previous_2years: bool = True
 ) -> dict:
     # pylint: disable=too-many-locals
     """
@@ -336,6 +337,9 @@ def get_data_for_context_card(
         include_percentage_change (bool): Whether to include percentage change from previous year
             and 2 years ago. Defaults to False.
         include_2019 (bool): Whether to include data from 2019. Defaults to True.
+        data_expected_for_previous_year_and_previous_2years (bool): Whether data is expexcted for 
+            previous 2 years. Defaults to True. If True raises a value error if data not found,
+            otherwise returns None.
     Returns:
         dict: A dictionary containing the latest year and previous year, and optionally 2019 and optionally 2 years
         ago data for the specified measure and percentage change.
@@ -350,6 +354,7 @@ def get_data_for_context_card(
         latest_date,
         value_column,
         abbreviate_month=abbreviate_month,
+        data_expected=True,
         include_percentage_change=include_percentage_change,
     )
     date_of_latest_data = latest_data[DATE_VALID]
@@ -359,6 +364,7 @@ def get_data_for_context_card(
         previous_year_date,
         value_column,
         abbreviate_month,
+        data_expected_for_previous_year_and_previous_2years,
         include_percentage_change,
         date_of_latest_data,
     )
@@ -382,6 +388,7 @@ def get_data_for_context_card(
             date_2_years_ago,
             value_column,
             abbreviate_month,
+            data_expected_for_previous_year_and_previous_2years,
             include_percentage_change,
             previous_year_date,
         )
@@ -421,8 +428,10 @@ def get_latest_data_for_year(
     date: str,
     value_column: str,
     abbreviate_month: bool,
+    data_expected: bool,
     include_percentage_change: bool = False,
     date_of_latest_data=None,
+    
 ) -> dict:
     """
     Helper function to fetch the most recent data for a given date.
@@ -442,8 +451,26 @@ def get_latest_data_for_year(
     year_data = df_measure.filter(df_measure[DATE_VALID] == date)
 
     if year_data.height == 0:
-
-        raise ValueError(f"No data found for the date: {date}")
+        if data_expected:
+            raise ValueError(f"No data found for the date: {date}")
+        else:
+            return {
+            YEAR_END: convert_date_string_to_text_string(
+                date,
+                include_day_of_month=False,
+                abbreviate_month=abbreviate_month,
+            ),
+            METRIC_VALUE: None,
+            DATE_VALID: date,
+            **(
+                {
+                    PERCENTAGE_CHANGE_FROM_PREV_YEAR: None,
+                    PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: None,
+                }
+                if include_percentage_change
+                else {}
+            ),
+        }
     if date_of_latest_data:
         date_of_latest_data_dt = datetime.strptime(date_of_latest_data, "%Y-%m-%d")
 
