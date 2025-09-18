@@ -13,7 +13,7 @@ from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
 
-from constants import (
+from gov_uk_dashboards.constants import (
     CHANGED_FROM_GAP_STYLE,
     DATE_VALID,
     LARGE_BOLD_FONT_STYLE,
