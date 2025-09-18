@@ -30,6 +30,7 @@ from gov_uk_dashboards.constants import (
     YEAR_END,
 )
 
+
 def get_rolling_period_context_card(
     df_function, measure, heading, text_for_main_number, main_number_units=None
 ):
@@ -136,8 +137,6 @@ def _get_rolling_period_data_content_for_x_years(
         ],
         # className="context-card-grid-item"
     )
-
-
 
 
 # pylint: disable=too-many-arguments
@@ -320,6 +319,7 @@ def get_data_for_context_card(
     display_value_as_int: bool = False,
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
+    include_2019: bool = True,
 ) -> dict:
     # pylint: disable=too-many-locals
     """
@@ -335,8 +335,9 @@ def get_data_for_context_card(
         abbreviate_month (bool): Whether to abbreviate the month. Defaults to True.
         include_percentage_change (bool): Whether to include percentage change from previous year
             and 2 years ago. Defaults to False.
+        include_2019 (bool): Whether to include data from 2019. Defaults to True.
     Returns:
-        dict: A dictionary containing the latest year, previous year, 2019 and optionally 2 years
+        dict: A dictionary containing the latest year and previous year, and optionally 2019 and optionally 2 years
         ago data for the specified measure and percentage change.
     """
     df_measure = df.filter(df[MEASURE] == measure)
@@ -362,13 +363,17 @@ def get_data_for_context_card(
         date_of_latest_data,
     )
 
-    twenty_nineteen_data = df_measure.get_column(TWENTY_NINETEEN_VALUE)[0]
-
     data_to_return = {
         LATEST_YEAR: latest_data,
         PREVIOUS_YEAR: previous_year_data,
-        TWENTY_NINETEEN: {METRIC_VALUE: twenty_nineteen_data},
     }
+
+    if include_2019:
+        twenty_nineteen_data = df_measure.get_column(TWENTY_NINETEEN_VALUE)[0]
+        data_to_return = {
+            **data_to_return,
+            TWENTY_NINETEEN: {METRIC_VALUE: twenty_nineteen_data},
+        }
 
     if include_data_from_2_years_ago:
         date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
