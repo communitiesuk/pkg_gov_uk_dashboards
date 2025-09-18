@@ -188,7 +188,9 @@ def get_changed_from_content(
     else:
         percentage_change = ((current_value - previous_value) / previous_value) * 100
 
-    if percentage_change > 0:
+    if percentage_change==None:
+        return None
+    elif percentage_change > 0:
         colour = "green" if increase_is_positive else "red"
         arrow_direction = "up"
         prefix = "up"
