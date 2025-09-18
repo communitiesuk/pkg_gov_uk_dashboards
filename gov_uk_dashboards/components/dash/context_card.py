@@ -1,8 +1,14 @@
+from typing import Union
 import polars as pl
+import calendar
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from dash import html
+from dash.development.base_component import Component
 from gov_uk_dashboards.components.dash import (
     heading2,
 )
+from gov_uk_dashboards.formatting.number_formatting import add_commas
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
@@ -11,14 +17,21 @@ from constants import (
     CHANGED_FROM_GAP_STYLE,
     DATE_VALID,
     LARGE_BOLD_FONT_STYLE,
+    LATEST_YEAR,
     MEASURE,
+    METRIC_VALUE,
     PERCENTAGE_CHANGE_FROM_PREV_YEAR,
     PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR,
+    PREVIOUS_2YEAR,
+    PREVIOUS_YEAR,
+    TWENTY_NINETEEN,
+    TWENTY_NINETEEN_VALUE,
     VALUE,
+    YEAR_END,
 )
 
 def get_rolling_period_context_card(
-    df, measure, heading, text_for_main_number, main_number_units=None
+    df_function, measure, heading, text_for_main_number, main_number_units=None
 ):
     """Function to get a context card displaying a main figure along with a percentage comparison
     to previous two years
@@ -34,7 +47,7 @@ def get_rolling_period_context_card(
     Returns:
         html.Div: A div containing the context card
     """
-    df = get_housing_supply_summary_df()
+    df = df_function()
     df_filtered = df.filter(pl.col(MEASURE) == measure)
 
     latest_year_data = df_filtered.filter(
