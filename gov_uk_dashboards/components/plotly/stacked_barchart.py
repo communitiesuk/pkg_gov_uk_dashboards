@@ -38,7 +38,6 @@ from gov_uk_dashboards.components.plotly.enums import (
     TitleDataStructure,
     XAxisFormat,
 )
-from gov_uk_dashboards.formatting.human_readable import format_as_human_readable
 
 from gov_uk_dashboards.components.helpers.update_layout_bgcolor_margin import (
     update_layout_bgcolor_margin,
@@ -253,9 +252,9 @@ class StackedBarChart:
                 )
             )
 
-        _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
-            self.df, "£", self.trace_name_list
-        )
+        # _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
+        #     self.df, "£", self.trace_name_list
+        # )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         fig.update_layout(
@@ -263,9 +262,11 @@ class StackedBarChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 # "range": [min_y * 1.1, max_y * 1.1],
-                "tickmode": "array",
-                "tickvals": tickvals,
-                "ticktext": ticktext,
+                "tickprefix": "£",
+                "exponentformat": "B",
+                # "tickmode": "array",
+                # "tickvals": tickvals,
+                # "ticktext": ticktext,
             },
             showlegend=True,
             barmode="relative",
@@ -342,29 +343,29 @@ class StackedBarChart:
             df_list = [self.df]
         return df_list
 
-    def _get_y_range_tickvals_and_ticktext(
-        self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
-    ):
-        barchart_df = dataframe.pivot(
-            index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
-        )
-        positive_sum = sum(
-            pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
-            for col in yaxis_with_values
-        )
-        negative_sum = sum(
-            pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
-            for col in yaxis_with_values
-        )
-        barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
-        barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
-        maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
-        miny = barchart_df.select([pl.col("Negative sum").min()]).item()
-        tickvals = self._generate_tickvals(maxy, miny)
-        ticktext = [
-            format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
-        ]
-        return tickvals[-1], tickvals[0], tickvals, ticktext
+    # def _get_y_range_tickvals_and_ticktext(
+    #     self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
+    # ):
+    #     barchart_df = dataframe.pivot(
+    #         index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
+    #     )
+    #     positive_sum = sum(
+    #         pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
+    #         for col in yaxis_with_values
+    #     )
+    #     negative_sum = sum(
+    #         pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
+    #         for col in yaxis_with_values
+    #     )
+    #     barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
+    #     barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
+    #     maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
+    #     miny = barchart_df.select([pl.col("Negative sum").min()]).item()
+    #     tickvals = self._generate_tickvals(maxy, miny)
+    #     ticktext = [
+    #         format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
+    #     ]
+    #     return tickvals[-1], tickvals[0], tickvals, ticktext
 
     def _generate_tickvals(self, maxy, miny):
         range_size = maxy - miny
