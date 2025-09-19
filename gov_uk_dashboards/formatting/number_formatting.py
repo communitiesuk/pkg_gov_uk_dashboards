@@ -22,3 +22,10 @@ def format_number_into_thousands_or_millions(
     else:
         formatted_number = str(number)
     return formatted_number
+
+
+def add_commas(number: int, remove_decimal_places: bool = False) -> str:
+    """Formats large numbers with a string"""
+    if remove_decimal_places:
+        return f"{number:,.0f}"
+    return f"{number:,}"

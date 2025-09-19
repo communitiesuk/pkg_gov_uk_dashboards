@@ -24,3 +24,18 @@ DOWNLOAD_BUTTON_CLASSES = (
     "govuk-!-margin-bottom-0 govuk-!-margin-top-4 "
     "flex w-auto items-center gap-2 print:hidden"
 )
+
+PERCENTAGE_CHANGE_FROM_PREV_YEAR = "Percentage change from prev year"
+PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR = "Percentage change from two prev year"
+TWENTY_NINETEEN_VALUE = "twenty_nineteen_value"
+
+LARGE_BOLD_FONT_STYLE = {"fontSize": "300%"}
+CHANGED_FROM_GAP_STYLE = {"marginTop": "20px"}
+
+PERIOD_END = "period_end"
+YEAR_END = "year_end"
+METRIC_VALUE = "metric_value"
+LATEST_YEAR = "latest_year"
+PREVIOUS_YEAR = "previous_year"
+PREVIOUS_2YEAR = "previous_2year"
+TWENTY_NINETEEN = "twenty_nineteen"
