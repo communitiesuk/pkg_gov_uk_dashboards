@@ -205,7 +205,7 @@ class StackedBarChart:
                     mode="markers",
                     marker={"color": "white", "opacity": 0},
                     name=self.total_trace_name + LEGEND_SPACING,
-                    hovertemplate="{self.total_trace_name}: %{customdata[0]}<extra></extra>",
+                    hovertemplate = f"{self.total_trace_name}: %{{customdata[0]}}<extra></extra>",
                     showlegend=False,
                     hoverinfo="skip",
                     legendrank=999,
