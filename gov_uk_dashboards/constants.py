@@ -32,6 +32,7 @@ TWENTY_NINETEEN_VALUE = "twenty_nineteen_value"
 LARGE_BOLD_FONT_STYLE = {"fontSize": "300%"}
 CHANGED_FROM_GAP_STYLE = {"marginTop": "20px"}
 
+PERIOD_END = "period_end"
 YEAR_END = "year_end"
 METRIC_VALUE = "metric_value"
 LATEST_YEAR = "latest_year"

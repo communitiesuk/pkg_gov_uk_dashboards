@@ -1,7 +1,9 @@
 """Tests for convert_days_to_weeks_and_days"""
 
 import pytest
-from gov_uk_dashboards.components.dash.context_card import convert_days_to_weeks_and_days
+from gov_uk_dashboards.components.dash.context_card import (
+    convert_days_to_weeks_and_days,
+)
 
 
 @pytest.mark.parametrize(

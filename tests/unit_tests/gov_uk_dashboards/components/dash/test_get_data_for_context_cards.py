@@ -6,7 +6,7 @@ from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
 from gov_uk_dashboards.constants import (
-    PLANNING_APPLICATIONS_GRANTED,
+    MEASURE,
     METRIC_VALUE,
     YEAR_END,
     PERIOD_END,
@@ -16,9 +16,7 @@ from gov_uk_dashboards.constants import (
     PREVIOUS_YEAR,
     TWENTY_NINETEEN,
 )
-from lib.absolute_path import absolute_path
-
-from lib.get_data_for_context_cards import (
+from gov_uk_dashboards.components.dash.context_card import (
     get_data_for_context_card,
     get_latest_data_for_year,
 )
@@ -26,8 +24,19 @@ from lib.get_data_for_context_cards import (
 
 def test_get_data_for_context_card():
     """Test get_data_for_context_card function"""
-    test_df = pl.read_csv(
-        absolute_path("tests/data/housing/housing_supply_summary.csv")
+    test_df = pl.DataFrame(
+        {
+            MEASURE: ["measure1", "measure1", "measure1"],
+            "Area_Code": ["E92000001", "E92000001", "E92000001"],
+            "Value": [10000.0,15000.0,16000.0],
+            "twenty_nineteen_value": [13000.0,13000.0,13000.0],
+            "Date valid": ["2023-12-31","2022-12-31","2020-12-31"],
+            "value_unrounded": [10001,15001,16001],
+            "Percentage change from prev year": [None,None,None],
+            "Percentage change from two prev year": [None,None,None],
+            "Financial year": ["2023-24","2022-23","2020-21"],
+            "Date submitted": ["2025-07-01T20:07:17.000","2025-07-01T20:07:17.000","2025-07-01T20:07:17.000"],
+        }
     )
 
     expected = {
@@ -46,7 +55,7 @@ def test_get_data_for_context_card():
         },
     }
 
-    result = get_data_for_context_card(PLANNING_APPLICATIONS_GRANTED, test_df)
+    result = get_data_for_context_card("measure1", test_df)
 
     assert result == expected
 
