@@ -28,14 +28,18 @@ def test_get_data_for_context_card():
         {
             MEASURE: ["measure1", "measure1", "measure1"],
             "Area_Code": ["E92000001", "E92000001", "E92000001"],
-            "Value": [10000.0,15000.0,16000.0],
-            "twenty_nineteen_value": [13000.0,13000.0,13000.0],
-            "Date valid": ["2023-12-31","2022-12-31","2020-12-31"],
-            "value_unrounded": [10001,15001,16001],
-            "Percentage change from prev year": [None,None,None],
-            "Percentage change from two prev year": [None,None,None],
-            "Financial year": ["2023-24","2022-23","2020-21"],
-            "Date submitted": ["2025-07-01T20:07:17.000","2025-07-01T20:07:17.000","2025-07-01T20:07:17.000"],
+            "Value": [10000.0, 15000.0, 16000.0],
+            "twenty_nineteen_value": [13000.0, 13000.0, 13000.0],
+            "Date valid": ["2023-12-31", "2022-12-31", "2020-12-31"],
+            "value_unrounded": [10001, 15001, 16001],
+            "Percentage change from prev year": [None, None, None],
+            "Percentage change from two prev year": [None, None, None],
+            "Financial year": ["2023-24", "2022-23", "2020-21"],
+            "Date submitted": [
+                "2025-07-01T20:07:17.000",
+                "2025-07-01T20:07:17.000",
+                "2025-07-01T20:07:17.000",
+            ],
         }
     )
 

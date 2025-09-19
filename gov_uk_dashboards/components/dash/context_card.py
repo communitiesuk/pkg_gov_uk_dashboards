@@ -1,7 +1,9 @@
+"""Context card functions"""
+
 from typing import Union
-import polars as pl
 import calendar
 from datetime import datetime
+import polars as pl
 from dateutil.relativedelta import relativedelta
 from dash import html
 from dash.development.base_component import Component
@@ -34,19 +36,26 @@ from gov_uk_dashboards.constants import (
 def get_rolling_period_context_card(
     df_function, measure, heading, text_for_main_number, main_number_units=None
 ):
-    """Function to get a context card displaying a main figure along with a percentage comparison
-    to previous two years
+    """
+    Build a context card showing the latest value of a measure with comparisons
+    to the previous two years.
+
+    The function fetches data via `df_function`, filters it for the given measure,
+    extracts the most recent year, and constructs an HTML card with a heading,
+    main value, and percentage change context.
 
     Args:
-        df (pl.DataFrame): Dataframe containing measure of interest
-        measure (str): Measure to filter by
-        heading (str): Heading for context card
-        text_for_main_number (str): Explanatory text to display under main number
-        main_number_units (str, optional): Units to display after main number if needed.
-            Defaults to None.
+        df_function (Callable): A function that returns a Polars DataFrame
+            containing the measure of interest.
+        measure (str): The measure identifier to filter data by.
+        heading (str): The heading text for the context card.
+        text_for_main_number (str): Supporting explanatory text displayed under
+            the main number.
+        main_number_units (str, optional): Units to display after the main number
+            (e.g. "%", "days"). Defaults to None.
 
     Returns:
-        html.Div: A div containing the context card
+        html.Div: A GOV.UK-styled HTML div containing the context card.
     """
     df = df_function()
     df_filtered = df.filter(pl.col(MEASURE) == measure)
@@ -155,28 +164,45 @@ def get_changed_from_content(
     use_calculated_percentage_change: bool = False,
     use_number_rather_than_percentage: bool = False,
 ) -> Component:
-    """Returns the component showing how a value has changed, for use in context cards.
+    """
+    Build an HTML component describing how a metric has changed over time.
+
+    Depending on arguments, this function renders either:
+    - a percentage change between current and previous values,
+    - the absolute previous value,
+    - or the difference expressed in weeks/days.
+
+    Styling and arrows (up, down, right) are applied to indicate direction
+    and whether an increase is considered positive.
+
     Args:
-        current_value (Union[int, float]): The currrent value of the metric. Defaults to None.
-        previous_value (Union[int, float]): The previous value of the metric. Defaults to None.
-        calculated_percentage_change: Percentage change pre-calculated in database.
+        current_value (Union[int, float], optional): The current metric value. Defaults to None.
+        previous_value (Union[int, float], optional): The previous metric value. Defaults to None.
+        calculated_percentage_change (float, optional): Pre-calculated percentage change
+            (e.g. from a database). Used only if `use_calculated_percentage_change=True`.
             Defaults to None.
-        increase_is_positive (bool): Whether an increase in value is positive for the metric.
-        comparison_period_text: (str): Text describing comparison period. Defaults to empty string.
-        use_previous_value_rather_than_change (bool): Whether to include the actual
-            previous value or the percentage change between previous and current value. Defaults to
-            False.
-        use_difference_in_weeks_days (bool): Whether to use difference in values in weeks and days
-            format. Defaults to False. If true, current_value and previous_value must be an int
-            representing number of days.
-        percentage_change_rounding (int): The number of decimal places to round percentage change
-            to. Defaults to 1.
-        use_calculated_percentage_change (bool): Whether to use calculated percentage change.
+        increase_is_positive (bool, optional): Whether an increase is considered a positive change.
+            Defaults to True.
+        comparison_period_text (str, optional): Text describing the comparison period
+            (e.g. "last year", "previous quarter"). Defaults to "".
+        use_previous_value_rather_than_change (bool, optional): If True, show the actual previous
+            value instead of a calculated change. Defaults to False.
+        use_difference_in_weeks_days (bool, optional): If True, show the difference in
+            weeks/days (requires `current_value` and `previous_value` as day counts).
             Defaults to False.
-        use_number_rather_than_percentage (bool): Whether the value is an absolute value
-            rather than a percentage. Defaults to False.
+        percentage_change_rounding (int, optional): Decimal places to round percentage change.
+            Defaults to 1.
+        use_calculated_percentage_change (bool, optional): If True, use the supplied
+            `calculated_percentage_change` instead of computing it. Defaults to False.
+        use_number_rather_than_percentage (bool, optional): If True, display the change as
+            an absolute number instead of a percentage. Defaults to False.
+
     Returns:
-        Component: Html component describing how values for a metric have changed.
+        Component: An HTML component (Dash) representing the change, styled with GOV.UK classes.
+
+    Raises:
+        ValueError: If `use_previous_value_rather_than_change` and
+            `use_difference_in_weeks_days` are both True.
     """
     if use_previous_value_rather_than_change and use_difference_in_weeks_days:
         raise ValueError(
@@ -188,9 +214,9 @@ def get_changed_from_content(
     else:
         percentage_change = ((current_value - previous_value) / previous_value) * 100
 
-    if percentage_change == None:
+    if percentage_change is None:
         return None
-    elif percentage_change > 0:
+    if percentage_change > 0:
         colour = "green" if increase_is_positive else "red"
         arrow_direction = "up"
         prefix = "up"
@@ -343,8 +369,8 @@ def get_data_for_context_card(
             previous 2 years. Defaults to True. If True raises a value error if data not found,
             otherwise returns None.
     Returns:
-        dict: A dictionary containing the latest year and previous year, and optionally 2019 and optionally 2 years
-        ago data for the specified measure and percentage change.
+        dict: A dictionary containing the latest year and previous year, and optionally 2019 and
+        optionally 2 years ago data for the specified measure and percentage change.
     """
     df_measure = df.filter(df[MEASURE] == measure)
     if display_value_as_int:
@@ -435,43 +461,60 @@ def get_latest_data_for_year(
     date_of_latest_data=None,
 ) -> dict:
     """
-    Helper function to fetch the most recent data for a given date.
+    Retrieve the most recent metric value for a given reference date.
+
+    This function looks up data for the specified `date` in the provided
+    DataFrame. If data exists, it returns the latest entry (or the entry
+    corresponding to one year before `date_of_latest_data`, if provided).
+    Optionally, percentage changes from previous years can be included.
+
     Args:
-        df_measure (pl.DataFrame): The DataFrame containing the data.
-        date (str): The date string to filter the data.
-        value_column (str): The name of the column to get the value for.
-        abbreviate_month (bool): Whether to abbreviate the month.
-        include_percentage_change (bool): Whether to include percentage change from previous year
-            and 2 years ago. Defaults to False.
-        date_of_latest_data (str): Date string, which if given, returns data for year before.
+        df_measure (pl.DataFrame): Source DataFrame containing the data.
+        date (str): The reference date (format: YYYY-MM-DD) to search for.
+        value_column (str): Column name containing the metric value.
+        abbreviate_month (bool): Whether to abbreviate month names in output text.
+        data_expected (bool, optional): If True, raises a ValueError when no
+            matching data is found. If False, returns None values instead.
+            Defaults to True.
+        include_percentage_change (bool, optional): If True, includes percentage
+            change from the previous year and two years prior. Defaults to False.
+        date_of_latest_data (str, optional): A specific "latest data" date
+            (format: YYYY-MM-DD). If provided, returns the value from one year
+            before this date instead of the latest available.
+
     Returns:
-        dict: A dictionary containing the year end and metric value.
+        dict: A dictionary containing:
+            - YEAR_END (str): Formatted year-end date.
+            - METRIC_VALUE: The metric value (or None if not found).
+            - DATE_VALID (str): The raw date corresponding to the result.
+            - PERCENTAGE_CHANGE_FROM_PREV_YEAR (optional): Change vs. previous year.
+            - PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR (optional): Change vs. two years prior.
+
     Raises:
-        ValueError: If no data is found for the given date.
+        ValueError: If no matching data is found when `data_expected=True`.
     """
     year_data = df_measure.filter(df_measure[DATE_VALID] == date)
 
     if year_data.height == 0:
         if data_expected:
             raise ValueError(f"No data found for the date: {date}")
-        else:
-            return {
-                YEAR_END: convert_date_string_to_text_string(
-                    date,
-                    include_day_of_month=False,
-                    abbreviate_month=abbreviate_month,
-                ),
-                METRIC_VALUE: None,
-                DATE_VALID: date,
-                **(
-                    {
-                        PERCENTAGE_CHANGE_FROM_PREV_YEAR: None,
-                        PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: None,
-                    }
-                    if include_percentage_change
-                    else {}
-                ),
-            }
+        return {
+            YEAR_END: convert_date_string_to_text_string(
+                date,
+                include_day_of_month=False,
+                abbreviate_month=abbreviate_month,
+            ),
+            METRIC_VALUE: None,
+            DATE_VALID: date,
+            **(
+                {
+                    PERCENTAGE_CHANGE_FROM_PREV_YEAR: None,
+                    PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: None,
+                }
+                if include_percentage_change
+                else {}
+            ),
+        }
     if date_of_latest_data:
         date_of_latest_data_dt = datetime.strptime(date_of_latest_data, "%Y-%m-%d")
 
