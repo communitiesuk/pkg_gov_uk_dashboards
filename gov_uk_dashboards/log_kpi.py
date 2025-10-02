@@ -16,7 +16,6 @@ def log_message(message: str):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python log_kpi.py \"Your message here\"")
         sys.exit(1)
 
     msg = " ".join(sys.argv[1:])
