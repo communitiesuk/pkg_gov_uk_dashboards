@@ -86,7 +86,7 @@ class TimeSeriesChart:
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
         footnote: Optional[str] = None,
-        stacked: Optional[bool]=False,
+        stacked: Optional[bool] = False,
     ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -430,7 +430,7 @@ class TimeSeriesChart:
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
             legendgroup=legendgroup,
-            stackgroup='one' if self.stacked else None
+            stackgroup="one" if self.stacked else None,
         )
 
     def _get_hover_template(self, df, trace_name):
@@ -604,14 +604,17 @@ class TimeSeriesChart:
             range_x = [0.5, 4.5]
         elif self.xaxis_tick_text_format == XAxisFormat.WEEK.value:
             df = self.filtered_df.with_columns(
-                pl.col(self.x_axis_column).str.strptime(pl.Datetime, "%Y-%m-%d", strict=False)
+                pl.col(self.x_axis_column)
+                .str.strptime(pl.Datetime, "%Y-%m-%d", strict=False)
                 .alias(self.x_axis_column)
             ).sort(self.x_axis_column)
 
             start_datetime = df[self.x_axis_column].min() - relativedelta(weeks=1)
-            latest_datetime = df[self.x_axis_column].max()+ relativedelta(weeks=1)
+            latest_datetime = df[self.x_axis_column].max() + relativedelta(weeks=1)
 
-            start_of_week = start_datetime - relativedelta(days=start_datetime.weekday())
+            start_of_week = start_datetime - relativedelta(
+                days=start_datetime.weekday()
+            )
 
             tick_values = []
             tick_text = []
@@ -622,11 +625,7 @@ class TimeSeriesChart:
                 tick_text.append(current.strftime("%d %b %Y"))  # e.g. "29 Sep 2025"
                 current += relativedelta(weeks=1)
 
-
-            range_x = [
-                start_datetime,
-                latest_datetime
-            ]
+            range_x = [start_datetime, latest_datetime]
         else:
             raise ValueError(
                 f"Invalid xaxis_tick_text_format: {self.xaxis_tick_text_format}"
@@ -638,11 +637,10 @@ class TimeSeriesChart:
         maximum y value."""
         if self.stacked:
             largest_y_value = (
-                self.filtered_df
-                .group_by(self.x_axis_column)              # group by date
-                .agg(pl.col(self.y_axis_column).sum())     # total per date
+                self.filtered_df.group_by(self.x_axis_column)  # group by date
+                .agg(pl.col(self.y_axis_column).sum())  # total per date
                 .select(pl.col(self.y_axis_column).max())  # largest daily total
-                .item()                                    # extract scalar
+                .item()  # extract scalar
             )
         else:
             largest_y_value = self.filtered_df[self.y_axis_column].max()
