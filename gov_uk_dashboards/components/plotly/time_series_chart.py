@@ -503,6 +503,7 @@ class TimeSeriesChart:
             return self.legend_dict[trace_name]
         return trace_name
 
+    # pylint: disable=too-many-statements
     def _get_x_axis_content(self):
         """Generates tick text and values for the x-axis based on the unique years calculated from
         the DATE_VALID column in the dataframe.
