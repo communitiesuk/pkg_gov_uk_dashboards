@@ -602,6 +602,31 @@ class TimeSeriesChart:
             ]
 
             range_x = [0.5, 4.5]
+        elif self.xaxis_tick_text_format == XAxisFormat.WEEK.value:
+            df = self.filtered_df.with_columns(
+                pl.col(self.x_axis_column).str.strptime(pl.Datetime, "%Y-%m-%d", strict=False)
+                .alias(self.x_axis_column)
+            ).sort(self.x_axis_column)
+
+            start_datetime = df[self.x_axis_column].min() - relativedelta(weeks=1)
+            latest_datetime = df[self.x_axis_column].max()+ relativedelta(weeks=1)
+
+            start_of_week = start_datetime - relativedelta(days=start_datetime.weekday())
+
+            tick_values = []
+            tick_text = []
+
+            current = start_of_week
+            while current <= latest_datetime:
+                tick_values.append(current)
+                tick_text.append(current.strftime("%d %b %Y"))  # e.g. "29 Sep 2025"
+                current += relativedelta(weeks=1)
+
+
+            range_x = [
+                start_datetime,
+                latest_datetime
+            ]
         else:
             raise ValueError(
                 f"Invalid xaxis_tick_text_format: {self.xaxis_tick_text_format}"
@@ -611,9 +636,17 @@ class TimeSeriesChart:
     def _get_y_axis_range_max(self):
         """Get the y axis range maximum value to ensure there is an axis label greater than the
         maximum y value."""
-        largest_number_of_weeks = self.filtered_df[self.y_axis_column].max()
-
-        y_axis_max = largest_number_of_weeks + (0.3 * largest_number_of_weeks)
+        if self.stacked:
+            largest_y_value = (
+                self.filtered_df
+                .group_by(self.x_axis_column)              # group by date
+                .agg(pl.col(self.y_axis_column).sum())     # total per date
+                .select(pl.col(self.y_axis_column).max())  # largest daily total
+                .item()                                    # extract scalar
+            )
+        else:
+            largest_y_value = self.filtered_df[self.y_axis_column].max()
+        y_axis_max = largest_y_value + (0.3 * largest_y_value)
         return y_axis_max
 
     def _get_df_list_for_time_series(self) -> list[pl.DataFrame]:
