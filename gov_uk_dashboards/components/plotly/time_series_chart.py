@@ -86,6 +86,7 @@ class TimeSeriesChart:
         additional_line: Optional[dict] = None,
         hover_distance: Optional[int] = 1,
         footnote: Optional[str] = None,
+        stacked: Optional[bool]=False,
     ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -124,6 +125,7 @@ class TimeSeriesChart:
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
         self.additional_line = additional_line
         self.hover_distance = hover_distance
+        self.stacked = stacked
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
         self.footnote = footnote
@@ -428,6 +430,7 @@ class TimeSeriesChart:
                 trace_name in self.legend_dict if self.legend_dict is not None else True
             ),
             legendgroup=legendgroup,
+            stackgroup='one' if self.stacked else None
         )
 
     def _get_hover_template(self, df, trace_name):
