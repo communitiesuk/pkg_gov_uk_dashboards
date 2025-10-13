@@ -30,7 +30,7 @@ def extract_main_type(typ):
 
         # If it's a tuple containing types, filter out NoneType and return the first non-None
         non_none_args = [
-            arg for arg in args if arg is not type(None)
+            arg for arg in args if not isinstance(arg, type(None))
         ]  # Remove NoneType
         return (
             non_none_args[0] if non_none_args else typ
