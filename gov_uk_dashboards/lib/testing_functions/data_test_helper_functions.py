@@ -29,7 +29,9 @@ def extract_main_type(typ):
             return str  # Since Literals typically hold strings, return `str`
 
         # If it's a tuple containing types, filter out NoneType and return the first non-None
-        non_none_args = [arg for arg in args if not isinstance(arg, type(None))]  # Remove NoneType
+        non_none_args = [
+            arg for arg in args if not isinstance(arg, type(None))
+        ]  # Remove NoneType
         return (
             non_none_args[0] if non_none_args else typ
         )  # Return the first non-None type
