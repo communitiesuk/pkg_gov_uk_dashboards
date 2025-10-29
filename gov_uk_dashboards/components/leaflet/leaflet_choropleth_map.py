@@ -243,9 +243,19 @@ class LeafletChoroplethMap:
             three_quarter_value,
             max_value,
         ]
+
+        tick_text = [format_number_into_thousands_or_millions(x) for x in tick_values]
+
+        # If duplicates appear in tick_text, change rounding
+        if len(set(tick_text)) < len(tick_text):
+            tick_text = [
+                format_number_into_thousands_or_millions(x, 1) for x in tick_values
+            ]
+
         tick_text = [
-            format_number_into_thousands_or_millions(x) for x in tick_values
-        ]  # Optional, for formatting
+            str(int(val)) if val < 1000 else text
+            for text, val in zip(tick_text, tick_values)
+        ]  # values less than 1000 are ints
 
         return dl.Colorbar(
             colorscale=self._get_colorscale(),
