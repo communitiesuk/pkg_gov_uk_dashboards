@@ -276,6 +276,7 @@ class StackedBarChart:
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
+        self._format_xaxis(fig)
         return fig
 
     def create_bar_chart_trace(
@@ -396,6 +397,36 @@ class StackedBarChart:
         # Generate tick values
         tickvals = list(range(int(start), int(end) + 1, int(step_size)))
         return tickvals
+
+    def _format_xaxis(self, fig):
+        if self.xaxis_tick_text_format == "quarter":
+            df = self.df.with_columns(
+                pl.col(self.x_axis_column).str.strptime(pl.Date, "%Y-%m-%d")
+            )
+
+            first_year = df.select(pl.col(self.x_axis_column).min()).item().year
+            next_year = first_year + 1
+
+            max_in_first_year = (
+                df.filter(pl.col(self.x_axis_column).dt.year() == first_year)
+                .select(pl.col(self.x_axis_column).max())
+                .item()
+            )
+            min_in_next_year = (
+                df.filter(pl.col(self.x_axis_column).dt.year() == next_year)
+                .select(pl.col(self.x_axis_column).min())
+                .item()
+            )
+
+            tick0 = max_in_first_year + (min_in_next_year - max_in_first_year) / 2
+
+            fig.update_xaxes(
+                tick0=tick0,  # start tick halfway between Dec & Mar
+                dtick="M12",  # one tick per year
+                tickformat="%Y",
+                hoverformat="%b %Y",
+            )
+        return fig
 
 
 def get_tracenamelist_and_legend_order(df_function, barchart_measures=None):
