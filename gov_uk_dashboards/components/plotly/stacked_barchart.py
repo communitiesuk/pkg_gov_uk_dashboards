@@ -73,6 +73,7 @@ class StackedBarChart:
         alternative_data_button_text: Optional[str] = None,
         alternative_all_data_button_text: Optional[str] = None,
         total_trace_name: Optional[str] = None,
+        y_axis_tick_prefix: Optional[str] = "£",
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -122,6 +123,7 @@ class StackedBarChart:
         self.alternative_data_button_text = alternative_data_button_text
         self.alternative_all_data_button_text = alternative_all_data_button_text
         self.total_trace_name = total_trace_name
+        self.y_axis_tick_prefix = y_axis_tick_prefix
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -262,7 +264,7 @@ class StackedBarChart:
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
                 # "range": [min_y * 1.1, max_y * 1.1],
-                "tickprefix": "£",
+                "tickprefix": self.y_axis_tick_prefix,
                 "exponentformat": "B",
                 # "tickmode": "array",
                 # "tickvals": tickvals,
