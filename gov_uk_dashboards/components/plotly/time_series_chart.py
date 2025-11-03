@@ -63,6 +63,7 @@ class TimeSeriesChart:
         hover_data: HoverDataByTrace,
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
+        dashed_trace_name_list: list[str] = [],
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
         ] = None,
@@ -96,6 +97,7 @@ class TimeSeriesChart:
         )
         self.filtered_df = filtered_df
         self.trace_name_list = trace_name_list
+        self.dashed_trace_name_list = dashed_trace_name_list
         self.legend_dict = legend_dict
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -255,7 +257,11 @@ class TimeSeriesChart:
                 self.create_time_series_trace(
                     df.sort(self.x_axis_column),
                     trace_name,
-                    line_style={"dash": "solid", "color": colour},
+                    line_style=(
+                        {"dash": "dot", "color": colour}
+                        if trace_name in self.dashed_trace_name_list
+                        else {"dash": "solid", "color": colour}
+                    ),
                     marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
                     legendgroup=legendgroup,
                 ),
