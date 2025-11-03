@@ -261,7 +261,8 @@ class TimeSeriesChart:
                     trace_name,
                     line_style=(
                         {"dash": "dot", "color": colour}
-                        if trace_name in self.dashed_trace_name_list
+                        if self.dashed_trace_name_list is not None
+                        and trace_name in self.dashed_trace_name_list
                         else {"dash": "solid", "color": colour}
                     ),
                     marker={"symbol": marker, "size": marker_sizes, "opacity": 1},
