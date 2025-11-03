@@ -64,6 +64,7 @@ class TimeSeriesChart:
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
         dashed_trace_name_list: list[str] = None,
+        initially_hidden_traces: Optional[list[str]] = None,
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
         ] = None,
@@ -98,6 +99,7 @@ class TimeSeriesChart:
         self.filtered_df = filtered_df
         self.trace_name_list = trace_name_list
         self.dashed_trace_name_list = dashed_trace_name_list
+        self.initially_hidden_traces = initially_hidden_traces
         self.legend_dict = legend_dict
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -423,6 +425,14 @@ class TimeSeriesChart:
             marker (dict[str,str]): Properties for marker parameter.
             legendgroup (str): Name to group by in legend,
         """
+        if (
+            self.initially_hidden_traces is not None
+            and trace_name in self.initially_hidden_traces
+        ):
+            visible = "legendonly"
+        else:
+            visible = True
+
         return go.Scatter(
             x=df[self.x_axis_column],
             y=df[self.y_axis_column],
@@ -437,6 +447,7 @@ class TimeSeriesChart:
             ),
             legendgroup=legendgroup,
             stackgroup="one" if self.stacked else None,
+            visible=visible,
         )
 
     def _get_hover_template(self, df, trace_name):
