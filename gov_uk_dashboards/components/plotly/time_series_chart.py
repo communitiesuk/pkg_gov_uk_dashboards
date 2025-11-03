@@ -63,7 +63,7 @@ class TimeSeriesChart:
         hover_data: HoverDataByTrace,
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
-        dashed_trace_name_list: list[str] = [],
+        dashed_trace_name_list: list[str] = None,
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
         ] = None,
