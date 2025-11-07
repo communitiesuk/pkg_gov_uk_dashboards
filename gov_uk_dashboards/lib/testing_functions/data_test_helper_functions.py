@@ -240,6 +240,7 @@ def value_matches_regex_pattern_or_alternative_value(
         "url": r"https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",  # pylint: disable=line-too-long
         "x_weeks_and_y_days": r"^\d+\s+weeks\s+and\s+\d+\s+days$",
         "area_code": r"^^E(?:0[6789]|[01][06789])\d{6}$",
+        "region_code": r"^E1200000[1-9]$",
         "YYYY-YY": r"^\d{4}-\d{2}$",
         "YYYY-MM": r"^\d{4}-(0[1-9]|1[0-2])$",
     }
