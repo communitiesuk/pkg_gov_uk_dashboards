@@ -9352,3 +9352,43 @@ mark.expenditure {
 .leaflet-interactive:focus {
   outline: none !important;
 }
+
+.horizontal-radios {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Each radio item becomes a vertical stack */
+.horizontal-radio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  /* Keep GOV.UK relative positioning so pseudo-elements work */
+  position: relative;
+  /* Remove the large left indent */
+  padding-left: 0 !important;
+}
+
+/* Let the GOV.UK pseudo-element circle appear ABOVE the label */
+.horizontal-radio .govuk-radios__label {
+  margin: 2rem 0 0; /* push label below the radio circle */
+  text-align: center;
+  max-width: 6rem;
+}
+
+/* Move the GOV.UK radio circle into place */
+.horizontal-radio .govuk-radios__label::before,
+.horizontal-radio .govuk-radios__label::after {
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+
+/* Remove absolute positioning from the input so it doesn’t float somewhere random */
+.horizontal-radio .govuk-radios__input {
+  position: absolute; /* keep required for GOV.UK JS */
+  left: 50%;
+  top: 0.3rem;
+  transform: translateX(-50%);
+}
