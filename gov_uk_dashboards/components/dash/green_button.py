@@ -22,5 +22,4 @@ def green_button(button_text: str, button_id: str):
             ),
         ],
         className="govuk-button-group",
-        # style={"float": "right"}, is this needed?
     )
