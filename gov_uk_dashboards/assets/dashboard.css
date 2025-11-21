@@ -9392,3 +9392,13 @@ mark.expenditure {
   top: 0.3rem;
   transform: translateX(-50%);
 }
+
+.horizontal-radios .govuk-radios__item {
+  margin-bottom: 0 !important;
+  margin-right: 2rem; /* spacing between items */
+}
+
+/* Remove margin-right on last item */
+.horizontal-radios .govuk-radios__item:last-child {
+  margin-right: 0 !important;
+}
