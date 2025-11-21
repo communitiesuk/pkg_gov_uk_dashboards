@@ -6,7 +6,6 @@ from dash import html
 from gov_uk_dashboards.constants import DOWNLOAD_BUTTON_CLASSES
 
 
-
 def create_download_button_with_icon(
     button_text: str,
     button_id_name: str,

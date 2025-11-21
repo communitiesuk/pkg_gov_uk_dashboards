@@ -2,6 +2,7 @@
 
 from dash import html
 
+
 def green_button(button_text: str, button_id: str):
     """
     Return a green button which is aligned to the right
