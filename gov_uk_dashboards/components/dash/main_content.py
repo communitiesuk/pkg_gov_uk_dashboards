@@ -5,7 +5,7 @@ import re
 from dash import html
 
 
-def main_content(children, id_fragment=None):
+def main_content(children, id_fragment=None, include_feedback_banner_div: bool = False):
     """
     Wrapper for the main content of the dashboard, containing visualisations.
 
@@ -29,4 +29,11 @@ def main_content(children, id_fragment=None):
             UserWarning,
             stacklevel=2,
         )
+
+    if not isinstance(children, list):
+        children = [children]
+
+    if include_feedback_banner_div:
+        children.append(html.Div(id="feedback-banner"))
+
     return html.Main(children, className="main", id=slug, role="main")

@@ -66,7 +66,7 @@ from ..plotly.captioned_figure import captioned_figure
 from .card import card, empty_card
 from .card_full_width import card_full_width
 from .apply_and_reset_filters_buttons import apply_and_reset_filters_buttons
-from .download_button import download_button
+from .green_button import green_button
 from .collapsible_panel import collapsible_panel
 from .dashboard_container import dashboard_container
 from .details import details
