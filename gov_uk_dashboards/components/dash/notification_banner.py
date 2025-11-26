@@ -4,7 +4,7 @@ from dash import html
 
 
 def notification_banner(
-    text: str,
+    text: list,
     title: str = "Important",
     text_class_name: str = "govuk-notification-banner__heading",
     style: dict = None,
