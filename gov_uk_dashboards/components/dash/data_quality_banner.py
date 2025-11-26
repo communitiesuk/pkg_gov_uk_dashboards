@@ -17,13 +17,12 @@ class DataQualityConfig:
     text: str
     style: str
     title_color: str = None
-    glossary_url:str =None
-    
+    glossary_url: str = None
+
     def __post_init__(self):
         if not self.glossary_url:
             slug = create_id_from_string(self.title)
             self.glossary_url = f"/glossary#data-quality-{slug}"
-            
 
 
 class DataQualityLabels(Enum):
@@ -53,10 +52,14 @@ class DataQualityLabels(Enum):
 
 def data_quality_notification_banner(label: DataQualityLabels):
     config = label.value
-    text = [f"{config.text} Read more in our ",html.A(
+    text = [
+        f"{config.text} Read more in our ",
+        html.A(
             "glossary",
             href=config.glossary_url,
-        ),"."]
+        ),
+        ".",
+    ]
     return notification_banner(
         title=config.title,
         text=text,

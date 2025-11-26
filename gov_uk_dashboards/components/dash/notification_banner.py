@@ -29,9 +29,7 @@ def notification_banner(
             html.Div(
                 [
                     html.P(
-                        
-                            text
-                        ,
+                        text,
                         className=text_class_name,
                     )
                 ],
