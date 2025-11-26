@@ -9406,3 +9406,7 @@ mark.expenditure {
 #feedback-banner-content.highlight {
   border: 3px solid #ffdd00;
 }
+
+.govuk-table__body tr[id] {
+  scroll-margin-top: 3rem;
+}
