@@ -1,6 +1,8 @@
+from dash import html
 from dataclasses import dataclass
 from enum import Enum
 from gov_uk_dashboards.components.dash.notification_banner import notification_banner
+from gov_uk_dashboards.formatting.text_functions import create_id_from_string
 from gov_uk_dashboards.constants import (
     NOTIFICATION_STYLE_GREEN,
     NOTIFICATION_STYLE_ORANGE,
@@ -15,6 +17,13 @@ class DataQualityConfig:
     text: str
     style: str
     title_color: str = None
+    glossary_url:str =None
+    
+    def __post_init__(self):
+        if not self.glossary_url:
+            slug = create_id_from_string(self.title)
+            self.glossary_url = f"/glossary#data-quality-{slug}"
+            
 
 
 class DataQualityLabels(Enum):
@@ -37,16 +46,20 @@ class DataQualityLabels(Enum):
     )
     OPERATIONAL = DataQualityConfig(
         title="Operational data",
-        text="Never use in isolation—always verify independently.",
+        text="Never use in isolation, always verify independently.",
         style=NOTIFICATION_STYLE_RED,
     )
 
 
 def data_quality_notification_banner(label: DataQualityLabels):
     config = label.value
+    text = [f"{config.text} Read more in our ",html.A(
+            "glossary",
+            href=config.glossary_url,
+        ),"."]
     return notification_banner(
         title=config.title,
-        text=config.text,
+        text=text,
         style=config.style,
         title_color=config.title_color,
     )
