@@ -210,7 +210,7 @@ class LeafletChoroplethMap:
                     "#1F9EB7",
                     "#80C6A3",
                     "#CDE594",
-                    "#ffffcc"
+                    "#ffffcc",
                 ]
             return discrete_colours
         return ["#B0F2BC", "#257D98"]
