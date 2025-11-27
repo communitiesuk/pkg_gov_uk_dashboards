@@ -39,3 +39,8 @@ LATEST_YEAR = "latest_year"
 PREVIOUS_YEAR = "previous_year"
 PREVIOUS_2YEAR = "previous_2year"
 TWENTY_NINETEEN = "twenty_nineteen"
+
+NOTIFICATION_STYLE_RED = {"borderColor": "#d4351c", "backgroundColor": "#d4351c"}
+NOTIFICATION_STYLE_ORANGE = {"borderColor": "#f47738", "backgroundColor": "#f47738"}
+NOTIFICATION_STYLE_YELLOW = {"borderColor": "#ffdd00", "backgroundColor": "#ffdd00"}
+NOTIFICATION_STYLE_GREEN = {"borderColor": "#00703c", "backgroundColor": "#00703c"}

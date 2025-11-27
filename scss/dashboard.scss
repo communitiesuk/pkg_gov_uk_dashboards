@@ -1539,3 +1539,12 @@ mark.expenditure {
 #feedback-banner-content.highlight {
     border: 3px solid #ffdd00;
 }
+
+#glossary-table .highlight {
+    border: 3px solid #ffdd00;
+    border-radius: 4px;
+}
+
+.govuk-table__body tr[id] {
+    scroll-margin-top: 3rem;
+}

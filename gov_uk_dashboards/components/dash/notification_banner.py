@@ -4,7 +4,11 @@ from dash import html
 
 
 def notification_banner(
-    text: str, text_class_name: str = "govuk-warning-text__text", style: dict = None
+    text: list,
+    title: str = "Important",
+    text_class_name: str = "govuk-notification-banner__heading",
+    style: dict = None,
+    title_color: str = None,
 ):
     """
     Return Gov UK Design component notification banner component.
@@ -14,9 +18,10 @@ def notification_banner(
             html.Div(
                 [
                     html.H2(
-                        ["Important"],
+                        [title],
                         className="govuk-notification-banner__title",
                         id="govuk-notification-banner-title",
+                        style={"color": title_color} if title_color else None,
                     )
                 ],
                 className="govuk-notification-banner__header",
@@ -24,9 +29,7 @@ def notification_banner(
             html.Div(
                 [
                     html.P(
-                        [
-                            text,
-                        ],
+                        text,
                         className=text_class_name,
                     )
                 ],
