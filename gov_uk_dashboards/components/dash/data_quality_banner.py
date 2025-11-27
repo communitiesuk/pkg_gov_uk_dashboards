@@ -58,7 +58,7 @@ class DataQualityLabels(Enum):
     )
     EXPERIMENTAL_MI = DataQualityConfig(
         title="Experimental management information",
-        text="Use only as a directional indicator, and seek expert advice before acting. ",
+        text="Indicative only, requires expert guidance on use.",
         style=NOTIFICATION_STYLE_ORANGE,
         title_color="black",
     )
@@ -78,6 +78,8 @@ def data_quality_notification_banner(label: DataQualityLabels):
         html.A(
             "glossary",
             href=config.glossary_url,
+            target="_blank",
+            rel="noopener noreferrer",
         ),
         ".",
     ]
