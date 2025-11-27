@@ -1,6 +1,8 @@
-from dash import html
-from dataclasses import dataclass
+"""data_quality_banner"""
+
 from enum import Enum
+from dataclasses import dataclass
+from dash import html
 from gov_uk_dashboards.components.dash.notification_banner import notification_banner
 from gov_uk_dashboards.formatting.text_functions import create_id_from_string
 from gov_uk_dashboards.constants import (
@@ -13,6 +15,20 @@ from gov_uk_dashboards.constants import (
 
 @dataclass
 class DataQualityConfig:
+    """
+    Configuration class for defining the display and linking details of a data quality metric.
+
+    Attributes:
+        title (str): The title of the data quality metric.
+        text (str): Descriptive text or explanation of the metric.
+        style (str): The visual style or format for displaying the metric.
+        title_color (str, optional): Optional color to use for the title. Defaults to None.
+        glossary_url (str, optional): Optional URL linking to a glossary entry for this metric.
+            If not provided, a URL is automatically generated based on the title.
+
+    Methods:
+        __post_init__(): Automatically generates a glossary URL if none is provided.
+    """
     title: str
     text: str
     style: str
@@ -26,6 +42,7 @@ class DataQualityConfig:
 
 
 class DataQualityLabels(Enum):
+    """Enumeration of standard labels used to categorize or describe data quality."""
     OFFICIAL = DataQualityConfig(
         title="OFFICIAL public data",
         text="Use with confidence.",
@@ -51,6 +68,8 @@ class DataQualityLabels(Enum):
 
 
 def data_quality_notification_banner(label: DataQualityLabels):
+    """Return data quality notification banner based on Gov UK Design component notification
+    banner component."""
     config = label.value
     text = [
         f"{config.text} Read more in our ",
