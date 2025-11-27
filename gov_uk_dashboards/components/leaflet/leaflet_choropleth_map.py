@@ -205,12 +205,12 @@ class LeafletChoroplethMap:
                 discrete_colours.pop(1)
             if len(self.df[self.column_to_plot].unique()) == 6:
                 discrete_colours = [
-                    "#0D3B66",
-                    "#346B85",
-                    "#3EABCC",
-                    "#F6A06D",
-                    "#AC7D67",
-                    "#D43D3D",
+                    "#080C54",
+                    "#186290",
+                    "#1F9EB7",
+                    "#80C6A3",
+                    "#CDE594",
+                    "#ffffcc"
                 ]
             return discrete_colours
         return ["#B0F2BC", "#257D98"]
