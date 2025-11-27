@@ -29,6 +29,7 @@ class DataQualityConfig:
     Methods:
         __post_init__(): Automatically generates a glossary URL if none is provided.
     """
+
     title: str
     text: str
     style: str
@@ -43,6 +44,7 @@ class DataQualityConfig:
 
 class DataQualityLabels(Enum):
     """Enumeration of standard labels used to categorize or describe data quality."""
+
     OFFICIAL = DataQualityConfig(
         title="OFFICIAL public data",
         text="Use with confidence.",
