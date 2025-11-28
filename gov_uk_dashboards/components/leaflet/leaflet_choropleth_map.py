@@ -228,12 +228,9 @@ class LeafletChoroplethMap:
     def _get_colorbar(self):
         top_margin = ("100px" if self.colorbar_title else None,)
         if self.color_scale_is_discrete:
-            categories = self._get_color_bar_categories()
-            colorscale = self._get_colorscale()[::-1]
-
             return dlx.categorical_colorbar(
-                categories=categories,
-                colorscale=colorscale,
+                categories=self._get_color_bar_categories(),
+                colorscale=self._get_colorscale()[::-1],
                 width=30,
                 height=200,
                 position="topleft",
@@ -307,8 +304,10 @@ class LeafletChoroplethMap:
                     "zIndex": "999",  # Ensure it appears above map elements
                 },
             )
+        return None
 
-    def resolve_colorbar_title(self, colorbar_title):
+    def resolve_colorbar_title(self, colorbar_title: str):
+        """Returns text for colorbar title."""
         if colorbar_title is None:
             return None  # exclude title
         if colorbar_title == "default":
