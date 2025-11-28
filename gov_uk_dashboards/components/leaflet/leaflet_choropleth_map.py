@@ -44,7 +44,7 @@ class LeafletChoroplethMap:
         color_scale_is_discrete: bool = True,
         colorbar_title: str = None,
         show_tile_layer: bool = False,
-    ):
+    ):  # pylint: disable=too-many-locals
         self.geojson_data = geojson
         self.df = df
         self.hover_text_columns = hover_text_columns
