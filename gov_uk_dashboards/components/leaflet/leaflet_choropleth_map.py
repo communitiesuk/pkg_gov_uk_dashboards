@@ -202,9 +202,9 @@ class LeafletChoroplethMap:
         if self.color_scale_is_discrete:
             if len(self.df[self.column_to_plot].unique()) == 3:
                 return ["#080C54", "#1F9EB7", "#CDE594"]
-            elif len(self.df[self.column_to_plot].unique()) == 4:
+            if len(self.df[self.column_to_plot].unique()) == 4:
                 return ["#080C54", "#1F9EB7", "#80C6A3", "#CDE594"]
-            elif len(self.df[self.column_to_plot].unique()) == 5:
+            if len(self.df[self.column_to_plot].unique()) == 5:
                 return [
                     "#080C54",
                     "#186290",
@@ -212,7 +212,7 @@ class LeafletChoroplethMap:
                     "#80C6A3",
                     "#CDE594",
                 ]
-            elif len(self.df[self.column_to_plot].unique()) == 6:
+            if len(self.df[self.column_to_plot].unique()) == 6:
                 return [
                     "#080C54",
                     "#186290",
