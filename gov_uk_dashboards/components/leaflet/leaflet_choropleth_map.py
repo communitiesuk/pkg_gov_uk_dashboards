@@ -200,11 +200,20 @@ class LeafletChoroplethMap:
 
     def _get_colorscale(self):
         if self.color_scale_is_discrete:
-            discrete_colours = ["#217847", "#23BBBE", "#8CCE69", "#FFEA80"]
             if len(self.df[self.column_to_plot].unique()) == 3:
-                discrete_colours.pop(1)
+                return ["#080C54", "#1F9EB7", "#CDE594"]
+            if len(self.df[self.column_to_plot].unique()) == 4:
+                return ["#080C54", "#1F9EB7", "#80C6A3", "#CDE594"]
+            if len(self.df[self.column_to_plot].unique()) == 5:
+                return [
+                    "#080C54",
+                    "#186290",
+                    "#1F9EB7",
+                    "#80C6A3",
+                    "#CDE594",
+                ]
             if len(self.df[self.column_to_plot].unique()) == 6:
-                discrete_colours = [
+                return [
                     "#080C54",
                     "#186290",
                     "#1F9EB7",
@@ -212,8 +221,7 @@ class LeafletChoroplethMap:
                     "#CDE594",
                     "#ffffcc",
                 ]
-            return discrete_colours
-        return ["#B0F2BC", "#257D98"]
+        return ["#80C6A3", "#186290"]
 
     def _get_color_bar_categories(self):
         return (
