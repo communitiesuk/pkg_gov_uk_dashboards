@@ -74,6 +74,7 @@ class StackedBarChart:
         alternative_all_data_button_text: Optional[str] = None,
         total_trace_name: Optional[str] = None,
         y_axis_tick_prefix: Optional[str] = "£",
+        x_hoverformat: Optional[str] = "%b %Y",
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -124,6 +125,7 @@ class StackedBarChart:
         self.alternative_all_data_button_text = alternative_all_data_button_text
         self.total_trace_name = total_trace_name
         self.y_axis_tick_prefix = y_axis_tick_prefix
+        self.x_hoverformat = x_hoverformat
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -426,7 +428,7 @@ class StackedBarChart:
                 tick0=tick0,  # start tick halfway between Dec & Mar
                 dtick="M12",  # one tick per year
                 tickformat="%Y",
-                hoverformat="%b %Y",
+                hoverformat=self.x_hoverformat,
             )
         return fig
 
