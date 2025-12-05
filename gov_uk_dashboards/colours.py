@@ -60,6 +60,28 @@ class ONSAccessibleColours(Enum):
     # LIGHT_BLUE = "#27a0cc"
     ORANGE = "#f47738"
 
+    OCEAN_BLUE = "#206095"
+    SPRING_GREEN = "#a8bd3a"
+    BEETROOT_PURPLE = "#871a5b"
+    CORAL_PINK = "#f66068"
+    DARK_LEAF_GREEN = "#05341a"
+    SKY_BLUE = "#27a0cc"
+    NIGHT_BLUE = "#003c57"
+    MINT_GREEN = "#22d0b6"
+    LAVENDER_PURPLE = "#746cb1"
+
+    CATEGORICAL_MANY = [
+        OCEAN_BLUE,
+        SPRING_GREEN,
+        BEETROOT_PURPLE,
+        CORAL_PINK,
+        DARK_LEAF_GREEN,
+        SKY_BLUE,
+        NIGHT_BLUE,
+        MINT_GREEN,
+        LAVENDER_PURPLE,
+    ]
+
 
 class AFAccessibleColours(Enum):
     """Analysis Function colour palettes taken from
