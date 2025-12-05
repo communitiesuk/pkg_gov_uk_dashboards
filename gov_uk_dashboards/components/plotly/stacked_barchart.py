@@ -233,7 +233,6 @@ class StackedBarChart:
                 colour_list,
             )
         ):
-            print(trace_name)
             fig.add_trace(
                 self.create_bar_chart_trace(
                     df.sort(self.x_axis_column),
