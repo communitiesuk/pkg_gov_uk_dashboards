@@ -328,13 +328,13 @@ class StackedBarChart:
         if self.x_unified_hovermode is True:
             return f"{trace_name}: " + "%{customdata[0]}<extra></extra>"
         hover_text_headers = self.hover_data[trace_name][HOVER_TEXT_HEADERS]
-        hover_template = (
-            f"{trace_name}<br>"
-            f"{hover_text_headers[0]}"
-            ": %{customdata[0]}<br>"
-            f"{hover_text_headers[1]}"
-            ": %{customdata[1]}<extra></extra>"
-        )
+        hover_template = f"{trace_name}<br>"
+
+        for i, header in enumerate(hover_text_headers):
+            hover_template += f"{header}: %{{customdata[{i}]}}<br>"
+
+        # Remove the last <br> and add <extra></extra>
+        hover_template = hover_template.rstrip("<br>") + "<extra></extra>"
         return hover_template
 
     def _get_custom_data(self, trace_name, df):
