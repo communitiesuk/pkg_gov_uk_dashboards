@@ -23,7 +23,7 @@ from gov_uk_dashboards.constants import (
     SUBTITLE,
     VALUE,
 )
-from gov_uk_dashboards.colours import AFAccessibleColours
+from gov_uk_dashboards.colours import AFAccessibleColours, ONSAccessibleColours
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
@@ -215,14 +215,17 @@ class StackedBarChart:
                     legendrank=999,
                 )
             )
-        colour_list = (
-            AFAccessibleColours.CATEGORICAL.value
-            if len(self.trace_name_list) != 2
-            else [
+
+        if len(self.trace_name_list) > 6:
+            colour_list = ONSAccessibleColours.CATEGORICAL_MANY.value
+        elif len(self.trace_name_list) != 2:
+            colour_list = AFAccessibleColours.CATEGORICAL.value
+        else:
+            colour_list = [
                 AFAccessibleColours.DARK_BLUE.value,
                 AFAccessibleColours.ORANGE.value,
             ]  # if 2 lines should use dark blue & orange as have highest contrast ratio
-        )
+
         for _, (df, trace_name, colour) in enumerate(
             zip(
                 self._get_df_list_for_bar_chart(),
@@ -230,6 +233,7 @@ class StackedBarChart:
                 colour_list,
             )
         ):
+            print(trace_name)
             fig.add_trace(
                 self.create_bar_chart_trace(
                     df.sort(self.x_axis_column),
@@ -274,7 +278,7 @@ class StackedBarChart:
             },
             showlegend=True,
             barmode="relative",
-            xaxis={"categoryorder": "category ascending"},
+            xaxis={"categoryorder": "array", "categoryarray": self.trace_name_list},
             xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
             ## copied from timeseries
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
