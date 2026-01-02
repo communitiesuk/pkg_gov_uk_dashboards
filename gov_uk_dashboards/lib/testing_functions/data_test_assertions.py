@@ -46,7 +46,7 @@ def cvs_contains_no_duplicate_rows(csv_absolute_filepath: str):
     Returns: bool: True if there were no duplicates in the df, False otherwise.
     """
 
-    df = pl.read_csv(csv_absolute_filepath)
+    df = pl.read_csv(csv_absolute_filepath, infer_schema_length=1000)
     num_duplicate_rows = df.is_duplicated().sum()
     assert (
         num_duplicate_rows == 0
@@ -71,7 +71,7 @@ def inferred_df_has_correct_column_types(
         for field, typ in schema.__annotations__.items()
     }
 
-    df = pl.read_csv(csv_absolute_filepath)
+    df = pl.read_csv(csv_absolute_filepath, minfer_schema_length=1000)
     assert df.schema == expected_schema
 
 
@@ -86,7 +86,7 @@ def df_has_valid_schema(csv_absolute_filepath: str, schema: Type[BaseModel]):
         schema (Type[BaseModel]): Pydantic model class to extract the expected column types
     """
 
-    df = pl.read_csv(csv_absolute_filepath)
+    df = pl.read_csv(csv_absolute_filepath, infer_schema_length=1000)
 
     if hasattr(schema, "from_polars"):  # column level validation
         try:
