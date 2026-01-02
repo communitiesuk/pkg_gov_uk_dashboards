@@ -71,7 +71,7 @@ def inferred_df_has_correct_column_types(
         for field, typ in schema.__annotations__.items()
     }
 
-    df = pl.read_csv(csv_absolute_filepath, minfer_schema_length=1000)
+    df = pl.read_csv(csv_absolute_filepath, infer_schema_length=1000)
     assert df.schema == expected_schema
 
 
