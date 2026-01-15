@@ -81,35 +81,32 @@ def header(
 
 
 def logo_header():
-    return (
-        html.Header(
+    return html.Header(
+        html.Div(
             html.Div(
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.Img(
-                                    src="assets\\images\\explore_data_logo.svg",
-                                    className="header-image",
-                                    style={"maxHeight": "100px"},
-                                ),
-                            ],
-                            style={
-                                "display": "flex",
-                                "flex-direction": "column",
-                                "color": "#00625e",
-                                "align-items": "center",
-                                "paddingBottom": "2px",
-                            },
-                        ),
-                    ],
-                    className="govuk-header__content",
-                ),
-                style={"borderBottom": "0px solid #000000", "borderColor": "#f3f2f1"},
-                className="govuk-header__container govuk-width-container",
+                [
+                    html.Div(
+                        [
+                            html.Img(
+                                src="/assets/images/explore_data_logo.svg",
+                                className="header-image",
+                                style={"maxHeight": "100px"},
+                            ),
+                        ],
+                        style={
+                            "display": "flex",
+                            "flexDirection": "column",
+                            "color": "#00625e",
+                            "alignItems": "center",
+                            "paddingBottom": "2px",
+                        },
+                    ),
+                ],
+                className="govuk-header__content",
             ),
-            className="govuk-header",
-            style={"backgroundColor": "#f3f2f1"}
-            | {"borderColor": "#f3f2f1", "backgroundColor": "#f3f2f1"},
+            style={"borderBottom": "0px solid #000000", "borderColor": "#f3f2f1"},
+            className="govuk-header__container govuk-width-container",
         ),
+        className="govuk-header",
+        style={"backgroundColor": "#f3f2f1", "borderColor": "#f3f2f1"},
     )
