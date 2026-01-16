@@ -81,6 +81,18 @@ def header(
 
 
 def logo_header():
+    """
+    Create and return the application header containing the Explore Data logo.
+
+    This component renders a GOV.UK–styled header with an SVG logo.
+    The logo is loaded from the Dash assets directory and constrained
+    to a maximum height for consistent layout.
+
+    Returns
+    -------
+    dash.html.Header
+        A Dash Header component containing the styled logo container.
+    """
     return html.Header(
         html.Div(
             html.Div(
