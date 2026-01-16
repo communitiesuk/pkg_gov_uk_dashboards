@@ -78,3 +78,47 @@ def header(
         | {"borderColor": "#000000", "backgroundColor": "rgb(0,98,94)"},
         **{"data-module": "govuk-header"},
     )
+
+
+def logo_header():
+    """
+    Create and return the application header containing the Explore Data logo.
+
+    This component renders a GOV.UK–styled header with an SVG logo.
+    The logo is loaded from the Dash assets directory and constrained
+    to a maximum height for consistent layout.
+
+    Returns
+    -------
+    dash.html.Header
+        A Dash Header component containing the styled logo container.
+    """
+    return html.Header(
+        html.Div(
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.Img(
+                                src="/assets/images/explore_data_logo.svg",
+                                className="header-image",
+                                style={"maxHeight": "100px"},
+                            ),
+                        ],
+                        style={
+                            "display": "flex",
+                            "flexDirection": "column",
+                            "color": "#00625e",
+                            "alignItems": "center",
+                            "paddingBottom": "2px",
+                        },
+                    ),
+                ],
+                className="govuk-header__content",
+            ),
+            style={"borderBottom": "0px solid #000000", "borderColor": "#f3f2f1"},
+            className="govuk-header__container govuk-width-container",
+        ),
+        className="govuk-header",
+        style={"backgroundColor": "#f3f2f1", "borderColor": "#f3f2f1"},
+    )
