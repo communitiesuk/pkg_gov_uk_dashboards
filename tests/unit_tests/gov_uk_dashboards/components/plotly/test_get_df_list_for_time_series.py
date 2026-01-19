@@ -5,7 +5,6 @@ import polars as pl
 from gov_uk_dashboards.constants import DATE_VALID, MEASURE, UNIT_SIZE, VALUE
 from gov_uk_dashboards.components.plotly.time_series_chart import TimeSeriesChart
 
-
 DF_MEASURE1_SMALL = pl.DataFrame(
     {
         MEASURE: ["Measure 1 Small"] * 3,
