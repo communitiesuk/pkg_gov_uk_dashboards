@@ -44,3 +44,17 @@ NOTIFICATION_STYLE_RED = {"borderColor": "#d4351c", "backgroundColor": "#d4351c"
 NOTIFICATION_STYLE_ORANGE = {"borderColor": "#f47738", "backgroundColor": "#f47738"}
 NOTIFICATION_STYLE_YELLOW = {"borderColor": "#ffdd00", "backgroundColor": "#ffdd00"}
 NOTIFICATION_STYLE_GREEN = {"borderColor": "#00703c", "backgroundColor": "#00703c"}
+
+BANNER_STYLE = {
+    "display": "flex",
+    "visibility": "visible",
+    "margin": "-10px -15px 0px -15px",
+}
+
+ERROR_MESSAGE_BANNER_STYLE = {
+    "width": "100%",
+    "paddingLeft": "30px",
+    "paddingRight": "30px",
+    "justifyContent": "left",
+    "backgroundColor": "#FFDD00",
+}

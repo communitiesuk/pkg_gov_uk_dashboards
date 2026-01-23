@@ -2,6 +2,8 @@
 
 from dash import html
 
+from gov_uk_dashboards.constants import BANNER_STYLE, ERROR_MESSAGE_BANNER_STYLE
+
 
 def message_banner(category, message, style=None):
     """
@@ -29,4 +31,22 @@ def message_banner(category, message, style=None):
         ),
         className="change-log-banner govuk-!-margin-bottom-2",
         style=style,
+    )
+
+
+def get_warning_banner(banner_text: str) -> html.Div:
+    """Returns warning banner with banner_text displayed.
+
+    Args:
+        banner_text (str): Text to display on warning banner.
+    """
+    return html.Div(
+        [
+            message_banner(
+                "UPDATE",
+                html.Span(banner_text),
+                style=ERROR_MESSAGE_BANNER_STYLE,
+            )
+        ],
+        style=BANNER_STYLE,
     )
