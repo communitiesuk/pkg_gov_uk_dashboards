@@ -97,20 +97,6 @@ def _get_rolling_period_data_content_for_x_years(
         data[DATE_VALID], abbreviate_month=False, include_year=True
     )
 
-    current_date = data[DATE_VALID]
-    previous_year_datetime = get_a_previous_date(current_date, "previous", False)
-    two_years_ago_datetime = get_a_previous_date(current_date, "two_previous", False)
-    formatted_year_ago = convert_date_string_to_text_string(
-        previous_year_datetime.strftime("%Y-%m-%d"),
-        abbreviate_month=False,
-        include_year=True,
-    )
-    formatted_two_years_ago = convert_date_string_to_text_string(
-        two_years_ago_datetime.strftime("%Y-%m-%d"),
-        abbreviate_month=False,
-        include_year=True,
-    )
-
     return html.Div(
         [
             html.Div(
@@ -129,7 +115,7 @@ def _get_rolling_period_data_content_for_x_years(
                 ),
                 use_calculated_percentage_change=True,
                 increase_is_positive=True,
-                comparison_period_text=f"from same period previous year",
+                comparison_period_text="from same period previous year",
             ),
             html.Div(
                 [

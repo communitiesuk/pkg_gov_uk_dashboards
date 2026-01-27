@@ -32,7 +32,7 @@ def add_commas(number: int, remove_decimal_places: bool = False) -> str:
 
 
 def format_percentage(percentage):
+    """Formats percentages to remove decimal place on numbers 10 or more"""
     if abs(percentage) < 10:
         return percentage
-    else:
-        return int(percentage)
+    return int(percentage)
