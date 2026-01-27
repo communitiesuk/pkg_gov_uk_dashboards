@@ -67,12 +67,12 @@ def get_rolling_period_context_card(
     context_card_data = {
         VALUE: latest_year_data[VALUE][0],
         DATE_VALID: latest_year_data[DATE_VALID][0],
-        PERCENTAGE_CHANGE_FROM_PREV_YEAR: format_percentage(latest_year_data[
-            PERCENTAGE_CHANGE_FROM_PREV_YEAR
-        ][0]),
-        PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: format_percentage(latest_year_data[
-            PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
-        ][0]),
+        PERCENTAGE_CHANGE_FROM_PREV_YEAR: format_percentage(
+            latest_year_data[PERCENTAGE_CHANGE_FROM_PREV_YEAR][0]
+        ),
+        PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: format_percentage(
+            latest_year_data[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR][0]
+        ),
     }
     return html.Div(
         [
@@ -124,7 +124,9 @@ def _get_rolling_period_data_content_for_x_years(
                 className="govuk-body",
             ),
             get_changed_from_content(
-                calculated_percentage_change=format_percentage(data[PERCENTAGE_CHANGE_FROM_PREV_YEAR]),
+                calculated_percentage_change=format_percentage(
+                    data[PERCENTAGE_CHANGE_FROM_PREV_YEAR]
+                ),
                 use_calculated_percentage_change=True,
                 increase_is_positive=True,
                 comparison_period_text=f"from same period previous year",
@@ -132,9 +134,9 @@ def _get_rolling_period_data_content_for_x_years(
             html.Div(
                 [
                     get_changed_from_content(
-                        calculated_percentage_change=format_percentage(data[
-                            PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
-                        ]),
+                        calculated_percentage_change=format_percentage(
+                            data[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR]
+                        ),
                         use_calculated_percentage_change=True,
                         increase_is_positive=True,
                         comparison_period_text="from same period a year earlier",
@@ -556,4 +558,3 @@ def get_latest_data_for_year(
             PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
         )[0]
     return output
-
