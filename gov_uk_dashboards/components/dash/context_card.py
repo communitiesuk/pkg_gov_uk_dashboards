@@ -330,7 +330,7 @@ def get_data_for_context_card_new(
     df: pl.DataFrame,
     title,
     date_prefix, # make enum later
-    additional_text_and_position,
+    additional_text_and_position=None,
     number_format="int", # need to pass this into changed from too fro same formatting
     date_format="%d %B %Y",
     value_column: str = VALUE,
