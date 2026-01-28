@@ -193,7 +193,7 @@ def get_changed_from_content(
     """
     if use_previous_value_rather_than_change and use_difference_in_weeks_days:
         raise ValueError(
-            "use_previous_value_rather_than_percentage_change and use_difference_in_weeks_days "
+            "use_previous_value_rather_than_change and use_difference_in_weeks_days "
             "both cannot be true"
         )
     if use_calculated_percentage_change:
@@ -237,6 +237,7 @@ def get_changed_from_content(
                 # which is added from govuk-tag class
             )
         )
+        print("PREVIOUS VAKUE",previous_value)
         content.append(
             html.Span(
                 f"{previous_value}{unit}",
@@ -330,11 +331,15 @@ def get_data_for_context_card_new(
     df: pl.DataFrame,
     title,
     date_prefix, # make enum later
-    additional_text_and_position=None,
+    additional_text_and_position,
+    increase_is_positive,
+    comparison_period_text_year_earlier,
+    comparison_period_text_prev_year,
+    use_previous_value_rather_than_change,
+    use_number_rather_than_percentage,
     number_format="int", # need to pass this into changed from too fro same formatting
     date_format="%d %B %Y",
     value_column: str = VALUE,
-    include_data_from_2_years_ago: bool = False,
     display_value_as_int: bool = False,
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
@@ -350,8 +355,6 @@ def get_data_for_context_card_new(
         measure (str): The measure for which data is to be fetched.
         df (pl.DataFrame): The dataframe to fetch the measure from.
         value_column (str): The name of the column to get the value for.
-        include_data_from_2_years_ago (bool): Whether to include data from 2 years ago. Defaults
-        to False.
         display_value_as_int (bool): Whether to display the value as an int. Defaults to False.
         abbreviate_month (bool): Whether to abbreviate the month. Defaults to True.
         include_percentage_change (bool): Whether to include percentage change from previous year
@@ -389,6 +392,17 @@ def get_data_for_context_card_new(
         date_of_latest_data,
     )
     
+    date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
+    data_from_2_years_ago = get_latest_data_for_year(
+        df_measure,
+        date_2_years_ago,
+        value_column,
+        abbreviate_month,
+        data_expected_for_previous_year_and_previous_2years,
+        include_percentage_change,
+        previous_year_date,
+    )
+    
     def format_date(date_str): # is this defined elsewhere
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         return date_obj.strftime(date_format)
@@ -396,24 +410,22 @@ def get_data_for_context_card_new(
     data_to_return = {
         LATEST_YEAR: latest_data,
         PREVIOUS_YEAR: previous_year_data,
+        PREVIOUS_2YEAR: data_from_2_years_ago,
         "title": title,
         "headline_value":add_commas(latest_data["metric_value"], remove_decimal_places=True) if number_format=="int" else latest_data["metric_value"],
         "latest_date":date_prefix+" "+format_date(latest_data["Date valid"]),
-        "additional_text_and_position": additional_text_and_position
+        "additional_text_and_position": additional_text_and_position,
+        "increase_is_positive": increase_is_positive,
+        "comparison_period_text_year_earlier":comparison_period_text_year_earlier,
+        "comparison_period_text_prev_year":comparison_period_text_prev_year,
+         "use_previous_value_rather_than_change":use_previous_value_rather_than_change,
+        "use_number_rather_than_percentage":use_number_rather_than_percentage,
+        "previous_value": add_commas(previous_year_data["metric_value"], remove_decimal_places=True) if number_format=="int" else previous_year_data["metric_value"],
+        "year_earlier_value": add_commas(data_from_2_years_ago["metric_value"], remove_decimal_places=True) if number_format=="int" else data_from_2_years_ago["metric_value"],
     }
 
-    if include_data_from_2_years_ago:
-        date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
-        data_from_2_years_ago = get_latest_data_for_year(
-            df_measure,
-            date_2_years_ago,
-            value_column,
-            abbreviate_month,
-            data_expected_for_previous_year_and_previous_2years,
-            include_percentage_change,
-            previous_year_date,
-        )
-        data_to_return = {**data_to_return, PREVIOUS_2YEAR: data_from_2_years_ago}
+   
+
 
     return data_to_return
 
@@ -422,7 +434,6 @@ def get_data_for_context_card(
     measure: str,
     df: pl.DataFrame,
     value_column: str = VALUE,
-    include_data_from_2_years_ago: bool = False,
     display_value_as_int: bool = False,
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
@@ -438,8 +449,6 @@ def get_data_for_context_card(
         measure (str): The measure for which data is to be fetched.
         df (pl.DataFrame): The dataframe to fetch the measure from.
         value_column (str): The name of the column to get the value for.
-        include_data_from_2_years_ago (bool): Whether to include data from 2 years ago. Defaults
-        to False.
         display_value_as_int (bool): Whether to display the value as an int. Defaults to False.
         abbreviate_month (bool): Whether to abbreviate the month. Defaults to True.
         include_percentage_change (bool): Whether to include percentage change from previous year
@@ -489,18 +498,18 @@ def get_data_for_context_card(
             TWENTY_NINETEEN: {METRIC_VALUE: twenty_nineteen_data},
         }
 
-    if include_data_from_2_years_ago:
-        date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
-        data_from_2_years_ago = get_latest_data_for_year(
-            df_measure,
-            date_2_years_ago,
-            value_column,
-            abbreviate_month,
-            data_expected_for_previous_year_and_previous_2years,
-            include_percentage_change,
-            previous_year_date,
-        )
-        data_to_return = {**data_to_return, PREVIOUS_2YEAR: data_from_2_years_ago}
+    # if include_data_from_2_years_ago:
+    #     date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
+    #     data_from_2_years_ago = get_latest_data_for_year(
+    #         df_measure,
+    #         date_2_years_ago,
+    #         value_column,
+    #         abbreviate_month,
+    #         data_expected_for_previous_year_and_previous_2years,
+    #         include_percentage_change,
+    #         previous_year_date,
+    #     )
+    #     data_to_return = {**data_to_return, PREVIOUS_2YEAR: data_from_2_years_ago}
 
     return data_to_return
 
