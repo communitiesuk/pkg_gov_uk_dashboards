@@ -325,6 +325,98 @@ def convert_days_to_weeks_and_days(
     day_or_days = "day" if days == 1 else "days"
     return f"{weeks} {week_or_weeks} and {days} {day_or_days}"
 
+def get_data_for_context_card_new(
+    measure: str,
+    df: pl.DataFrame,
+    title,
+    date_prefix, # make enum later
+    additional_text_and_position,
+    number_format="int", # need to pass this into changed from too fro same formatting
+    date_format="%d %B %Y",
+    value_column: str = VALUE,
+    include_data_from_2_years_ago: bool = False,
+    display_value_as_int: bool = False,
+    abbreviate_month: bool = True,
+    include_percentage_change: bool = False,
+    data_expected_for_previous_year_and_previous_2years: bool = True,
+    
+    
+) -> dict:
+    # pylint: disable=too-many-locals
+    """
+    Fetches the latest year, previous year, 2019 data and optionally data from 2 years ago for a
+    specific measure.
+    Args:
+        measure (str): The measure for which data is to be fetched.
+        df (pl.DataFrame): The dataframe to fetch the measure from.
+        value_column (str): The name of the column to get the value for.
+        include_data_from_2_years_ago (bool): Whether to include data from 2 years ago. Defaults
+        to False.
+        display_value_as_int (bool): Whether to display the value as an int. Defaults to False.
+        abbreviate_month (bool): Whether to abbreviate the month. Defaults to True.
+        include_percentage_change (bool): Whether to include percentage change from previous year
+            and 2 years ago. Defaults to False.
+        include_2019 (bool): Whether to include data from 2019. Defaults to True.
+        data_expected_for_previous_year_and_previous_2years (bool): Whether data is expexcted for
+            previous 2 years. Defaults to True. If True raises a value error if data not found,
+            otherwise returns None.
+    Returns:
+        dict: A dictionary containing the latest year and previous year, and optionally 2019 and
+        optionally 2 years ago data for the specified measure and percentage change.
+    """
+    df_measure = df.filter(df[MEASURE] == measure)
+    if display_value_as_int:
+        df_measure = df_measure.with_columns(df_measure[value_column].cast(pl.Int32))
+    latest_date = df_measure[DATE_VALID].max()
+    previous_year_date = get_a_previous_date(latest_date, "previous")
+    latest_data = get_latest_data_for_year(
+        df_measure,
+        latest_date,
+        value_column,
+        abbreviate_month=abbreviate_month,
+        data_expected=True,
+        include_percentage_change=include_percentage_change,
+    )
+    date_of_latest_data = latest_data[DATE_VALID]
+
+    previous_year_data = get_latest_data_for_year(
+        df_measure,
+        previous_year_date,
+        value_column,
+        abbreviate_month,
+        data_expected_for_previous_year_and_previous_2years,
+        include_percentage_change,
+        date_of_latest_data,
+    )
+    
+    def format_date(date_str): # is this defined elsewhere
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+        return date_obj.strftime(date_format)
+    print("latest_data",latest_data)
+    data_to_return = {
+        LATEST_YEAR: latest_data,
+        PREVIOUS_YEAR: previous_year_data,
+        "title": title,
+        "headline_value":add_commas(latest_data["metric_value"], remove_decimal_places=True) if number_format=="int" else latest_data["metric_value"],
+        "latest_date":date_prefix+" "+format_date(latest_data["Date valid"]),
+        "additional_text_and_position": additional_text_and_position
+    }
+
+    if include_data_from_2_years_ago:
+        date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
+        data_from_2_years_ago = get_latest_data_for_year(
+            df_measure,
+            date_2_years_ago,
+            value_column,
+            abbreviate_month,
+            data_expected_for_previous_year_and_previous_2years,
+            include_percentage_change,
+            previous_year_date,
+        )
+        data_to_return = {**data_to_return, PREVIOUS_2YEAR: data_from_2_years_ago}
+
+    return data_to_return
+
 
 def get_data_for_context_card(
     measure: str,
@@ -336,6 +428,7 @@ def get_data_for_context_card(
     include_percentage_change: bool = False,
     include_2019: bool = True,
     data_expected_for_previous_year_and_previous_2years: bool = True,
+    
 ) -> dict:
     # pylint: disable=too-many-locals
     """
