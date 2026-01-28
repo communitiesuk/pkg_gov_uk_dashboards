@@ -10,7 +10,7 @@ from dash.development.base_component import Component
 from gov_uk_dashboards.components.dash import (
     heading2,
 )
-from gov_uk_dashboards.formatting.number_formatting import add_commas
+from gov_uk_dashboards.formatting.number_formatting import add_commas, format_percentage
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
@@ -67,12 +67,12 @@ def get_rolling_period_context_card(
     context_card_data = {
         VALUE: latest_year_data[VALUE][0],
         DATE_VALID: latest_year_data[DATE_VALID][0],
-        PERCENTAGE_CHANGE_FROM_PREV_YEAR: latest_year_data[
-            PERCENTAGE_CHANGE_FROM_PREV_YEAR
-        ][0],
-        PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: latest_year_data[
-            PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
-        ][0],
+        PERCENTAGE_CHANGE_FROM_PREV_YEAR: format_percentage(
+            latest_year_data[PERCENTAGE_CHANGE_FROM_PREV_YEAR][0]
+        ),
+        PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR: format_percentage(
+            latest_year_data[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR][0]
+        ),
     }
     return html.Div(
         [
@@ -97,20 +97,6 @@ def _get_rolling_period_data_content_for_x_years(
         data[DATE_VALID], abbreviate_month=False, include_year=True
     )
 
-    current_date = data[DATE_VALID]
-    previous_year_datetime = get_a_previous_date(current_date, "previous", False)
-    two_years_ago_datetime = get_a_previous_date(current_date, "two_previous", False)
-    formatted_year_ago = convert_date_string_to_text_string(
-        previous_year_datetime.strftime("%Y-%m-%d"),
-        abbreviate_month=False,
-        include_year=True,
-    )
-    formatted_two_years_ago = convert_date_string_to_text_string(
-        two_years_ago_datetime.strftime("%Y-%m-%d"),
-        abbreviate_month=False,
-        include_year=True,
-    )
-
     return html.Div(
         [
             html.Div(
@@ -124,21 +110,22 @@ def _get_rolling_period_data_content_for_x_years(
                 className="govuk-body",
             ),
             get_changed_from_content(
-                calculated_percentage_change=data[PERCENTAGE_CHANGE_FROM_PREV_YEAR],
+                calculated_percentage_change=format_percentage(
+                    data[PERCENTAGE_CHANGE_FROM_PREV_YEAR]
+                ),
                 use_calculated_percentage_change=True,
                 increase_is_positive=True,
-                comparison_period_text=f"from same rolling period ending {formatted_year_ago}",
+                comparison_period_text="from same period previous year",
             ),
             html.Div(
                 [
                     get_changed_from_content(
-                        calculated_percentage_change=data[
-                            PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
-                        ],
+                        calculated_percentage_change=format_percentage(
+                            data[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR]
+                        ),
                         use_calculated_percentage_change=True,
                         increase_is_positive=True,
-                        comparison_period_text="from same rolling period "
-                        f"ending {formatted_two_years_ago}",
+                        comparison_period_text="from same period a year earlier",
                     ),
                 ],
                 style=CHANGED_FROM_GAP_STYLE,
