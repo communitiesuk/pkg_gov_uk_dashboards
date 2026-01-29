@@ -688,7 +688,6 @@ class ContextCard:
 
     def __call__(self):
         card_content = [
-            heading2(self.title),
             html.Div(
                 self.headline_figure,
                 className="govuk-body govuk-!-font-weight-bold",
@@ -697,6 +696,8 @@ class ContextCard:
             paragraph(f"{self.date_prefix} {self.current_date}"),
             self._get_changed_from_content(),
         ]
+        if self.title:
+            card_content.insert(0,heading2(self.title))
         if self.additional_text_and_position:
             card_content.insert(
                 self.additional_text_and_position[1],
