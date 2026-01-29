@@ -8,25 +8,26 @@ from typing import Optional
 
 def convert_date(date_input, input_format=None,output_format=None, convert_to_datetime=False):
     """
-    Convert a date input (string or datetime) into either a formatted string or a datetime object.
+    Convert a date input (string or datetime) into either a datetime object or a formatted string.
 
-    If `date_input` is a string, it will be parsed using `input_format`. If `convert_to_datetime`
-    is True, the parsed/received datetime is returned. Otherwise, the datetime is formatted to
-    a string using `output_format`.
+    - If `date_input` is a string, `input_format` must be provided and will be used to parse it
+      via `datetime.strptime`.
+    - If `convert_to_datetime` is True, returns a `datetime.datetime` object and `output_format`
+      is ignored.
+    - If `convert_to_datetime` is False, `output_format` must be provided and will be used to
+      format the datetime via `datetime.strftime`.
 
     Args:
         date_input (str | datetime.datetime):
-            The date to convert. If a string, it will be parsed with `input_format`.
-            If a datetime, it will be used directly.
-        input_format (str):
-            The `datetime.strptime` format string used when `date_input` is a string.
-            Ignored if `date_input` is already a datetime.
-        output_format (str):
-            The `datetime.strftime` format string used when returning a string.
-            Ignored if `convert_to_datetime` is True.
+            The date to convert. Strings are parsed; datetime objects are used as-is.
+        input_format (str | None, optional):
+            Format string for parsing `date_input` when it is a string. Required if
+            `date_input` is a string.
+        output_format (str | None, optional):
+            Format string for formatting the output when returning a string. Required if
+            `convert_to_datetime` is False.
         convert_to_datetime (bool, optional):
-            If True, return a `datetime.datetime` object. If False (default), return a
-            formatted date string.
+            If True, return a datetime object. If False (default), return a formatted string.
 
     Returns:
         datetime.datetime | str:
@@ -34,17 +35,18 @@ def convert_date(date_input, input_format=None,output_format=None, convert_to_da
 
     Raises:
         ValueError:
-            If `date_input` is a string that does not match `input_format`.
+            If `date_input` is a string and `input_format` is None, or if parsing fails.
+        ValueError:
+            If `convert_to_datetime` is False and `output_format` is None.
         TypeError:
             If `date_input` is neither a string nor a datetime object.
 
     Examples:
-        >>> convert_date("2026-01-29", "%Y-%m-%d", "%d/%m/%Y")
+        >>> convert_date("2026-01-29", input_format="%Y-%m-%d", output_format="%d/%m/%Y")
         '29/01/2026'
 
-        >>> dt = convert_date("2026-01-29", "%Y-%m-%d", "%d/%m/%Y", convert_to_datetime=True)
-        >>> dt.year, dt.month, dt.day
-        (2026, 1, 29)
+        >>> convert_date("2026-01-29", input_format="%Y-%m-%d", convert_to_datetime=True)
+        datetime.datetime(2026, 1, 29, 0, 0)
     """
     if isinstance(date_input, str):
         date_input=datetime.strptime(date_input,input_format)
