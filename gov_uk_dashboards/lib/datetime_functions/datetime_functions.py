@@ -6,6 +6,53 @@ from datetime import datetime, date
 import re
 from typing import Optional
 
+def convert_date(date_input, input_format,output_format, convert_to_datetime=False):
+    """
+    Convert a date input (string or datetime) into either a formatted string or a datetime object.
+
+    If `date_input` is a string, it will be parsed using `input_format`. If `convert_to_datetime`
+    is True, the parsed/received datetime is returned. Otherwise, the datetime is formatted to
+    a string using `output_format`.
+
+    Args:
+        date_input (str | datetime.datetime):
+            The date to convert. If a string, it will be parsed with `input_format`.
+            If a datetime, it will be used directly.
+        input_format (str):
+            The `datetime.strptime` format string used when `date_input` is a string.
+            Ignored if `date_input` is already a datetime.
+        output_format (str):
+            The `datetime.strftime` format string used when returning a string.
+            Ignored if `convert_to_datetime` is True.
+        convert_to_datetime (bool, optional):
+            If True, return a `datetime.datetime` object. If False (default), return a
+            formatted date string.
+
+    Returns:
+        datetime.datetime | str:
+            A datetime object if `convert_to_datetime` is True, otherwise a formatted string.
+
+    Raises:
+        ValueError:
+            If `date_input` is a string that does not match `input_format`.
+        TypeError:
+            If `date_input` is neither a string nor a datetime object.
+
+    Examples:
+        >>> convert_date("2026-01-29", "%Y-%m-%d", "%d/%m/%Y")
+        '29/01/2026'
+
+        >>> dt = convert_date("2026-01-29", "%Y-%m-%d", "%d/%m/%Y", convert_to_datetime=True)
+        >>> dt.year, dt.month, dt.day
+        (2026, 1, 29)
+    """
+    if isinstance(date_input, str):
+        date_input=datetime.strptime(date_input,input_format)
+    if convert_to_datetime:
+        return date_input
+    else:
+        return date_input.strftime(output_format)
+    
 
 def convert_date_string_to_text_string(
     date_str: str,
