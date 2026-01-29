@@ -6,7 +6,7 @@ from datetime import datetime, date
 import re
 from typing import Optional
 
-def convert_date(date_input, input_format,output_format, convert_to_datetime=False):
+def convert_date(date_input, input_format=None,output_format=None, convert_to_datetime=False):
     """
     Convert a date input (string or datetime) into either a formatted string or a datetime object.
 
