@@ -752,10 +752,9 @@ class ContextCard:
         ):
             if percentage_change is None:
                 return None
-
             increase_is_positive = getattr(self, "increase_is_positive", True)
             use_number_rather_than_percentage = getattr(
-                self, "use_number_rather_than_percentage", False
+                self, "use_previous_value_rather_than_change", False
             )
             percentage_change_rounding = getattr(self, "percentage_change_rounding", 0)
 
