@@ -12,6 +12,7 @@ from gov_uk_dashboards.formatting.number_formatting import add_commas, format_pe
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_date
 
 from gov_uk_dashboards.constants import (
     CHANGED_FROM_GAP_STYLE,
@@ -276,7 +277,7 @@ def get_changed_from_content(
         )
         content.append(
             html.Span(
-                f"{round(abs(percentage_change), percentage_change_rounding)}{unit}",
+                f"{format_percentage(abs(percentage_change))}{unit}",
                 className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
                 + "changed-from-number-formatting",
             )
@@ -667,6 +668,8 @@ class ContextCard:
         date_format="%d %B %Y",
         use_previous_value_rather_than_change=False,
         use_difference_in_weeks_days=False,
+        increase_is_positive=True,
+        use_number_rather_than_percentage=False
     ):
         self.measure = measure
         self.title = title
@@ -677,6 +680,8 @@ class ContextCard:
             use_previous_value_rather_than_change
         )
         self.use_difference_in_weeks_days = use_difference_in_weeks_days
+        self.increase_is_positive=increase_is_positive
+        self.use_number_rather_than_percentage = use_number_rather_than_percentage
         self.df = self._filter_df(df)
         self.headline_figure = self._get_headline_figure()
         self.current_date = self._get_current_date()
@@ -713,6 +718,9 @@ class ContextCard:
         previous_date = get_a_previous_date(latest_date)
         year_earlier_date = get_a_previous_date(previous_date)
 
+        if not self.use_difference_in_weeks_days:
+            df_for_measure=df_for_measure.with_columns(pl.col(VALUE).map_elements(int,return_dtype=pl.Int64))
+
         return df_for_measure.filter(
             pl.col(DATE_VALID).is_in([latest_date, previous_date, year_earlier_date])
         ).sort(DATE_VALID, descending=True)
@@ -722,7 +730,7 @@ class ContextCard:
 
     def _get_current_date(self):
         current_date = self.df[DATE_VALID][0]
-        return convert_date_string_to_text_string(current_date)
+        return convert_date(current_date, "%Y-%m-%d", self.date_format)
 
     def _get_changed_from_content(self):
         if (
@@ -756,7 +764,6 @@ class ContextCard:
             use_number_rather_than_percentage = getattr(
                 self, "use_previous_value_rather_than_change", False
             )
-            percentage_change_rounding = getattr(self, "percentage_change_rounding", 0)
 
             if percentage_change > 0:
                 colour = "green" if increase_is_positive else "red"
@@ -841,7 +848,7 @@ class ContextCard:
                 )
                 content.append(
                     html.Span(
-                        f"{round(abs(percentage_change), percentage_change_rounding)}{unit}",
+                        f"{format_percentage(abs(percentage_change))}{unit}",
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
@@ -889,14 +896,14 @@ class ContextCard:
         # ---- build two tags ----
         tag_last_year = _build_tag(
             percentage_change=pct_year,
-            comparison_period_text="from last year",
+            comparison_period_text="from previous year",
             current_value=current_value,
             previous_value=prev_year_value,
         )
 
         tag_two_years = _build_tag(
             percentage_change=pct_2yr,
-            comparison_period_text="from 2 years ago",
+            comparison_period_text="from a year earlier",
             current_value=current_value,
             previous_value=two_year_value,
         )
@@ -907,116 +914,3 @@ class ContextCard:
         )
         tags = [t for t in (tag_last_year, styled_tag_two_years) if t is not None]
         return html.Div(tags) if tags else None
-
-    # def _get_changed_from_content(self):
-    #     if self.use_previous_value_rather_than_change and self.use_difference_in_weeks_days:
-    #         raise ValueError(
-    #             "use_previous_value_rather_than_change and use_difference_in_weeks_days "
-    #             "both cannot be true"
-    #         )
-    #     if self.df.height==1:
-    #         percentage_change_year = self.df[PERCENTAGE_CHANGE_FROM_PREV_YEAR]
-    #         percentage_change_2_year= self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR]
-    #     else:
-    #         percentage_change_year =  ((self.df[VALUE][0] - self.df[VALUE][1]) / self.df[VALUE][1]) * 100
-    #         percentage_change_2_year= ((self.df[VALUE][0] - self.df[VALUE][2]) / self.df[VALUE][2]) * 100
-
-    #     if percentage_change is None:
-    #         return None
-    #     if percentage_change > 0:
-    #         colour = "green" if increase_is_positive else "red"
-    #         arrow_direction = "up"
-    #         prefix = "up"
-    #     elif percentage_change < 0:
-    #         colour = "red" if increase_is_positive else "green"
-    #         arrow_direction = "down"
-    #         prefix = "down"
-    #     else:
-    #         colour = "grey"
-    #         arrow_direction = "right"  # this needs implementing in CSS
-    #         prefix = ""
-
-    #     box_style_class = f"govuk-tag govuk-tag--{colour} changed-from-box-formatting"
-    #     if percentage_change != 0:
-    #         box_style_class = (
-    #             box_style_class + f" changed-from-arrow_{arrow_direction}_{colour}"
-    #         )
-
-    #     content = []
-    #     if use_number_rather_than_percentage:
-    #         unit = ""
-    #     else:
-    #         unit = "%"
-
-    #     if self.use_previous_value_rather_than_change:
-    #         content.append(
-    #             html.Span(
-    #                 f"{prefix} from " if percentage_change != 0 else "unchanged from ",
-    #                 className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit"
-    #                 + " text-no-transform",  # text-no-transform prevents capitalisation,
-    #                 # which is added from govuk-tag class
-    #             )
-    #         )
-    #         content.append(
-    #             html.Span(
-    #                 f"{previous_value}{unit}",
-    #                 className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-    #                 + "changed-from-number-formatting",
-    #             )
-    #         )
-    #     elif use_difference_in_weeks_days:
-    #         difference_in_weeks_and_days = convert_days_to_weeks_and_days(
-    #             current_value - previous_value
-    #         )
-    #         if percentage_change > 0:
-    #             comparison_period_text_prefix = "slower than "
-    #         elif percentage_change < 0:
-    #             comparison_period_text_prefix = "faster than "
-    #         else:
-    #             comparison_period_text_prefix = "unchanged from "
-
-    #         comparison_period_text = comparison_period_text_prefix + comparison_period_text
-    #         if percentage_change != 0:
-    #             content.append(
-    #                 html.Span(
-    #                     f"{difference_in_weeks_and_days}",
-    #                     className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-    #                     + "changed-from-number-formatting"
-    #                     + " text-no-transform",  # text-no-transform prevents capitalisation,
-    #                     # which is added from govuk-tag class,
-    #                 )
-    #             )
-    #     else:
-    #         content.append(
-    #             html.Span(
-    #                 f"{prefix} " if percentage_change != 0 else "unchanged from ",
-    #                 className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit"
-    #                 + " text-no-transform",  # text-no-transform prevents capitalisation,
-    #                 # which is added from govuk-tag class
-    #             )
-    #         )
-    #         content.append(
-    #             html.Span(
-    #                 f"{round(abs(percentage_change), percentage_change_rounding)}{unit}",
-    #                 className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-    #                 + "changed-from-number-formatting",
-    #             )
-    #         )
-
-    #     content.append(
-    #         html.Span(
-    #             comparison_period_text,
-    #             className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit"
-    #             + " text-no-transform",  # text-no-transform prevents capitalisation,
-    #             # which is added from govuk-tag class
-    #         )
-    #     )
-
-    #     return html.Div(
-    #         [
-    #             html.Div(
-    #                 content,
-    #                 className=box_style_class,
-    #             ),
-    #         ]
-    #     )
