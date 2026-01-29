@@ -669,7 +669,7 @@ class ContextCard:
         use_previous_value_rather_than_change=False,
         use_difference_in_weeks_days=False,
         increase_is_positive=True,
-        use_number_rather_than_percentage=False
+        use_number_rather_than_percentage=False,
     ):
         self.measure = measure
         self.title = title
@@ -680,7 +680,7 @@ class ContextCard:
             use_previous_value_rather_than_change
         )
         self.use_difference_in_weeks_days = use_difference_in_weeks_days
-        self.increase_is_positive=increase_is_positive
+        self.increase_is_positive = increase_is_positive
         self.use_number_rather_than_percentage = use_number_rather_than_percentage
         self.df = self._filter_df(df)
         self.headline_figure = self._get_headline_figure()
@@ -697,7 +697,7 @@ class ContextCard:
             self._get_changed_from_content(),
         ]
         if self.title:
-            card_content.insert(0,heading2(self.title))
+            card_content.insert(0, heading2(self.title))
         if self.additional_text_and_position:
             card_content.insert(
                 self.additional_text_and_position[1],
@@ -720,14 +720,20 @@ class ContextCard:
         year_earlier_date = get_a_previous_date(previous_date)
 
         if not self.use_difference_in_weeks_days:
-            df_for_measure=df_for_measure.with_columns(pl.col(VALUE).map_elements(int,return_dtype=pl.Int64))
+            df_for_measure = df_for_measure.with_columns(
+                pl.col(VALUE).map_elements(int, return_dtype=pl.Int64)
+            )
 
         return df_for_measure.filter(
             pl.col(DATE_VALID).is_in([latest_date, previous_date, year_earlier_date])
         ).sort(DATE_VALID, descending=True)
 
     def _get_headline_figure(self):
-        return add_commas(self.df[VALUE][0], remove_decimal_places=True)
+        return (
+            add_commas(self.df[VALUE][0], remove_decimal_places=True)
+            if self.use_difference_in_weeks_days != True
+            else convert_days_to_weeks_and_days(self.df[VALUE][0])
+        )
 
     def _get_current_date(self):
         current_date = self.df[DATE_VALID][0]
@@ -810,6 +816,7 @@ class ContextCard:
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
+                comparison_period_text = "from " + comparison_period_text
 
             # Option B: show difference in weeks/days (requires values)
             elif self.use_difference_in_weeks_days:
@@ -853,6 +860,7 @@ class ContextCard:
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
+                comparison_period_text = "from " + comparison_period_text
 
             content.append(
                 html.Span(
@@ -897,14 +905,14 @@ class ContextCard:
         # ---- build two tags ----
         tag_last_year = _build_tag(
             percentage_change=pct_year,
-            comparison_period_text="from previous year",
+            comparison_period_text="previous year",
             current_value=current_value,
             previous_value=prev_year_value,
         )
 
         tag_two_years = _build_tag(
             percentage_change=pct_2yr,
-            comparison_period_text="from a year earlier",
+            comparison_period_text="a year earlier",
             current_value=current_value,
             previous_value=two_year_value,
         )

@@ -6,7 +6,10 @@ from datetime import datetime, date
 import re
 from typing import Optional
 
-def convert_date(date_input, input_format=None,output_format=None, convert_to_datetime=False):
+
+def convert_date(
+    date_input, input_format=None, output_format=None, convert_to_datetime=False
+):
     """
     Convert a date input (string or datetime) into either a datetime object or a formatted string.
 
@@ -49,12 +52,12 @@ def convert_date(date_input, input_format=None,output_format=None, convert_to_da
         datetime.datetime(2026, 1, 29, 0, 0)
     """
     if isinstance(date_input, str):
-        date_input=datetime.strptime(date_input,input_format)
+        date_input = datetime.strptime(date_input, input_format)
     if convert_to_datetime:
         return date_input
     else:
         return date_input.strftime(output_format)
-    
+
 
 def convert_date_string_to_text_string(
     date_str: str,
