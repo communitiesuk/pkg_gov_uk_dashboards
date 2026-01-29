@@ -7,9 +7,7 @@ import polars as pl
 from dateutil.relativedelta import relativedelta
 from dash import html
 from dash.development.base_component import Component
-from gov_uk_dashboards.components.dash import (
-    heading2,paragraph
-)
+from gov_uk_dashboards.components.dash import heading2, paragraph
 from gov_uk_dashboards.formatting.number_formatting import add_commas, format_percentage
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
@@ -237,7 +235,7 @@ def get_changed_from_content(
                 # which is added from govuk-tag class
             )
         )
-        print("PREVIOUS VAKUE",previous_value)
+        print("PREVIOUS VAKUE", previous_value)
         content.append(
             html.Span(
                 f"{previous_value}{unit}",
@@ -326,26 +324,25 @@ def convert_days_to_weeks_and_days(
     day_or_days = "day" if days == 1 else "days"
     return f"{weeks} {week_or_weeks} and {days} {day_or_days}"
 
+
 def get_data_for_context_card_new(
     measure: str,
     df: pl.DataFrame,
     title,
-    date_prefix, # make enum later
+    date_prefix,  # make enum later
     additional_text_and_position,
     increase_is_positive,
     comparison_period_text_year_earlier,
     comparison_period_text_prev_year,
     use_previous_value_rather_than_change,
     use_number_rather_than_percentage,
-    number_format="int", # need to pass this into changed from too fro same formatting
+    number_format="int",  # need to pass this into changed from too fro same formatting
     date_format="%d %B %Y",
     value_column: str = VALUE,
     display_value_as_int: bool = False,
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
     data_expected_for_previous_year_and_previous_2years: bool = True,
-    
-    
 ) -> dict:
     # pylint: disable=too-many-locals
     """
@@ -391,7 +388,7 @@ def get_data_for_context_card_new(
         include_percentage_change,
         date_of_latest_data,
     )
-    
+
     date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
     data_from_2_years_ago = get_latest_data_for_year(
         df_measure,
@@ -402,30 +399,42 @@ def get_data_for_context_card_new(
         include_percentage_change,
         previous_year_date,
     )
-    
-    def format_date(date_str): # is this defined elsewhere
+
+    def format_date(date_str):  # is this defined elsewhere
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         return date_obj.strftime(date_format)
-    print("latest_data",latest_data)
+
+    print("latest_data", latest_data)
     data_to_return = {
         LATEST_YEAR: latest_data,
         PREVIOUS_YEAR: previous_year_data,
         PREVIOUS_2YEAR: data_from_2_years_ago,
         "title": title,
-        "headline_value":add_commas(latest_data["metric_value"], remove_decimal_places=True) if number_format=="int" else latest_data["metric_value"],
-        "latest_date":date_prefix+" "+format_date(latest_data["Date valid"]),
+        "headline_value": (
+            add_commas(latest_data["metric_value"], remove_decimal_places=True)
+            if number_format == "int"
+            else latest_data["metric_value"]
+        ),
+        "latest_date": date_prefix + " " + format_date(latest_data["Date valid"]),
         "additional_text_and_position": additional_text_and_position,
         "increase_is_positive": increase_is_positive,
-        "comparison_period_text_year_earlier":comparison_period_text_year_earlier,
-        "comparison_period_text_prev_year":comparison_period_text_prev_year,
-         "use_previous_value_rather_than_change":use_previous_value_rather_than_change,
-        "use_number_rather_than_percentage":use_number_rather_than_percentage,
-        "previous_value": add_commas(previous_year_data["metric_value"], remove_decimal_places=True) if number_format=="int" else previous_year_data["metric_value"],
-        "year_earlier_value": add_commas(data_from_2_years_ago["metric_value"], remove_decimal_places=True) if number_format=="int" else data_from_2_years_ago["metric_value"],
+        "comparison_period_text_year_earlier": comparison_period_text_year_earlier,
+        "comparison_period_text_prev_year": comparison_period_text_prev_year,
+        "use_previous_value_rather_than_change": use_previous_value_rather_than_change,
+        "use_number_rather_than_percentage": use_number_rather_than_percentage,
+        "previous_value": (
+            add_commas(previous_year_data["metric_value"], remove_decimal_places=True)
+            if number_format == "int"
+            else previous_year_data["metric_value"]
+        ),
+        "year_earlier_value": (
+            add_commas(
+                data_from_2_years_ago["metric_value"], remove_decimal_places=True
+            )
+            if number_format == "int"
+            else data_from_2_years_ago["metric_value"]
+        ),
     }
-
-   
-
 
     return data_to_return
 
@@ -439,7 +448,6 @@ def get_data_for_context_card(
     include_percentage_change: bool = False,
     include_2019: bool = True,
     data_expected_for_previous_year_and_previous_2years: bool = True,
-    
 ) -> dict:
     # pylint: disable=too-many-locals
     """
@@ -647,21 +655,34 @@ def get_latest_data_for_year(
         )[0]
     return output
 
+
 class ContextCard:
-    def __init__(self,df:pl.DataFrame, measure:str, title:str,date_prefix,additional_text_and_position=None,date_format="%d %B %Y",use_previous_value_rather_than_change=False,use_difference_in_weeks_days=False):
-        self.measure=measure
-        self.title=title
-        self.additional_text_and_position=additional_text_and_position
-        self.date_prefix=date_prefix
-        self.date_format=date_format
-        self.use_previous_value_rather_than_change=use_previous_value_rather_than_change
-        self.use_difference_in_weeks_days=use_difference_in_weeks_days
-        self.df=self._filter_df(df)
-        self.headline_figure=self._get_headline_figure()
-        self.current_date=self._get_current_date()
-        
+    def __init__(
+        self,
+        df: pl.DataFrame,
+        measure: str,
+        title: str,
+        date_prefix,
+        additional_text_and_position=None,
+        date_format="%d %B %Y",
+        use_previous_value_rather_than_change=False,
+        use_difference_in_weeks_days=False,
+    ):
+        self.measure = measure
+        self.title = title
+        self.additional_text_and_position = additional_text_and_position
+        self.date_prefix = date_prefix
+        self.date_format = date_format
+        self.use_previous_value_rather_than_change = (
+            use_previous_value_rather_than_change
+        )
+        self.use_difference_in_weeks_days = use_difference_in_weeks_days
+        self.df = self._filter_df(df)
+        self.headline_figure = self._get_headline_figure()
+        self.current_date = self._get_current_date()
+
     def __call__(self):
-        card_content=[
+        card_content = [
             heading2(self.title),
             html.Div(
                 self.headline_figure,
@@ -669,18 +690,21 @@ class ContextCard:
                 style=LARGE_BOLD_FONT_STYLE | {"marginBottom": "0px"},
             ),
             paragraph(f"{self.date_prefix} {self.current_date}"),
-            self._get_changed_from_content()
+            self._get_changed_from_content(),
         ]
         if self.additional_text_and_position:
-            card_content.insert(self.additional_text_and_position[1],paragraph(self.additional_text_and_position[0]))
-        card_for_display=html.Div(
-        
-            card_content
-        ,
-        className="context-card-grid-item",)
+            card_content.insert(
+                self.additional_text_and_position[1],
+                paragraph(self.additional_text_and_position[0]),
+            )
+        card_for_display = html.Div(
+            card_content,
+            className="context-card-grid-item",
+        )
         return card_for_display
+
     def _filter_df(self, df):
-        df_for_measure=df.filter(df[MEASURE] == self.measure)
+        df_for_measure = df.filter(df[MEASURE] == self.measure)
         latest_date = df_for_measure.select(pl.col(DATE_VALID).max()).item()
 
         if "Percentage change from prev year" in df_for_measure.columns:
@@ -692,13 +716,19 @@ class ContextCard:
         return df_for_measure.filter(
             pl.col(DATE_VALID).is_in([latest_date, previous_date, year_earlier_date])
         ).sort(DATE_VALID, descending=True)
+
     def _get_headline_figure(self):
         return add_commas(self.df[VALUE][0], remove_decimal_places=True)
+
     def _get_current_date(self):
-        current_date=self.df[DATE_VALID][0]
+        current_date = self.df[DATE_VALID][0]
         return convert_date_string_to_text_string(current_date)
+
     def _get_changed_from_content(self):
-        if self.use_previous_value_rather_than_change and self.use_difference_in_weeks_days:
+        if (
+            self.use_previous_value_rather_than_change
+            and self.use_difference_in_weeks_days
+        ):
             raise ValueError(
                 "use_previous_value_rather_than_change and use_difference_in_weeks_days "
                 "both cannot be true"
@@ -722,9 +752,10 @@ class ContextCard:
         ):
             if percentage_change is None:
                 return None
-
             increase_is_positive = getattr(self, "increase_is_positive", True)
-            use_number_rather_than_percentage = getattr(self, "use_number_rather_than_percentage", False)
+            use_number_rather_than_percentage = getattr(
+                self, "use_previous_value_rather_than_change", False
+            )
             percentage_change_rounding = getattr(self, "percentage_change_rounding", 0)
 
             if percentage_change > 0:
@@ -740,7 +771,9 @@ class ContextCard:
                 arrow_direction = "right"
                 prefix = ""
 
-            box_style_class = f"govuk-tag govuk-tag--{colour} changed-from-box-formatting"
+            box_style_class = (
+                f"govuk-tag govuk-tag--{colour} changed-from-box-formatting"
+            )
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
@@ -755,7 +788,11 @@ class ContextCard:
 
                 content.append(
                     html.Span(
-                        f"{prefix} from " if percentage_change != 0 else "unchanged from ",
+                        (
+                            f"{prefix} from "
+                            if percentage_change != 0
+                            else "unchanged from "
+                        ),
                         className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit text-no-transform",
                     )
                 )
@@ -771,7 +808,9 @@ class ContextCard:
                 if current_value is None or previous_value is None:
                     return None
 
-                difference_in_weeks_and_days = convert_days_to_weeks_and_days(current_value - previous_value)
+                difference_in_weeks_and_days = convert_days_to_weeks_and_days(
+                    current_value - previous_value
+                )
 
                 if percentage_change > 0:
                     comparison_period_text_prefix = "slower than "
@@ -784,11 +823,13 @@ class ContextCard:
                     html.Span(
                         f"{difference_in_weeks_and_days}",
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-                                "changed-from-number-formatting text-no-transform",
+                        "changed-from-number-formatting text-no-transform",
                     )
                 )
 
-                comparison_period_text = comparison_period_text_prefix + comparison_period_text
+                comparison_period_text = (
+                    comparison_period_text_prefix + comparison_period_text
+                )
 
             # Option C: default (% change)
             else:
@@ -824,7 +865,7 @@ class ContextCard:
         if self.df.height == 1:
             # Using provided columns (likely already computed upstream)
             pct_year = _scalar(self.df[PERCENTAGE_CHANGE_FROM_PREV_YEAR])
-            pct_2yr  = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
+            pct_2yr = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
 
             # If you want to support previous-value/weeks-days in height==1 mode,
             # you'd need extra columns for those values. Otherwise tags will return None for those modes.
@@ -834,8 +875,16 @@ class ContextCard:
             prev_year_value = _scalar(self.df[VALUE][1])
             two_year_value = _scalar(self.df[VALUE][2])
 
-            pct_year = None if not prev_year_value  else ((current_value - prev_year_value) / prev_year_value) * 100
-            pct_2yr  = None if not two_year_value  else ((current_value - two_year_value) / two_year_value) * 100
+            pct_year = (
+                None
+                if not prev_year_value
+                else ((current_value - prev_year_value) / prev_year_value) * 100
+            )
+            pct_2yr = (
+                None
+                if not two_year_value
+                else ((current_value - two_year_value) / two_year_value) * 100
+            )
 
         # ---- build two tags ----
         tag_last_year = _build_tag(
@@ -851,9 +900,14 @@ class ContextCard:
             current_value=current_value,
             previous_value=two_year_value,
         )
-
-        tags = [t for t in (tag_last_year, tag_two_years) if t is not None]
+        styled_tag_two_years = (
+            html.Div(tag_two_years, style=CHANGED_FROM_GAP_STYLE)
+            if tag_two_years is not None
+            else None
+        )
+        tags = [t for t in (tag_last_year, styled_tag_two_years) if t is not None]
         return html.Div(tags) if tags else None
+
     # def _get_changed_from_content(self):
     #     if self.use_previous_value_rather_than_change and self.use_difference_in_weeks_days:
     #         raise ValueError(
@@ -966,4 +1020,3 @@ class ContextCard:
     #             ),
     #         ]
     #     )
-    
