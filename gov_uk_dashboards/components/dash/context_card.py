@@ -12,6 +12,7 @@ from gov_uk_dashboards.formatting.number_formatting import add_commas, format_pe
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_date
 
 from gov_uk_dashboards.constants import (
     CHANGED_FROM_GAP_STYLE,
@@ -722,7 +723,7 @@ class ContextCard:
 
     def _get_current_date(self):
         current_date = self.df[DATE_VALID][0]
-        return convert_date_string_to_text_string(current_date)
+        return convert_date(current_date, "%Y-%m-%d", self.date_format)
 
     def _get_changed_from_content(self):
         if (
