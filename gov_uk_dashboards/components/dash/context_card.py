@@ -728,7 +728,8 @@ class ContextCard:
                     )
                 )
                 if self.use_number_rather_than_percentage:
-                    comparison_period_text = "from " + comparison_period_text
+                    if comparison_period_text == "previous year":
+                        comparison_period_text = "in " + comparison_period_text
 
             # Option B: show difference in weeks/days (requires values)
             elif self.use_difference_in_weeks_days:
