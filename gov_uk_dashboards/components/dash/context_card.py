@@ -727,7 +727,7 @@ class ContextCard:
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
-                if self.use_number_rather_than_percentage == True:
+                if self.use_number_rather_than_percentage:
                     comparison_period_text = "from " + comparison_period_text
 
             # Option B: show difference in weeks/days (requires values)
@@ -824,7 +824,7 @@ class ContextCard:
 
         tag_two_years = _build_tag(
             percentage_change=pct_2yr,
-            comparison_period_text="a year earlier",
+            comparison_period_text="two years ago",
             current_value=current_value,
             previous_value=two_year_value,
         )
