@@ -27,7 +27,7 @@ def convert_date(
         `strftime`.
 
     Month abbreviation tweak:
-    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated 
+    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated
         months (e.g., via `%b`), any standalone "Jun" or "Jul" tokens in the formatted output are
         expanded to "June" / "July".
     - If `abbreviate_jun_jul` is True, the output is left exactly as produced by `strftime`.

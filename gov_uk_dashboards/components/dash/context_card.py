@@ -540,10 +540,10 @@ class ContextCard:
         units: str = None,
         additional_text_and_position=None,
         date_format="%d %b %Y",
-        use_previous_value_rather_than_change=False, # rename????
+        use_previous_value_rather_than_change=False,  # rename????
         use_difference_in_weeks_days=False,
         increase_is_positive=True,
-        use_number_rather_than_percentage=False, # rename????
+        use_number_rather_than_percentage=False,  # rename????
         details_summary_and_text: tuple = None,
     ):
         self.measure = measure
@@ -589,7 +589,7 @@ class ContextCard:
                             self.details_summary_and_text[1],
                         )
                     ],
-                    style={"marginTop": "40px"}  # from h repo,
+                    style={"marginTop": "40px"},  # from h repo,
                 )
             )
         if self.units:
@@ -717,13 +717,15 @@ class ContextCard:
                             if percentage_change != 0
                             else "unchanged from "
                         ),
-                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit text-no-transform",
+                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                        "text-no-transform",
                     )
                 )
                 content.append(
                     html.Span(
                         f"{previous_value}{unit}",
-                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
+                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                        "changed-from-number-formatting",
                     )
                 )
                 if self.use_number_rather_than_percentage:
@@ -763,13 +765,15 @@ class ContextCard:
                 content.append(
                     html.Span(
                         f"{prefix} " if percentage_change != 0 else "unchanged from ",
-                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit text-no-transform",
+                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                        "text-no-transform",
                     )
                 )
                 content.append(
                     html.Span(
                         f"{format_percentage(abs(percentage_change))}{unit}",
-                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
+                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                        "changed-from-number-formatting",
                     )
                 )
                 comparison_period_text = "from " + comparison_period_text
@@ -777,7 +781,8 @@ class ContextCard:
             content.append(
                 html.Span(
                     comparison_period_text,
-                    className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit text-no-transform",
+                    className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                    "text-no-transform",
                 )
             )
 
@@ -796,7 +801,8 @@ class ContextCard:
             pct_2yr = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
 
             # If you want to support previous-value/weeks-days in height==1 mode,
-            # you'd need extra columns for those values. Otherwise tags will return None for those modes.
+            # you'd need extra columns for those values. Otherwise tags will return None for those
+            # modes.
         else:
             # Expect order: [latest, prev_year, two_year]
             current_value = _scalar(self.df[VALUE][0])
