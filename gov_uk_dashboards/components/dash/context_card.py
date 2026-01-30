@@ -842,6 +842,8 @@ class ContextCard:
             if self.use_previous_value_rather_than_change:
                 if previous_value is None:
                     return None
+                if self.use_number_rather_than_percentage:
+                    previous_value = str(format_percentage(abs(previous_value)))
                 content.append(
                     html.Span(
                         (
