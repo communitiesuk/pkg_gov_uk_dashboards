@@ -536,15 +536,15 @@ class ContextCard:
         df: pl.DataFrame,
         measure: str,
         title: str,
-        date_prefix,
+        date_prefix: str,
         units: str = None,
-        additional_text_and_position=None,
-        date_format="%d %b %Y",
-        use_previous_value_rather_than_change=False,  # rename????
-        use_difference_in_weeks_days=False,
-        increase_is_positive=True,
-        use_number_rather_than_percentage=False,  # rename????
-        details_summary_and_text: tuple = None,
+        additional_text_and_position: tuple[str, int] = None,
+        date_format: str = "%d %b %Y",
+        use_previous_value_rather_than_change: bool = False,  # rename????
+        use_difference_in_weeks_days: bool = False,
+        increase_is_positive: bool = True,
+        use_number_rather_than_percentage: bool = False,  # rename????
+        details_summary_and_text: tuple[str, str] = None,
     ):
         self.measure = measure
         self.title = title
