@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from dash import html
 from dash.development.base_component import Component
 from gov_uk_dashboards.components.dash import heading2, paragraph
+from gov_uk_dashboards.components.dash.details import details
 from gov_uk_dashboards.formatting.number_formatting import add_commas, format_percentage
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
@@ -670,6 +671,7 @@ class ContextCard:
         use_difference_in_weeks_days=False,
         increase_is_positive=True,
         use_number_rather_than_percentage=False,
+        details_summary_and_text: tuple = None,
     ):
         self.measure = measure
         self.title = title
@@ -685,6 +687,7 @@ class ContextCard:
         self.df = self._filter_df(df)
         self.headline_figure = self._get_headline_figure()
         self.current_date = self._get_current_date()
+        self.details_summary_and_text = details_summary_and_text
 
     def __call__(self):
         card_content = [
@@ -703,6 +706,19 @@ class ContextCard:
                 self.additional_text_and_position[1],
                 paragraph(self.additional_text_and_position[0]),
             )
+        if self.details_summary_and_text:
+                DETAILS_STYLE = {"marginTop": "40px"}  # from h repo
+                card_content.append(
+                    html.Div(
+                        [
+                            details(
+                                self.details_summary_and_text[0],
+                                self.details_summary_and_text[1],
+                            )
+                        ],
+                        style=DETAILS_STYLE,
+                    )
+                )
         card_for_display = html.Div(
             card_content,
             className="context-card-grid-item",
