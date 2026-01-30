@@ -665,6 +665,7 @@ class ContextCard:
         measure: str,
         title: str,
         date_prefix,
+        units: str = None,
         additional_text_and_position=None,
         date_format="%d %B %Y",
         use_previous_value_rather_than_change=False,
@@ -675,6 +676,7 @@ class ContextCard:
     ):
         self.measure = measure
         self.title = title
+        self.units = units
         self.additional_text_and_position = additional_text_and_position
         self.date_prefix = date_prefix
         self.date_format = date_format
@@ -718,6 +720,10 @@ class ContextCard:
                     ],
                     style=DETAILS_STYLE,
                 )
+            )
+        if self.units:
+            card_content.insert(
+                1, html.Div(paragraph(self.units), style={"marginTop": "-15px"})
             )
         card_for_display = html.Div(
             card_content,
