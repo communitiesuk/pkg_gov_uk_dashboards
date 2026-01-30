@@ -745,8 +745,12 @@ class ContextCard:
         ).sort(DATE_VALID, descending=True)
 
     def _get_headline_figure(self):
+        use_number_rather_than_percentage = getattr(
+            self, "use_previous_value_rather_than_change", False
+        )
+        unit = "" if not use_number_rather_than_percentage else "%"
         return (
-            add_commas(self.df[VALUE][0], remove_decimal_places=True)
+            add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
             if self.use_difference_in_weeks_days != True
             else convert_days_to_weeks_and_days(self.df[VALUE][0])
         )
@@ -787,7 +791,7 @@ class ContextCard:
             use_number_rather_than_percentage = getattr(
                 self, "use_previous_value_rather_than_change", False
             )
-
+            print(use_number_rather_than_percentage)
             if percentage_change > 0:
                 colour = "green" if increase_is_positive else "red"
                 arrow_direction = "up"
@@ -807,15 +811,19 @@ class ContextCard:
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
-            unit = "" if use_number_rather_than_percentage else "%"
-
+            use_number_rather_than_percentage = getattr(
+            self, "use_previous_value_rather_than_change", False
+        )
+            unit = "" if not use_number_rather_than_percentage else "%"
+            print("£££", unit)
             content = []
+            
 
             # Option A: show previous value rather than % change
             if self.use_previous_value_rather_than_change:
                 if previous_value is None:
                     return None
-
+                print("&&&&",unit)
                 content.append(
                     html.Span(
                         (
