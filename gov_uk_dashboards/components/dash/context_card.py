@@ -546,6 +546,186 @@ class ContextCard:
         use_number_rather_than_percentage: bool = False,  # rename????
         details_summary_and_text: tuple[str, str] = None,
     ):
+        """
+        A compact “context card” for a time-series measure that renders:
+        • a headline figure,
+        • a date label,
+        • one or two comparison tags,
+        • optional title, units, inline note, and a collapsible details section.
+
+        The component can display comparisons as:
+        1) percent change (default),
+        2) the previous period’s value,
+        3) the time difference in weeks/days (for durations).
+
+        ----------
+        Parameters
+        ----------
+        df : pl.DataFrame
+            Input data for one or more measures across dates. Expected columns:
+            - MEASURE (categorical/str): identifies the measure.
+            - DATE_VALID (date or ISO string): observation date.
+            - VALUE (numeric): observed value for the measure.
+            If `df` is pre-aggregated to a single row with precomputed changes, include:
+            - PERCENTAGE_CHANGE_FROM_PREV_YEAR
+            - PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
+            In that 1-row mode, those columns are used directly for percent-change tags.
+
+        measure : str
+            The measure name to filter from `df[MEASURE]`.
+
+        title : str
+            Optional title shown at the top of the card. If falsy, no title is rendered.
+
+        date_prefix : str
+            Text prefixed before the current date (e.g., "Data to", "Week ending").
+
+        units : str, optional
+            Units label displayed just under the headline figure (e.g., "admissions", "£", "days").
+
+        additional_text_and_position : tuple[str, int], optional
+            An extra paragraph inserted into the content at the given index:
+            (text, position_index).
+
+        date_format : str, default "%d %b %Y"
+            Format string for the latest DATE_VALID (e.g., "05 Jan 2026").
+
+        use_previous_value_rather_than_change : bool, default False
+            When True, the “changed from …” tag shows the *previous period’s value*
+            instead of a percent change. Formatting of that value is controlled by
+            `use_number_rather_than_percentage` (see below).
+            NOTE: This cannot be True at the same time as `use_difference_in_weeks_days`.
+
+        use_difference_in_weeks_days : bool, default False
+            When True, the “changed from …” tag shows the *difference in time* (converted
+            to weeks and days) between the current and comparison periods. The tag text becomes:
+            - "slower than …" if current_value > previous_value
+            - "faster than …" if current_value < previous_value
+            - "unchanged from …" if equal
+            This mode assumes `VALUE` is a duration in days (or at least convertible by
+            `convert_days_to_weeks_and_days`). Requires both current and previous values.
+            NOTE: This cannot be True at the same time as `use_previous_value_rather_than_change`.
+
+        increase_is_positive : bool, default True
+            Controls the semantic mapping of change to color/arrow:
+            - If True: increase → green ↑, decrease → red ↓
+            - If False: increase → red ↓,  decrease → green ↑
+            Zero change renders a neutral (grey/right) style.
+
+        use_number_rather_than_percentage : bool, default False
+            Controls formatting *when showing values* (headline and/or previous-value mode):
+            - If True: values are formatted via `format_percentage(...)` (i.e., 0.123 → "12.3%"),
+                        and literal "%" is not duplicated.
+            - If False: values are rendered as plain numbers (comma-separated, no implicit percent).
+            NOTE: Despite the parameter name, True means “format as a percent string”.
+            This flag has no effect when the comparison is shown as percent change (default mode).
+
+        details_summary_and_text : tuple[str, str], optional
+            Renders a collapsible details section at the bottom with
+            (summary_text, details_body).
+
+        ----------
+        Data selection & typing
+        ----------
+        • The dataframe is filtered to the given `measure`.
+        • If the filtered frame has the “percentage change” columns and `height == 1`,
+        those precomputed values are used to render percent-change tags.
+        • Otherwise, three dates are selected for the measure:
+            latest_date,
+            previous_date = get_a_previous_date(latest_date),
+            year_earlier_date = get_a_previous_date(previous_date),
+        and the subset is sorted descending (latest first).
+        • Unless `use_difference_in_weeks_days` is True, and unless the combination
+        (`use_number_rather_than_percentage` AND `use_previous_value_rather_than_change`) is True,
+        values are cast to Int64 to present clean whole-number headlines.
+
+        ----------
+        Headline figure rules
+        ----------
+        • If `use_difference_in_weeks_days` is True:
+            Headline = convert_days_to_weeks_and_days(VALUE[0]).
+        • Else if (`use_previous_value_rather_than_change` AND `use_number_rather_than_percentage`) is True:
+            Headline = format_percentage(abs(VALUE[0]))  # includes the % sign.
+        • Else:
+            Headline = add_commas(VALUE[0], remove_decimal_places=True)
+            # Special case: if `use_previous_value_rather_than_change` is True and
+            # `use_number_rather_than_percentage` is False, a literal "%" is appended.
+            # (This supports datasets where the stored VALUE already represents percent points.)
+
+        If `units` is provided, it is displayed below the headline.
+
+        ----------
+        “Changed from” tags
+        ----------
+        The component attempts to render up to two tags:
+        1) comparison with “previous year”
+        2) comparison with “two years ago”
+        Tags are omitted if the required comparison value or change is unavailable.
+
+        A) Default mode (percent change)
+        Conditions: use_previous_value_rather_than_change = False
+                    use_difference_in_weeks_days = False
+        • Text: "up|down [N%] from previous year" (or “two years ago”).
+        • Color/arrow determined by `increase_is_positive`.
+        • Zero change → grey/right arrow, “unchanged from …”.
+
+        B) Previous-value mode
+        Conditions: use_previous_value_rather_than_change = True
+                    use_difference_in_weeks_days = False
+        • Text: "[up|down] from [previous_value]" or “unchanged from …”.
+        • The previous value is formatted as:
+            - `format_percentage(...)` when use_number_rather_than_percentage = True
+            - a plain number (comma formatting) otherwise
+        • Grammar tweak: if formatted as percent and the period is “previous year”,
+            phrase becomes “in previous year”.
+
+        C) Time-delta mode (weeks/days)
+        Conditions: use_difference_in_weeks_days = True
+                    use_previous_value_rather_than_change = False
+        • Computes current_value - previous_value (for each comparison),
+            converts via `convert_days_to_weeks_and_days(...)`.
+        • Prefix:
+                current > previous  → “slower than …”
+                current < previous  → “faster than …”
+                equal               → “unchanged from …”
+        • Requires both current and previous numeric values; if missing, tag is skipped.
+
+        ----------
+        Mutual exclusivity & errors
+        ----------
+        • `use_previous_value_rather_than_change` and `use_difference_in_weeks_days`
+        cannot both be True. A ValueError is raised if they are.
+
+        ----------
+        Visual composition
+        ----------
+        • Content order (roughly):
+            [title?]  headline  [units?]  (date_prefix + date)  comparison tags  [details?]
+        • `additional_text_and_position`, if provided, inserts an extra paragraph at the
+        specified index within the card content.
+        • The details section (if provided) is appended with additional top margin.
+
+        ----------
+        Notes on 1-row vs 3-row inputs
+        ----------
+        • When `df.height == 1`, the class expects precomputed change columns for
+        percent-change tags:
+            PERCENTAGE_CHANGE_FROM_PREV_YEAR,
+            PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR.
+        In this 1-row mode, modes that require raw previous values (previous-value or
+        time-delta) may render no tags unless those values are otherwise present.
+        • When `df.height > 1`, the class computes changes from rows ordered as:
+            [latest, previous_year, two_years_ago].
+
+        ----------
+        Semantics caveat for percentages
+        ----------
+        • `use_number_rather_than_percentage=True` means “format the numeric value as a percent
+        string” (e.g., 0.123 → "12.3%"). Set this True when your raw values are proportions.
+        • If your raw values are already in percent points (e.g., 12.3), leave it False to avoid
+        double-scaling; the class may append a literal “%” in specific cases described above.
+        """
+
         self.measure = measure
         self.title = title
         self.units = units
