@@ -667,7 +667,7 @@ class ContextCard:
         date_prefix,
         units: str = None,
         additional_text_and_position=None,
-        date_format="%d %B %Y",
+        date_format="%d %b %Y",
         use_previous_value_rather_than_change=False,
         use_difference_in_weeks_days=False,
         increase_is_positive=True,
