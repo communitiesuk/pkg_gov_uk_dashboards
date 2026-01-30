@@ -735,7 +735,10 @@ class ContextCard:
         previous_date = get_a_previous_date(latest_date)
         year_earlier_date = get_a_previous_date(previous_date)
 
-        if not self.use_difference_in_weeks_days:
+        if not self.use_difference_in_weeks_days and not (
+            self.use_number_rather_than_percentage
+            and self.use_previous_value_rather_than_change
+        ):
             df_for_measure = df_for_measure.with_columns(
                 pl.col(VALUE).map_elements(int, return_dtype=pl.Int64)
             )
@@ -750,8 +753,15 @@ class ContextCard:
         )
         unit = "" if not use_number_rather_than_percentage else "%"
         return (
-            add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
-            if self.use_difference_in_weeks_days != True
+            (
+                add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
+                if not (
+                    self.use_number_rather_than_percentage
+                    and self.use_previous_value_rather_than_change
+                )
+                else f"{str(format_percentage(abs(self.df[VALUE][0])))+unit}"
+            )
+            if not self.use_difference_in_weeks_days
             else convert_days_to_weeks_and_days(self.df[VALUE][0])
         )
 
@@ -811,12 +821,20 @@ class ContextCard:
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
-            if self.use_number_rather_than_percentage==False & self.use_previous_value_rather_than_change==False:
+            if (
+                self.use_number_rather_than_percentage
+                == False & self.use_previous_value_rather_than_change
+                == False
+            ):
                 unit = "%"
-            elif  self.use_previous_value_rather_than_change== True & self.use_number_rather_than_percentage== True:
-                unit="%"
+            elif (
+                self.use_previous_value_rather_than_change
+                == True & self.use_number_rather_than_percentage
+                == True
+            ):
+                unit = "%"
             else:
-                unit=""
+                unit = ""
 
             content = []
 
