@@ -707,18 +707,18 @@ class ContextCard:
                 paragraph(self.additional_text_and_position[0]),
             )
         if self.details_summary_and_text:
-                DETAILS_STYLE = {"marginTop": "40px"}  # from h repo
-                card_content.append(
-                    html.Div(
-                        [
-                            details(
-                                self.details_summary_and_text[0],
-                                self.details_summary_and_text[1],
-                            )
-                        ],
-                        style=DETAILS_STYLE,
-                    )
+            DETAILS_STYLE = {"marginTop": "40px"}  # from h repo
+            card_content.append(
+                html.Div(
+                    [
+                        details(
+                            self.details_summary_and_text[0],
+                            self.details_summary_and_text[1],
+                        )
+                    ],
+                    style=DETAILS_STYLE,
                 )
+            )
         card_for_display = html.Div(
             card_content,
             className="context-card-grid-item",
@@ -811,19 +811,19 @@ class ContextCard:
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
-            use_number_rather_than_percentage = getattr(
-            self, "use_previous_value_rather_than_change", False
-        )
-            unit = "" if not use_number_rather_than_percentage else "%"
-            print("£££", unit)
+            if self.use_number_rather_than_percentage==False & self.use_previous_value_rather_than_change==False:
+                unit = "%"
+            elif  self.use_previous_value_rather_than_change== True & self.use_number_rather_than_percentage== True:
+                unit="%"
+            else:
+                unit=""
+
             content = []
-            
 
             # Option A: show previous value rather than % change
             if self.use_previous_value_rather_than_change:
                 if previous_value is None:
                     return None
-                print("&&&&",unit)
                 content.append(
                     html.Span(
                         (
@@ -840,7 +840,7 @@ class ContextCard:
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
-                if self.use_number_rather_than_percentage==True:
+                if self.use_number_rather_than_percentage == True:
                     comparison_period_text = "from " + comparison_period_text
 
             # Option B: show difference in weeks/days (requires values)
