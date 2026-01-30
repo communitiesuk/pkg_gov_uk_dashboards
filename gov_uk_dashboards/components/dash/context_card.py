@@ -24,7 +24,6 @@ from gov_uk_dashboards.constants import (
     METRIC_VALUE,
     PERCENTAGE_CHANGE_FROM_PREV_YEAR,
     PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR,
-    PREVIOUS_2YEAR,
     PREVIOUS_YEAR,
     TWENTY_NINETEEN,
     TWENTY_NINETEEN_VALUE,
@@ -627,13 +626,12 @@ class ContextCard:
         ).sort(DATE_VALID, descending=True)
 
     def _get_headline_figure(self):
-        use_number_rather_than_percentage = getattr(
-            self, "use_previous_value_rather_than_change", False
-        )
         unit = (
             ""
-            if not use_number_rather_than_percentage
-            or self.use_number_rather_than_percentage == True
+            if (
+                not self.use_previous_value_rather_than_change
+                or self.use_number_rather_than_percentage
+            )
             else "%"
         )
 
