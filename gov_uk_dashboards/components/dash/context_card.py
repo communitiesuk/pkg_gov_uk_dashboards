@@ -630,7 +630,13 @@ class ContextCard:
         use_number_rather_than_percentage = getattr(
             self, "use_previous_value_rather_than_change", False
         )
-        unit = "" if not use_number_rather_than_percentage else "%"
+        unit = (
+            ""
+            if not use_number_rather_than_percentage
+            or self.use_number_rather_than_percentage == True
+            else "%"
+        )
+
         return (
             (
                 add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
@@ -677,10 +683,7 @@ class ContextCard:
             if percentage_change is None:
                 return None
             increase_is_positive = getattr(self, "increase_is_positive", True)
-            use_number_rather_than_percentage = getattr(
-                self, "use_previous_value_rather_than_change", False
-            )
-            print(use_number_rather_than_percentage)
+
             if percentage_change > 0:
                 colour = "green" if increase_is_positive else "red"
                 arrow_direction = "up"
@@ -700,20 +703,7 @@ class ContextCard:
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
-            if (
-                self.use_number_rather_than_percentage
-                == False & self.use_previous_value_rather_than_change
-                == False
-            ):
-                unit = "%"
-            elif (
-                self.use_previous_value_rather_than_change
-                == True & self.use_number_rather_than_percentage
-                == True
-            ):
-                unit = "%"
-            else:
-                unit = ""
+            unit = "%" if (not self.use_previous_value_rather_than_change) else ""
 
             content = []
 
