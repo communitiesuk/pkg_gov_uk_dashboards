@@ -15,25 +15,29 @@ def convert_date(
     abbreviate_jun_jul=False,
 ):
     """
-    Convert a date input (string, date, or datetime) into either a datetime object or a formatted string.
+    Convert a date input (string, date, or datetime) into either a datetime object or a formatted
+        string.
 
     Behaviour:
-    - If `date_input` is a string, `input_format` must be provided and is used with `datetime.strptime`.
-    - If `convert_to_datetime` is True, returns a `datetime.datetime` (at midnight if the input was a `date`),
-      and `output_format` is ignored.
-    - If `convert_to_datetime` is False, `output_format` must be provided and is used with `strftime`.
+    - If `date_input` is a string, `input_format` must be provided and is used with
+        `datetime.strptime`.
+    - If `convert_to_datetime` is True, returns a `datetime.datetime` (at midnight if the input was
+        a `date`), and `output_format` is ignored.
+    - If `convert_to_datetime` is False, `output_format` must be provided and is used with
+        `strftime`.
 
     Month abbreviation tweak:
-    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated months
-      (e.g., via `%b`), any standalone "Jun" or "Jul" tokens in the formatted output are expanded to
-      "June" / "July".
+    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated 
+        months (e.g., via `%b`), any standalone "Jun" or "Jul" tokens in the formatted output are
+        expanded to "June" / "July".
     - If `abbreviate_jun_jul` is True, the output is left exactly as produced by `strftime`.
 
     Args:
         date_input (str | datetime.datetime | datetime.date):
             The date to convert.
         input_format (str | None):
-            Format string for parsing `date_input` when it is a string. Required if `date_input` is a string.
+            Format string for parsing `date_input` when it is a string. Required if `date_input` is
+            a string.
         output_format (str | None):
             Format string used when returning a string. Required if `convert_to_datetime` is False.
         convert_to_datetime (bool):

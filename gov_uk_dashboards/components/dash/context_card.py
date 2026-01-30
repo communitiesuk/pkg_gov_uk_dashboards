@@ -581,7 +581,6 @@ class ContextCard:
                 paragraph(self.additional_text_and_position[0]),
             )
         if self.details_summary_and_text:
-            DETAILS_STYLE = {"marginTop": "40px"}  # from h repo
             card_content.append(
                 html.Div(
                     [
@@ -590,7 +589,7 @@ class ContextCard:
                             self.details_summary_and_text[1],
                         )
                     ],
-                    style=DETAILS_STYLE,
+                    style={"marginTop": "40px"}  # from h repo,
                 )
             )
         if self.units:
