@@ -8,29 +8,38 @@ from typing import Optional
 
 
 def convert_date(
-    date_input, input_format=None, output_format=None, convert_to_datetime=False
+    date_input,
+    input_format=None,
+    output_format=None,
+    convert_to_datetime=False,
+    abbreviate_jun_jul=False,
 ):
     """
-    Convert a date input (string or datetime) into either a datetime object or a formatted string.
+    Convert a date input (string, date, or datetime) into either a datetime object or a formatted string.
 
-    - If `date_input` is a string, `input_format` must be provided and will be used to parse it
-      via `datetime.strptime`.
-    - If `convert_to_datetime` is True, returns a `datetime.datetime` object and `output_format`
-      is ignored.
-    - If `convert_to_datetime` is False, `output_format` must be provided and will be used to
-      format the datetime via `datetime.strftime`.
+    Behaviour:
+    - If `date_input` is a string, `input_format` must be provided and is used with `datetime.strptime`.
+    - If `convert_to_datetime` is True, returns a `datetime.datetime` (at midnight if the input was a `date`),
+      and `output_format` is ignored.
+    - If `convert_to_datetime` is False, `output_format` must be provided and is used with `strftime`.
+
+    Month abbreviation tweak:
+    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated months
+      (e.g., via `%b`), any standalone "Jun" or "Jul" tokens in the formatted output are expanded to
+      "June" / "July".
+    - If `abbreviate_jun_jul` is True, the output is left exactly as produced by `strftime`.
 
     Args:
-        date_input (str | datetime.datetime):
-            The date to convert. Strings are parsed; datetime objects are used as-is.
-        input_format (str | None, optional):
-            Format string for parsing `date_input` when it is a string. Required if
-            `date_input` is a string.
-        output_format (str | None, optional):
-            Format string for formatting the output when returning a string. Required if
-            `convert_to_datetime` is False.
-        convert_to_datetime (bool, optional):
-            If True, return a datetime object. If False (default), return a formatted string.
+        date_input (str | datetime.datetime | datetime.date):
+            The date to convert.
+        input_format (str | None):
+            Format string for parsing `date_input` when it is a string. Required if `date_input` is a string.
+        output_format (str | None):
+            Format string used when returning a string. Required if `convert_to_datetime` is False.
+        convert_to_datetime (bool):
+            If True, return a `datetime.datetime`. If False, return a formatted string.
+        abbreviate_jun_jul (bool):
+            If False, expand "Jun"/"Jul" to "June"/"July" in the final formatted string.
 
     Returns:
         datetime.datetime | str:
@@ -39,24 +48,38 @@ def convert_date(
     Raises:
         ValueError:
             If `date_input` is a string and `input_format` is None, or if parsing fails.
-        ValueError:
             If `convert_to_datetime` is False and `output_format` is None.
         TypeError:
-            If `date_input` is neither a string nor a datetime object.
-
-    Examples:
-        >>> convert_date("2026-01-29", input_format="%Y-%m-%d", output_format="%d/%m/%Y")
-        '29/01/2026'
-
-        >>> convert_date("2026-01-29", input_format="%Y-%m-%d", convert_to_datetime=True)
-        datetime.datetime(2026, 1, 29, 0, 0)
+            If `date_input` is not a string, date, or datetime.
     """
+    # Parse / normalise to datetime
     if isinstance(date_input, str):
-        date_input = datetime.strptime(date_input, input_format)
-    if convert_to_datetime:
-        return date_input
+        if input_format is None:
+            raise ValueError("input_format must be provided when date_input is a string")
+        try:
+            dt = datetime.strptime(date_input, input_format)
+        except ValueError as e:
+            raise ValueError(f"Could not parse date_input={date_input!r} with input_format={input_format!r}") from e
+    elif isinstance(date_input, datetime):
+        dt = date_input
+    elif isinstance(date_input, date):
+        dt = datetime.combine(date_input, datetime.min.time())
     else:
-        return date_input.strftime(output_format)
+        raise TypeError("date_input must be a str, datetime.datetime, or datetime.date")
+
+    if convert_to_datetime:
+        return dt
+
+    if output_format is None:
+        raise ValueError("output_format must be provided when convert_to_datetime is False")
+
+    output_str = dt.strftime(output_format)
+
+    if not abbreviate_jun_jul:
+        output_str = re.sub(r"\bJun\b", "June", output_str)
+        output_str = re.sub(r"\bJul\b", "July", output_str)
+
+    return output_str
 
 
 def convert_date_string_to_text_string(
