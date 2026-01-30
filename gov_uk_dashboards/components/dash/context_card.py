@@ -840,7 +840,8 @@ class ContextCard:
                         className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 changed-from-number-formatting",
                     )
                 )
-                comparison_period_text = "from " + comparison_period_text
+                if self.use_number_rather_than_percentage==True:
+                    comparison_period_text = "from " + comparison_period_text
 
             # Option B: show difference in weeks/days (requires values)
             elif self.use_difference_in_weeks_days:
