@@ -55,11 +55,15 @@ def convert_date(
     # Parse / normalise to datetime
     if isinstance(date_input, str):
         if input_format is None:
-            raise ValueError("input_format must be provided when date_input is a string")
+            raise ValueError(
+                "input_format must be provided when date_input is a string"
+            )
         try:
             dt = datetime.strptime(date_input, input_format)
         except ValueError as e:
-            raise ValueError(f"Could not parse date_input={date_input!r} with input_format={input_format!r}") from e
+            raise ValueError(
+                f"Could not parse date_input={date_input!r} with input_format={input_format!r}"
+            ) from e
     elif isinstance(date_input, datetime):
         dt = date_input
     elif isinstance(date_input, date):
@@ -71,7 +75,9 @@ def convert_date(
         return dt
 
     if output_format is None:
-        raise ValueError("output_format must be provided when convert_to_datetime is False")
+        raise ValueError(
+            "output_format must be provided when convert_to_datetime is False"
+        )
 
     output_str = dt.strftime(output_format)
 
