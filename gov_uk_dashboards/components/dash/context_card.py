@@ -540,10 +540,10 @@ class ContextCard:
         units: str = None,
         additional_text_and_position=None,
         date_format="%d %b %Y",
-        use_previous_value_rather_than_change=False,
+        use_previous_value_rather_than_change=False, # rename????
         use_difference_in_weeks_days=False,
         increase_is_positive=True,
-        use_number_rather_than_percentage=False,
+        use_number_rather_than_percentage=False, # rename????
         details_summary_and_text: tuple = None,
     ):
         self.measure = measure
