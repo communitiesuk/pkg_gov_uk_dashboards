@@ -538,12 +538,13 @@ class ContextCard:
         title: str,
         date_prefix: str,
         units: str = None,
+        headline_figure_is_percentage: bool = False,
         additional_text_and_position: tuple[str, int] = None,
         date_format: str = "%d %b %Y",
         use_previous_value_rather_than_change: bool = False,  # rename????
         use_difference_in_weeks_days: bool = False,
         increase_is_positive: bool = True,
-        use_number_rather_than_percentage: bool = False,  # rename????
+        use_number_for_change_rather_than_percentage: bool = False,  # rename????
         details_summary_and_text: tuple[str, str] = None,
     ):
         """
@@ -612,7 +613,7 @@ class ContextCard:
             - If False: increase → red ↓,  decrease → green ↑
             Zero change renders a neutral (grey/right) style.
 
-        use_number_rather_than_percentage : bool, default False
+        use_number_for_change_rather_than_percentage : bool, default False
             Controls formatting *when showing values* (headline and/or previous-value mode):
             - If True: values are formatted via `format_percentage(...)` (i.e., 0.123 → "12.3%"),
                         and literal "%" is not duplicated.
@@ -729,6 +730,7 @@ class ContextCard:
         self.measure = measure
         self.title = title
         self.units = units
+        self.headline_figure_is_percentage = headline_figure_is_percentage
         self.additional_text_and_position = additional_text_and_position
         self.date_prefix = date_prefix
         self.date_format = date_format
@@ -737,7 +739,9 @@ class ContextCard:
         )
         self.use_difference_in_weeks_days = use_difference_in_weeks_days
         self.increase_is_positive = increase_is_positive
-        self.use_number_rather_than_percentage = use_number_rather_than_percentage
+        self.use_number_for_change_rather_than_percentage = (
+            use_number_for_change_rather_than_percentage
+        )
         self.df = self._filter_df(df)
         self.headline_figure = self._get_headline_figure()
         self.current_date = self._get_current_date()
@@ -793,35 +797,23 @@ class ContextCard:
         year_earlier_date = get_a_previous_date(previous_date)
 
         if not self.use_difference_in_weeks_days and not (
-            self.use_number_rather_than_percentage
+            self.use_number_for_change_rather_than_percentage
             and self.use_previous_value_rather_than_change
         ):
-            df_for_measure = df_for_measure.with_columns(
-                pl.col(VALUE).cast(pl.Int64)
-            )
+            df_for_measure = df_for_measure.with_columns(pl.col(VALUE).cast(pl.Int64))
 
         return df_for_measure.filter(
             pl.col(DATE_VALID).is_in([latest_date, previous_date, year_earlier_date])
         ).sort(DATE_VALID, descending=True)
 
     def _get_headline_figure(self):
-        unit = (
-            ""
-            if (
-                not self.use_previous_value_rather_than_change
-                or self.use_number_rather_than_percentage
-            )
-            else "%"
-        )
+        unit = "%" if self.headline_figure_is_percentage else ""
 
         return (
             (
-                add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
-                if not (
-                    self.use_number_rather_than_percentage
-                    and self.use_previous_value_rather_than_change
-                )
-                else f"{str(format_percentage(abs(self.df[VALUE][0])))+unit}"
+                f"{str(format_percentage(abs(self.df[VALUE][0])))+unit}"
+                if self.headline_figure_is_percentage
+                else add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
             )
             if not self.use_difference_in_weeks_days
             else convert_days_to_weeks_and_days(self.df[VALUE][0])
@@ -880,7 +872,15 @@ class ContextCard:
             if percentage_change != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
-            unit = "%" if (not self.use_previous_value_rather_than_change) else ""
+            unit = (
+                "%"
+                if (
+                    self.headline_figure_is_percentage
+                    and self.use_previous_value_rather_than_change
+                )
+                or not self.use_previous_value_rather_than_change
+                else ""
+            )
 
             content = []
 
@@ -888,8 +888,12 @@ class ContextCard:
             if self.use_previous_value_rather_than_change:
                 if previous_value is None:
                     return None
-                if self.use_number_rather_than_percentage:
+                if self.headline_figure_is_percentage:
                     previous_value = str(format_percentage(abs(previous_value)))
+                else:
+                    previous_value = add_commas(
+                        previous_value, remove_decimal_places=True
+                    )
                 content.append(
                     html.Span(
                         (
@@ -908,7 +912,7 @@ class ContextCard:
                         "changed-from-number-formatting",
                     )
                 )
-                if self.use_number_rather_than_percentage:
+                if self.use_number_for_change_rather_than_percentage:
                     if comparison_period_text == "previous year":
                         comparison_period_text = "in " + comparison_period_text
 
