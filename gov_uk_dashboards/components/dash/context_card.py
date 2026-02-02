@@ -797,7 +797,7 @@ class ContextCard:
             and self.use_previous_value_rather_than_change
         ):
             df_for_measure = df_for_measure.with_columns(
-                pl.col(VALUE).map_elements(int, return_dtype=pl.Int64)
+                pl.col(VALUE).cast(pl.Int64)
             )
 
         return df_for_measure.filter(
