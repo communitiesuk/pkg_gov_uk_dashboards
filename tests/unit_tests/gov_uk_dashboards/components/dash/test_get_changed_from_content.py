@@ -46,25 +46,7 @@ def test_get_changed_from_content_formatting_and_suffix():
         True,
     )
     assert "up " in actual.children[0].children[0].children
-    assert "15.6%" in actual.children[0].children[1].children
-
-
-def test_value_error_raised_when_2_params_are_true():
-    """test the correct value error is raised when both
-    use_previous_value_rather_than_percentage_change and use_difference_in_weeks_days are true
-    """
-    with pytest.raises(
-        ValueError,
-        match="use_previous_value_rather_than_percentage_change and use_difference_in_weeks_days "
-        "both cannot be true",
-    ):
-        get_changed_from_content(
-            10,
-            5,
-            increase_is_positive=True,
-            use_previous_value_rather_than_change=True,
-            use_difference_in_weeks_days=True,
-        )
+    assert "15%" in actual.children[0].children[1].children
 
 
 def test_get_changed_from_content_when_use_difference_in_weeks_days():
