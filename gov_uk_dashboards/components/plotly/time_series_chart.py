@@ -64,6 +64,7 @@ class TimeSeriesChart:
         filtered_df: pl.DataFrame,
         trace_name_list: list[str],
         dashed_trace_name_list: list[str] = None,
+        trace_colour_groups: list[str, str] = None,
         initially_hidden_traces: Optional[list[str]] = None,
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
@@ -99,6 +100,7 @@ class TimeSeriesChart:
         self.filtered_df = filtered_df
         self.trace_name_list = trace_name_list
         self.dashed_trace_name_list = dashed_trace_name_list
+        self.trace_colour_groups = trace_colour_groups
         self.initially_hidden_traces = initially_hidden_traces
         self.legend_dict = legend_dict
         self.trace_name_column = trace_name_column
@@ -677,27 +679,85 @@ class TimeSeriesChart:
         return df_list
 
     def _get_colour_list(self):
-        """Returns a list of colours."""
+        """Returns a list of colours (one per trace in trace_name_list).
+
+        If `trace_colour_groups` is provided, traces in the same group share a colour.
+        Traces not in any group get their own colour from the palette.
+        """
         number_of_traces = len(self.trace_name_list)
+
+        # --- base palette selection ---
         if number_of_traces == 2 and self.filled_traces_dict is None:
             colour_list = [
                 AFAccessibleColours.DARK_BLUE.value,
                 AFAccessibleColours.ORANGE.value,
-            ]  # if 2 lines should use dark blue & orange as have highest contrast ratio
+            ]
         else:
             colour_list = AFAccessibleColours.CATEGORICAL.value.copy()
+
+        # --- apply optional colour shift / override palette ---
         colour_shift_dict = (
             {"default": 0}
             if self.number_of_traces_colour_shift_dict is None
             else self.number_of_traces_colour_shift_dict
         )
-
         colour_shift_value = colour_shift_dict.get(
             number_of_traces, colour_shift_dict["default"]
         )
+
         if isinstance(colour_shift_value, list):
-            return colour_shift_value  # list of colours
-        while colour_shift_value > 0:
-            colour_list.append(colour_list.pop(0))
-            colour_shift_value -= 1
-        return colour_list
+            # Treat as an explicit palette (don't return early, because grouping may still apply)
+            colour_list = colour_shift_value
+        else:
+            while colour_shift_value > 0:
+                colour_list.append(colour_list.pop(0))
+                colour_shift_value -= 1
+
+        # --- no grouping: just return palette in order (trim if needed) ---
+        if not getattr(self, "trace_colour_groups", None):
+            return colour_list[:number_of_traces]
+
+        # --- build trace -> group_id map, with validation ---
+        trace_set = set(self.trace_name_list)
+        trace_to_group_id = {}
+
+        for group_id, group in enumerate(self.trace_colour_groups):
+            for t in group:
+                if t not in trace_set:
+                    raise ValueError(
+                        f"trace_colour_groups contains '{t}', but it's not in trace_name_list."
+                    )
+                if t in trace_to_group_id:
+                    raise ValueError(
+                        f"Trace '{t}' appears in more than one trace_colour_group."
+                    )
+                trace_to_group_id[t] = group_id
+
+        # --- assign colours: one colour per group, and one colour per ungrouped trace ---
+        colour_list_index = 0
+        group_colour = {}
+        trace_colour_dict = {}
+
+        # 1) Assign colours to groups in first-seen order (based on trace_name_list order)
+        for trace in self.trace_name_list:
+            group_id = trace_to_group_id.get(trace)
+            if group_id is None:
+                continue
+            if group_id in group_colour:
+                continue
+            group_colour[group_id] = colour_list[colour_list_index % len(colour_list)]
+            colour_list_index += 1
+
+        # 2) Fill trace -> colour for grouped traces
+        for trace, group_id in trace_to_group_id.items():
+            trace_colour_dict[trace] = group_colour[group_id]
+
+        # 3) Assign colours for ungrouped traces (each gets a new palette colour)
+        for trace in self.trace_name_list:
+            if trace in trace_colour_dict:
+                continue
+            trace_colour_dict[trace] = colour_list[colour_list_index % len(colour_list)]
+            colour_list_index += 1
+
+        # Final list aligned with trace_name_list order
+        return [trace_colour_dict[t] for t in self.trace_name_list]
