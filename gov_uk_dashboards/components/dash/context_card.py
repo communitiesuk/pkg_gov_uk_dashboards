@@ -7,13 +7,13 @@ import polars as pl
 from dateutil.relativedelta import relativedelta
 from dash import html
 from dash.development.base_component import Component
-from gov_uk_dashboards.components.dash import (
-    heading2,
-)
+from gov_uk_dashboards.components.dash import heading2, paragraph
+from gov_uk_dashboards.components.dash.details import details
 from gov_uk_dashboards.formatting.number_formatting import add_commas, format_percentage
 from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
     convert_date_string_to_text_string,
 )
+from gov_uk_dashboards.lib.datetime_functions.datetime_functions import convert_date
 
 from gov_uk_dashboards.constants import (
     CHANGED_FROM_GAP_STYLE,
@@ -24,7 +24,6 @@ from gov_uk_dashboards.constants import (
     METRIC_VALUE,
     PERCENTAGE_CHANGE_FROM_PREV_YEAR,
     PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR,
-    PREVIOUS_2YEAR,
     PREVIOUS_YEAR,
     TWENTY_NINETEEN,
     TWENTY_NINETEEN_VALUE,
@@ -147,7 +146,6 @@ def get_changed_from_content(
     comparison_period_text: str = "",
     use_previous_value_rather_than_change: bool = False,
     use_difference_in_weeks_days: bool = False,
-    percentage_change_rounding: int = 1,
     use_calculated_percentage_change: bool = False,
     use_number_rather_than_percentage: bool = False,
 ) -> Component:
@@ -177,8 +175,6 @@ def get_changed_from_content(
         use_difference_in_weeks_days (bool, optional): If True, show the difference in
             weeks/days (requires `current_value` and `previous_value` as day counts).
             Defaults to False.
-        percentage_change_rounding (int, optional): Decimal places to round percentage change.
-            Defaults to 1.
         use_calculated_percentage_change (bool, optional): If True, use the supplied
             `calculated_percentage_change` instead of computing it. Defaults to False.
         use_number_rather_than_percentage (bool, optional): If True, display the change as
@@ -193,7 +189,7 @@ def get_changed_from_content(
     """
     if use_previous_value_rather_than_change and use_difference_in_weeks_days:
         raise ValueError(
-            "use_previous_value_rather_than_percentage_change and use_difference_in_weeks_days "
+            "use_previous_value_rather_than_change and use_difference_in_weeks_days "
             "both cannot be true"
         )
     if use_calculated_percentage_change:
@@ -237,6 +233,7 @@ def get_changed_from_content(
                 # which is added from govuk-tag class
             )
         )
+        print("PREVIOUS VAKUE", previous_value)
         content.append(
             html.Span(
                 f"{previous_value}{unit}",
@@ -277,7 +274,7 @@ def get_changed_from_content(
         )
         content.append(
             html.Span(
-                f"{round(abs(percentage_change), percentage_change_rounding)}{unit}",
+                f"{format_percentage(abs(percentage_change))}{unit}",
                 className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
                 + "changed-from-number-formatting",
             )
@@ -330,7 +327,6 @@ def get_data_for_context_card(
     measure: str,
     df: pl.DataFrame,
     value_column: str = VALUE,
-    include_data_from_2_years_ago: bool = False,
     display_value_as_int: bool = False,
     abbreviate_month: bool = True,
     include_percentage_change: bool = False,
@@ -345,8 +341,6 @@ def get_data_for_context_card(
         measure (str): The measure for which data is to be fetched.
         df (pl.DataFrame): The dataframe to fetch the measure from.
         value_column (str): The name of the column to get the value for.
-        include_data_from_2_years_ago (bool): Whether to include data from 2 years ago. Defaults
-        to False.
         display_value_as_int (bool): Whether to display the value as an int. Defaults to False.
         abbreviate_month (bool): Whether to abbreviate the month. Defaults to True.
         include_percentage_change (bool): Whether to include percentage change from previous year
@@ -396,19 +390,6 @@ def get_data_for_context_card(
             TWENTY_NINETEEN: {METRIC_VALUE: twenty_nineteen_data},
         }
 
-    if include_data_from_2_years_ago:
-        date_2_years_ago = get_a_previous_date(previous_year_date, "previous")
-        data_from_2_years_ago = get_latest_data_for_year(
-            df_measure,
-            date_2_years_ago,
-            value_column,
-            abbreviate_month,
-            data_expected_for_previous_year_and_previous_2years,
-            include_percentage_change,
-            previous_year_date,
-        )
-        data_to_return = {**data_to_return, PREVIOUS_2YEAR: data_from_2_years_ago}
-
     return data_to_return
 
 
@@ -436,6 +417,9 @@ def get_a_previous_date(
         new_date_str = new_date.strftime("%Y-%m-%d")
         return new_date_str
     return new_date
+
+
+# if include_data_from_2_years_ago:
 
 
 def get_latest_data_for_year(
@@ -544,3 +528,451 @@ def get_latest_data_for_year(
             PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
         )[0]
     return output
+
+
+# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-few-public-methods
+class ContextCard:
+    """Context card class"""
+
+    def __init__(
+        self,
+        df: pl.DataFrame,
+        measure: str,
+        title: str,
+        date_prefix: str,
+        units: str = None,
+        headline_figure_is_percentage: bool = False,
+        additional_text_and_position: tuple[str, int] = None,
+        date_format: str = "%d %b %Y",
+        use_previous_value_rather_than_change: bool = False,  # rename????
+        use_difference_in_weeks_days: bool = False,
+        increase_is_positive: bool = True,
+        use_number_for_change_rather_than_percentage: bool = False,  # rename????
+        details_summary_and_text: tuple[str, str] = None,
+    ):
+        """
+        A compact “context card” for a time-series measure that renders:
+        • a headline figure,
+        • a date label,
+        • up to two comparison tags (previous year, two years ago),
+        • optional title, units, inline note, and a collapsible details section.
+
+        The component supports three comparison display modes:
+        1) percent change (default),
+        2) show the comparison period’s value instead of percent change,
+        3) show the time difference in weeks/days (for duration measures).
+
+        ----------
+        Parameters
+        ----------
+        df : pl.DataFrame
+            Input data for one or more measures across dates. Expected columns:
+            - MEASURE (categorical/str): identifies the measure.
+            - DATE_VALID (date or ISO string): observation date.
+            - VALUE (numeric): observed value for the measure.
+
+            Two data shapes are supported by the current implementation:
+
+            A) “Precomputed change” mode:
+               If the dataframe contains a column literally named
+               "Percentage change from prev year", `_filter_df` keeps only the latest
+               DATE_VALID row for the selected measure. In `_get_changed_from_content`,
+               percent-change tags are read directly from:
+               - PERCENTAGE_CHANGE_FROM_PREV_YEAR
+               - PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR
+
+            B) “Computed change” mode:
+               Otherwise, three dates are selected for the measure:
+                 latest_date,
+                 previous_date = get_a_previous_date(latest_date),
+                 year_earlier_date = get_a_previous_date(previous_date),
+               then the frame is filtered to those dates and sorted descending.
+               Percent changes are computed from the numeric VALUEs in positions:
+                 [0] latest, [1] previous year, [2] two years ago
+
+        measure : str
+            The measure name to filter from `df[MEASURE]`.
+
+        title : str
+            Optional title shown at the top of the card. If falsy, no title is rendered.
+
+        date_prefix : str
+            Text prefixed before the current date (e.g., "Data to", "Week ending").
+
+        units : str, optional
+            Units label inserted beneath the headline figure.
+
+        headline_figure_is_percentage : bool, default False
+            Controls headline formatting and some tag formatting.
+            If True, the headline uses `format_percentage(abs(value))` and appends "%".
+            If False, the headline uses `add_commas(value, remove_decimal_places=True)`.
+
+        additional_text_and_position : tuple[str, int], optional
+            An extra paragraph inserted into the content at the given index:
+            (text, position_index).
+
+        date_format : str, default "%d %b %Y"
+            Format string for the latest DATE_VALID (e.g., "05 Jan 2026").
+
+        use_previous_value_rather_than_change : bool, default False
+            When True, comparison tags show the comparison period’s VALUE instead of a
+            percent change (e.g., "up from 1,234 from previous year").
+            NOTE: This cannot be True at the same time as `use_difference_in_weeks_days`.
+
+        use_difference_in_weeks_days : bool, default False
+            When True, comparison tags show the difference between the current VALUE and
+            the comparison VALUE converted to weeks/days via `convert_days_to_weeks_and_days`.
+            Tag prefix becomes:
+              - "slower than ..." if percent-change is positive,
+              - "faster than ..." if percent-change is negative,
+              - "unchanged from ..." if zero.
+            Requires both current and comparison values to be present.
+            NOTE: This cannot be True at the same time as `use_previous_value_rather_than_change`.
+
+        increase_is_positive : bool, default True
+            Controls the semantic mapping of change to colour/arrow:
+              - If True: increase → green ↑, decrease → red ↓
+              - If False: increase → red ↓,  decrease → green ↑
+            Zero change renders a neutral (grey/right) style.
+
+        use_number_for_change_rather_than_percentage : bool, default False
+            Only affects the “previous-value” tag mode:
+              - If True and the comparison period is "previous year", the label text is
+                changed from "previous year" to "in previous year".
+            (No other behaviour is currently toggled by this flag in the present code.)
+
+        details_summary_and_text : tuple[str, str], optional
+            Renders a collapsible details section at the bottom with
+            (summary_text, details_body).
+
+        ----------
+        Behaviour summary
+        ----------
+        • The dataframe is filtered to `measure` and reduced to either:
+          - one latest row (if the literal column "Percentage change from prev year" exists), or
+          - three rows for the latest + two prior comparison dates (computed via
+            `get_a_previous_date`).
+
+        • Headline figure:
+          - If `use_difference_in_weeks_days` is True: `convert_days_to_weeks_and_days(VALUE[0])`
+          - Else if `headline_figure_is_percentage` is True:
+                `format_percentage(abs(VALUE[0])) + "%"`
+          - Else: `add_commas(VALUE[0], remove_decimal_places=True)`
+
+        • Date label:
+          Uses the latest DATE_VALID formatted via `convert_date(..., "%Y-%m-%d", date_format)`.
+
+        • Comparison tags:
+          Attempts to render up to two tags: vs "previous year" and vs "two years ago".
+          Tags are omitted if the required inputs are missing.
+
+        • Mutual exclusivity:
+          `use_previous_value_rather_than_change` and `use_difference_in_weeks_days`
+          cannot both be True (ValueError raised when building tag content).
+
+        • Layout:
+          Content order is:
+            [title?], headline, [units?], (date_prefix + date), comparison tags, [details?]
+          `additional_text_and_position` inserts an extra paragraph at the specified index.
+        """
+
+        self.measure = measure
+        self.title = title
+        self.units = units
+        self.headline_figure_is_percentage = headline_figure_is_percentage
+        self.additional_text_and_position = additional_text_and_position
+        self.date_prefix = date_prefix
+        self.date_format = date_format
+        self.use_previous_value_rather_than_change = (
+            use_previous_value_rather_than_change
+        )
+        self.use_difference_in_weeks_days = use_difference_in_weeks_days
+        self.increase_is_positive = increase_is_positive
+        self.use_number_for_change_rather_than_percentage = (
+            use_number_for_change_rather_than_percentage
+        )
+        self.df = self._filter_df(df)
+        self.headline_figure = self._get_headline_figure()
+        self.current_date = self._get_current_date()
+        self.details_summary_and_text = details_summary_and_text
+
+    def __call__(self):
+        card_content = [
+            html.Div(
+                self.headline_figure,
+                className="govuk-body govuk-!-font-weight-bold",
+                style=LARGE_BOLD_FONT_STYLE | {"marginBottom": "0px"},
+            ),
+            paragraph(f"{self.date_prefix} {self.current_date}"),
+            self._get_changed_from_content(),
+        ]
+        if self.title:
+            card_content.insert(0, heading2(self.title))
+        if self.additional_text_and_position:
+            card_content.insert(
+                self.additional_text_and_position[1],
+                paragraph(self.additional_text_and_position[0]),
+            )
+        if self.details_summary_and_text:
+            card_content.append(
+                html.Div(
+                    [
+                        details(
+                            self.details_summary_and_text[0],
+                            self.details_summary_and_text[1],
+                        )
+                    ],
+                    style={"marginTop": "40px"},  # from h repo,
+                )
+            )
+        if self.units:
+            card_content.insert(
+                1, html.Div(paragraph(self.units), style={"marginTop": "-15px"})
+            )
+        card_for_display = html.Div(
+            card_content,
+            className="context-card-grid-item",
+        )
+        return card_for_display
+
+    def _filter_df(self, df):
+        df_for_measure = df.filter(df[MEASURE] == self.measure)
+        latest_date = df_for_measure.select(pl.col(DATE_VALID).max()).item()
+
+        if "Percentage change from prev year" in df_for_measure.columns:
+            return df_for_measure.filter(pl.col(DATE_VALID) == latest_date)
+
+        previous_date = get_a_previous_date(latest_date)
+        year_earlier_date = get_a_previous_date(previous_date)
+
+        if not self.use_difference_in_weeks_days and not (
+            self.use_number_for_change_rather_than_percentage
+            and self.use_previous_value_rather_than_change
+        ):
+            df_for_measure = df_for_measure.with_columns(pl.col(VALUE).cast(pl.Int64))
+
+        return df_for_measure.filter(
+            pl.col(DATE_VALID).is_in([latest_date, previous_date, year_earlier_date])
+        ).sort(DATE_VALID, descending=True)
+
+    def _get_headline_figure(self):
+        unit = "%" if self.headline_figure_is_percentage else ""
+
+        return (
+            (
+                f"{str(format_percentage(abs(self.df[VALUE][0])))+unit}"
+                if self.headline_figure_is_percentage
+                else add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
+            )
+            if not self.use_difference_in_weeks_days
+            else convert_days_to_weeks_and_days(self.df[VALUE][0])
+        )
+
+    # pylint: disable=too-many-statements
+    def _get_current_date(self):
+        current_date = self.df[DATE_VALID][0]
+        return convert_date(current_date, "%Y-%m-%d", self.date_format)
+
+    def _get_changed_from_content(self):
+        if (
+            self.use_previous_value_rather_than_change
+            and self.use_difference_in_weeks_days
+        ):
+            raise ValueError(
+                "use_previous_value_rather_than_change and use_difference_in_weeks_days "
+                "both cannot be true"
+            )
+
+        # ---- helpers ----
+        def _scalar(x):
+            """Polars -> python scalar (handles Series/Expr-ish values)."""
+            if x is None:
+                return None
+            if isinstance(x, pl.Series):
+                return x.item() if len(x) else None
+            return x
+
+        def _build_tag(
+            *,
+            percentage_change: float | None,
+            comparison_period_text: str,
+            current_value: float | None = None,
+            previous_value: float | None = None,
+        ):
+            if percentage_change is None:
+                return None
+            increase_is_positive = getattr(self, "increase_is_positive", True)
+
+            if percentage_change > 0:
+                colour = "green" if increase_is_positive else "red"
+                arrow_direction = "up"
+                prefix = "up"
+            elif percentage_change < 0:
+                colour = "red" if increase_is_positive else "green"
+                arrow_direction = "down"
+                prefix = "down"
+            else:
+                colour = "grey"
+                arrow_direction = "right"
+                prefix = ""
+
+            box_style_class = (
+                f"govuk-tag govuk-tag--{colour} changed-from-box-formatting"
+            )
+            if percentage_change != 0:
+                box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
+
+            unit = (
+                "%"
+                if (
+                    self.headline_figure_is_percentage
+                    and self.use_previous_value_rather_than_change
+                )
+                or not self.use_previous_value_rather_than_change
+                else ""
+            )
+
+            content = []
+
+            # Option A: show previous value rather than % change
+            if self.use_previous_value_rather_than_change:
+                if previous_value is None:
+                    return None
+                if self.headline_figure_is_percentage:
+                    previous_value = str(format_percentage(abs(previous_value)))
+                else:
+                    previous_value = add_commas(
+                        previous_value, remove_decimal_places=True
+                    )
+                content.append(
+                    html.Span(
+                        (
+                            f"{prefix} from "
+                            if percentage_change != 0
+                            else "unchanged from "
+                        ),
+                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                        "text-no-transform",
+                    )
+                )
+                content.append(
+                    html.Span(
+                        f"{previous_value}{unit}",
+                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                        "changed-from-number-formatting",
+                    )
+                )
+                if self.use_number_for_change_rather_than_percentage:
+                    if comparison_period_text == "previous year":
+                        comparison_period_text = "in " + comparison_period_text
+
+            # Option B: show difference in weeks/days (requires values)
+            elif self.use_difference_in_weeks_days:
+                if current_value is None or previous_value is None:
+                    return None
+
+                difference_in_weeks_and_days = convert_days_to_weeks_and_days(
+                    current_value - previous_value
+                )
+
+                if percentage_change > 0:
+                    comparison_period_text_prefix = "slower than "
+                elif percentage_change < 0:
+                    comparison_period_text_prefix = "faster than "
+                else:
+                    comparison_period_text_prefix = "unchanged from "
+
+                content.append(
+                    html.Span(
+                        f"{difference_in_weeks_and_days}",
+                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                        "changed-from-number-formatting text-no-transform",
+                    )
+                )
+
+                comparison_period_text = (
+                    comparison_period_text_prefix + comparison_period_text
+                )
+
+            # Option C: default (% change)
+            else:
+                content.append(
+                    html.Span(
+                        f"{prefix} " if percentage_change != 0 else "unchanged from ",
+                        className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                        "text-no-transform",
+                    )
+                )
+                content.append(
+                    html.Span(
+                        f"{format_percentage(abs(percentage_change))}{unit}",
+                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                        "changed-from-number-formatting",
+                    )
+                )
+                comparison_period_text = "from " + comparison_period_text
+
+            content.append(
+                html.Span(
+                    comparison_period_text,
+                    className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
+                    "text-no-transform",
+                )
+            )
+
+            return html.Div(
+                [html.Div(content, className=box_style_class)],
+            )
+
+        # ---- compute changes ----
+        current_value = None
+        prev_year_value = None
+        two_year_value = None
+
+        if self.df.height == 1:
+            # Using provided columns (likely already computed upstream)
+            pct_year = _scalar(self.df[PERCENTAGE_CHANGE_FROM_PREV_YEAR])
+            pct_2yr = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
+
+            # If you want to support previous-value/weeks-days in height==1 mode,
+            # you'd need extra columns for those values. Otherwise tags will return None for those
+            # modes.
+        else:
+            # Expect order: [latest, prev_year, two_year]
+            current_value = _scalar(self.df[VALUE][0])
+            prev_year_value = _scalar(self.df[VALUE][1])
+            two_year_value = _scalar(self.df[VALUE][2])
+
+            pct_year = (
+                None
+                if not prev_year_value
+                else ((current_value - prev_year_value) / prev_year_value) * 100
+            )
+            pct_2yr = (
+                None
+                if not two_year_value
+                else ((current_value - two_year_value) / two_year_value) * 100
+            )
+
+        # ---- build two tags ----
+        tag_last_year = _build_tag(
+            percentage_change=pct_year,
+            comparison_period_text="previous year",
+            current_value=current_value,
+            previous_value=prev_year_value,
+        )
+
+        tag_two_years = _build_tag(
+            percentage_change=pct_2yr,
+            comparison_period_text="two years ago",
+            current_value=current_value,
+            previous_value=two_year_value,
+        )
+        styled_tag_two_years = (
+            html.Div(tag_two_years, style=CHANGED_FROM_GAP_STYLE)
+            if tag_two_years is not None
+            else None
+        )
+        tags = [t for t in (tag_last_year, styled_tag_two_years) if t is not None]
+        return html.Div(tags) if tags else None
