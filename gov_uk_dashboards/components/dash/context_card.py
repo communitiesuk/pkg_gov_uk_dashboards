@@ -624,8 +624,8 @@ class ContextCard:
             When True, comparison tags show the difference between the current VALUE and
             the comparison VALUE converted to weeks/days via `convert_days_to_weeks_and_days`.
             Tag prefix becomes:
-              - "slower than ..." if percent-change is positive,
-              - "faster than ..." if percent-change is negative,
+              - "longer than ..." if percent-change is positive,
+              - "shorter than ..." if percent-change is negative,
               - "unchanged from ..." if zero.
             Requires both current and comparison values to be present.
             NOTE: This cannot be True at the same time as `use_previous_value_rather_than_change`.
@@ -877,9 +877,9 @@ class ContextCard:
                 )
 
                 if percentage_change > 0:
-                    comparison_period_text_prefix = "slower than "
+                    comparison_period_text_prefix = "longer than "
                 elif percentage_change < 0:
-                    comparison_period_text_prefix = "faster than "
+                    comparison_period_text_prefix = "shorter than "
                 else:
                     comparison_period_text_prefix = "unchanged from "
 
