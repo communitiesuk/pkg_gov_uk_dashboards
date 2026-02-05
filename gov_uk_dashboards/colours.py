@@ -95,8 +95,14 @@ class AFAccessibleColours(Enum):
     ORANGE = "#F46A25"
     DARK_GREY = "#3D3D3D"
     LIGHT_PURPLE = "#A285D1"
+    MUSTARD   = "#9C7A00"
+    CRIMSON   = "#C62828"
+    OLIVE     = "#7A9A01"
+    MAGENTA   = "#D81B60"
+    BROWN     = "#8C5A2B"
+    TEAL_BLUE = "#1F77B4"
 
-    CATEGORICAL = [DARK_BLUE, TURQUOISE, DARK_PINK, ORANGE, DARK_GREY, LIGHT_PURPLE]
+    CATEGORICAL = [DARK_BLUE, TURQUOISE, DARK_PINK, ORANGE, DARK_GREY, LIGHT_PURPLE,MUSTARD,CRIMSON,OLIVE,MAGENTA,BROWN,TEAL_BLUE]
 
     # three shades of blue from dark to light to use for sequential data
     BLUE_SEQUENTIAL = ["#12436D", "#2073BC", "#6BACE6"]
