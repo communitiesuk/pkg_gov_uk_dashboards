@@ -127,6 +127,12 @@ class TimeSeriesChart:
             "triangle-up",
             "x",
             "triangle-down",
+            "cross",
+            "star",
+            "pentagon",
+            "hexagon",
+            "triangle-left",
+            "triangle-right",
         ]
         self.number_of_traces_colour_shift_dict = number_of_traces_colour_shift_dict
         self.additional_line = additional_line
