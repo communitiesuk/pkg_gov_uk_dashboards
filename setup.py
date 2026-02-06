@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text(encoding="UTF-8")
 
 # Call setup function
 setup(
-    author="Department for Levelling Up, Housing and Communities",
+    author="Ministry of Housing, Communities & Local Government",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
     version="26.27.0",
