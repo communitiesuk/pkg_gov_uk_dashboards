@@ -15,7 +15,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     install_requires=[
-        "setuptools>=59.8,<81.0",
+        "setuptools>=59.8,<83.0",
         "dash~=3.0",
         "numpy>=2.3.2",
         "dash_bootstrap_components~=2.0.3",
