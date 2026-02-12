@@ -1,5 +1,6 @@
 import urllib
 from dash import html
+from gov_uk_dashboards.components.dash import heading2, paragraph
 
 def get_feedback_banner(page_path: str, app_name: str, email_address: str):
     new_user_email_request_body = (
@@ -100,4 +101,31 @@ def get_feedback_banner(page_path: str, app_name: str, email_address: str):
             )
         ],
         className="feedback-container",
+    )
+    
+def get_thank_you_message(
+    button_id: str, feedback_email_subject: str, email_address: str
+):
+    return html.Div(
+        [
+            heading2("Thank you."),
+            (
+                paragraph(
+                    [
+                        "If you would like to provide further feedback, email us at: ",
+                        html.A(
+                            email_address,
+                            href=(
+                                f"mailto:{email_address}?"
+                                f"subject={feedback_email_subject}"
+                            ),
+                        ),
+                        ".",
+                    ]
+                )
+                if button_id != "feedback-problem"
+                else None
+            ),
+        ],
+        style={"paddingTop": "20px", "paddingLeft": "20px", "paddingBottom": "20px"},
     )
