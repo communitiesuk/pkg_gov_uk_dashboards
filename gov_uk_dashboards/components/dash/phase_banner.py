@@ -12,7 +12,8 @@ def phase_banner_with_feedback(
     """Creates a phase banner with an optional feedback link.
 
     The id of the 'feedback' link can be set to allow for targeting with callbacks.
-    By default the link will open on the same window, to open in a new window, set link_target to "_blank".
+    By default the link will open on the same window, to open in a new window, set link_target
+    to "_blank".
 
     GOV.UK design system reference:
     https://design-system.service.gov.uk/components/phase-banner/

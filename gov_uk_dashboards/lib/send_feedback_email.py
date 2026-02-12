@@ -12,8 +12,8 @@ def send_feedback_email(
     app_name: str,
     email_address: str,
     template_id: str,
-    api_key: str
-):
+    api_key: str,
+):  # pylint: disable = too-many-positional-arguments, too-many-arguments
     """Send feedback email."""
     client = NotificationsAPIClient(api_key)
     subject = (

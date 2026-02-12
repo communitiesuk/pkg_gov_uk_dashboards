@@ -1,5 +1,3 @@
-
-// assets/clientside.js
 window.dash_clientside = Object.assign({}, window.dash_clientside, {
   utils: {
     setTitle: function (title) {
