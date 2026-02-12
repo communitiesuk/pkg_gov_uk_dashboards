@@ -18,3 +18,4 @@ polars~=1.38.1
 dash_leaflet~=1.1.3
 dash_extensions~=2.0.4
 dash[testing]~=3.4.0
+notifications_python_client~=10.0.1
