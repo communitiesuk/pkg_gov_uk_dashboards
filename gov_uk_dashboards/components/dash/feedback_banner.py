@@ -79,7 +79,7 @@ def get_feedback_banner(page_path: str, app_name: str, email_address: str) -> ht
                                             html.Li(
                                                 [
                                                     html.A(
-                                                        "Request a new user",
+                                                        "Request access for new users",
                                                         id="new-user-request",
                                                         href=(
                                                             f"mailto:{email_address}?subject=New "
