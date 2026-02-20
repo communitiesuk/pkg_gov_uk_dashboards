@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "setuptools>=59.8,<83.0",
-        "dash~=3.0",
+        "dash~=4.0",
         "numpy>=2.3.2",
         "dash_bootstrap_components~=2.0.3",
         "plotly>=6.2,<6.6",
