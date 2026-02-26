@@ -627,8 +627,8 @@ class ContextCard:
             When not None, should contain 2 strings, comparison tags show the difference as given
             in the columns.
             Tag prefix becomes:
-              - "longer than ..." if positive,
-              - "shorter than ..." if negative,
+              - "slower than ..." if positive,
+              - "fast than ..." if negative,
               - "unchanged from ..." if zero.
             NOTE: This should be None if us `use_previous_value_rather_than_change` is True.
 
@@ -895,9 +895,9 @@ class ContextCard:
             elif self.columns_for_prev_year_and_2_prev_year:
 
                 if formatted_difference_number > 0:
-                    comparison_period_text_prefix = "longer than "
+                    comparison_period_text_prefix = "slower than "
                 elif formatted_difference_number < 0:
-                    comparison_period_text_prefix = "shorter than "
+                    comparison_period_text_prefix = "faster than "
                 else:
                     comparison_period_text_prefix = "unchanged from "
 
