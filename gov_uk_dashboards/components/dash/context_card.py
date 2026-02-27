@@ -1,5 +1,7 @@
 """Context card functions"""
 
+# pylint: disable=too-many-lines
+
 from typing import Union
 import calendar
 from datetime import datetime
@@ -545,10 +547,10 @@ class ContextCard:
         headline_figure_is_percentage: bool = False,
         additional_text_and_position: tuple[str, int] = None,
         date_format: str = "%d %b %Y",
-        use_previous_value_rather_than_change: bool = False,  # rename????
-        use_difference_in_weeks_days: bool = False,
+        use_previous_value_rather_than_change: bool = False,
+        columns_for_prev_year_and_2_prev_year: list[str] = None,
         increase_is_positive: bool = True,
-        use_number_for_change_rather_than_percentage: bool = False,  # rename????
+        use_number_for_change_rather_than_percentage: bool = False,
         details_summary_and_text: tuple[str, str] = None,
     ):
         """
@@ -618,17 +620,17 @@ class ContextCard:
         use_previous_value_rather_than_change : bool, default False
             When True, comparison tags show the comparison period’s VALUE instead of a
             percent change (e.g., "up from 1,234 from previous year").
-            NOTE: This cannot be True at the same time as `use_difference_in_weeks_days`.
+            NOTE: This cannot be True at the same time as
+                columns_for_prev_year_and_2_prev_year != None.
 
-        use_difference_in_weeks_days : bool, default False
-            When True, comparison tags show the difference between the current VALUE and
-            the comparison VALUE converted to weeks/days via `convert_days_to_weeks_and_days`.
+        columns_for_prev_year_and_2_prev_year : list[str], default None
+            When not None, should contain 2 strings, comparison tags show the difference as given
+            in the columns.
             Tag prefix becomes:
-              - "longer than ..." if percent-change is positive,
-              - "shorter than ..." if percent-change is negative,
+              - "slower than ..." if positive,
+              - "fast than ..." if negative,
               - "unchanged from ..." if zero.
-            Requires both current and comparison values to be present.
-            NOTE: This cannot be True at the same time as `use_previous_value_rather_than_change`.
+            NOTE: This should be None if us `use_previous_value_rather_than_change` is True.
 
         increase_is_positive : bool, default True
             Controls the semantic mapping of change to colour/arrow:
@@ -655,7 +657,8 @@ class ContextCard:
             `get_a_previous_date`).
 
         • Headline figure:
-          - If `use_difference_in_weeks_days` is True: `convert_days_to_weeks_and_days(VALUE[0])`
+          - If `columns_for_prev_year_and_2_prev_year` is not None: the absolute value as it appears
+            in the column
           - Else if `headline_figure_is_percentage` is True:
                 `format_percentage(abs(VALUE[0])) + "%"`
           - Else: `add_commas(VALUE[0], remove_decimal_places=True)`
@@ -668,8 +671,9 @@ class ContextCard:
           Tags are omitted if the required inputs are missing.
 
         • Mutual exclusivity:
-          `use_previous_value_rather_than_change` and `use_difference_in_weeks_days`
-          cannot both be True (ValueError raised when building tag content).
+          `use_previous_value_rather_than_change` cannot be True if
+          `columns_for_prev_year_and_2_prev_year` is not None (ValueError raised when
+          building tag content).
 
         • Layout:
           Content order is:
@@ -687,7 +691,9 @@ class ContextCard:
         self.use_previous_value_rather_than_change = (
             use_previous_value_rather_than_change
         )
-        self.use_difference_in_weeks_days = use_difference_in_weeks_days
+        self.columns_for_prev_year_and_2_prev_year = (
+            columns_for_prev_year_and_2_prev_year
+        )
         self.increase_is_positive = increase_is_positive
         self.use_number_for_change_rather_than_percentage = (
             use_number_for_change_rather_than_percentage
@@ -740,13 +746,16 @@ class ContextCard:
         df_for_measure = df.filter(df[MEASURE] == self.measure)
         latest_date = df_for_measure.select(pl.col(DATE_VALID).max()).item()
 
-        if "Percentage change from prev year" in df_for_measure.columns:
+        if (
+            "Percentage change from prev year" in df_for_measure.columns
+            or self.columns_for_prev_year_and_2_prev_year is not None
+        ):
             return df_for_measure.filter(pl.col(DATE_VALID) == latest_date)
 
         previous_date = get_a_previous_date(latest_date)
         year_earlier_date = get_a_previous_date(previous_date)
 
-        if not self.use_difference_in_weeks_days and not (
+        if not self.columns_for_prev_year_and_2_prev_year and not (
             self.use_number_for_change_rather_than_percentage
             and self.use_previous_value_rather_than_change
         ):
@@ -765,8 +774,8 @@ class ContextCard:
                 if self.headline_figure_is_percentage
                 else add_commas(self.df[VALUE][0], remove_decimal_places=True) + unit
             )
-            if not self.use_difference_in_weeks_days
-            else convert_days_to_weeks_and_days(self.df[VALUE][0])
+            if not self.columns_for_prev_year_and_2_prev_year
+            else self.df[VALUE][0]
         )
 
     # pylint: disable=too-many-statements
@@ -777,11 +786,11 @@ class ContextCard:
     def _get_changed_from_content(self):
         if (
             self.use_previous_value_rather_than_change
-            and self.use_difference_in_weeks_days
+            and self.columns_for_prev_year_and_2_prev_year
         ):
             raise ValueError(
-                "use_previous_value_rather_than_change and use_difference_in_weeks_days "
-                "both cannot be true"
+                "use_previous_value_rather_than_change cannot be True if "
+                "columns_for_prev_year_and_2_prev_year is not None."
             )
 
         # ---- helpers ----
@@ -797,30 +806,44 @@ class ContextCard:
             *,
             percentage_change: float | None,
             comparison_period_text: str,
-            current_value: float | None = None,
             previous_value: float | None = None,
+            formatted_difference: str = None,
         ):
-            if percentage_change is None:
+            if percentage_change is not None and formatted_difference is not None:
+                raise ValueError(
+                    f"Only one of percentage_change: {percentage_change} and formatted_difference: "
+                    f"{formatted_difference} should be provided."
+                )
+
+            # If neither is provided, return None
+            if percentage_change is None and formatted_difference is None:
                 return None
             increase_is_positive = getattr(self, "increase_is_positive", True)
 
-            if percentage_change > 0:
-                colour = "green" if increase_is_positive else "red"
-                arrow_direction = "up"
-                prefix = "up"
-            elif percentage_change < 0:
-                colour = "red" if increase_is_positive else "green"
-                arrow_direction = "down"
-                prefix = "down"
-            else:
-                colour = "grey"
-                arrow_direction = "right"
-                prefix = ""
+            def get_change_attributes(value, increase_is_positive):
+                if value > 0:
+                    return ("green" if increase_is_positive else "red", "up", "up")
+                if value < 0:
+                    return ("red" if increase_is_positive else "green", "down", "down")
+                return ("grey", "right", "")
+
+            if percentage_change is not None:
+                colour, arrow_direction, prefix = get_change_attributes(
+                    percentage_change, increase_is_positive
+                )
+            else:  # formatted_difference is not None
+                formatted_difference_number = int(formatted_difference.split(" ")[0])
+                colour, arrow_direction, prefix = get_change_attributes(
+                    formatted_difference_number, increase_is_positive
+                )
+
+                # Remove leading minus if it exists
+                formatted_difference = formatted_difference.lstrip("-")
 
             box_style_class = (
                 f"govuk-tag govuk-tag--{colour} changed-from-box-formatting"
             )
-            if percentage_change != 0:
+            if percentage_change != 0 or formatted_difference_number != 0:
                 box_style_class += f" changed-from-arrow_{arrow_direction}_{colour}"
 
             unit = (
@@ -867,29 +890,26 @@ class ContextCard:
                     if comparison_period_text == "previous year":
                         comparison_period_text = "in " + comparison_period_text
 
-            # Option B: show difference in weeks/days (requires values)
-            elif self.use_difference_in_weeks_days:
-                if current_value is None or previous_value is None:
-                    return None
+            # Option B: show difference as already calculated in df using
+            # columns_for_prev_year_and_2_prev_year
+            elif self.columns_for_prev_year_and_2_prev_year:
 
-                difference_in_weeks_and_days = convert_days_to_weeks_and_days(
-                    current_value - previous_value
-                )
-
-                if percentage_change > 0:
-                    comparison_period_text_prefix = "longer than "
-                elif percentage_change < 0:
-                    comparison_period_text_prefix = "shorter than "
+                if formatted_difference_number > 0:
+                    comparison_period_text_prefix = "slower than "
+                elif formatted_difference_number < 0:
+                    comparison_period_text_prefix = "faster than "
                 else:
                     comparison_period_text_prefix = "unchanged from "
 
-                content.append(
-                    html.Span(
-                        f"{difference_in_weeks_and_days}",
-                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-                        "changed-from-number-formatting text-no-transform",
+                # Only append the content if the difference is not zero
+                if formatted_difference_number != 0:
+                    content.append(
+                        html.Span(
+                            f"{formatted_difference}",
+                            className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                            "changed-from-number-formatting text-no-transform",
+                        )
                     )
-                )
 
                 comparison_period_text = (
                     comparison_period_text_prefix + comparison_period_text
@@ -929,15 +949,26 @@ class ContextCard:
         current_value = None
         prev_year_value = None
         two_year_value = None
-
+        formatted_year_difference = None
+        formatted_2_year_difference = None
+        pct_year = None
+        pct_2yr = None
         if self.df.height == 1:
-            # Using provided columns (likely already computed upstream)
-            pct_year = _scalar(self.df[PERCENTAGE_CHANGE_FROM_PREV_YEAR])
-            pct_2yr = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
+            if self.columns_for_prev_year_and_2_prev_year is not None:
+                formatted_year_difference = _scalar(
+                    self.df[self.columns_for_prev_year_and_2_prev_year[0]]
+                )
+                formatted_2_year_difference = _scalar(
+                    self.df[self.columns_for_prev_year_and_2_prev_year[1]]
+                )
+            else:
+                # Using provided columns (likely already computed upstream)
+                pct_year = _scalar(self.df[PERCENTAGE_CHANGE_FROM_PREV_YEAR])
+                pct_2yr = _scalar(self.df[PERCENTAGE_CHANGE_FROM_TWO_PREV_YEAR])
 
-            # If you want to support previous-value/weeks-days in height==1 mode,
-            # you'd need extra columns for those values. Otherwise tags will return None for those
-            # modes.
+                # If you want to support previous-value/weeks-days in height==1 mode,
+                # you'd need extra columns for those values. Otherwise tags will return None for
+                # those modes.
         else:
             # Expect order: [latest, prev_year, two_year]
             current_value = _scalar(self.df[VALUE][0])
@@ -959,15 +990,15 @@ class ContextCard:
         tag_last_year = _build_tag(
             percentage_change=pct_year,
             comparison_period_text="previous year",
-            current_value=current_value,
             previous_value=prev_year_value,
+            formatted_difference=formatted_year_difference,
         )
 
         tag_two_years = _build_tag(
             percentage_change=pct_2yr,
             comparison_period_text="two years ago",
-            current_value=current_value,
             previous_value=two_year_value,
+            formatted_difference=formatted_2_year_difference,
         )
         styled_tag_two_years = (
             html.Div(tag_two_years, style=CHANGED_FROM_GAP_STYLE)
