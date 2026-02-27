@@ -50,29 +50,40 @@ def display_chart_or_table_with_header(
     Returns:
         html.Div: Div containing Header and chart/table.
     """
-    return html.Div(
-        [
-            html.Div(
-                [
-                    html.Div(
-                        [
-                            html.H2(
-                                heading,
-                                className=HeadingSizes.MEDIUM,
-                                style={"color": "black", "margin": "0px 0px 5px"},
-                            ),
-                            html.H3(
-                                sub_heading,
-                                className=HeadingSizes.SMALL,
-                                style={"color": "black", "margin": "0px 0px 5px"},
-                            ),
-                        ],
-                    ),
-                ]
-            ),
-            paragraph(text_below_subheading),
-            chart_or_table,
-            html.Div([paragraph(footnote)], style={"paddingTop": "20px"}),
+    content = [
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H2(
+                            heading,
+                            className=HeadingSizes.MEDIUM,
+                            style={"color": "black", "margin": "0px 0px 5px"},
+                        ),
+                        html.H3(
+                            sub_heading,
+                            className=HeadingSizes.SMALL,
+                            style={"color": "black", "margin": "0px 0px 5px"},
+                        ),
+                    ],
+                ),
+            ]
+        ),
+        paragraph(text_below_subheading),
+        chart_or_table,
+    ]
+
+    if footnote is not None:
+        content.append(html.Div([paragraph(footnote)], style={"paddingTop": "20px"}))
+
+    download_ids = [
+        download_button_id,
+        download_data_button_id,
+        download_map_button_id,
+        download_all_data_button_id,
+    ]
+    if any(x is not None for x in download_ids):
+        content.append(
             html.Div(
                 (
                     [
@@ -127,6 +138,8 @@ def display_chart_or_table_with_header(
                     ]
                 ),
             ),
-        ],
+        )
+    return html.Div(
+        content,
         className="container-class box_container_layout bg_white",
     )
