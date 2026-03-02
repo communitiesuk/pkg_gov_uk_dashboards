@@ -8,11 +8,13 @@ from gov_uk_dashboards.lib.datetime_functions.datetime_functions import (
 )
 
 
+# pylint: disable=too-many-arguments,disable=too-many-positional-arguments
 def download_csv_with_headers(
-    list_of_df_title_subtitle_dicts: list[dict],
+    list_of_df_title_dicts: list[dict],
     name: str,
     sensitivity_label: str,
     last_updated_date: str = None,
+    next_update_date: str = None,
     additional_text: list[str] = None,
 ):
     """
@@ -20,15 +22,18 @@ def download_csv_with_headers(
     titles, subtitles, footnotes, and metadata headers (e.g. sensitivity label, download date).
 
     Parameters:
-        list_of_df_title_subtitle_dicts (list[dict]):
+        list_of_df_title_dicts (list[dict]):
             A list of dictionaries, each containing a Polars DataFrame ('df'), a title,
-            and optionally a subtitle and footnote.
+            and optionally a footnote.
         name (str):
             The filename (without extension) for the downloaded CSV.
         sensitivity_label (str):
             A label (e.g. OFFICIAL-SENSITIVE) to prepend at the top of the file.
         last_updated_date (str, optional):
             A string to indicate when the data was last updated.
+        next_update_date (str, optional):
+            A string to indicate when the data is next updated. If ens with " p" row titled
+            "Next update (provisional)" added oteriwse "Next update".
         additional_text (list[str], optional):
             Extra lines to include before the data sections (e.g. disclaimers).
 
@@ -37,11 +42,9 @@ def download_csv_with_headers(
     """
     # pylint: disable=too-many-locals
     csv_buffer = io.StringIO()
-    max_columns = _get_number_of_max_columns_from_all_dfs(
-        list_of_df_title_subtitle_dicts
-    )
+    max_columns = _get_number_of_max_columns_from_all_dfs(list_of_df_title_dicts)
     # Get first df and first col to use to add header data
-    first_df = list_of_df_title_subtitle_dicts[0]["df"]
+    first_df = list_of_df_title_dicts[0]["df"]
     first_col = first_df.columns[0]
 
     header_data = []
@@ -57,39 +60,42 @@ def download_csv_with_headers(
                 if last_updated_date
                 else []
             ),
+            *(
+                # Handle next_update_date and 'p' suffix
+                [{first_col: f"Next update (provisional): {next_update_date[:-2]}"}]
+                if next_update_date and next_update_date.endswith(" p")
+                else (
+                    [{first_col: f"Next update: {next_update_date}"}]
+                    if next_update_date
+                    else []
+                )
+            ),
             {first_col: None},
             *(
                 [{first_col: text} for text in additional_text] + [{first_col: None}]
                 if additional_text
                 else []
             ),
-            {first_col: list_of_df_title_subtitle_dicts[0]["title"]},
-            *(
-                [{first_col: list_of_df_title_subtitle_dicts[0]["subtitle"]}]
-                if list_of_df_title_subtitle_dicts[0]["subtitle"]
-                else []
-            ),
+            {first_col: list_of_df_title_dicts[0]["title"]},
             {first_col: None},
             *(
-                [{first_col: list_of_df_title_subtitle_dicts[0].get("footnote")}]
-                if list_of_df_title_subtitle_dicts[0].get("footnote")
+                [{first_col: list_of_df_title_dicts[0].get("footnote")}]
+                if list_of_df_title_dicts[0].get("footnote")
                 else []
             ),
         ]
     )
     _write_padded_rows_to_buffer(header_data, max_columns, csv_buffer)
-    for i, data in enumerate(list_of_df_title_subtitle_dicts):
-        df, title, subtitle, footnote = (
+    for i, data in enumerate(list_of_df_title_dicts):
+        df, title, footnote = (
             data["df"],
             data["title"],
-            data["subtitle"],
             data.get("footnote"),
         )
 
         if i > 0 and title:
             meta_rows = [
                 {first_col: title},
-                *([{first_col: subtitle}] if subtitle else []),
                 {first_col: None},
                 *([{first_col: footnote}] if footnote else []),
             ]
@@ -109,7 +115,7 @@ def download_csv_with_headers(
 
             df.write_csv(csv_buffer)
 
-        if i < len(list_of_df_title_subtitle_dicts) - 1:
+        if i < len(list_of_df_title_dicts) - 1:
             blank_row = pl.DataFrame([pad_row({}, max_columns)])
             blank_row.write_csv(csv_buffer, include_header=False)
 
