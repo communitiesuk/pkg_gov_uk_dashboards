@@ -5,7 +5,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
         document.title = title;
       }
       // Return something to satisfy Dash's need for an output value
-      return title;
+      return window.dash_clientside.no_update;
     }
   }
 });
