@@ -781,7 +781,9 @@ class ContextCard:
     # pylint: disable=too-many-statements
     def _get_current_date(self):
         current_date = self.df[DATE_VALID][0]
-        return convert_date(current_date, "%Y-%m-%d", self.date_format)
+        return convert_date(
+            current_date, "%Y-%m-%d", self.date_format, abbreviate_jun_jul=True
+        )
 
     def _get_changed_from_content(self):
         if (

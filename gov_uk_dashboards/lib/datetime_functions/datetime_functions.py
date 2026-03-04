@@ -83,6 +83,10 @@ def convert_date(
             "output_format must be provided when convert_to_datetime is False"
         )
 
+    output_format = output_format.replace(
+        "%d", str(dt.day)
+    )  # removes leading 0 eg. 01 March becomes 1 March
+
     output_str = dt.strftime(output_format)
 
     if not abbreviate_jun_jul:
@@ -276,10 +280,7 @@ def convert_to_date_range(date_str: str) -> str:
     """
     date_object = datetime.strptime(date_str, "%Y-%m-%d").date()
 
-    if date_object.month in (6, 7):
-        current_month = date_object.strftime("%B")
-    else:
-        current_month = date_object.strftime("%b")
+    current_month = current_month = date_object.strftime("%b")
 
     current_year = date_object.year
 
