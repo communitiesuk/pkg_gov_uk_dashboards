@@ -235,7 +235,7 @@ def get_changed_from_content(
                 # which is added from govuk-tag class
             )
         )
-        print("PREVIOUS VAKUE", previous_value)
+
         content.append(
             html.Span(
                 f"{previous_value}{unit}",
@@ -897,9 +897,9 @@ class ContextCard:
             elif self.columns_for_prev_year_and_2_prev_year:
 
                 if formatted_difference_number > 0:
-                    comparison_period_text_prefix = "slower than "
+                    comparison_period_text_prefix = "longer than "
                 elif formatted_difference_number < 0:
-                    comparison_period_text_prefix = "faster than "
+                    comparison_period_text_prefix = "shorter than "
                 else:
                     comparison_period_text_prefix = "unchanged from "
 
