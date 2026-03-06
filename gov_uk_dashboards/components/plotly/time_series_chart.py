@@ -553,7 +553,10 @@ class TimeSeriesChart:
             tick_values = [date(year, 1, 1) for year in tick_text]
             range_x = [
                 min_datetime - relativedelta(months=6),
-                max_datetime + relativedelta(months=6),
+                max_datetime
+                + relativedelta(
+                    months=9
+                ),  # extend range and force last x axis tick text to be displayed
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
@@ -573,6 +576,9 @@ class TimeSeriesChart:
 
             tick_text_length = len(tick_text)
             total_tick_points = int((tick_text_length / 5) * 7)
+            total_tick_points = min(
+                total_tick_points, tick_text_length + 3
+            )  # don't want more than quarter year extra ?
             additional_tick_points = total_tick_points - tick_text_length
             last_current_tick_text = datetime.strptime(tick_text[-1], "%b %Y")
 
@@ -590,9 +596,11 @@ class TimeSeriesChart:
 
             range_x = [
                 tick_values[0],
-                tick_values[-1] + relativedelta(months=1),
+                tick_values[-1]
+                + relativedelta(
+                    days=45
+                ),  # extend range and force last x axis tick text to be displayed
             ]
-            tick_text = replace_jun_jul_month_abbreviations(tick_text)
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR_MONTHLY_DATA.value:
             df = self.filtered_df.with_columns(
