@@ -17,6 +17,8 @@ def get_legend_configuration(
         itemdoubleclick (bool): Determines the behavior when double-clicking on a legend item.
                                 Set to True by default, allowing double-click interactions.
         reverse_order (bool): Whether to reverse legend order. Defaults to False.
+        y_legend_value (float): The vertical position of the legend **top edge** (yanchor=top) in
+            relative coordinates. Negative values position the legend below the plot.
     Returns:
         dict: A dictionary containing the configuration settings for the legend.
     """
