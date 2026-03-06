@@ -4,7 +4,10 @@ from gov_uk_dashboards.constants import CHART_LABEL_FONT_SIZE
 
 
 def get_legend_configuration(
-    itemclick=True, itemdoubleclick=True, reverse_order=False, y_legend_value=-0.22
+    itemclick: bool = True,
+    itemdoubleclick: bool = True,
+    reverse_order: bool = False,
+    y_legend_value: float = -0.22,
 ):
     """
     Returns the legend configuration for charts with customizable interaction settings.
