@@ -38,7 +38,7 @@ def format_yaxes(
         showgrid=True,
         range=[0, max_y_range],
         tickvals=ticks,
-        ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
+        ticktext=[f"{v:,}" for v in ticks],
     )
 
 
@@ -65,10 +65,8 @@ def generate_human_readable_yticks(
         [0, 100000, 200000, 300000, 400000, 500000, 600000]
     """
 
-    # Step 1: compute raw step
     raw_step = (y_max - y_min) / (max_ticks - 1)
 
-    # Step 2: round step to nearest 1, 2, 5 * 10^n
     magnitude = 10 ** math.floor(math.log10(raw_step))
     residual = raw_step / magnitude
 
@@ -81,20 +79,16 @@ def generate_human_readable_yticks(
     else:
         nice_step = 10 * magnitude
 
-    # Step 3: compute nice min and max ticks
     nice_min = math.floor(y_min / nice_step) * nice_step
     nice_max = math.ceil(y_max / nice_step) * nice_step
 
-    # Step 4: generate ticks
     ticks = []
     current = nice_min
-    while current <= nice_max + 1e-8:  # small epsilon for floating point
+    while current <= nice_max + 1e-8:
         ticks.append(round(current, 10))
         current += nice_step
 
-    # Step 5: limit number of ticks
     if len(ticks) > max_ticks:
-        # pick evenly spaced subset including first and last
         step = len(ticks) / (max_ticks - 1)
         ticks = [ticks[round(i * step)] for i in range(max_ticks)]
 
@@ -125,16 +119,15 @@ def compute_y_axis_ticks(
         [0, 100000, 200000, 300000, 400000, 500000, 600000]"""
     if stacked:
         largest_y_value = (
-            df.group_by(x_axis_column)  # group by date
-            .agg(pl.col(y_axis_column).sum())  # total per date
-            .select(pl.col(y_axis_column).max())  # largest daily total
-            .item()  # extract scalar
+            df.group_by(x_axis_column)
+            .agg(pl.col(y_axis_column).sum())
+            .select(pl.col(y_axis_column).max())
+            .item()
         )
     else:
         largest_y_value = df[y_axis_column].max()
     y_axis_max = largest_y_value + (0.3 * largest_y_value)
 
-    # Generate nice ticks
     ticks = generate_human_readable_yticks(0, y_axis_max)
 
     return ticks

@@ -284,7 +284,6 @@ class StackedBarChart:
             barmode="relative",
             xaxis={"categoryorder": "array", "categoryarray": self.trace_name_list},
             xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
-            ## copied from timeseries
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
@@ -338,7 +337,6 @@ class StackedBarChart:
         for i, header in enumerate(hover_text_headers):
             hover_template += f"{header}: %{{customdata[{i}]}}<br>"
 
-        # Remove the last <br> and add <extra></extra>
         hover_template = hover_template.rstrip("<br>") + "<extra></extra>"
         return hover_template
 
