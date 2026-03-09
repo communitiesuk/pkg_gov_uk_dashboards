@@ -3,6 +3,7 @@
 import json
 from typing import Optional
 from dash import html
+from dateutil.relativedelta import relativedelta
 import polars as pl
 
 import plotly.graph_objects as go
@@ -377,11 +378,19 @@ class StackedBarChart:
 
             tick0 = max_in_first_year + (min_in_next_year - max_in_first_year) / 2
 
+            start_datetime = df.select(
+                pl.col(self.x_axis_column).min()
+            ).item() - relativedelta(months=6)
+            latest_datetime = df.select(
+                pl.col(self.x_axis_column).max()
+            ).item() + relativedelta(months=12)
+
             fig.update_xaxes(
                 tick0=tick0,  # start tick halfway between Dec & Mar
                 dtick="M12",  # one tick per year
                 tickformat="%Y",
                 hoverformat=self.x_hoverformat,
+                range=[start_datetime, latest_datetime],
             )
         return fig
 
