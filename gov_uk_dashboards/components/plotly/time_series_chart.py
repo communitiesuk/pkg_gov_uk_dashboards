@@ -9,6 +9,9 @@ import polars as pl
 
 import plotly.graph_objects as go
 
+from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
+    format_yaxes,
+)
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
     CUSTOM_DATA,
@@ -364,7 +367,7 @@ class TimeSeriesChart:
             fig.add_annotation(
                 x=self.verticle_line_x_value_and_name[0],
                 yref="paper",
-                y=0.9,
+                y=0.85,
                 text=self.verticle_line_x_value_and_name[1],
                 showarrow=False,
                 font={"color": "#414042", "size": 16},
@@ -372,9 +375,10 @@ class TimeSeriesChart:
                 yanchor="bottom",
             )
 
-        y_range = [0, self._get_y_axis_range_max()]
+        format_yaxes(
+            fig, self.stacked, self.filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
-        fig.update_yaxes(rangemode="tozero", showgrid=True, range=y_range)
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
         if self.x_axis_title is not None:
@@ -558,7 +562,7 @@ class TimeSeriesChart:
             tick_values = [date(year, 1, 1) for year in tick_text]
             range_x = [
                 min_datetime - relativedelta(months=6),
-                max_datetime + relativedelta(months=6),
+                max_datetime + relativedelta(months=9),
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
@@ -578,6 +582,7 @@ class TimeSeriesChart:
 
             tick_text_length = len(tick_text)
             total_tick_points = int((tick_text_length / 5) * 7)
+            total_tick_points = min(total_tick_points, tick_text_length + 3)
             additional_tick_points = total_tick_points - tick_text_length
             last_current_tick_text = datetime.strptime(tick_text[-1], "%b %Y")
 
@@ -595,9 +600,8 @@ class TimeSeriesChart:
 
             range_x = [
                 tick_values[0],
-                tick_values[-1] + relativedelta(months=1),
+                tick_values[-1] + relativedelta(days=45),
             ]
-            # tick_text = replace_jun_jul_month_abbreviations(tick_text)
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR_MONTHLY_DATA.value:
             df = self.filtered_df.with_columns(
@@ -663,21 +667,6 @@ class TimeSeriesChart:
                 f"Invalid xaxis_tick_text_format: {self.xaxis_tick_text_format}"
             )
         return tick_text, tick_values, range_x
-
-    def _get_y_axis_range_max(self):
-        """Get the y axis range maximum value to ensure there is an axis label greater than the
-        maximum y value."""
-        if self.stacked:
-            largest_y_value = (
-                self.filtered_df.group_by(self.x_axis_column)  # group by date
-                .agg(pl.col(self.y_axis_column).sum())  # total per date
-                .select(pl.col(self.y_axis_column).max())  # largest daily total
-                .item()  # extract scalar
-            )
-        else:
-            largest_y_value = self.filtered_df[self.y_axis_column].max()
-        y_axis_max = largest_y_value + (0.3 * largest_y_value)
-        return y_axis_max
 
     def _get_df_list_for_time_series(self) -> list[pl.DataFrame]:
         if self.trace_name_column is not None:
