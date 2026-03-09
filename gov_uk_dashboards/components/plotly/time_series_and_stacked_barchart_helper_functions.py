@@ -1,4 +1,5 @@
 import math
+import polars as pl
 
 
 def generate_nice_ticks(y_min, y_max, max_ticks=10):
@@ -44,5 +45,25 @@ def generate_nice_ticks(y_min, y_max, max_ticks=10):
         # pick evenly spaced subset including first and last
         step = len(ticks) / (max_ticks - 1)
         ticks = [ticks[round(i * step)] for i in range(max_ticks)]
+
+    return ticks
+
+
+def _get_y_axis_ticks(stacked, df, x_axis_column, y_axis_column):
+    """Get the y axis range maximum value to ensure there is an axis label greater than the
+    maximum y value."""
+    if stacked:
+        largest_y_value = (
+            df.group_by(x_axis_column)  # group by date
+            .agg(pl.col(y_axis_column).sum())  # total per date
+            .select(pl.col(y_axis_column).max())  # largest daily total
+            .item()  # extract scalar
+        )
+    else:
+        largest_y_value = df[y_axis_column].max()
+    y_axis_max = largest_y_value + (0.3 * largest_y_value)
+
+    # Generate nice ticks
+    ticks = generate_nice_ticks(0, y_axis_max)
 
     return ticks

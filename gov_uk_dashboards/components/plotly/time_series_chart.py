@@ -10,7 +10,7 @@ import polars as pl
 import plotly.graph_objects as go
 
 from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
-    generate_nice_ticks,
+    _get_y_axis_ticks,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -405,7 +405,9 @@ class TimeSeriesChart:
         return fig
 
     def format_yaxes(self, fig):
-        ticks = self._get_y_axis_ticks()
+        ticks = _get_y_axis_ticks(
+            self, self.stacked, self.filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
         max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
 
@@ -687,25 +689,6 @@ class TimeSeriesChart:
                 f"Invalid xaxis_tick_text_format: {self.xaxis_tick_text_format}"
             )
         return tick_text, tick_values, range_x
-
-    def _get_y_axis_ticks(self):
-        """Get the y axis range maximum value to ensure there is an axis label greater than the
-        maximum y value."""
-        if self.stacked:
-            largest_y_value = (
-                self.filtered_df.group_by(self.x_axis_column)  # group by date
-                .agg(pl.col(self.y_axis_column).sum())  # total per date
-                .select(pl.col(self.y_axis_column).max())  # largest daily total
-                .item()  # extract scalar
-            )
-        else:
-            largest_y_value = self.filtered_df[self.y_axis_column].max()
-        y_axis_max = largest_y_value + (0.3 * largest_y_value)
-
-        # Generate nice ticks
-        ticks = generate_nice_ticks(0, y_axis_max)
-
-        return ticks
 
     def _get_df_list_for_time_series(self) -> list[pl.DataFrame]:
         if self.trace_name_column is not None:

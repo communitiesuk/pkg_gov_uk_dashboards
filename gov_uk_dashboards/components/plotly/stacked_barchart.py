@@ -11,7 +11,7 @@ from gov_uk_dashboards.components.helpers.get_chart_for_download import (
     get_chart_for_download,
 )
 from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
-    generate_nice_ticks,
+    _get_y_axis_ticks,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -285,7 +285,12 @@ class StackedBarChart:
         return fig
 
     def format_yaxes(self, fig):
-        ticks = self._get_y_axis_ticks()
+        filtered_df = self.df.filter(
+            pl.col(self.trace_name_column).is_in(self.trace_name_list)
+        )
+        ticks = _get_y_axis_ticks(
+            self.stacked, filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
         max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
 
@@ -391,30 +396,6 @@ class StackedBarChart:
                 hoverformat=self.x_hoverformat,
             )
         return fig
-
-    def _get_y_axis_ticks(self):
-        """Get the y axis range maximum value to ensure there is an axis label greater than the
-        maximum y value."""
-        filtered_df = self.df.filter(
-            pl.col(self.trace_name_column).is_in(self.trace_name_list)
-        )
-
-        if self.stacked:
-            largest_y_value = (
-                filtered_df.group_by(self.x_axis_column)  # group by date
-                .agg(pl.col(self.y_axis_column).sum())  # total per date
-                .select(pl.col(self.y_axis_column).max())  # largest daily total
-                .item()  # extract scalar
-            )
-        else:
-            largest_y_value = filtered_df[self.y_axis_column].max()
-
-        y_axis_max = largest_y_value + (0.3 * largest_y_value)
-
-        # Generate nice ticks
-        ticks = generate_nice_ticks(0, y_axis_max)
-
-        return ticks
 
 
 def get_tracenamelist_and_legend_order(df_function, barchart_measures=None):
