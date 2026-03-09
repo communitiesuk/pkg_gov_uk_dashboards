@@ -11,7 +11,7 @@ from gov_uk_dashboards.components.helpers.get_chart_for_download import (
     get_chart_for_download,
 )
 from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
-    _get_y_axis_ticks,
+    format_yaxes,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -264,7 +264,13 @@ class StackedBarChart:
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
-        self.format_yaxes(fig)
+        filtered_df = self.df.filter(
+            pl.col(self.trace_name_column).is_in(self.trace_name_list)
+        )
+
+        format_yaxes(
+            fig, self.stacked, filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
         fig.update_layout(
             legend=get_legend_configuration(),
@@ -283,24 +289,6 @@ class StackedBarChart:
         )
         self._format_xaxis(fig)
         return fig
-
-    def format_yaxes(self, fig):
-        filtered_df = self.df.filter(
-            pl.col(self.trace_name_column).is_in(self.trace_name_list)
-        )
-        ticks = _get_y_axis_ticks(
-            self.stacked, filtered_df, self.x_axis_column, self.y_axis_column
-        )
-
-        max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
-
-        fig.update_yaxes(
-            rangemode="tozero",
-            showgrid=True,
-            range=[0, max_y_range],
-            tickvals=ticks,
-            ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
-        )
 
     def create_bar_chart_trace(
         self,

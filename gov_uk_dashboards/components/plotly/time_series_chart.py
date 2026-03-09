@@ -10,7 +10,7 @@ import polars as pl
 import plotly.graph_objects as go
 
 from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
-    _get_y_axis_ticks,
+    format_yaxes,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -375,7 +375,9 @@ class TimeSeriesChart:
                 yanchor="bottom",
             )
 
-        self.format_yaxes(fig)
+        format_yaxes(
+            fig, self.stacked, self.filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
@@ -403,21 +405,6 @@ class TimeSeriesChart:
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
         return fig
-
-    def format_yaxes(self, fig):
-        ticks = _get_y_axis_ticks(
-            self, self.stacked, self.filtered_df, self.x_axis_column, self.y_axis_column
-        )
-
-        max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
-
-        fig.update_yaxes(
-            rangemode="tozero",
-            showgrid=True,
-            range=[0, max_y_range],
-            tickvals=ticks,
-            ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
-        )
 
     def _get_legend_group(self, df):
         if "legend_group" in df.columns and len(df) > 0:

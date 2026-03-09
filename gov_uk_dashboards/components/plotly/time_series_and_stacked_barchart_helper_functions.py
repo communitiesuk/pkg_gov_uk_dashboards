@@ -2,6 +2,20 @@ import math
 import polars as pl
 
 
+def format_yaxes(fig, stacked, df, x_axis_column, y_axis_column):
+    ticks = _get_y_axis_ticks(stacked, df, x_axis_column, y_axis_column)
+
+    max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
+
+    fig.update_yaxes(
+        rangemode="tozero",
+        showgrid=True,
+        range=[0, max_y_range],
+        tickvals=ticks,
+        ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
+    )
+
+
 def generate_nice_ticks(y_min, y_max, max_ticks=10):
     """
     Generate "nice" tick values for a numeric axis.
