@@ -388,8 +388,13 @@ class TimeSeriesChart:
                 font={"size": 16},
             )
 
+        tick_text, _, _ = self._get_x_axis_content()
+        legend_y_value = -0.22
+        if len(tick_text) > 12 and any(len(str(x)) > 5 for x in tick_text):
+            legend_y_value = -0.4
+
         fig.update_layout(
-            legend=get_legend_configuration(),
+            legend=get_legend_configuration(y_legend_value=legend_y_value),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis_tickformat=",",
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
@@ -601,6 +606,7 @@ class TimeSeriesChart:
                     days=45
                 ),  # extend range and force last x axis tick text to be displayed
             ]
+            # tick_text = replace_jun_jul_month_abbreviations(tick_text)
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR_MONTHLY_DATA.value:
             df = self.filtered_df.with_columns(
