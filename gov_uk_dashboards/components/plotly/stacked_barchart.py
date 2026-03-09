@@ -126,6 +126,7 @@ class StackedBarChart:
         self.total_trace_name = total_trace_name
         self.y_axis_tick_prefix = y_axis_tick_prefix
         self.x_hoverformat = x_hoverformat
+        self.stacked = True
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -259,21 +260,26 @@ class StackedBarChart:
                 )
             )
 
-        # _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
-        #     self.df, "£", self.trace_name_list
-        # )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
+
+        ticks = self._get_y_axis_ticks()
+
+        max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
+
+        fig.update_yaxes(
+            rangemode="tozero",
+            showgrid=True,
+            range=[0, max_y_range],
+            tickvals=ticks,
+            ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
+        )
 
         fig.update_layout(
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
-                # "range": [min_y * 1.1, max_y * 1.1],
                 "tickprefix": self.y_axis_tick_prefix,
                 "exponentformat": "B",
-                # "tickmode": "array",
-                # "tickvals": tickvals,
-                # "ticktext": ticktext,
             },
             showlegend=True,
             barmode="relative",
@@ -351,59 +357,53 @@ class StackedBarChart:
             df_list = [self.df]
         return df_list
 
-    # def _get_y_range_tickvals_and_ticktext(
-    #     self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
-    # ):
-    #     barchart_df = dataframe.pivot(
-    #         index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
-    #     )
-    #     positive_sum = sum(
-    #         pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
-    #         for col in yaxis_with_values
-    #     )
-    #     negative_sum = sum(
-    #         pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
-    #         for col in yaxis_with_values
-    #     )
-    #     barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
-    #     barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
-    #     maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
-    #     miny = barchart_df.select([pl.col("Negative sum").min()]).item()
-    #     tickvals = self._generate_tickvals(maxy, miny)
-    #     ticktext = [
-    #         format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
-    #     ]
-    #     return tickvals[-1], tickvals[0], tickvals, ticktext
+    def generate_nice_ticks(self, y_min, y_max, max_ticks=10):
+        """
+        Generate "nice" tick values for a numeric axis.
 
-    def _generate_tickvals(self, maxy, miny):
-        range_size = maxy - miny
-        if range_size <= 0:
-            center = maxy if maxy is not None else 0
-            return [center - 1, center, center + 1]
-        # Determine the order of magnitude of the range
-        order = int(math.log10(range_size))
+        Args:
+            y_min (float): Minimum axis value
+            y_max (float): Maximum axis value
+            max_ticks (int): Maximum number of ticks
 
-        # Start with an initial step size
-        step_size = 10**order
+        Returns:
+            list: Tick values (floats) that are rounded and evenly spaced
+        """
 
-        # Calculate the number of ticks based on the step size
-        num_ticks = math.ceil(range_size / step_size)
+        # Step 1: compute raw step
+        raw_step = (y_max - y_min) / (max_ticks - 1)
 
-        # Adjust step size to ensure the number of ticks is between 6 and 10
-        while num_ticks < 6 or num_ticks > 10:
-            if num_ticks < 6:  # Too few ticks -> decrease step size
-                step_size /= 2
-            elif num_ticks > 10:  # Too many ticks -> increase step size
-                step_size *= 2
-            num_ticks = math.ceil(range_size / step_size)
+        # Step 2: round step to nearest 1, 2, 5 * 10^n
+        magnitude = 10 ** math.floor(math.log10(raw_step))
+        residual = raw_step / magnitude
 
-        # Adjust the start and end of the range to align with the step size
-        start = math.floor(miny / step_size) * step_size
-        end = math.ceil(maxy / step_size) * step_size
+        if residual <= 1:
+            nice_step = 1 * magnitude
+        elif residual <= 2:
+            nice_step = 2 * magnitude
+        elif residual <= 5:
+            nice_step = 5 * magnitude
+        else:
+            nice_step = 10 * magnitude
 
-        # Generate tick values
-        tickvals = list(range(int(start), int(end) + 1, int(step_size)))
-        return tickvals
+        # Step 3: compute nice min and max ticks
+        nice_min = math.floor(y_min / nice_step) * nice_step
+        nice_max = math.ceil(y_max / nice_step) * nice_step
+
+        # Step 4: generate ticks
+        ticks = []
+        current = nice_min
+        while current <= nice_max + 1e-8:  # small epsilon for floating point
+            ticks.append(round(current, 10))
+            current += nice_step
+
+        # Step 5: limit number of ticks
+        if len(ticks) > max_ticks:
+            # pick evenly spaced subset including first and last
+            step = len(ticks) / (max_ticks - 1)
+            ticks = [ticks[round(i * step)] for i in range(max_ticks)]
+
+        return ticks
 
     def _format_xaxis(self, fig):
         if self.xaxis_tick_text_format == "quarter":
@@ -434,6 +434,30 @@ class StackedBarChart:
                 hoverformat=self.x_hoverformat,
             )
         return fig
+
+    def _get_y_axis_ticks(self):
+        """Get the y axis range maximum value to ensure there is an axis label greater than the
+        maximum y value."""
+        filtered_df = self.df.filter(
+            pl.col(self.trace_name_column).is_in(self.trace_name_list)
+        )
+
+        if self.stacked:
+            largest_y_value = (
+                filtered_df.group_by(self.x_axis_column)  # group by date
+                .agg(pl.col(self.y_axis_column).sum())  # total per date
+                .select(pl.col(self.y_axis_column).max())  # largest daily total
+                .item()  # extract scalar
+            )
+        else:
+            largest_y_value = filtered_df[self.y_axis_column].max()
+
+        y_axis_max = largest_y_value + (0.3 * largest_y_value)
+
+        # Generate nice ticks
+        ticks = self.generate_nice_ticks(0, y_axis_max)
+
+        return ticks
 
 
 def get_tracenamelist_and_legend_order(df_function, barchart_measures=None):
