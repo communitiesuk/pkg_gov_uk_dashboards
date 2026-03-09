@@ -1,7 +1,6 @@
 """stacked_barchart function"""
 
 import json
-import math
 from typing import Optional
 from dash import html
 import polars as pl
@@ -10,6 +9,9 @@ import plotly.graph_objects as go
 
 from gov_uk_dashboards.components.helpers.get_chart_for_download import (
     get_chart_for_download,
+)
+from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
+    generate_nice_ticks,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -262,17 +264,7 @@ class StackedBarChart:
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
-        ticks = self._get_y_axis_ticks()
-
-        max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
-
-        fig.update_yaxes(
-            rangemode="tozero",
-            showgrid=True,
-            range=[0, max_y_range],
-            tickvals=ticks,
-            ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
-        )
+        self.format_yaxes(fig)
 
         fig.update_layout(
             legend=get_legend_configuration(),
@@ -291,6 +283,19 @@ class StackedBarChart:
         )
         self._format_xaxis(fig)
         return fig
+
+    def format_yaxes(self, fig):
+        ticks = self._get_y_axis_ticks()
+
+        max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
+
+        fig.update_yaxes(
+            rangemode="tozero",
+            showgrid=True,
+            range=[0, max_y_range],
+            tickvals=ticks,
+            ticktext=[f"{v:,}" for v in ticks],  # formatted with commas,
+        )
 
     def create_bar_chart_trace(
         self,
@@ -357,54 +362,6 @@ class StackedBarChart:
             df_list = [self.df]
         return df_list
 
-    def generate_nice_ticks(self, y_min, y_max, max_ticks=10):
-        """
-        Generate "nice" tick values for a numeric axis.
-
-        Args:
-            y_min (float): Minimum axis value
-            y_max (float): Maximum axis value
-            max_ticks (int): Maximum number of ticks
-
-        Returns:
-            list: Tick values (floats) that are rounded and evenly spaced
-        """
-
-        # Step 1: compute raw step
-        raw_step = (y_max - y_min) / (max_ticks - 1)
-
-        # Step 2: round step to nearest 1, 2, 5 * 10^n
-        magnitude = 10 ** math.floor(math.log10(raw_step))
-        residual = raw_step / magnitude
-
-        if residual <= 1:
-            nice_step = 1 * magnitude
-        elif residual <= 2:
-            nice_step = 2 * magnitude
-        elif residual <= 5:
-            nice_step = 5 * magnitude
-        else:
-            nice_step = 10 * magnitude
-
-        # Step 3: compute nice min and max ticks
-        nice_min = math.floor(y_min / nice_step) * nice_step
-        nice_max = math.ceil(y_max / nice_step) * nice_step
-
-        # Step 4: generate ticks
-        ticks = []
-        current = nice_min
-        while current <= nice_max + 1e-8:  # small epsilon for floating point
-            ticks.append(round(current, 10))
-            current += nice_step
-
-        # Step 5: limit number of ticks
-        if len(ticks) > max_ticks:
-            # pick evenly spaced subset including first and last
-            step = len(ticks) / (max_ticks - 1)
-            ticks = [ticks[round(i * step)] for i in range(max_ticks)]
-
-        return ticks
-
     def _format_xaxis(self, fig):
         if self.xaxis_tick_text_format == "quarter":
             df = self.df.with_columns(
@@ -455,7 +412,7 @@ class StackedBarChart:
         y_axis_max = largest_y_value + (0.3 * largest_y_value)
 
         # Generate nice ticks
-        ticks = self.generate_nice_ticks(0, y_axis_max)
+        ticks = generate_nice_ticks(0, y_axis_max)
 
         return ticks
 
