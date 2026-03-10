@@ -1,15 +1,18 @@
 """stacked_barchart function"""
 
 import json
-import math
 from typing import Optional
 from dash import html
+from dateutil.relativedelta import relativedelta
 import polars as pl
 
 import plotly.graph_objects as go
 
 from gov_uk_dashboards.components.helpers.get_chart_for_download import (
     get_chart_for_download,
+)
+from gov_uk_dashboards.components.plotly.time_series_and_stacked_barchart_helper_functions import (
+    format_yaxes,
 )
 from gov_uk_dashboards.constants import (
     CHART_LABEL_FONT_SIZE,
@@ -126,6 +129,7 @@ class StackedBarChart:
         self.total_trace_name = total_trace_name
         self.y_axis_tick_prefix = y_axis_tick_prefix
         self.x_hoverformat = x_hoverformat
+        self.stacked = True
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -259,27 +263,27 @@ class StackedBarChart:
                 )
             )
 
-        # _, _, tickvals, ticktext = self._get_y_range_tickvals_and_ticktext(
-        #     self.df, "£", self.trace_name_list
-        # )
         update_layout_bgcolor_margin(fig, "#FFFFFF")
+
+        filtered_df = self.df.filter(
+            pl.col(self.trace_name_column).is_in(self.trace_name_list)
+        )
+
+        format_yaxes(
+            fig, self.stacked, filtered_df, self.x_axis_column, self.y_axis_column
+        )
 
         fig.update_layout(
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
-                # "range": [min_y * 1.1, max_y * 1.1],
                 "tickprefix": self.y_axis_tick_prefix,
                 "exponentformat": "B",
-                # "tickmode": "array",
-                # "tickvals": tickvals,
-                # "ticktext": ticktext,
             },
             showlegend=True,
             barmode="relative",
             xaxis={"categoryorder": "array", "categoryarray": self.trace_name_list},
             xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
-            ## copied from timeseries
             hovermode="x unified" if self.x_unified_hovermode is True else "closest",
             hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
         )
@@ -333,7 +337,6 @@ class StackedBarChart:
         for i, header in enumerate(hover_text_headers):
             hover_template += f"{header}: %{{customdata[{i}]}}<br>"
 
-        # Remove the last <br> and add <extra></extra>
         hover_template = hover_template.rstrip("<br>") + "<extra></extra>"
         return hover_template
 
@@ -350,60 +353,6 @@ class StackedBarChart:
         else:
             df_list = [self.df]
         return df_list
-
-    # def _get_y_range_tickvals_and_ticktext(
-    #     self, dataframe: pl.DataFrame, tick_prefix: str, yaxis_with_values: list[str]
-    # ):
-    #     barchart_df = dataframe.pivot(
-    #         index=FINANCIAL_YEAR_ENDING, on=MEASURE, values=VALUE
-    #     )
-    #     positive_sum = sum(
-    #         pl.when(pl.col(col) > 0).then(pl.col(col)).otherwise(0)
-    #         for col in yaxis_with_values
-    #     )
-    #     negative_sum = sum(
-    #         pl.when(pl.col(col) < 0).then(pl.col(col)).otherwise(0)
-    #         for col in yaxis_with_values
-    #     )
-    #     barchart_df = barchart_df.with_columns(positive_sum.alias("Positive sum"))
-    #     barchart_df = barchart_df.with_columns(negative_sum.alias("Negative sum"))
-    #     maxy = barchart_df.select([pl.col("Positive sum").max()]).item()
-    #     miny = barchart_df.select([pl.col("Negative sum").min()]).item()
-    #     tickvals = self._generate_tickvals(maxy, miny)
-    #     ticktext = [
-    #         format_as_human_readable(val, prefix=tick_prefix) for val in tickvals
-    #     ]
-    #     return tickvals[-1], tickvals[0], tickvals, ticktext
-
-    def _generate_tickvals(self, maxy, miny):
-        range_size = maxy - miny
-        if range_size <= 0:
-            center = maxy if maxy is not None else 0
-            return [center - 1, center, center + 1]
-        # Determine the order of magnitude of the range
-        order = int(math.log10(range_size))
-
-        # Start with an initial step size
-        step_size = 10**order
-
-        # Calculate the number of ticks based on the step size
-        num_ticks = math.ceil(range_size / step_size)
-
-        # Adjust step size to ensure the number of ticks is between 6 and 10
-        while num_ticks < 6 or num_ticks > 10:
-            if num_ticks < 6:  # Too few ticks -> decrease step size
-                step_size /= 2
-            elif num_ticks > 10:  # Too many ticks -> increase step size
-                step_size *= 2
-            num_ticks = math.ceil(range_size / step_size)
-
-        # Adjust the start and end of the range to align with the step size
-        start = math.floor(miny / step_size) * step_size
-        end = math.ceil(maxy / step_size) * step_size
-
-        # Generate tick values
-        tickvals = list(range(int(start), int(end) + 1, int(step_size)))
-        return tickvals
 
     def _format_xaxis(self, fig):
         if self.xaxis_tick_text_format == "quarter":
@@ -427,11 +376,19 @@ class StackedBarChart:
 
             tick0 = max_in_first_year + (min_in_next_year - max_in_first_year) / 2
 
+            start_datetime = df.select(
+                pl.col(self.x_axis_column).min()
+            ).item() - relativedelta(months=6)
+            latest_datetime = df.select(
+                pl.col(self.x_axis_column).max()
+            ).item() + relativedelta(months=12)
+
             fig.update_xaxes(
                 tick0=tick0,  # start tick halfway between Dec & Mar
                 dtick="M12",  # one tick per year
                 tickformat="%Y",
                 hoverformat=self.x_hoverformat,
+                range=[start_datetime, latest_datetime],
             )
         return fig
 

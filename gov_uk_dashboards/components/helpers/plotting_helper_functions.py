@@ -3,7 +3,12 @@
 from gov_uk_dashboards.constants import CHART_LABEL_FONT_SIZE
 
 
-def get_legend_configuration(itemclick=True, itemdoubleclick=True, reverse_order=False):
+def get_legend_configuration(
+    itemclick: bool = True,
+    itemdoubleclick: bool = True,
+    reverse_order: bool = False,
+    y_legend_value: float = -0.22,
+):
     """
     Returns the legend configuration for charts with customizable interaction settings.
     Args:
@@ -12,13 +17,15 @@ def get_legend_configuration(itemclick=True, itemdoubleclick=True, reverse_order
         itemdoubleclick (bool): Determines the behavior when double-clicking on a legend item.
                                 Set to True by default, allowing double-click interactions.
         reverse_order (bool): Whether to reverse legend order. Defaults to False.
+        y_legend_value (float): The vertical position of the legend **top edge** (yanchor=top) in
+            relative coordinates. Negative values position the legend below the plot.
     Returns:
         dict: A dictionary containing the configuration settings for the legend.
     """
     traceorder = {} if not reverse_order else {"traceorder": "reversed"}
     return {
         "x": 0,
-        "y": -0.22,
+        "y": y_legend_value,
         "yanchor": "top",
         "traceorder": "normal",
         "orientation": "h",
