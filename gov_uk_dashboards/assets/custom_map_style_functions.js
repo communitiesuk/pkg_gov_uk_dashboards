@@ -10,12 +10,19 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
             } = context.hideout;
             const value = feature.properties[colorProp];
             const colors = Array.from(colorscale); // defensive copy
+
             if (value === null || value === undefined) {
-                return {
+                let s = {
                     ...style,
                     fillColor: "#b1b4b6"
                 };
+                // 🔴 Merge per-feature style
+                if(feature.properties.style){
+                    s = {...s, ...feature.properties.style};
+                }
+                return s;
             }
+
             // Normalize value to 0-1
             const t = (value - min) / (max - min);
 
@@ -33,13 +40,21 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
             const n = colors.length - 1;
             const idx = Math.min(Math.floor(t * n), n - 1);
             const local_t = (t * n) - idx;
-            const fillColor = interpolateColor(colors[idx], colors[idx + 1], local_t);
+            let fillColor = interpolateColor(colors[idx], colors[idx + 1], local_t);
 
-            return {
+            let s = {
                 ...style,
                 fillColor: fillColor
             };
+
+            // 🔴 Merge per-feature style (red outline, etc.)
+            if(feature.properties.style){
+                s = {...s, ...feature.properties.style};
+            }
+
+            return s;
         },
+
         discreteColorScale: function(feature, context) {
             const {
                 colorscale,  // e.g., ["#d7191c", "#fdae61", "#abdda4", "#2b83ba"]
@@ -47,27 +62,37 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 style,
                 min          // e.g., 1
             } = context.hideout;
-        
+
             const value = feature.properties[colorProp];
             const colors = Array.from(colorscale); // ensure no mutation
-        
+
             if (value === null || value === undefined) {
-                return {
+                let s = {
                     ...style,
                     fillColor: "#b1b4b6"  // default gray
                 };
+                // 🔴 Merge per-feature style
+                if(feature.properties.style){
+                    s = {...s, ...feature.properties.style};
+                }
+                return s;
             }
-        
+
             // Convert value to zero-based index
             const idx = value - min;
-        
-            // Defensive check
             const fillColor = colors[idx] || "#b1b4b6";
-        
-            return {
+
+            let s = {
                 ...style,
                 fillColor: fillColor
             };
+
+            // 🔴 Merge per-feature style (red outline, etc.)
+            if(feature.properties.style){
+                s = {...s, ...feature.properties.style};
+            }
+
+            return s;
         }
     }
 });
