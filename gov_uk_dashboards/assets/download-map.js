@@ -1,7 +1,7 @@
 window.mynamespace = window.mynamespace || {};
 
 window.mynamespace = {
-  downloadMap: function(buttonId) {
+  downloadMap: function(buttonId, la) {
       if (typeof buttonId !== "string") {
           console.warn("Invalid buttonId passed to downloadMap:", buttonId);
           return;
@@ -26,7 +26,7 @@ window.mynamespace = {
         ctx.drawImage(originalCanvas, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
         const link = document.createElement("a");
-        link.download = `${buttonId}.png`;
+        link.download = `${buttonId}${la}.png`;
         link.href = croppedCanvas.toDataURL("image/png");
         document.body.appendChild(link);
         link.click();
