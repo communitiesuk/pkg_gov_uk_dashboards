@@ -44,9 +44,11 @@ class LeafletChoroplethMap:
         color_scale_is_discrete: bool = True,
         colorbar_title: str = None,
         show_tile_layer: bool = False,
+        selected_la: str = None,
     ):  # pylint: disable=too-many-locals
         self.geojson_data = geojson
         self.df = df
+        self.selected_la = selected_la
         self.hover_text_columns = hover_text_columns
         self.column_to_plot = column_to_plot
         self.legend_column = legend_column
@@ -165,6 +167,19 @@ class LeafletChoroplethMap:
                 feature["properties"]["density"] = None
                 feature["properties"]["area"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data available"
+
+            # ⭐ Only for selected LA
+            if self.selected_la and feature["properties"]["area"] == self.selected_la:
+                feature["properties"]["style"] = {
+                    "color": "red",  # border color
+                    "weight": 4,  # thicker border
+                    "fillOpacity": feature.get("properties", {}).get(
+                        "fillOpacity", 0.7
+                    ),  # keep fill
+                }
+            else:
+                # Make sure all other LAs do NOT keep old style
+                feature["properties"].pop("style", None)
 
     def _get_dl_geojson(self):
         style_handle = self._get_style_handle()
