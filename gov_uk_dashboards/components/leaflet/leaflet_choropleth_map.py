@@ -88,7 +88,8 @@ class LeafletChoroplethMap:
         choropleth_map = dl.Map(
             children=children,
             # Zoom to selected LA or fallback to full England
-            bounds=selected_bounds if selected_bounds else [[49.8, -10], [55.9, 1.8]],
+            bounds=[[49.8, -10], [55.9, 1.8]],
+            id=f"choropleth-map-{self.instance_number}",
             boundsOptions={"padding": [20, 20], "maxZoom": 10},  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
@@ -124,6 +125,7 @@ class LeafletChoroplethMap:
 
         return [
             choropleth_map,
+            selected_bounds,
             html.Div(
                 [download_choropleth_map_display],
                 id=f"{self.download_chart_button_id}-hidden-map-container",
