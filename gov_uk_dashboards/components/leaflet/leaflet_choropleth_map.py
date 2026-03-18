@@ -61,15 +61,21 @@ class LeafletChoroplethMap:
         self.color_scale_is_discrete = color_scale_is_discrete
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self._add_data_to_geojson()
+        self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
 
     def get_leaflet_choropleth_map(self):
-        """Creates and returns leaflet choropleth map chart for display on application.
+        """Builds the choropleth map with proper highlighting and zoom."""
+        geojson_layer, selected_bounds = self._get_dl_geojson()
 
-        Returns:
-            dl.Map: A dash leaflet map chart.
-        """
+        # Build children list safely (exclude None)
+        children = [
+            *([dl.TileLayer()] if self.show_tile_layer else []),
+            self._get_colorbar(),
+            *([self._get_colorbar_title(self.enable_zoom)] if self._get_colorbar_title(self.enable_zoom) else []),
+            geojson_layer,
+        ]
+
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
             "dragging": False,
@@ -78,15 +84,12 @@ class LeafletChoroplethMap:
             "touchZoom": False,
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
+
         choropleth_map = dl.Map(
-            children=[
-                dl.TileLayer() if self.show_tile_layer else None,
-                self._get_colorbar(),
-                self._get_colorbar_title(self.enable_zoom),
-                self._get_dl_geojson(),
-            ],
-            center=[54.5, -2.5],  # Centered on the UK
-            zoom=6.5,
+            children=children,
+            # Zoom to selected LA or fallback to full England
+            bounds=selected_bounds if selected_bounds else [[49.8, -10], [55.9, 1.8]],
+            boundsOptions={"padding": [20, 20], "maxZoom": 10},  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
@@ -95,15 +98,10 @@ class LeafletChoroplethMap:
             style={"width": "100%", "height": "960px", "background": "white"},
         )
         download_choropleth_map = dl.Map(
-            children=[
-                dl.TileLayer() if self.show_tile_layer else None,
-                self._get_colorbar(),
-                self._get_colorbar_title(),
-                self._get_dl_geojson(),
-            ],
+            children=children,
             center=[54.5, -25.0],
             zoom=7.5,
-            maxBounds=[[49.5, -30], [60, 2]],
+            maxBounds=[[49.8, -10], [55.9, 1.8]],
             zoomControl=False,
             attributionControl=False,
             style={"width": "1200px", "height": "1200px", "background": "white"},
@@ -137,7 +135,9 @@ class LeafletChoroplethMap:
             ),
         ]
 
-    def _add_data_to_geojson(self):
+    def _add_data_to_geojson_and_get_bounds(self):
+        """Adds data to features, highlights selected LA, and returns dl.GeoJSON + selected_bounds."""
+        selected_bounds = None
         info_map = {
             row["Area_Code"]: {
                 "value": row[self.column_to_plot],
@@ -168,44 +168,53 @@ class LeafletChoroplethMap:
                 feature["properties"]["area"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data available"
 
-            # ⭐ Only for selected LA
+            # Highlight only the selected LA
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
                 feature["properties"]["style"] = {
-                    "color": "red",  # border color
-                    "weight": 4,  # thicker border
-                    "fillOpacity": feature.get("properties", {}).get(
-                        "fillOpacity", 0.7
-                    ),  # keep fill
+                    "color": "red",
+                    "weight": 4,
+                    "fillOpacity": feature.get("properties", {}).get("fillOpacity", 0.7),
                 }
+
+                # Compute bounds of the selected feature
+                coords = []
+                geom_type = feature["geometry"]["type"]
+                if geom_type == "Polygon":
+                    coords = feature["geometry"]["coordinates"][0]
+                elif geom_type == "MultiPolygon":
+                    for poly in feature["geometry"]["coordinates"]:
+                        coords.extend(poly[0])
+                lats = [pt[1] for pt in coords]
+                lngs = [pt[0] for pt in coords]
+                selected_bounds = [[min(lats), min(lngs)], [max(lats), max(lngs)]]
+
             else:
-                # Make sure all other LAs do NOT keep old style
                 feature["properties"].pop("style", None)
 
-    def _get_dl_geojson(self):
-        style_handle = self._get_style_handle()
-        colorscale = self._get_colorscale()
-        style = {
-            "weight": 2,
-            "opacity": 1,
-            "color": "white",
-            "fillOpacity": 0.7 if self.show_tile_layer else 1,
-        }
-        hover_style = arrow_function({"weight": 5, "color": "#666", "dashArray": ""})
-        return dl.GeoJSON(
+        # Create the GeoJSON component
+        geojson_layer = dl.GeoJSON(
             data=self.geojson_data,
             id="geojson",
-            zoomToBounds=True,
-            zoomToBoundsOnClick=True,
-            style=style_handle,
-            hoverStyle=hover_style,
+            hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
+            style=self._get_style_handle(),
             hideout={
-                "colorscale": colorscale,  # Use hex strings
-                "style": style,
+                "colorscale": self._get_colorscale(),
+                "style": {
+                    "weight": 2,
+                    "opacity": 1,
+                    "color": "white",
+                    "fillOpacity": 0.7 if self.show_tile_layer else 1,
+                },
                 "colorProp": "density",
                 "min": self.df[self.column_to_plot].min(),
                 "max": self.df[self.column_to_plot].max(),
             },
         )
+
+        return geojson_layer, selected_bounds
+
+    def _get_dl_geojson(self):
+        return self._add_data_to_geojson_and_get_bounds()
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
