@@ -79,7 +79,7 @@ class LeafletChoroplethMap:
         children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
             self._get_colorbar(),
-            *([self._get_colorbar_title(self.enable_zoom)] if self._get_colorbar_title(self.enable_zoom) else []),
+            *([self._get_colorbar_title(self.enable_zoom)]),
             geojson_layer,
         ]
 
@@ -105,10 +105,18 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "100%", "height": "960px", "background": "white"},
         )
+        # Build children list safely (exclude None)
+        children = [
+            *([dl.TileLayer()] if self.show_tile_layer else []),
+            self._get_colorbar(),
+            *([self._get_colorbar_title()]),
+            geojson_layer,
+        ]
         download_choropleth_map = dl.Map(
             children=children,
-            center=[54.5, -25.0],
-            zoom=7.5,
+            bounds=[[49.5, -30], [60, 2]],
+            # center=[54.5, -25.0],
+            # zoom=7.5,
             maxBounds=[[49.5, -30], [60, 2]],
             zoomControl=False,
             attributionControl=False,
@@ -210,6 +218,8 @@ class LeafletChoroplethMap:
         # Create the GeoJSON component
         geojson_layer = dl.GeoJSON(
             data=self.geojson_data,
+            zoomToBounds=True,
+            zoomToBoundsOnClick=True,
             id="geojson",
             hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
