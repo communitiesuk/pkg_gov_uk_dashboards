@@ -200,6 +200,13 @@ class LeafletChoroplethMap:
             else:
                 feature["properties"].pop("style", None)
 
+        style = {
+            "weight": 2,
+            "opacity": 1,
+            "color": "white",
+            "fillOpacity": 0.7 if self.show_tile_layer else 1,
+        }
+        
         # Create the GeoJSON component
         geojson_layer = dl.GeoJSON(
             data=self.geojson_data,
@@ -208,12 +215,7 @@ class LeafletChoroplethMap:
             style=self._get_style_handle(),
             hideout={
                 "colorscale": self._get_colorscale(),
-                "style": {
-                    "weight": 2,
-                    "opacity": 1,
-                    "color": "white",
-                    "fillOpacity": 0.7 if self.show_tile_layer else 1,
-                },
+                "style": style,
                 "colorProp": "density",
                 "min": self.df[self.column_to_plot].min(),
                 "max": self.df[self.column_to_plot].max(),
