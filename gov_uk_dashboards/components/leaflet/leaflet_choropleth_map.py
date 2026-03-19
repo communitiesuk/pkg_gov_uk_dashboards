@@ -112,16 +112,28 @@ class LeafletChoroplethMap:
             *([self._get_colorbar_title()]),
             geojson_layer,
         ]
-        download_choropleth_map = dl.Map(
-            children=children,
-            bounds=[[49.5, -30], [60, 2]],
-            center=[54.5, -25.0],
-            zoom=7.5,
-            maxBounds=[[49.5, -30], [60, 2]],
-            zoomControl=False,
-            attributionControl=False,
-            style={"width": "1200px", "height": "1200px", "background": "white"},
-        )
+        if self.selected_la:
+            download_choropleth_map = dl.Map(
+                children=children,
+                bounds=[[49.5, -30], [60, 2]],
+                # center=[54.5, -25.0],
+                # zoom=7.5,
+                maxBounds=[[49.5, -30], [60, 2]],
+                zoomControl=False,
+                attributionControl=False,
+                style={"width": "1200px", "height": "1200px", "background": "white"},
+            )
+        else:
+            download_choropleth_map = dl.Map(
+                children=children,
+                bounds=[[49.5, -30], [60, 2]],
+                center=[54.5, -25.0],
+                zoom=7.5,
+                maxBounds=[[49.5, -30], [60, 2]],
+                zoomControl=False,
+                attributionControl=False,
+                style={"width": "1200px", "height": "1200px", "background": "white"},
+            )    
         choropleth_map = display_chart_or_table_with_header(
             choropleth_map,
             self.title,
