@@ -73,7 +73,7 @@ class LeafletChoroplethMap:
         - dl.Map: leaflet choropleth map for chart download
         """
         """Builds the choropleth map with proper highlighting and zoom."""
-        geojson_layer, selected_bounds = self._get_dl_geojson()
+        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
         children = [
@@ -99,6 +99,8 @@ class LeafletChoroplethMap:
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
+            center=[54.5, -2.5],  # Centered on the UK
+            zoom=6.5,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "960px", "background": "white"},
@@ -219,9 +221,6 @@ class LeafletChoroplethMap:
         )
 
         return geojson_layer, selected_bounds
-
-    def _get_dl_geojson(self):
-        return self._add_data_to_geojson_and_get_bounds()
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
