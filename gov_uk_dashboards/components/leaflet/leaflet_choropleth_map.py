@@ -91,7 +91,6 @@ class LeafletChoroplethMap:
             "touchZoom": False,
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
-
         choropleth_map = dl.Map(
             children=children,
             bounds=[[49.8, -10], [55.9, 1.8]],
@@ -108,7 +107,7 @@ class LeafletChoroplethMap:
             children=children,
             center=[54.5, -25.0],
             zoom=7.5,
-            maxBounds=[[49.8, -10], [55.9, 1.8]],
+            maxBounds=[[49.5, -30], [60, 2]],
             zoomControl=False,
             attributionControl=False,
             style={"width": "1200px", "height": "1200px", "background": "white"},
