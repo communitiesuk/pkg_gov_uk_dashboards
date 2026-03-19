@@ -115,8 +115,8 @@ class LeafletChoroplethMap:
         download_choropleth_map = dl.Map(
             children=children,
             bounds=[[49.5, -30], [60, 2]],
-            # center=[54.5, -25.0],
-            # zoom=7.5,
+            center=[54.5, -25.0],
+            zoom=7.5,
             maxBounds=[[49.5, -30], [60, 2]],
             zoomControl=False,
             attributionControl=False,
