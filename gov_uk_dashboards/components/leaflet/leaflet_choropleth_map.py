@@ -67,6 +67,11 @@ class LeafletChoroplethMap:
         self.id_for_choropleth_map_on_page = "choropleth-map-"+id_for_choropleth_map_on_page
 
     def get_leaflet_choropleth_map(self):
+        """Creates and returns:
+        - dl.Map: leaflet choropleth map chart for display on application, which highlights and zooms to selected LA.
+        - List[List[float]]: bounds for selected LA
+        - dl.Map: leaflet choropleth map for chart download
+        """
         """Builds the choropleth map with proper highlighting and zoom."""
         geojson_layer, selected_bounds = self._get_dl_geojson()
 
@@ -89,7 +94,6 @@ class LeafletChoroplethMap:
 
         choropleth_map = dl.Map(
             children=children,
-            # Zoom to selected LA or fallback to full England
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={"padding": [20, 20], "maxZoom": 10},  # ensures LA fills map nicely
