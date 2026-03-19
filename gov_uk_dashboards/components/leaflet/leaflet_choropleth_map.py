@@ -37,6 +37,7 @@ class LeafletChoroplethMap:
         area_column: str,
         title: str,
         instance_number: int,
+        id_for_choropleth_map_on_page: Optional[str]="",
         subtitle: Optional[str] = None,
         enable_zoom: bool = True,
         download_chart_button_id: Optional[str] = None,
@@ -63,6 +64,7 @@ class LeafletChoroplethMap:
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
+        self.id_for_choropleth_map_on_page = "choropleth-map-"+id_for_choropleth_map_on_page
 
     def get_leaflet_choropleth_map(self):
         """Builds the choropleth map with proper highlighting and zoom."""
@@ -89,7 +91,7 @@ class LeafletChoroplethMap:
             children=children,
             # Zoom to selected LA or fallback to full England
             bounds=[[49.8, -10], [55.9, 1.8]],
-            id=f"choropleth-map-{self.instance_number}",
+            id=self.id_for_choropleth_map_on_page,
             boundsOptions={"padding": [20, 20], "maxZoom": 10},  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
