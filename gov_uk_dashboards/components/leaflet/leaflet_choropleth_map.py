@@ -82,6 +82,8 @@ class LeafletChoroplethMap:
 
         # Build children list safely (exclude None)
         display_children = [
+            dl.Pane(name="hover-pane", style={"zIndex": 500}), 
+            dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             *([dl.TileLayer()] if self.show_tile_layer else []),
             self._get_colorbar(),
             *([self._get_colorbar_title(self.enable_zoom)]),
@@ -184,7 +186,7 @@ class LeafletChoroplethMap:
         }
 
         for feature in geojson_copy["features"]:
-            region_code = feature["properties"]["geo_id"]
+            region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
             if info:
                 feature["properties"]["density"] = info["value"]
@@ -196,7 +198,6 @@ class LeafletChoroplethMap:
                 else:
                     for col in self.hover_text_columns:
                         tooltip_parts.append(f"<br>{col}: {info[col]}")
-
                 feature["properties"]["tooltip"] = "".join(tooltip_parts)
             else:
                 feature["properties"]["density"] = None
@@ -205,15 +206,24 @@ class LeafletChoroplethMap:
 
             # Highlight only the selected LA
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
-                feature["properties"]["style"] = {
-                    "color": "red",
-                    "weight": 4,
-                    "fillOpacity": feature.get("properties", {}).get(
-                        "fillOpacity", 0.7
-                    ),
-                }
+                # Start from existing style (or empty dict)
+                style = feature.get("properties", {}).get("style", {})
+                
+                # Remove the border
+                style["color"] = "transparent"
+                style["weight"] = 0
+                
+                # Keep fillOpacity / fillColor from choropleth if present
+                if "fillOpacity" not in style:
+                    style["fillOpacity"] = 0.7
 
-                # Compute bounds of the selected feature
+                feature["properties"]["style"] = style
+
+                # Keep overlay info for the separate border layer
+                feature["properties"]["permanentWeight"] = 6  # ensures it never shrinks
+                feature["properties"]["hoverColor"] = "red"
+                feature["properties"]["hoverWeight"] = 6  # same as permanent
+                # Compute bounds
                 coords = []
                 geom_type = feature["geometry"]["type"]
                 if geom_type == "Polygon":
@@ -226,34 +236,82 @@ class LeafletChoroplethMap:
                 selected_bounds = [[min(lats), min(lngs)], [max(lats), max(lngs)]]
 
             else:
-                feature["properties"].pop("style", None)
+                # Other LAs
+                feature["properties"]["style"] = {
+                    "color": "white",
+                    "weight": 2,
+                    "fillOpacity": 0.7,
+                }
+                feature["properties"]["permanentWeight"] = 2
+                feature["properties"]["hoverColor"] = "#666"
+                feature["properties"]["hoverWeight"] = 4  # smaller than selected LA
 
-        style = {
+        # Move selected LA to the end so it's drawn on top
+        features = [
+            f
+            for f in geojson_copy["features"]
+            if f["properties"].get("area") != self.selected_la
+        ]
+        selected_features = [
+            f
+            for f in geojson_copy["features"]
+            if f["properties"].get("area") == self.selected_la
+        ]
+        geojson_copy["features"] = features + selected_features
+
+        # Default style
+        default_style = {
             "weight": 2,
             "opacity": 1,
             "color": "white",
-            "fillOpacity": 0.7 if self.show_tile_layer else 1,
+            "fillOpacity": 0.7,
         }
-        # Create the GeoJSON component
-        geojson_layer = dl.GeoJSON(
-            data=geojson_copy,
-            zoomToBounds=not for_download,  # disable auto-zoom for download
-            zoomToBoundsOnClick=True,
-            id=(
-                f"geojson-{self.selected_la or 'national'}-"
-                f"{'download' if for_download else 'display'}-"
-                f"{int(time.time() * 1000)}"
-            ),  # unique ID
-            hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
+
+        # Layer for selected LA only
+        selected_features = [
+            f
+            for f in geojson_copy["features"]
+            if f["properties"]["area"] == self.selected_la
+        ]
+        other_layer = dl.GeoJSON(
+            data={"type": "FeatureCollection", "features": geojson_copy["features"]},
             style=self._get_style_handle(),
+            hoverStyle={
+                "color": "#666",
+                "weight": 4,
+                "fillOpacity": 0.7,
+                "dashArray": "",
+            },
             hideout={
                 "colorscale": self._get_colorscale(),
-                "style": style,
+                "style": default_style,
                 "colorProp": "density",
                 "min": self.df[self.column_to_plot].min(),
                 "max": self.df[self.column_to_plot].max(),
             },
+            options=dict(pane="hover-pane"),  # interactive layer below selected border
         )
+
+        # Selected LA red outline (non-interactive)
+        selected_layer = dl.GeoJSON(
+            data={"type": "FeatureCollection", "features": selected_features},
+            options=dict(
+                pane="selected-top-pane",  # 👈 draw on top of hover layer
+                style={
+                    "color": "red",
+                    "weight": 6,
+                    "fillOpacity": 0,
+                },
+                hoverStyle={
+                "color": "red",
+                "weight": 8,
+                "fillOpacity": 0,
+                "dashArray": "",
+            },
+                interactive=True,  # prevent hover blocking
+            ),
+        )
+        geojson_layer = dl.LayerGroup([other_layer, selected_layer])
 
         return geojson_layer, selected_bounds
 
