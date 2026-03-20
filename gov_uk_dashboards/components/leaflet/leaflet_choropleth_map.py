@@ -60,11 +60,11 @@ class LeafletChoroplethMap:
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.color_scale_is_discrete = color_scale_is_discrete
+        self.id_for_choropleth_map_on_page = "choropleth-map-"+id_for_choropleth_map_on_page
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self._add_data_to_geojson_and_get_bounds()
+        self._add_data_to_geojson_and_get_bounds(False)
         self.instance_number = instance_number
-        self.id_for_choropleth_map_on_page = "choropleth-map-"+id_for_choropleth_map_on_page
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -73,7 +73,8 @@ class LeafletChoroplethMap:
         - dl.Map: leaflet choropleth map for chart download
         """
         """Builds the choropleth map with proper highlighting and zoom."""
-        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds(False)
+        geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds(True)
 
         # Build children list safely (exclude None)
         children = [
@@ -110,7 +111,7 @@ class LeafletChoroplethMap:
             *([dl.TileLayer()] if self.show_tile_layer else []),
             self._get_colorbar(),
             *([self._get_colorbar_title()]),
-            geojson_layer,
+            geojson_layer_download,
         ]
         if self.selected_la:
             download_choropleth_map = dl.Map(
@@ -129,6 +130,7 @@ class LeafletChoroplethMap:
                 bounds=[[49.5, -30], [60, 2]],
                 center=[54.5, -25.0],
                 zoom=7.5,
+
                 maxBounds=[[49.5, -30], [60, 2]],
                 zoomControl=False,
                 attributionControl=False,
@@ -156,15 +158,15 @@ class LeafletChoroplethMap:
             html.Div(
                 [download_choropleth_map_display],
                 id=f"{self.download_chart_button_id}-hidden-map-container",
-                style={
-                    "position": "absolute",
-                    "top": "-10000px",
-                    "left": "-10000px",
-                },  # hide off screen
+                # style={
+                #     "position": "absolute",
+                #     "top": "-10000px",
+                #     "left": "-10000px",
+                # },  # hide off screen
             ),
         ]
 
-    def _add_data_to_geojson_and_get_bounds(self):
+    def _add_data_to_geojson_and_get_bounds(self, for_download:bool):
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON + selected_bounds."""
         selected_bounds = None
         info_map = {
@@ -226,13 +228,12 @@ class LeafletChoroplethMap:
             "color": "white",
             "fillOpacity": 0.7 if self.show_tile_layer else 1,
         }
-        
         # Create the GeoJSON component
         geojson_layer = dl.GeoJSON(
             data=self.geojson_data,
             zoomToBounds=True,
             zoomToBoundsOnClick=True,
-            id="geojson",
+            id=f"geojson-{self.selected_la}-{self.id_for_choropleth_map_on_page}-{"download" if for_download else "page"}",
             hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
             hideout={
