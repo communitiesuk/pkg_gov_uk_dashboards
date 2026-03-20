@@ -217,7 +217,7 @@ class LeafletChoroplethMap:
 
                 # Keep fillOpacity / fillColor from choropleth if present
                 if "fillOpacity" not in style:
-                    style["fillOpacity"] = 0.7
+                    style["fillOpacity"] = 0.7 if self.show_tile_layer else 1
 
                 feature["properties"]["style"] = style
 
@@ -242,7 +242,7 @@ class LeafletChoroplethMap:
                 feature["properties"]["style"] = {
                     "color": "white",
                     "weight": 2,
-                    "fillOpacity": 0.7,
+                    "fillOpacity": 0.7 if self.show_tile_layer else 1,
                 }
                 feature["properties"]["permanentWeight"] = 2
                 feature["properties"]["hoverColor"] = "#666"
