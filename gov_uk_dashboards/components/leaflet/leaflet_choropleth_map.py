@@ -225,7 +225,7 @@ class LeafletChoroplethMap:
                 feature["properties"]["permanentWeight"] = 6  # ensures it never shrinks
                 feature["properties"]["hoverColor"] = "red"
                 feature["properties"]["hoverWeight"] = 6  # same as permanent
-                # Compute bounds
+                # Compute bounds of the selected feature
                 coords = []
                 geom_type = feature["geometry"]["type"]
                 if geom_type == "Polygon":
@@ -266,7 +266,7 @@ class LeafletChoroplethMap:
             "weight": 2,
             "opacity": 1,
             "color": "white",
-            "fillOpacity": 0.7,
+            "fillOpacity": 0.7 if self.show_tile_layer else 1,
         }
 
         # Layer for selected LA only
@@ -277,13 +277,8 @@ class LeafletChoroplethMap:
         ]
         other_layer = dl.GeoJSON(
             data={"type": "FeatureCollection", "features": geojson_copy["features"]},
+            hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
-            hoverStyle={
-                "color": "#666",
-                "weight": 4,
-                "fillOpacity": 0.7,
-                "dashArray": "",
-            },
             hideout={
                 "colorscale": self._get_colorscale(),
                 "style": default_style,
