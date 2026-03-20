@@ -833,7 +833,7 @@ class ContextCard:
                 colour, arrow_direction, prefix = get_change_attributes(
                     percentage_change, increase_is_positive
                 )
-                formatted_difference_number=0
+                formatted_difference_number = 0
             else:  # formatted_difference is not None
                 formatted_difference_number = int(formatted_difference.split(" ")[0])
                 colour, arrow_direction, prefix = get_change_attributes(
