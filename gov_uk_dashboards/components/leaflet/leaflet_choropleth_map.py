@@ -1,6 +1,6 @@
 """Leaflet choropleth map class"""
 
-import copy  # at top of your file
+import copy
 import time
 from typing import Optional
 from dash_extensions.javascript import Namespace
