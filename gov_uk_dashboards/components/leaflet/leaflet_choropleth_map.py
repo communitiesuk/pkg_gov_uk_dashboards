@@ -1,7 +1,9 @@
 """Leaflet choropleth map class"""
 
+import copy  # at top of your file
+import time
 from typing import Optional
-from dash_extensions.javascript import arrow_function, Namespace
+from dash_extensions.javascript import Namespace
 import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash import html
@@ -37,7 +39,7 @@ class LeafletChoroplethMap:
         area_column: str,
         title: str,
         instance_number: int,
-        id_for_choropleth_map_on_page: Optional[str]="",
+        id_for_choropleth_map_on_page: Optional[str] = "",
         subtitle: Optional[str] = None,
         enable_zoom: bool = True,
         download_chart_button_id: Optional[str] = None,
@@ -60,7 +62,9 @@ class LeafletChoroplethMap:
         self.download_chart_button_id = download_chart_button_id
         self.download_data_button_id = download_data_button_id
         self.color_scale_is_discrete = color_scale_is_discrete
-        self.id_for_choropleth_map_on_page = "choropleth-map-"+id_for_choropleth_map_on_page
+        self.id_for_choropleth_map_on_page = (
+            "choropleth-map-" + id_for_choropleth_map_on_page
+        )
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson_and_get_bounds(False)
@@ -77,7 +81,7 @@ class LeafletChoroplethMap:
         geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds(True)
 
         # Build children list safely (exclude None)
-        children = [
+        display_children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
             self._get_colorbar(),
             *([self._get_colorbar_title(self.enable_zoom)]),
@@ -93,10 +97,13 @@ class LeafletChoroplethMap:
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
         choropleth_map = dl.Map(
-            children=children,
+            children=display_children,
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
-            boundsOptions={"padding": [20, 20], "maxZoom": 10},  # ensures LA fills map nicely
+            boundsOptions={
+                "padding": [20, 20],
+                "maxZoom": 10,
+            },  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
             maxBounds=[[49.8, -10], [55.9, 1.8]],
@@ -107,35 +114,27 @@ class LeafletChoroplethMap:
             style={"width": "100%", "height": "960px", "background": "white"},
         )
         # Build children list safely (exclude None)
-        children = [
+        download_children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
             self._get_colorbar(),
             *([self._get_colorbar_title()]),
             geojson_layer_download,
         ]
-        if self.selected_la:
-            download_choropleth_map = dl.Map(
-                children=children,
-                bounds=[[49.5, -30], [60, 2]],
-                # center=[54.5, -25.0],
-                # zoom=7.5,
-                maxBounds=[[49.5, -30], [60, 2]],
-                zoomControl=False,
-                attributionControl=False,
-                style={"width": "1200px", "height": "1200px", "background": "white"},
-            )
-        else:
-            download_choropleth_map = dl.Map(
-                children=children,
-                bounds=[[49.5, -30], [60, 2]],
-                center=[54.5, -25.0],
-                zoom=7.5,
 
-                maxBounds=[[49.5, -30], [60, 2]],
-                zoomControl=False,
-                attributionControl=False,
-                style={"width": "1200px", "height": "1200px", "background": "white"},
-            )    
+        download_choropleth_map = dl.Map(
+            children=download_children,
+            center=[54.5, -2.5],
+            zoom=6.5,
+            maxBounds=[
+                [49.5, -10],
+                [57.2, 2],
+            ],  # restrict panning but keep England tight
+            zoomControl=False,
+            attributionControl=False,
+            style={"width": "1200px", "height": "1200px", "background": "white"},
+            id=f"download-map-{self.selected_la or 'national'}-{int(time.time()*1000)}",  # unique ID to force map to regenerate
+        )
+
         choropleth_map = display_chart_or_table_with_header(
             choropleth_map,
             self.title,
@@ -158,17 +157,20 @@ class LeafletChoroplethMap:
             html.Div(
                 [download_choropleth_map_display],
                 id=f"{self.download_chart_button_id}-hidden-map-container",
-                # style={
-                #     "position": "absolute",
-                #     "top": "-10000px",
-                #     "left": "-10000px",
-                # },  # hide off screen
+                style={
+                    "position": "absolute",
+                    "top": "-10000px",
+                    "left": "-10000px",
+                },  # hide off screen
             ),
         ]
 
-    def _add_data_to_geojson_and_get_bounds(self, for_download:bool):
+    def _add_data_to_geojson_and_get_bounds(self, for_download: bool):
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON + selected_bounds."""
         selected_bounds = None
+        # Make a deep copy so each map (display or download) has independent data
+        geojson_copy = copy.deepcopy(self.geojson_data)
+
         info_map = {
             row["Area_Code"]: {
                 "value": row[self.column_to_plot],
@@ -178,11 +180,10 @@ class LeafletChoroplethMap:
             for row in self.df.iter_rows(named=True)
         }
 
-        for feature in self.geojson_data["features"]:
+        for feature in geojson_copy["features"]:
             region_code = feature["properties"]["geo_id"]
             info = info_map.get(region_code)
             if info:
-
                 feature["properties"]["density"] = info["value"]
                 feature["properties"]["area"] = info["area"]
 
@@ -204,7 +205,9 @@ class LeafletChoroplethMap:
                 feature["properties"]["style"] = {
                     "color": "red",
                     "weight": 4,
-                    "fillOpacity": feature.get("properties", {}).get("fillOpacity", 0.7),
+                    "fillOpacity": feature.get("properties", {}).get(
+                        "fillOpacity", 0.7
+                    ),
                 }
 
                 # Compute bounds of the selected feature
@@ -230,10 +233,12 @@ class LeafletChoroplethMap:
         }
         # Create the GeoJSON component
         geojson_layer = dl.GeoJSON(
-            data=self.geojson_data,
-            zoomToBounds=True,
+            data=geojson_copy,
+            zoomToBounds=(
+                False if for_download else True
+            ),  # disable auto-zoom for download
             zoomToBoundsOnClick=True,
-            id=f"geojson-{self.selected_la}-{self.id_for_choropleth_map_on_page}-{"download" if for_download else "page"}",
+            id=f"geojson-{self.selected_la or 'national'}-{'download' if for_download else 'display'}-{int(time.time()*1000)}",  # unique ID
             hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
             hideout={
