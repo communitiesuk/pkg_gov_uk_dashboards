@@ -82,9 +82,9 @@ class LeafletChoroplethMap:
 
         # Build children list safely (exclude None)
         display_children = [
-            dl.Pane(name="hover-pane", style={"zIndex": 500}), 
-            dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             *([dl.TileLayer()] if self.show_tile_layer else []),
+            dl.Pane(name="hover-pane", style={"zIndex": 500}),
+            dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             self._get_colorbar(),
             *([self._get_colorbar_title(self.enable_zoom)]),
             geojson_layer,
@@ -118,6 +118,8 @@ class LeafletChoroplethMap:
         # Build children list safely (exclude None)
         download_children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
+            dl.Pane(name="hover-pane", style={"zIndex": 500}),
+            dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             self._get_colorbar(),
             *([self._get_colorbar_title()]),
             geojson_layer_download,
@@ -208,11 +210,11 @@ class LeafletChoroplethMap:
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
                 # Start from existing style (or empty dict)
                 style = feature.get("properties", {}).get("style", {})
-                
+
                 # Remove the border
                 style["color"] = "transparent"
                 style["weight"] = 0
-                
+
                 # Keep fillOpacity / fillColor from choropleth if present
                 if "fillOpacity" not in style:
                     style["fillOpacity"] = 0.7
@@ -303,11 +305,11 @@ class LeafletChoroplethMap:
                     "fillOpacity": 0,
                 },
                 hoverStyle={
-                "color": "red",
-                "weight": 8,
-                "fillOpacity": 0,
-                "dashArray": "",
-            },
+                    "color": "red",
+                    "weight": 8,
+                    "fillOpacity": 0,
+                    "dashArray": "",
+                },
                 interactive=True,  # prevent hover blocking
             ),
         )
