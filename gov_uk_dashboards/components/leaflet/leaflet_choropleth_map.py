@@ -72,11 +72,11 @@ class LeafletChoroplethMap:
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
-        - dl.Map: leaflet choropleth map chart for display on application, which highlights and zooms to selected LA.
+        - dl.Map: leaflet choropleth map chart for display on application, which highlights and
+            zooms to selected LA.
         - List[List[float]]: bounds for selected LA
-        - dl.Map: leaflet choropleth map for chart download
+        - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        """Builds the choropleth map with proper highlighting and zoom."""
         geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds(False)
         geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds(True)
 
@@ -132,7 +132,8 @@ class LeafletChoroplethMap:
             zoomControl=False,
             attributionControl=False,
             style={"width": "1200px", "height": "1200px", "background": "white"},
-            id=f"download-map-{self.selected_la or 'national'}-{int(time.time()*1000)}",  # unique ID to force map to regenerate
+            id=f"download-map-{self.selected_la or 'national'}-{int(time.time()*1000)}",
+            # unique ID to force map to regenerate
         )
 
         choropleth_map = display_chart_or_table_with_header(
@@ -166,7 +167,9 @@ class LeafletChoroplethMap:
         ]
 
     def _add_data_to_geojson_and_get_bounds(self, for_download: bool):
-        """Adds data to features, highlights selected LA, and returns dl.GeoJSON + selected_bounds."""
+        """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
+        selected_bounds."""
+        # pylint: disable=too-many-locals
         selected_bounds = None
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
@@ -234,11 +237,13 @@ class LeafletChoroplethMap:
         # Create the GeoJSON component
         geojson_layer = dl.GeoJSON(
             data=geojson_copy,
-            zoomToBounds=(
-                False if for_download else True
-            ),  # disable auto-zoom for download
+            zoomToBounds=not for_download,  # disable auto-zoom for download
             zoomToBoundsOnClick=True,
-            id=f"geojson-{self.selected_la or 'national'}-{'download' if for_download else 'display'}-{int(time.time()*1000)}",  # unique ID
+            id=(
+                f"geojson-{self.selected_la or 'national'}-"
+                f"{'download' if for_download else 'display'}-"
+                f"{int(time.time() * 1000)}"
+            ),  # unique ID
             hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
             hideout={
