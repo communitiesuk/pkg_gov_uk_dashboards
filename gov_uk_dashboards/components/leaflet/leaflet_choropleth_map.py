@@ -244,8 +244,8 @@ class LeafletChoroplethMap:
         ]
         geojson_copy["features"] = features + selected_features
 
-        # Default style
-        default_style = {
+
+        style = {
             "weight": 2,
             "opacity": 1,
             "color": "white",
@@ -264,7 +264,7 @@ class LeafletChoroplethMap:
             style=self._get_style_handle(),
             hideout={
                 "colorscale": self._get_colorscale(),
-                "style": default_style,
+                "style": style,
                 "colorProp": "density",
                 "min": self.df[self.column_to_plot].min(),
                 "max": self.df[self.column_to_plot].max(),

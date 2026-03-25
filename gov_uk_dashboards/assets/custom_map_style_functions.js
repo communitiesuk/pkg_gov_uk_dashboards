@@ -50,7 +50,7 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
 
             const value = feature.properties[colorProp];
             const colors = Array.from(colorscale); // ensure no mutation
-        
+
             if (value === null || value === undefined) {
                 return {
                     ...style,
