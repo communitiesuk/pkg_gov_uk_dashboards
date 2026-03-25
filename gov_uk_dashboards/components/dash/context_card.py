@@ -927,14 +927,17 @@ class ContextCard:
                         "text-no-transform",
                     )
                 )
-                content.append(
-                    html.Span(
-                        f"{format_percentage(abs(percentage_change))}{unit}",
-                        className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
-                        "changed-from-number-formatting",
+                if percentage_change != 0:
+                    content.append(
+                        html.Span(
+                            f"{format_percentage(abs(percentage_change))}{unit}",
+                            className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-margin-right-1 "
+                            "changed-from-number-formatting",
+                        )
                     )
-                )
-                comparison_period_text = "from " + comparison_period_text
+                comparison_period_text = (
+                    "from " if percentage_change != 0 else ""
+                ) + comparison_period_text
 
             content.append(
                 html.Span(
