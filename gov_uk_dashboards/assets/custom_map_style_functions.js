@@ -47,7 +47,7 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 style,
                 min          // e.g., 1
             } = context.hideout;
-        
+
             const value = feature.properties[colorProp];
             const colors = Array.from(colorscale); // ensure no mutation
         
@@ -57,13 +57,13 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                     fillColor: "#b1b4b6"  // default gray
                 };
             }
-        
+
             // Convert value to zero-based index
             const idx = value - min;
-        
+
             // Defensive check
             const fillColor = colors[idx] || "#b1b4b6";
-        
+
             return {
                 ...style,
                 fillColor: fillColor
