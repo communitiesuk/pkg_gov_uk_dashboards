@@ -922,12 +922,12 @@ class ContextCard:
             else:
                 content.append(
                     html.Span(
-                        f"{prefix} " if percentage_change != 0.0 else "unchanged from ",
+                        f"{prefix} " if percentage_change != 0 else "unchanged from ",
                         className="govuk-body-s govuk-!-margin-bottom-0 text-color-inherit "
                         "text-no-transform",
                     )
                 )
-                if percentage_change != 0.0:
+                if percentage_change != 0:
                     content.append(
                         html.Span(
                             f"{format_percentage(abs(percentage_change))}{unit}",
@@ -936,7 +936,7 @@ class ContextCard:
                         )
                     )
                 comparison_period_text = (
-                    "from " if percentage_change != 0.0 else ""
+                    "from " if percentage_change != 0 else ""
                 ) + comparison_period_text
 
             content.append(
