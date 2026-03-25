@@ -243,13 +243,7 @@ class LeafletChoroplethMap:
             "fillOpacity": 0.7 if self.show_tile_layer else 1,
         }
 
-        # Layer for selected LA only
-        selected_features = [
-            f
-            for f in geojson_copy["features"]
-            if f["properties"]["area"] == self.selected_la
-        ]
-        other_layer = dl.GeoJSON(
+        national_layer = dl.GeoJSON(
             data={"type": "FeatureCollection", "features": geojson_copy["features"]},
             hoverStyle={"weight": 5, "color": "#666", "dashArray": ""},
             style=self._get_style_handle(),
@@ -263,7 +257,8 @@ class LeafletChoroplethMap:
             options={"pane": "hover-pane"},  # interactive layer below selected border
         )
 
-        selected_layer = dl.GeoJSON(
+        # Layer for selected LA only
+        selected_la_layer = dl.GeoJSON(
             data={"type": "FeatureCollection", "features": selected_features},
             options={
                 "pane": "selected-top-pane",  # draw on top of hover layer
@@ -281,7 +276,7 @@ class LeafletChoroplethMap:
                 "interactive": True,
             },
         )
-        geojson_layer = dl.LayerGroup([other_layer, selected_layer])
+        geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
         return geojson_layer, selected_bounds
 
