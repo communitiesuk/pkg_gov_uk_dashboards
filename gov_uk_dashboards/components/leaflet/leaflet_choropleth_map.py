@@ -67,7 +67,7 @@ class LeafletChoroplethMap:
         )
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self._add_data_to_geojson_and_get_bounds(False)
+        self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
 
     def get_leaflet_choropleth_map(self):
@@ -77,8 +77,8 @@ class LeafletChoroplethMap:
         - List[List[float]]: bounds for selected LA
         - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds(False)
-        geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds(True)
+        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
         display_children = [
@@ -170,7 +170,7 @@ class LeafletChoroplethMap:
             ),
         ]
 
-    def _add_data_to_geojson_and_get_bounds(self, for_download: bool):
+    def _add_data_to_geojson_and_get_bounds(self):
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
         selected_bounds."""
         # pylint: disable=too-many-locals
@@ -208,23 +208,6 @@ class LeafletChoroplethMap:
 
             # Highlight only the selected LA
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
-                # Start from existing style (or empty dict)
-                style = feature.get("properties", {}).get("style", {})
-
-                # Remove the border
-                style["color"] = "transparent"
-                style["weight"] = 0
-
-                # Keep fillOpacity / fillColor from choropleth if present
-                if "fillOpacity" not in style:
-                    style["fillOpacity"] = 0.7 if self.show_tile_layer else 1
-
-                feature["properties"]["style"] = style
-
-                # Keep overlay info for the separate border layer
-                feature["properties"]["permanentWeight"] = 6  # ensures it never shrinks
-                feature["properties"]["hoverColor"] = "red"
-                feature["properties"]["hoverWeight"] = 6  # same as permanent
                 # Compute bounds of the selected feature
                 coords = []
                 geom_type = feature["geometry"]["type"]
@@ -286,27 +269,27 @@ class LeafletChoroplethMap:
                 "min": self.df[self.column_to_plot].min(),
                 "max": self.df[self.column_to_plot].max(),
             },
-            options=dict(pane="hover-pane"),  # interactive layer below selected border
+            options={"pane": "hover-pane"},  # interactive layer below selected border
         )
 
         # Selected LA red outline (non-interactive)
         selected_layer = dl.GeoJSON(
             data={"type": "FeatureCollection", "features": selected_features},
-            options=dict(
-                pane="selected-top-pane",  # 👈 draw on top of hover layer
-                style={
+            options={
+                "pane": "selected-top-pane",  # 👈 draw on top of hover layer
+                "style": {
                     "color": "red",
-                    "weight": 6,
+                    "weight": 5,
                     "fillOpacity": 0,
                 },
-                hoverStyle={
+                "hoverStyle": {
                     "color": "red",
                     "weight": 8,
                     "fillOpacity": 0,
                     "dashArray": "",
                 },
-                interactive=True,  # prevent hover blocking
-            ),
+                "interactive": True,
+            },
         )
         geojson_layer = dl.LayerGroup([other_layer, selected_layer])
 
