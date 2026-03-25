@@ -81,14 +81,15 @@ class LeafletChoroplethMap:
         geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
-        display_children = [
+        children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             self._get_colorbar(),
             *([self._get_colorbar_title(self.enable_zoom)]),
-            geojson_layer,
         ]
+        display_children = children + [geojson_layer]
+        download_children = children + [geojson_layer_download]
 
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
@@ -115,15 +116,6 @@ class LeafletChoroplethMap:
             attributionControl=False,
             style={"width": "100%", "height": "960px", "background": "white"},
         )
-        # Build children list safely (exclude None)
-        download_children = [
-            *([dl.TileLayer()] if self.show_tile_layer else []),
-            dl.Pane(name="hover-pane", style={"zIndex": 500}),
-            dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
-            self._get_colorbar(),
-            *([self._get_colorbar_title()]),
-            geojson_layer_download,
-        ]
 
         download_choropleth_map = dl.Map(
             children=download_children,
@@ -244,7 +236,6 @@ class LeafletChoroplethMap:
         ]
         geojson_copy["features"] = features + selected_features
 
-
         style = {
             "weight": 2,
             "opacity": 1,
@@ -272,11 +263,10 @@ class LeafletChoroplethMap:
             options={"pane": "hover-pane"},  # interactive layer below selected border
         )
 
-        # Selected LA red outline (non-interactive)
         selected_layer = dl.GeoJSON(
             data={"type": "FeatureCollection", "features": selected_features},
             options={
-                "pane": "selected-top-pane",  # 👈 draw on top of hover layer
+                "pane": "selected-top-pane",  # draw on top of hover layer
                 "style": {
                     "color": "red",
                     "weight": 5,
