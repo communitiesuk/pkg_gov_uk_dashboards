@@ -9,6 +9,24 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
+    <script
+      type="text/javascript"
+      src="https://js.monitor.azure.com/scripts/b/ai.3.gbl.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript">
+      if ("{{app_insights_conn_string}}") {
+        var aiSnippet = {
+          config: {
+            connectionString: "{{app_insights_conn_string}}"
+          }
+        };
+
+        var aiInit = new Microsoft.ApplicationInsights.ApplicationInsights(aiSnippet);
+        window.appInsights = aiInit.loadAppInsights();
+        window.appInsights.trackPageView();
+      }
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id={{gtag}}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
