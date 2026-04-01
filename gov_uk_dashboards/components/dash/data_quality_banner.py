@@ -69,7 +69,7 @@ class DataQualityLabels(Enum):
     )
 
 
-def data_quality_notification_banner(label: DataQualityLabels):
+def data_quality_notification_banner(sensitivity: str, label: DataQualityLabels):
     """Return data quality notification banner based on Gov UK Design component notification
     banner component."""
     config = label.value
@@ -83,8 +83,12 @@ def data_quality_notification_banner(label: DataQualityLabels):
         ),
         ".",
     ]
+    if sensitivity == "OFFICIAL-SENSITIVE":
+        title = sensitivity + " - " + config.title
+    else:
+        title = config.title
     return notification_banner(
-        title=config.title,
+        title=title,
         text=text,
         style=config.style,
         title_color=config.title_color,
