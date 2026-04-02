@@ -10,7 +10,7 @@ setup(
     author="Ministry of Housing, Communities & Local Government",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
-    version="30.0.2",
+    version="30.0.3",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
