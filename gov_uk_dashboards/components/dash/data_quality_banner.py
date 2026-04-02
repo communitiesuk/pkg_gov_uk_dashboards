@@ -46,7 +46,7 @@ class DataQualityLabels(Enum):
     """Enumeration of standard labels used to categorize or describe data quality."""
 
     OFFICIAL = DataQualityConfig(
-        title="OFFICIAL public data",
+        title="Public data",
         text="Use with confidence.",
         style=NOTIFICATION_STYLE_GREEN,
     )
@@ -83,12 +83,9 @@ def data_quality_notification_banner(sensitivity: str, label: DataQualityLabels)
         ),
         ".",
     ]
-    if sensitivity == "OFFICIAL-SENSITIVE":
-        title = sensitivity + " - " + config.title
-    else:
-        title = config.title
+
     return notification_banner(
-        title=title,
+        title=sensitivity + " - " + config.title,
         text=text,
         style=config.style,
         title_color=config.title_color,
