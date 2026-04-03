@@ -2,7 +2,7 @@
 # Version is hardcoded to ensure uniformity no matter the platform.
 flask-basicauth~=0.2.0
 dash~=4.1.0
-Werkzeug~=3.1.7
+Werkzeug~=3.1.8
 pytest~=9.0.2
 pylint~=4.0.5
 black~=26.3.1
