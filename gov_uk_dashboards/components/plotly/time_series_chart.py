@@ -79,6 +79,7 @@ class TimeSeriesChart:
         filled_traces_dict: dict[str] = None,
         trace_names_to_prevent_hover_of_first_point_list=None,
         x_axis_column=DATE_VALID,
+        x_axis_start_datetime=None,
         x_unified_hovermode: Optional[bool] = False,
         x_hoverformat: Optional[str] = None,
         x_unified_hovertemplate: Optional[str] = None,
@@ -114,6 +115,7 @@ class TimeSeriesChart:
             trace_names_to_prevent_hover_of_first_point_list
         )
         self.x_axis_column = x_axis_column
+        self.x_axis_start_datetime = x_axis_start_datetime
         self.x_unified_hovermode = x_unified_hovermode
         self.x_hoverformat = x_hoverformat
         self.x_unified_hovertemplate = x_unified_hovertemplate
@@ -572,7 +574,11 @@ class TimeSeriesChart:
                 .alias(self.x_axis_column)
             ).sort(self.x_axis_column)
 
-            start_datetime = datetime(2024, 7, 1).date()
+            if self.x_axis_start_datetime:
+                start_datetime = self.x_axis_start_datetime
+            else:
+                start_datetime = df[self.x_axis_column].min() - relativedelta(months=1)
+
             latest_datetime = df[self.x_axis_column].max()
             tick_text = []
             current = start_datetime
@@ -582,7 +588,7 @@ class TimeSeriesChart:
 
             tick_text_length = len(tick_text)
             total_tick_points = int((tick_text_length / 5) * 7)
-            total_tick_points = min(total_tick_points, tick_text_length + 3)
+            total_tick_points = min(total_tick_points, tick_text_length + 1)
             additional_tick_points = total_tick_points - tick_text_length
             last_current_tick_text = datetime.strptime(tick_text[-1], "%b %Y")
 
