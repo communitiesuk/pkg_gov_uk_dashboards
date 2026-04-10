@@ -92,7 +92,7 @@ class LeafletChoroplethMap:
             + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
             + [geojson_layer]
         )
-        london_display_children = children + [london_layer]
+        london_display_children = children + [*([self._get_london_map_insert_title()])]+ [london_layer]
         download_children = (
             children
             + [self._get_colorbar(), *([self._get_colorbar_title()])]
@@ -551,6 +551,22 @@ class LeafletChoroplethMap:
                 },
             )
         return None
+    
+    def _get_london_map_insert_title(self):
+            return html.Div(
+                "London (zoomed)",
+                style={
+                    "position": "absolute",
+                    "top": "340px",  # Adjusted to place above the colorbar
+                    "left": "10px",  # Align with the left side of the colorbar
+                    "background": "white",
+                    "padding": "2px 6px",
+                    "borderRadius": "5px",
+                    "fontWeight": "bold",
+                    "fontSize": "14px",
+                    "zIndex": "999",  # Ensure it appears above map elements
+                },
+            )
 
     def resolve_colorbar_title(self, colorbar_title: str):
         """Returns text for colorbar title."""
