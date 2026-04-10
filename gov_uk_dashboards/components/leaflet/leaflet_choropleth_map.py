@@ -139,7 +139,7 @@ class LeafletChoroplethMap:
             center=[51.5, -0.1],  # Centered on the UK
             zoom=9,
             attributionControl=False,
-            style={"width": "100%", "height": "960px", "background": "white"},
+            style={"width": "100%", "height": "960px", "background": "white","padding-left":"40px"},
             **disabled_zoom_controls,
         )
         
@@ -198,7 +198,7 @@ class LeafletChoroplethMap:
                     style={
                         "position": "absolute",
                         "top": "300px",
-                        "right": "20px",
+                        "right": "40px",
                         "width": "350px",
                         "height": "350px",
                         "zIndex": 1000,
@@ -558,7 +558,7 @@ class LeafletChoroplethMap:
                 style={
                     "position": "absolute",
                     "top": "340px",  # Adjusted to place above the colorbar
-                    "left": "10px",  # Align with the left side of the colorbar
+                    "left": "40px",  # Align with the left side of the colorbar
                     "background": "white",
                     "padding": "2px 6px",
                     "borderRadius": "5px",
