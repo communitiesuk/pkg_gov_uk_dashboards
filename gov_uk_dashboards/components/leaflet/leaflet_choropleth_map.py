@@ -174,7 +174,7 @@ class LeafletChoroplethMap:
                 **disabled_zoom_controls,
             )
 
-            maps_container = html.Div(
+            national_and_london_maps_container = html.Div(
                 style={
                     "display": "flex",
                     "gap": "20px",  # space between maps
@@ -223,7 +223,7 @@ class LeafletChoroplethMap:
                 **disabled_zoom_controls,
             )
 
-            download_maps_container = html.Div(
+            national_and_london_download_maps_container = html.Div(
                 style={
                     "display": "flex",
                     "width": "1400px",
@@ -257,7 +257,7 @@ class LeafletChoroplethMap:
             )
 
         choropleth_map = display_chart_or_table_with_header(
-            maps_container if self.show_london_map is True else national_choropleth_map,
+            national_and_london_maps_container if self.show_london_map is True else national_choropleth_map,
             self.title,
             self.subtitle,
             None,
@@ -268,7 +268,7 @@ class LeafletChoroplethMap:
         )
         download_choropleth_map_display = display_chart_or_table_with_header(
             (
-                download_maps_container
+                national_and_london_download_maps_container
                 if self.show_london_map
                 else national_download_choropleth_map
             ),
