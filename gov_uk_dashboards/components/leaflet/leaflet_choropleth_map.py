@@ -257,7 +257,11 @@ class LeafletChoroplethMap:
             )
 
         choropleth_map = display_chart_or_table_with_header(
-            national_and_london_maps_container if self.show_london_map is True else national_choropleth_map,
+            (
+                national_and_london_maps_container
+                if self.show_london_map is True
+                else national_choropleth_map
+            ),
             self.title,
             self.subtitle,
             None,
@@ -294,41 +298,6 @@ class LeafletChoroplethMap:
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
         selected_bounds."""
         # pylint: disable=too-many-locals
-        london_la_codes = [
-            "E09000017",
-            "E09000022",
-            "E09000027",
-            "E09000014",
-            "E09000025",
-            "E09000026",
-            "E09000030",
-            "E09000029",
-            "E09000015",
-            "E09000031",
-            "E09000004",
-            "E09000009",
-            "E09000013",
-            "E09000023",
-            "E09000005",
-            "E09000019",
-            "E09000001",
-            "E09000010",
-            "E09000012",
-            "E09000021",
-            "E09000008",
-            "E09000007",
-            "E09000032",
-            "E09000006",
-            "E09000024",
-            "E09000002",
-            "E09000003",
-            "E09000018",
-            "E09000011",
-            "E09000028",
-            "E09000033",
-            "E09000016",
-            "E09000020",
-        ]
         selected_bounds = None
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
@@ -343,6 +312,12 @@ class LeafletChoroplethMap:
         }
 
         if london_las:
+            london_la_codes = (
+                self.df.filter(pl.col("Region") == "London")
+                .select(pl.col("Area_Code").unique())
+                .to_series()
+                .to_list()
+            )
             geojson_copy["features"] = [
                 feature
                 for feature in geojson_copy["features"]
