@@ -573,34 +573,25 @@ class LeafletChoroplethMap:
         return None
 
     def _get_london_map_insert_title(self, for_download=False):
-        if not for_download:
-            return html.Div(
-                "London (zoomed)",
-                style={
-                    "position": "absolute",
-                    "top": "340px",  # Adjusted to place above the colorbar
-                    "left": "40px",  # Align with the left side of the colorbar
-                    "background": "white",
-                    "padding": "2px 6px",
-                    "borderRadius": "5px",
-                    "fontWeight": "bold",
-                    "fontSize": "14px",
-                    "zIndex": "999",  # Ensure it appears above map elements
-                },
-            )
+        base_style = {
+            "position": "absolute",
+            "background": "white",
+            "padding": "2px 6px",
+            "borderRadius": "5px",
+            "fontWeight": "bold",
+            "fontSize": "14px",
+            "zIndex": "999",
+        }
+
+        # position overrides
+        position_style = {
+            "top": "150px" if for_download else "340px",
+            "left": "20px" if for_download else "40px",
+        }
+
         return html.Div(
             "London (zoomed)",
-            style={
-                "position": "absolute",
-                "top": "150px",  # Adjusted to place above the colorbar
-                "left": "20px",  # Align with the left side of the colorbar
-                "background": "white",
-                "padding": "2px 6px",
-                "borderRadius": "5px",
-                "fontWeight": "bold",
-                "fontSize": "14px",
-                "zIndex": "999",  # Ensure it appears above map elements
-            },
+            style={**base_style, **position_style},
         )
 
     def resolve_colorbar_title(self, colorbar_title: str):
