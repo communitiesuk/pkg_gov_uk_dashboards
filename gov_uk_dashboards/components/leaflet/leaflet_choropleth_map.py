@@ -28,6 +28,7 @@ class LeafletChoroplethMap:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-positional-arguments
+    # pylint: disable=too-many-locals
 
     def __init__(
         self,
@@ -49,7 +50,7 @@ class LeafletChoroplethMap:
         show_tile_layer: bool = False,
         selected_la: str = None,
         show_london_map: bool = False,
-    ):  # pylint: disable=too-many-locals
+    ):
         self.geojson_data = geojson
         self.df = df
         self.selected_la = selected_la
@@ -108,7 +109,7 @@ class LeafletChoroplethMap:
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
 
-        national_choropleth_map = dl.Map(
+        map_container_for_display = dl.Map(
             children=national_display_children,
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
@@ -174,14 +175,14 @@ class LeafletChoroplethMap:
                 **disabled_zoom_controls,
             )
 
-            national_and_london_maps_container = html.Div(
+            map_container_for_display = html.Div(
                 style={
                     "display": "flex",
                     "gap": "20px",  # space between maps
                 },
                 children=[
                     html.Div(
-                        national_choropleth_map,
+                        map_container_for_display,
                         style={
                             "width": "100%",
                             "height": "100%",
@@ -253,11 +254,7 @@ class LeafletChoroplethMap:
             )
 
         choropleth_map = display_chart_or_table_with_header(
-            (
-                national_and_london_maps_container
-                if self.show_london_map is True
-                else national_choropleth_map
-            ),
+            map_container_for_display,
             self.title,
             self.subtitle,
             None,
@@ -554,7 +551,6 @@ class LeafletChoroplethMap:
             "zIndex": "999",
         }
 
-        # position overrides
         position_style = {
             "top": "150px" if for_download else "340px",
             "left": "20px" if for_download else "40px",
