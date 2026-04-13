@@ -8,6 +8,8 @@ import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash import html
 import polars as pl
+from shapely.geometry import shape, mapping
+from shapely.affinity import scale
 
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
@@ -112,7 +114,7 @@ class LeafletChoroplethMap:
 
         map_container_for_display = dl.Map(
             children=national_display_children,
-            bounds=[[49.8, -10], [55.9, 1.8]],
+            bounds=[[49.3, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={
                 "padding": [20, 20],
@@ -120,7 +122,7 @@ class LeafletChoroplethMap:
             },  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
-            maxBounds=[[49.8, -10], [55.9, 1.8]],
+            maxBounds=[[49.3, -10], [55.9, 1.8]],
             center=[54.5, -2.5],  # Centered on the UK
             zoom=6.5,
             **zoom_controls,
@@ -291,7 +293,7 @@ class LeafletChoroplethMap:
     def _add_data_to_geojson_and_get_bounds(self, london_las=False):
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
         selected_bounds."""
-        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-locals, too-many-branches
         selected_bounds = None
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
@@ -318,7 +320,7 @@ class LeafletChoroplethMap:
                 if feature["properties"].get("geo_id") in london_la_codes
             ]
 
-        for feature in geojson_copy["features"]:
+        for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
             if info:
@@ -336,6 +338,8 @@ class LeafletChoroplethMap:
                 feature["properties"]["density"] = None
                 feature["properties"]["area"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data available"
+            if feature["properties"].get("geo_id") == "E06000053":  # IoS LA code
+                geojson_copy["features"][i] = self.scale_feature(feature, 5.0)
 
             # Highlight only the selected LA
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
@@ -569,3 +573,13 @@ class LeafletChoroplethMap:
         if colorbar_title == "default":
             return self.hover_text_columns[0]
         return colorbar_title  # custom title
+
+    def scale_feature(self, feature, factor):
+        """Scale a GeoJSON feature geometry around its centroid."""
+        geom = shape(feature["geometry"])
+
+        scaled_geom = scale(geom, xfact=factor, yfact=factor, origin="centroid")
+
+        new_feature = feature.copy()
+        new_feature["geometry"] = mapping(scaled_geom)
+        return new_feature
