@@ -88,12 +88,12 @@ class LeafletChoroplethMap:
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
         ]
-        display_children = (
+        national_display_children = (
             children
             + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
             + [geojson_layer]
         )
-        download_children = (
+        national_download_children = (
             children
             + [self._get_colorbar(), *([self._get_colorbar_title()])]
             + [geojson_layer_download]
@@ -109,7 +109,7 @@ class LeafletChoroplethMap:
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
 
         choropleth_map = dl.Map(
-            children=display_children,
+            children=national_display_children,
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={
@@ -127,7 +127,7 @@ class LeafletChoroplethMap:
         )
 
         download_choropleth_map = dl.Map(
-            children=download_children,
+            children=national_download_children,
             center=[54.5, -2.5],
             zoom=6.5,
             maxBounds=[
