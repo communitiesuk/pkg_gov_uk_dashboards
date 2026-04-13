@@ -22,7 +22,8 @@ class LeafletChoroplethMap:
     Note: Values in the numeric column should use 1 for the highest value, with larger numbers
     representing lower values.
     If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
-    discrete"""
+    discrete.
+    Note: Hover text width is based off leaflet-tooltip class in css"""
 
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
@@ -548,7 +549,7 @@ class LeafletChoroplethMap:
             "borderRadius": "5px",
             "fontWeight": "bold",
             "fontSize": "14px",
-            "zIndex": "999",
+            "zIndex": "99",
         }
 
         position_style = {
