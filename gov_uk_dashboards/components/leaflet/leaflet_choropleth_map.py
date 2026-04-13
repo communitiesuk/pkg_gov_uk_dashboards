@@ -171,7 +171,7 @@ class LeafletChoroplethMap:
             ],  # restrict panning but keep England tight
             zoomControl=False,
             attributionControl=False,
-            style={"width": "100%", "height": "100%", "background": "white"},
+            style={"width": "1200px", "height": "1200px", "background": "white"},
             id=f"download-map-{self.selected_la or 'national'}-{int(time.time()*1000)}",
             # unique ID to force map to regenerate
         )
@@ -210,7 +210,7 @@ class LeafletChoroplethMap:
         download_maps_container = html.Div(
             style={
                 "display": "flex",
-                "width": "1200px",
+                "width": "1400px",
                 "height": "1200px",
                 "background": "white",
             },
@@ -229,12 +229,12 @@ class LeafletChoroplethMap:
                 html.Div(
                     download_london_map,
                     style={
-                        "width": "320px",  # 👈 fixed width # WAS 400
+                        "width": "400px",  # 👈 fixed width # WAS 400
                         "height": "350px",
                         "marginTop": "300px",  # 👈 vertical positioning
                         "background": "white",
                         "minWidth": "0",
-                        "marginLeft": "-100px",  # 👈 spacing instead of gap
+                        "marginLeft": "70px",  # 👈 spacing instead of gap
                     },
                 ),
             ],
