@@ -93,6 +93,7 @@ class LeafletChoroplethMap:
             + [geojson_layer]
         )
         london_display_children = children + [*([self._get_london_map_insert_title()])]+ [london_layer]
+        london_download_children = children + [*([self._get_london_map_insert_title(for_download=True)])]+ [london_layer]
         download_children = (
             children
             + [self._get_colorbar(), *([self._get_colorbar_title()])]
@@ -144,7 +145,7 @@ class LeafletChoroplethMap:
         )
         
         download_london_map = dl.Map(
-            children=london_display_children,
+            children=london_download_children,
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page + "-london",
             boundsOptions={
@@ -552,13 +553,28 @@ class LeafletChoroplethMap:
             )
         return None
     
-    def _get_london_map_insert_title(self):
+    def _get_london_map_insert_title(self, for_download=False):
+        if for_download==False:
             return html.Div(
                 "London (zoomed)",
                 style={
                     "position": "absolute",
                     "top": "340px",  # Adjusted to place above the colorbar
                     "left": "40px",  # Align with the left side of the colorbar
+                    "background": "white",
+                    "padding": "2px 6px",
+                    "borderRadius": "5px",
+                    "fontWeight": "bold",
+                    "fontSize": "14px",
+                    "zIndex": "999",  # Ensure it appears above map elements
+                },
+            )
+        return html.Div(
+                "London (zoomed)",
+                style={
+                    "position": "absolute",
+                    "top": "150px",  # Adjusted to place above the colorbar
+                    "left": "20px",  # Align with the left side of the colorbar
                     "background": "white",
                     "padding": "2px 6px",
                     "borderRadius": "5px",
