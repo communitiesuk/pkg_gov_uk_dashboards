@@ -158,7 +158,7 @@ class LeafletChoroplethMap:
                 boundsOptions={
                     "padding": [20, 20],
                     "maxZoom": 10,
-                },  # ensures LA fills map nicely
+                },
                 minZoom=6.5,
                 maxZoom=10 if self.enable_zoom else 6.5,
                 maxBounds=[[49.8, -10], [55.9, 1.8]],
@@ -180,17 +180,15 @@ class LeafletChoroplethMap:
                     "gap": "20px",  # space between maps
                 },
                 children=[
-                    # NATIONAL MAP (add right padding so inset doesn't overlap content)
                     html.Div(
                         national_choropleth_map,
                         style={
                             "width": "100%",
                             "height": "100%",
-                            "paddingRight": "380px",  # 👈 key fix
+                            "paddingRight": "380px",
                             "boxSizing": "border-box",
                         },
                     ),
-                    # London inset map
                     html.Div(
                         london_map,
                         style={
@@ -212,11 +210,11 @@ class LeafletChoroplethMap:
                 boundsOptions={
                     "padding": [20, 20],
                     "maxZoom": 10,
-                },  # ensures LA fills map nicely
+                },
                 minZoom=6.5,
                 maxZoom=10 if self.enable_zoom else 6.5,
                 maxBounds=[[49.8, -10], [55.9, 1.8]],
-                center=[51.5, -0.25],  # Centered on the UK
+                center=[51.5, -0.25],
                 zoom=9,
                 attributionControl=False,
                 style={"width": "100%", "height": "960px", "background": "white"},
@@ -231,26 +229,24 @@ class LeafletChoroplethMap:
                     "background": "white",
                 },
                 children=[
-                    # NATIONAL MAP
                     html.Div(
                         national_download_choropleth_map,
                         style={
-                            "width": "880px",  # 👈 fixed width WAS 880
+                            "width": "880px",
                             "height": "100%",
                             "minWidth": "0",
                             "marginLeft": "50px",
                         },
                     ),
-                    # LONDON MAP (RIGHT SIDE)
                     html.Div(
                         download_london_map,
                         style={
-                            "width": "400px",  # 👈 fixed width # WAS 400
+                            "width": "400px",
                             "height": "350px",
-                            "marginTop": "300px",  # 👈 vertical positioning
+                            "marginTop": "300px",
                             "background": "white",
                             "minWidth": "0",
-                            "marginLeft": "70px",  # 👈 spacing instead of gap
+                            "marginLeft": "70px",
                         },
                     ),
                 ],
