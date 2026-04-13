@@ -108,7 +108,7 @@ class LeafletChoroplethMap:
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
 
-        choropleth_map = dl.Map(
+        national_choropleth_map = dl.Map(
             children=national_display_children,
             bounds=[[49.8, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
@@ -126,7 +126,7 @@ class LeafletChoroplethMap:
             style={"width": "100%", "height": "960px", "background": "white"},
         )
 
-        download_choropleth_map = dl.Map(
+        national_download_choropleth_map = dl.Map(
             children=national_download_children,
             center=[54.5, -2.5],
             zoom=6.5,
@@ -182,7 +182,7 @@ class LeafletChoroplethMap:
                 children=[
                     # NATIONAL MAP (add right padding so inset doesn't overlap content)
                     html.Div(
-                        choropleth_map,
+                        national_choropleth_map,
                         style={
                             "width": "100%",
                             "height": "100%",
@@ -233,7 +233,7 @@ class LeafletChoroplethMap:
                 children=[
                     # NATIONAL MAP
                     html.Div(
-                        download_choropleth_map,
+                        national_download_choropleth_map,
                         style={
                             "width": "880px",  # 👈 fixed width WAS 880
                             "height": "100%",
@@ -257,7 +257,7 @@ class LeafletChoroplethMap:
             )
 
         choropleth_map = display_chart_or_table_with_header(
-            maps_container if self.show_london_map is True else choropleth_map,
+            maps_container if self.show_london_map is True else national_choropleth_map,
             self.title,
             self.subtitle,
             None,
@@ -270,7 +270,7 @@ class LeafletChoroplethMap:
             (
                 download_maps_container
                 if self.show_london_map
-                else download_choropleth_map
+                else national_download_choropleth_map
             ),
             self.title,
             self.subtitle,
