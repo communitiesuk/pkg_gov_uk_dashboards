@@ -8,6 +8,8 @@ import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash import html
 import polars as pl
+from shapely.geometry import shape, mapping
+from shapely.affinity import scale
 
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
@@ -16,18 +18,22 @@ from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
 
+LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
+
 
 class LeafletChoroplethMap:
     """Class for  generating leaflet choropleth map charts.
     Note: Values in the numeric column should use 1 for the highest value, with larger numbers
     representing lower values.
     If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
-    discrete"""
+    discrete.
+    Note: Hover text width is based off leaflet-tooltip class in css"""
 
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-positional-arguments
+    # pylint: disable=too-many-locals
 
     def __init__(
         self,
@@ -48,7 +54,8 @@ class LeafletChoroplethMap:
         colorbar_title: str = None,
         show_tile_layer: bool = False,
         selected_la: str = None,
-    ):  # pylint: disable=too-many-locals
+        show_london_map: bool = False,
+    ):
         self.geojson_data = geojson
         self.df = df
         self.selected_la = selected_la
@@ -69,6 +76,7 @@ class LeafletChoroplethMap:
         self.show_tile_layer = show_tile_layer
         self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
+        self.show_london_map = show_london_map
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -77,19 +85,25 @@ class LeafletChoroplethMap:
         - List[List[float]]: bounds for selected LA
         - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds()
-        geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
         children = [
             *([dl.TileLayer()] if self.show_tile_layer else []),
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
-            self._get_colorbar(),
-            *([self._get_colorbar_title(self.enable_zoom)]),
         ]
-        display_children = children + [geojson_layer]
-        download_children = children + [geojson_layer_download]
+        national_display_children = (
+            children
+            + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
+            + [geojson_layer]
+        )
+        national_download_children = (
+            children
+            + [self._get_colorbar(), *([self._get_colorbar_title()])]
+            + [geojson_layer_download]
+        )
 
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
@@ -99,9 +113,10 @@ class LeafletChoroplethMap:
             "touchZoom": False,
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
-        choropleth_map = dl.Map(
-            children=display_children,
-            bounds=[[49.8, -10], [55.9, 1.8]],
+
+        map_container_for_display = dl.Map(
+            children=national_display_children,
+            bounds=[[49.3, -10], [55.9, 1.8]],
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={
                 "padding": [20, 20],
@@ -109,16 +124,16 @@ class LeafletChoroplethMap:
             },  # ensures LA fills map nicely
             minZoom=6.5,
             maxZoom=10 if self.enable_zoom else 6.5,
-            maxBounds=[[49.8, -10], [55.9, 1.8]],
+            maxBounds=[[49.3, -10], [55.9, 1.8]],
             center=[54.5, -2.5],  # Centered on the UK
             zoom=6.5,
             **zoom_controls,
             attributionControl=False,
-            style={"width": "100%", "height": "960px", "background": "white"},
+            style={"width": "100%", "height": "1000px", "background": "white"},
         )
 
-        download_choropleth_map = dl.Map(
-            children=download_children,
+        national_download_choropleth_map = dl.Map(
+            children=national_download_children,
             center=[54.5, -2.5],
             zoom=6.5,
             maxBounds=[
@@ -132,8 +147,132 @@ class LeafletChoroplethMap:
             # unique ID to force map to regenerate
         )
 
+        if self.show_london_map:
+            london_layer, _, london_region_bounds = (
+                self._add_data_to_geojson_and_get_bounds(True)
+            )
+            london_region_rectangle = dl.Rectangle(
+                bounds=london_region_bounds,
+                color="black",
+                weight=2,
+                fill=False,
+                interactive=False,
+            )
+            london_display_children = (
+                children
+                + [*([self._get_london_map_insert_title()])]
+                + [london_layer]
+                + [london_region_rectangle]
+            )
+            london_download_children = (
+                children
+                + [*([self._get_london_map_insert_title(for_download=True)])]
+                + [london_layer]
+                + [london_region_rectangle]
+            )
+            london_map = dl.Map(
+                children=london_display_children,
+                bounds=LONDON_REGION_MAP_BOUNDS,
+                id=self.id_for_choropleth_map_on_page + "-london",
+                boundsOptions={
+                    "padding": [20, 20],
+                    "maxZoom": 10,
+                },
+                minZoom=6.5,
+                maxZoom=10 if self.enable_zoom else 6.5,
+                maxBounds=LONDON_REGION_MAP_BOUNDS,
+                center=[51.5, -0.1],  # Centered on the UK
+                zoom=9,
+                attributionControl=False,
+                style={
+                    "width": "100%",
+                    "height": "960px",
+                    "background": "white",
+                    "padding-left": "40px",
+                },
+                **disabled_zoom_controls,
+            )
+
+            map_container_for_display = html.Div(
+                style={
+                    "display": "flex",
+                    "gap": "20px",  # space between maps
+                },
+                children=[
+                    html.Div(
+                        map_container_for_display,
+                        style={
+                            "width": "100%",
+                            "height": "100%",
+                            "paddingRight": "380px",
+                            "boxSizing": "border-box",
+                        },
+                    ),
+                    html.Div(
+                        london_map,
+                        style={
+                            "position": "absolute",
+                            "top": "300px",
+                            "right": "40px",
+                            "width": "350px",
+                            "height": "350px",
+                            "zIndex": 1000,
+                        },
+                    ),
+                ],
+            )
+
+            download_london_map = dl.Map(
+                children=london_download_children,
+                bounds=LONDON_REGION_MAP_BOUNDS,
+                id=self.id_for_choropleth_map_on_page + "-london",
+                boundsOptions={
+                    "padding": [20, 20],
+                    "maxZoom": 10,
+                },
+                minZoom=6.5,
+                maxZoom=10 if self.enable_zoom else 6.5,
+                maxBounds=LONDON_REGION_MAP_BOUNDS,
+                center=[51.5, -0.25],
+                zoom=9,
+                attributionControl=False,
+                style={"width": "100%", "height": "960px", "background": "white"},
+                **disabled_zoom_controls,
+            )
+
+            national_and_london_download_maps_container = html.Div(
+                style={
+                    "display": "flex",
+                    "width": "1400px",
+                    "height": "1200px",
+                    "background": "white",
+                },
+                children=[
+                    html.Div(
+                        national_download_choropleth_map,
+                        style={
+                            "width": "880px",
+                            "height": "100%",
+                            "minWidth": "0",
+                            "marginLeft": "50px",
+                        },
+                    ),
+                    html.Div(
+                        download_london_map,
+                        style={
+                            "width": "400px",
+                            "height": "350px",
+                            "marginTop": "300px",
+                            "background": "white",
+                            "minWidth": "0",
+                            "marginLeft": "70px",
+                        },
+                    ),
+                ],
+            )
+
         choropleth_map = display_chart_or_table_with_header(
-            choropleth_map,
+            map_container_for_display,
             self.title,
             self.subtitle,
             None,
@@ -143,7 +282,11 @@ class LeafletChoroplethMap:
             instance=self.instance_number,
         )
         download_choropleth_map_display = display_chart_or_table_with_header(
-            download_choropleth_map,
+            (
+                national_and_london_download_maps_container
+                if self.show_london_map
+                else national_download_choropleth_map
+            ),
             self.title,
             self.subtitle,
         )
@@ -162,11 +305,13 @@ class LeafletChoroplethMap:
             ),
         ]
 
-    def _add_data_to_geojson_and_get_bounds(self):
+    def _add_data_to_geojson_and_get_bounds(self, london_las=False):
         """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
         selected_bounds."""
-        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-locals, too-many-branches
         selected_bounds = None
+        london_region_bounds = None
+
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
 
@@ -179,7 +324,23 @@ class LeafletChoroplethMap:
             for row in self.df.iter_rows(named=True)
         }
 
-        for feature in geojson_copy["features"]:
+        if london_las:
+            london_la_codes = (
+                self.df.filter(pl.col("Region") == "London")
+                .select(pl.col("Area_Code").unique())
+                .to_series()
+                .to_list()
+            )
+            geojson_copy["features"] = [
+                feature
+                for feature in geojson_copy["features"]
+                if feature["properties"].get("geo_id") in london_la_codes
+            ]
+            london_region_bounds = self.pad_bounds(
+                self.compute_bounds(geojson_copy["features"])
+            )
+
+        for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
             if info:
@@ -197,6 +358,8 @@ class LeafletChoroplethMap:
                 feature["properties"]["density"] = None
                 feature["properties"]["area"] = "Unknown"
                 feature["properties"]["tooltip"] = "No data available"
+            if feature["properties"].get("geo_id") == "E06000053":  # IoS LA code
+                geojson_copy["features"][i] = self.scale_feature(feature, 5.0)
 
             # Highlight only the selected LA
             if self.selected_la and feature["properties"]["area"] == self.selected_la:
@@ -278,7 +441,7 @@ class LeafletChoroplethMap:
         )
         geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
-        return geojson_layer, selected_bounds
+        return geojson_layer, selected_bounds, london_region_bounds
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
@@ -402,6 +565,26 @@ class LeafletChoroplethMap:
             )
         return None
 
+    def _get_london_map_insert_title(self, for_download=False):
+        base_style = {
+            "position": "absolute",
+            "background": "white",
+            "borderRadius": "5px",
+            "fontWeight": "bold",
+            "fontSize": "14px",
+            "zIndex": "99",
+        }
+
+        position_style = {
+            "top": "150px" if for_download else "340px",
+            "left": "20px" if for_download else "40px",
+        }
+
+        return html.Div(
+            "London",
+            style={**base_style, **position_style},
+        )
+
     def resolve_colorbar_title(self, colorbar_title: str):
         """Returns text for colorbar title."""
         if colorbar_title is None:
@@ -409,3 +592,51 @@ class LeafletChoroplethMap:
         if colorbar_title == "default":
             return self.hover_text_columns[0]
         return colorbar_title  # custom title
+
+    def scale_feature(self, feature, factor):
+        """Scale a GeoJSON feature geometry around its centroid."""
+        geom = shape(feature["geometry"])
+
+        scaled_geom = scale(geom, xfact=factor, yfact=factor, origin="centroid")
+
+        new_feature = feature.copy()
+        new_feature["geometry"] = mapping(scaled_geom)
+        return new_feature
+
+    def compute_bounds(self, features):
+        """Return bounds for GeoJSON features.
+
+        Takes Polygon/MultiPolygon features and returns
+        [[south, west], [north, east]] or None if empty."""
+        lats = []
+        lngs = []
+
+        for f in features:
+            geom = f.get("geometry")
+            if not geom:
+                continue
+
+            coords = geom.get("coordinates")
+            gtype = geom.get("type")
+
+            if gtype == "Polygon":
+                for pt in coords[0]:
+                    lngs.append(pt[0])
+                    lats.append(pt[1])
+
+            elif gtype == "MultiPolygon":
+                for poly in coords:
+                    for pt in poly[0]:
+                        lngs.append(pt[0])
+                        lats.append(pt[1])
+
+        if not lats or not lngs:
+            return None
+
+        return [[min(lats), min(lngs)], [max(lats), max(lngs)]]  # SW  # NE
+
+    def pad_bounds(self, bounds, pad=0.01):
+        """Expand bounds by applying padding."""
+        (south, west), (north, east) = bounds
+
+        return [[south - pad, west - pad], [north + pad, east + pad]]

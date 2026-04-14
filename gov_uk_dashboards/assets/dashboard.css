@@ -9529,3 +9529,9 @@ mark.expenditure {
   color: #0b0c0c; /* keep text black */
   border-color: #0b0c0c;
 }
+
+.leaflet-tooltip {
+  max-width: 175px !important;
+  width: 175px !important;
+  white-space: normal !important;
+}
