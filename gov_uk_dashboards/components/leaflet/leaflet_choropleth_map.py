@@ -83,8 +83,8 @@ class LeafletChoroplethMap:
         - List[List[float]]: bounds for selected LA
         - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        geojson_layer, selected_bounds = self._add_data_to_geojson_and_get_bounds()
-        geojson_layer_download, _ = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
         children = [
@@ -146,14 +146,27 @@ class LeafletChoroplethMap:
         )
 
         if self.show_london_map:
-            london_layer, _ = self._add_data_to_geojson_and_get_bounds(True)
+            london_layer, _, london_region_bounds = (
+                self._add_data_to_geojson_and_get_bounds(True)
+            )
+            london_region_rectangle = dl.Rectangle(
+                bounds=london_region_bounds,
+                color="black",
+                weight=2,
+                fill=False,
+                interactive=False,
+            )
             london_display_children = (
-                children + [*([self._get_london_map_insert_title()])] + [london_layer]
+                children
+                + [*([self._get_london_map_insert_title()])]
+                + [london_layer]
+                + [london_region_rectangle]
             )
             london_download_children = (
                 children
                 + [*([self._get_london_map_insert_title(for_download=True)])]
                 + [london_layer]
+                + [london_region_rectangle]
             )
             london_map = dl.Map(
                 children=london_display_children,
@@ -295,6 +308,8 @@ class LeafletChoroplethMap:
         selected_bounds."""
         # pylint: disable=too-many-locals, too-many-branches
         selected_bounds = None
+        london_region_bounds = None
+
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
 
@@ -319,6 +334,9 @@ class LeafletChoroplethMap:
                 for feature in geojson_copy["features"]
                 if feature["properties"].get("geo_id") in london_la_codes
             ]
+            london_region_bounds = self.pad_bounds(
+                self.compute_bounds(geojson_copy["features"])
+            )
 
         for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
@@ -421,7 +439,7 @@ class LeafletChoroplethMap:
         )
         geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
-        return geojson_layer, selected_bounds
+        return geojson_layer, selected_bounds, london_region_bounds
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
@@ -549,7 +567,6 @@ class LeafletChoroplethMap:
         base_style = {
             "position": "absolute",
             "background": "white",
-            "padding": "2px 6px",
             "borderRadius": "5px",
             "fontWeight": "bold",
             "fontSize": "14px",
@@ -562,7 +579,7 @@ class LeafletChoroplethMap:
         }
 
         return html.Div(
-            "London (zoomed)",
+            "London",
             style={**base_style, **position_style},
         )
 
@@ -583,3 +600,41 @@ class LeafletChoroplethMap:
         new_feature = feature.copy()
         new_feature["geometry"] = mapping(scaled_geom)
         return new_feature
+
+    def compute_bounds(self, features):
+        """Return bounds for GeoJSON features.
+
+        Takes Polygon/MultiPolygon features and returns
+        [[south, west], [north, east]] or None if empty."""
+        lats = []
+        lngs = []
+
+        for f in features:
+            geom = f.get("geometry")
+            if not geom:
+                continue
+
+            coords = geom.get("coordinates")
+            gtype = geom.get("type")
+
+            if gtype == "Polygon":
+                for pt in coords[0]:
+                    lngs.append(pt[0])
+                    lats.append(pt[1])
+
+            elif gtype == "MultiPolygon":
+                for poly in coords:
+                    for pt in poly[0]:
+                        lngs.append(pt[0])
+                        lats.append(pt[1])
+
+        if not lats or not lngs:
+            return None
+
+        return [[min(lats), min(lngs)], [max(lats), max(lngs)]]  # SW  # NE
+
+    def pad_bounds(self, bounds, pad=0.01):
+        """Expand bounds by applying padding."""
+        (south, west), (north, east) = bounds
+
+        return [[south - pad, west - pad], [north + pad, east + pad]]
