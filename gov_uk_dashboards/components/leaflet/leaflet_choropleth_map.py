@@ -18,6 +18,8 @@ from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
 
+LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
+
 
 class LeafletChoroplethMap:
     """Class for  generating leaflet choropleth map charts.
@@ -170,7 +172,7 @@ class LeafletChoroplethMap:
             )
             london_map = dl.Map(
                 children=london_display_children,
-                bounds=[[49.8, -10], [55.9, 1.8]],
+                bounds=LONDON_REGION_MAP_BOUNDS,
                 id=self.id_for_choropleth_map_on_page + "-london",
                 boundsOptions={
                     "padding": [20, 20],
@@ -178,7 +180,7 @@ class LeafletChoroplethMap:
                 },
                 minZoom=6.5,
                 maxZoom=10 if self.enable_zoom else 6.5,
-                maxBounds=[[49.8, -10], [55.9, 1.8]],
+                maxBounds=LONDON_REGION_MAP_BOUNDS,
                 center=[51.5, -0.1],  # Centered on the UK
                 zoom=9,
                 attributionControl=False,
@@ -222,7 +224,7 @@ class LeafletChoroplethMap:
 
             download_london_map = dl.Map(
                 children=london_download_children,
-                bounds=[[49.8, -10], [55.9, 1.8]],
+                bounds=LONDON_REGION_MAP_BOUNDS,
                 id=self.id_for_choropleth_map_on_page + "-london",
                 boundsOptions={
                     "padding": [20, 20],
@@ -230,7 +232,7 @@ class LeafletChoroplethMap:
                 },
                 minZoom=6.5,
                 maxZoom=10 if self.enable_zoom else 6.5,
-                maxBounds=[[49.8, -10], [55.9, 1.8]],
+                maxBounds=LONDON_REGION_MAP_BOUNDS,
                 center=[51.5, -0.25],
                 zoom=9,
                 attributionControl=False,
