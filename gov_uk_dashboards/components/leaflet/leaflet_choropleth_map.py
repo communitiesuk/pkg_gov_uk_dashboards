@@ -197,26 +197,22 @@ class LeafletChoroplethMap:
                 style={
                     "display": "flex",
                     "gap": "20px",  # space between maps
+                    "alignItems": "flex-start",
                 },
                 children=[
                     html.Div(
                         map_container_for_display,
                         style={
-                            "width": "100%",
-                            "height": "100%",
-                            "paddingRight": "380px",
-                            "boxSizing": "border-box",
+                            "flex": "1",
+                            "minWidth": "0",
                         },
                     ),
                     html.Div(
                         london_map,
                         style={
-                            "position": "absolute",
-                            "top": "300px",
-                            "right": "40px",
                             "width": "350px",
-                            "height": "350px",
-                            "zIndex": 1000,
+                            "flexShrink": "0",
+                            "transform": "translateY(130px)",  # 👈 moves visually only
                         },
                     ),
                 ],
