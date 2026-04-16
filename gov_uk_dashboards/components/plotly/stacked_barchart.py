@@ -127,7 +127,6 @@ class StackedBarChart:
         self.alternative_all_data_button_text = alternative_all_data_button_text
         self.total_trace_name = total_trace_name
         self.x_hoverformat = x_hoverformat
-        self.stacked = True
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -269,7 +268,7 @@ class StackedBarChart:
 
         format_yaxes(
             fig,
-            self.stacked,
+            True,
             filtered_df,
             self.x_axis_column,
             self.y_axis_column,
