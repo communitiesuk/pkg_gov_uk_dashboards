@@ -196,7 +196,7 @@ class LeafletChoroplethMap:
             map_container_for_display = html.Div(
                 style={
                     "display": "flex",
-                    "gap": "20px", # space between maps
+                    "gap": "20px",  # space between maps
                     "alignItems": "flex-start",
                 },
                 children=[
