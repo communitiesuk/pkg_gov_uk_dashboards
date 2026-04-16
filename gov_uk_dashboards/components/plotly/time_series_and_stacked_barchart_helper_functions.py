@@ -32,11 +32,15 @@ def format_yaxes(
     ticks = compute_y_axis_ticks(stacked, df, x_axis_column, y_axis_column)
 
     max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
+    if ticks[0] == 0:
+        min_y_range = 0
+    else:
+        min_y_range = min(ticks[0] - 2 * (ticks[1] - ticks[0]) / 3, 0)
 
     fig.update_yaxes(
         rangemode="tozero",
         showgrid=True,
-        range=[0, max_y_range],
+        range=[min_y_range, max_y_range],
         tickvals=ticks,
         ticktext=[f"{v:,}" for v in ticks],
     )
@@ -118,16 +122,36 @@ def compute_y_axis_ticks(
         >>> compute_y_axis_ticks(False, df, "date", "sales")
         [0, 100000, 200000, 300000, 400000, 500000, 600000]"""
     if stacked:
+        df_positive = df.filter(pl.col(y_axis_column) > 0)
+        df_negative = df.filter(pl.col(y_axis_column) < 0)
+
+        # Sum positives per x-axis group
         largest_y_value = (
-            df.group_by(x_axis_column)
+            df_positive.group_by(x_axis_column)
             .agg(pl.col(y_axis_column).sum())
-            .select(pl.col(y_axis_column).max())
-            .item()
+            .get_column(y_axis_column)
+            .max()
+            if df_positive.height > 0
+            else 0
         )
+
+        # Sum negatives per x-axis group
+        smallest_y_value = (
+            df_negative.group_by(x_axis_column)
+            .agg(pl.col(y_axis_column).sum())
+            .get_column(y_axis_column)
+            .min()
+            if df_negative.height > 0
+            else 0
+        )
+
     else:
         largest_y_value = df[y_axis_column].max()
-    y_axis_max = largest_y_value + (0.3 * largest_y_value)
+        smallest_y_value = df[y_axis_column].min()
 
-    ticks = generate_human_readable_yticks(0, y_axis_max)
+    # Add padding
+    y_axis_max = largest_y_value * 1.3
+    y_axis_min = min(smallest_y_value * 1.3, 0)
 
+    ticks = generate_human_readable_yticks(y_axis_min, y_axis_max)
     return ticks

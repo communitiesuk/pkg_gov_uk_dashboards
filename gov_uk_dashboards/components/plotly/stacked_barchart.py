@@ -76,8 +76,9 @@ class StackedBarChart:
         alternative_data_button_text: Optional[str] = None,
         alternative_all_data_button_text: Optional[str] = None,
         total_trace_name: Optional[str] = None,
-        y_axis_tick_prefix: Optional[str] = "£",
+        y_axis_tick_prefix: Optional[str] = None,
         x_hoverformat: Optional[str] = "%b %Y",
+        use_plotly_automated_y_axis: bool = False,
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -129,7 +130,7 @@ class StackedBarChart:
         self.total_trace_name = total_trace_name
         self.y_axis_tick_prefix = y_axis_tick_prefix
         self.x_hoverformat = x_hoverformat
-        self.stacked = True
+        self.use_plotly_automated_y_axis = use_plotly_automated_y_axis
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -264,29 +265,40 @@ class StackedBarChart:
             )
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
+        if not self.use_plotly_automated_y_axis:
+            filtered_df = self.df.filter(
+                pl.col(self.trace_name_column).is_in(self.trace_name_list)
+            )
 
-        filtered_df = self.df.filter(
-            pl.col(self.trace_name_column).is_in(self.trace_name_list)
-        )
+            format_yaxes(
+                fig,
+                True,
+                filtered_df,
+                self.x_axis_column,
+                self.y_axis_column,
+            )
 
-        format_yaxes(
-            fig, self.stacked, filtered_df, self.x_axis_column, self.y_axis_column
-        )
+        layout = {
+            "legend": get_legend_configuration(),
+            "font": {"size": CHART_LABEL_FONT_SIZE},
+            "showlegend": True,
+            "barmode": "relative",
+            "xaxis": {
+                "categoryorder": "array",
+                "categoryarray": self.trace_name_list,
+            },
+            "xaxis_title": self.x_axis_column if self.show_x_axis_title else None,
+            "hovermode": "x unified" if self.x_unified_hovermode else "closest",
+            "hoverdistance": self.hover_distance,
+        }
 
-        fig.update_layout(
-            legend=get_legend_configuration(),
-            font={"size": CHART_LABEL_FONT_SIZE},
-            yaxis={
+        if self.use_plotly_automated_y_axis:
+            layout["yaxis"] = {
                 "tickprefix": self.y_axis_tick_prefix,
                 "exponentformat": "B",
-            },
-            showlegend=True,
-            barmode="relative",
-            xaxis={"categoryorder": "array", "categoryarray": self.trace_name_list},
-            xaxis_title=self.x_axis_column if self.show_x_axis_title else None,
-            hovermode="x unified" if self.x_unified_hovermode is True else "closest",
-            hoverdistance=self.hover_distance,  # Increase distance to simulate hover 'always on'
-        )
+            }
+
+        fig.update_layout(**layout)
         self._format_xaxis(fig)
         return fig
 
