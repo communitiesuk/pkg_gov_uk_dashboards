@@ -378,7 +378,11 @@ class TimeSeriesChart:
             )
 
         format_yaxes(
-            fig, self.stacked, self.filtered_df, self.x_axis_column, self.y_axis_column
+            fig,
+            self.stacked,
+            self.filtered_df,
+            self.x_axis_column,
+            self.y_axis_column,
         )
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
