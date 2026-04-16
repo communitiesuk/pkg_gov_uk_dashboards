@@ -32,10 +32,10 @@ def format_yaxes(
     ticks = compute_y_axis_ticks(stacked, df, x_axis_column, y_axis_column)
 
     max_y_range = ticks[-2] + 2 * (ticks[-1] - ticks[-2]) / 3
-    if ticks[0]==0:
-        min_y_range=0
+    if ticks[0] == 0:
+        min_y_range = 0
     else:
-        min_y_range = min(ticks[0] - 2 * (ticks[1] - ticks[0]) / 3,0)
+        min_y_range = min(ticks[0] - 2 * (ticks[1] - ticks[0]) / 3, 0)
 
     fig.update_yaxes(
         rangemode="tozero",
@@ -127,22 +127,22 @@ def compute_y_axis_ticks(
 
         # Sum positives per x-axis group
         largest_y_value = (
-            df_positive
-            .group_by(x_axis_column)
+            df_positive.group_by(x_axis_column)
             .agg(pl.col(y_axis_column).sum())
             .get_column(y_axis_column)
             .max()
-            if df_positive.height > 0 else 0
+            if df_positive.height > 0
+            else 0
         )
 
         # Sum negatives per x-axis group
         smallest_y_value = (
-            df_negative
-            .group_by(x_axis_column)
+            df_negative.group_by(x_axis_column)
             .agg(pl.col(y_axis_column).sum())
             .get_column(y_axis_column)
             .min()
-            if df_negative.height > 0 else 0
+            if df_negative.height > 0
+            else 0
         )
 
     else:
@@ -151,7 +151,7 @@ def compute_y_axis_ticks(
 
     # Add padding
     y_axis_max = largest_y_value * 1.3
-    y_axis_min = min(smallest_y_value * 1.3,0)
+    y_axis_min = min(smallest_y_value * 1.3, 0)
 
     ticks = generate_human_readable_yticks(y_axis_min, y_axis_max)
     return ticks

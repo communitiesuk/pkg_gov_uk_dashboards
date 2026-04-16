@@ -76,6 +76,7 @@ class StackedBarChart:
         alternative_data_button_text: Optional[str] = None,
         alternative_all_data_button_text: Optional[str] = None,
         total_trace_name: Optional[str] = None,
+        y_axis_tick_prefix: Optional[str] = None,
         x_hoverformat: Optional[str] = "%b %Y",
     ):
         """Initializes the StackedBarChart instance.
@@ -126,6 +127,7 @@ class StackedBarChart:
         self.alternative_data_button_text = alternative_data_button_text
         self.alternative_all_data_button_text = alternative_all_data_button_text
         self.total_trace_name = total_trace_name
+        self.y_axis_tick_prefix = y_axis_tick_prefix
         self.x_hoverformat = x_hoverformat
         self.fig = self.create_stacked_bar_chart()
 
@@ -262,22 +264,23 @@ class StackedBarChart:
 
         update_layout_bgcolor_margin(fig, "#FFFFFF")
 
-        filtered_df = self.df.filter(
-            pl.col(self.trace_name_column).is_in(self.trace_name_list)
-        )
+        # filtered_df = self.df.filter(
+        #     pl.col(self.trace_name_column).is_in(self.trace_name_list)
+        # )
 
-        format_yaxes(
-            fig,
-            True,
-            filtered_df,
-            self.x_axis_column,
-            self.y_axis_column,
-        )
+        # format_yaxes(
+        #     fig,
+        #     True,
+        #     filtered_df,
+        #     self.x_axis_column,
+        #     self.y_axis_column,
+        # )
 
         fig.update_layout(
             legend=get_legend_configuration(),
             font={"size": CHART_LABEL_FONT_SIZE},
             yaxis={
+                "tickprefix": self.y_axis_tick_prefix,
                 "exponentformat": "B",
             },
             showlegend=True,
