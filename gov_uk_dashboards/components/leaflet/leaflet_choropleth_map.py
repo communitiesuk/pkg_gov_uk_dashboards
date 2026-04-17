@@ -185,37 +185,23 @@ class LeafletChoroplethMap:
                 zoom=9,
                 attributionControl=False,
                 style={
-                    "width": "100%",
-                    "height": "960px",
+                    "width": "350px",
+                    "height": "300px",  # 👈 must be small for inset
                     "background": "white",
                     "padding-left": "40px",
                 },
                 **disabled_zoom_controls,
             )
 
+            london_overlay_div = html.Div(
+                ["Hello",
+                london_map],
+                id="london-overlay-container",
+            )
+
             map_container_for_display = html.Div(
-                style={
-                    "display": "flex",
-                    "gap": "20px",  # space between maps
-                    "alignItems": "flex-start",
-                },
-                children=[
-                    html.Div(
-                        map_container_for_display,
-                        style={
-                            "flex": "1",
-                            "minWidth": "0",
-                        },
-                    ),
-                    html.Div(
-                        london_map,
-                        style={
-                            "width": "350px",
-                            "flexShrink": "0",
-                            "transform": "translateY(130px)",  # 👈 moves visually only
-                        },
-                    ),
-                ],
+                style={"position": "relative"},
+                children=[map_container_for_display, london_overlay_div],
             )
 
             download_london_map = dl.Map(
