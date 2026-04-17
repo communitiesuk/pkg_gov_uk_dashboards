@@ -160,8 +160,22 @@ class LeafletChoroplethMap:
             )
             london_display_children = (
                 children
-                + [*([self._get_london_map_insert_title()])]
+                # + [*([self._get_london_map_insert_title()])]
                 + [london_layer]
+                + [
+                    html.Div(
+                        ["London new"],
+                        style={
+                            "position": "absolute",
+                            "background": "white",
+                            "borderRadius": "5px",
+                            "fontWeight": "bold",
+                            "fontSize": "14px",
+                            "zIndex": "99",
+                            "top": "10px",
+                        },
+                    )
+                ]
                 + [london_region_rectangle]
             )
             london_download_children = (
@@ -194,8 +208,7 @@ class LeafletChoroplethMap:
             )
 
             london_overlay_div = html.Div(
-                ["Hello",
-                london_map],
+                [london_map],
                 id="london-overlay-container",
             )
 
@@ -563,8 +576,7 @@ class LeafletChoroplethMap:
         }
 
         return html.Div(
-            "London",
-            style={**base_style, **position_style},
+            "London", style={**base_style, **position_style}, id="where-are-you"
         )
 
     def resolve_colorbar_title(self, colorbar_title: str):
