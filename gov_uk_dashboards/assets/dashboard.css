@@ -9535,3 +9535,23 @@ mark.expenditure {
   width: 175px !important;
   white-space: normal !important;
 }
+
+#london-overlay-container {
+  position: absolute;
+  top: 400px;
+  left: -30px;
+  z-index: 1000;
+  background: white;
+  padding: 6px;
+}
+
+/* 1300px last width that looks right for london & national map */
+@media (max-width: 1300px) {
+  #london-overlay-container {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
