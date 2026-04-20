@@ -122,6 +122,7 @@ class LeafletChoroplethMap:
             boundsOptions={
                 "padding": [20, 20],
             },  # ensures LA fills map nicely
+            minZoom=5,
             maxZoom=10 if self.enable_zoom else 6.5,
             **zoom_controls,
             attributionControl=False,
