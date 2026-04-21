@@ -2,7 +2,8 @@
 
 import calendar
 import os
-from datetime import datetime, date
+from datetime import datetime, date, time
+from zoneinfo import ZoneInfo
 import re
 from typing import Optional
 
@@ -238,10 +239,21 @@ def convert_to_financial_year_ending(
     return f"{year + 1}"
 
 
-def get_todays_date() -> str:
+def get_todays_date(return_datetime: bool = False) -> str | datetime:
     """get a string of todays date fixing value for visual tests"""
-    if os.environ.get("STAGE") and os.environ.get("STAGE") == "testing":
-        return "2023-12-25"
+    if os.environ.get("STAGE") == "testing":
+        fixed_date = date(2023, 12, 25)
+        if return_datetime:
+            return datetime.combine(
+                fixed_date,
+                time.min,
+                tzinfo=ZoneInfo("Europe/London"),
+            )
+        return fixed_date.isoformat()
+
+    if return_datetime:
+        return datetime.now(ZoneInfo("Europe/London"))
+
     return str(date.today())
 
 
