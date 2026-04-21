@@ -220,30 +220,33 @@ class LeafletChoroplethMap:
 
             national_and_london_download_maps_container = html.Div(
                 style={
-                    "display": "flex",
+                    "position": "relative",
                     "width": "1400px",
                     "height": "1200px",
                     "background": "white",
                 },
                 children=[
+                    # NATIONAL MAP (normal flow)
                     html.Div(
                         national_download_choropleth_map,
                         style={
-                            "width": "880px",
+                            "width": "100%",
                             "height": "100%",
-                            "minWidth": "0",
                             "marginLeft": "50px",
                         },
                     ),
+
+                    # LONDON MAP (overlay)
                     html.Div(
                         download_london_map,
                         style={
+                            "position": "absolute",
+                            "top": "200px",   # adjust as needed
+                            "left": "40px",   # 👈 puts it in white space
                             "width": "400px",
                             "height": "350px",
-                            "marginTop": "300px",
+                            "zIndex": 10,
                             "background": "white",
-                            "minWidth": "0",
-                            "marginLeft": "70px",
                         },
                     ),
                 ],
@@ -555,7 +558,7 @@ class LeafletChoroplethMap:
 
 
         position_style = {
-            "top": "150px" if for_download else "340px",
+            "top": "150px" if for_download else "330px",
             "left": "20px" if for_download else "40px",
             "position": "absolute" if for_download else None
         }
