@@ -116,14 +116,22 @@ class LeafletChoroplethMap:
 
         map_container_for_display = dl.Map(
             children=national_display_children,
-            bounds=[[49.66247637044628, -6.568378284916049], [55.8212081746314, 1.77370560966352]], # got from a print in self._add_data_to_geojson_and_get_bounds
-            maxBounds=[[49.66247637044628, -6.568378284916049], [55.8212081746314, 1.77370560966352]],
+            bounds=[
+                [49.66247637044628, -6.568378284916049],
+                [55.8212081746314, 1.77370560966352],
+            ],  # got from a print in self._add_data_to_geojson_and_get_bounds
+            maxBounds=[
+                [49.66247637044628, -6.568378284916049],
+                [55.8212081746314, 1.77370560966352],
+            ],
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={
                 "padding": [20, 20],
             },  # ensures LA fills map nicely
             minZoom=5,
             maxZoom=10 if self.enable_zoom else 6.5,
+            # center=[54.5, -2.5],  # Centered on the UK
+            # zoom=6.5,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "1000px", "background": "white"},
@@ -158,7 +166,7 @@ class LeafletChoroplethMap:
             london_display_children = (
                 children
                 + [london_layer]
-                +[*([self._get_london_map_insert_title()])]
+                + [*([self._get_london_map_insert_title()])]
                 + [london_region_rectangle]
             )
             london_download_children = (
@@ -226,7 +234,6 @@ class LeafletChoroplethMap:
                     "background": "white",
                 },
                 children=[
-                    # NATIONAL MAP (normal flow)
                     html.Div(
                         national_download_choropleth_map,
                         style={
@@ -235,14 +242,12 @@ class LeafletChoroplethMap:
                             "marginLeft": "50px",
                         },
                     ),
-
-                    # LONDON MAP (overlay)
                     html.Div(
                         download_london_map,
                         style={
                             "position": "absolute",
-                            "top": "200px",   # adjust as needed
-                            "left": "40px",   # 👈 puts it in white space
+                            "top": "200px",
+                            "left": "40px",
                             "width": "400px",
                             "height": "350px",
                             "zIndex": 10,
@@ -547,25 +552,22 @@ class LeafletChoroplethMap:
         return None
 
     def _get_london_map_insert_title(self, for_download=False):
-        base_style={
-                            "background": "white",
-                            "borderRadius": "5px",
-                            "fontWeight": "bold",
-                            "fontSize": "14px",
-                            "zIndex": "99",
-                            "top": "10px",
-                        }
-
+        base_style = {
+            "background": "white",
+            "borderRadius": "5px",
+            "fontWeight": "bold",
+            "fontSize": "14px",
+            "zIndex": "99",
+            "top": "10px",
+        }
 
         position_style = {
             "top": "150px" if for_download else "330px",
             "left": "20px" if for_download else "40px",
-            "position": "absolute" if for_download else None
+            "position": "absolute" if for_download else None,
         }
 
-        return html.Div(
-            "London", style={**base_style, **position_style}
-        )
+        return html.Div("London", style={**base_style, **position_style})
 
     def resolve_colorbar_title(self, colorbar_title: str):
         """Returns text for colorbar title."""
