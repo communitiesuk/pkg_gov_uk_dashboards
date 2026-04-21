@@ -191,7 +191,7 @@ class LeafletChoroplethMap:
                 attributionControl=False,
                 style={
                     "width": "350px",
-                    "height": "300px",  # 👈 must be small for inset
+                    "height": "300px",
                     "background": "white",
                     "padding-left": "40px",
                 },
