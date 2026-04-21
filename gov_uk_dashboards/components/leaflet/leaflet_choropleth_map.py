@@ -157,22 +157,8 @@ class LeafletChoroplethMap:
             )
             london_display_children = (
                 children
-                # + [*([self._get_london_map_insert_title()])]
                 + [london_layer]
-                + [
-                    html.Div(
-                        ["London new"],
-                        style={
-                            "position": "absolute",
-                            "background": "white",
-                            "borderRadius": "5px",
-                            "fontWeight": "bold",
-                            "fontSize": "14px",
-                            "zIndex": "99",
-                            "top": "10px",
-                        },
-                    )
-                ]
+                +[*([self._get_london_map_insert_title()])]
                 + [london_region_rectangle]
             )
             london_download_children = (
@@ -558,22 +544,24 @@ class LeafletChoroplethMap:
         return None
 
     def _get_london_map_insert_title(self, for_download=False):
-        base_style = {
-            "position": "absolute",
-            "background": "white",
-            "borderRadius": "5px",
-            "fontWeight": "bold",
-            "fontSize": "14px",
-            "zIndex": "99",
-        }
+        base_style={
+                            "background": "white",
+                            "borderRadius": "5px",
+                            "fontWeight": "bold",
+                            "fontSize": "14px",
+                            "zIndex": "99",
+                            "top": "10px",
+                        }
+
 
         position_style = {
             "top": "150px" if for_download else "340px",
             "left": "20px" if for_download else "40px",
+            "position": "absolute" if for_download else None
         }
 
         return html.Div(
-            "London", style={**base_style, **position_style}, id="where-are-you"
+            "London", style={**base_style, **position_style}
         )
 
     def resolve_colorbar_title(self, colorbar_title: str):
