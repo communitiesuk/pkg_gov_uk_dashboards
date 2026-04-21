@@ -130,7 +130,7 @@ class LeafletChoroplethMap:
             },  # ensures LA fills map nicely
             minZoom=5,
             maxZoom=10 if self.enable_zoom else 6.5,
-            # center=[54.5, -2.5],  # Centered on the UK
+            center=[54.5, -2.5],  # Centered on the UK
             # zoom=6.5,
             **zoom_controls,
             attributionControl=False,
