@@ -1688,3 +1688,10 @@ mark.expenditure {
         margin-top: 10px;
     }
 }
+
+// Hide colourbar when width < 1300px
+@media (max-width: 1300px) {
+  .leaflet-control-colorbar.leaflet-control {
+    display: none
+  }
+}
