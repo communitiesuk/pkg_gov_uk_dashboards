@@ -537,6 +537,7 @@ class LeafletChoroplethMap:
             top = "70px" if enable_zoom is False else "140px"
             return html.Div(
                 self.colorbar_title,
+                className="colorbar-title",
                 style={
                     "position": "absolute",
                     "top": top,  # Adjusted to place above the colorbar

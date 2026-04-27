@@ -1695,3 +1695,10 @@ mark.expenditure {
     display: none
   }
 }
+
+// Hide colourbar title when width < 1300px
+@media (max-width: 1300px) {
+  .colorbar-title {
+    display: none;
+  }
+}
