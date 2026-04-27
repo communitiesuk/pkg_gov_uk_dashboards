@@ -9560,3 +9560,8 @@ mark.expenditure {
     display: none;
   }
 }
+@media (max-width: 1300px) {
+  .colorbar-title {
+    display: none;
+  }
+}
