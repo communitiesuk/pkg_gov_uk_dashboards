@@ -69,7 +69,7 @@ class TimeSeriesChart:
         dashed_trace_name_list: list[str] = None,
         trace_colour_groups: list[str, str] = None,
         initially_hidden_traces: Optional[list[str]] = None,
-        grey_traces: Optional[list[str]]=None,
+        grey_traces: Optional[list[str]] = None,
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
         ] = None,
@@ -270,7 +270,7 @@ class TimeSeriesChart:
             else:
                 marker_sizes = [12] * (len(df.with_row_index()))
             if self.grey_traces is not None and trace_name in self.grey_traces:
-                colour="#BFBFBF"
+                colour = "#BFBFBF"
             legendgroup = self._get_legend_group(df)
             fig.add_trace(
                 self.create_time_series_trace(
@@ -710,9 +710,13 @@ class TimeSeriesChart:
 
     def _get_base_palette(self) -> list[str]:
         if self.grey_traces is not None:
-            number_of_traces = len(self.trace_name_list)-len(self.grey_traces)
-            if number_of_traces==1:
-                return ["#12436D"]*len(self.trace_name_list) # from focus palette
+            number_of_coloured_traces = len(self.trace_name_list) - len(
+                self.grey_traces
+            )
+            if number_of_coloured_traces == 1:
+                return ["#12436D"] * len(self.trace_name_list)  # from focus palette
+            else:
+                raise ValueError("Number of coloured traces must be 1.")
         number_of_traces = len(self.trace_name_list)
         if number_of_traces == 2 and self.filled_traces_dict is None:
             return [
