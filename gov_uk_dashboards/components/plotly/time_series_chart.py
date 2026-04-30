@@ -69,6 +69,7 @@ class TimeSeriesChart:
         dashed_trace_name_list: list[str] = None,
         trace_colour_groups: list[str, str] = None,
         initially_hidden_traces: Optional[list[str]] = None,
+        grey_traces: Optional[list[str]] = None,
         hover_data_for_traces_with_different_hover_for_last_point: Optional[
             HoverDataByTrace
         ] = None,
@@ -106,6 +107,7 @@ class TimeSeriesChart:
         self.dashed_trace_name_list = dashed_trace_name_list
         self.trace_colour_groups = trace_colour_groups
         self.initially_hidden_traces = initially_hidden_traces
+        self.grey_traces = grey_traces
         self.legend_dict = legend_dict
         self.trace_name_column = trace_name_column
         self.xaxis_tick_text_format = xaxis_tick_text_format
@@ -267,6 +269,8 @@ class TimeSeriesChart:
                 marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
             else:
                 marker_sizes = [12] * (len(df.with_row_index()))
+            if self.grey_traces is not None and trace_name in self.grey_traces:
+                colour = AFAccessibleColours.FOCUS_PALETTE.value[1]
             legendgroup = self._get_legend_group(df)
             fig.add_trace(
                 self.create_time_series_trace(
@@ -705,6 +709,15 @@ class TimeSeriesChart:
         return self._assign_colours_with_groups(palette, trace_to_group_id)
 
     def _get_base_palette(self) -> list[str]:
+        if self.grey_traces is not None:
+            number_of_coloured_traces = len(self.trace_name_list) - len(
+                self.grey_traces
+            )
+            if number_of_coloured_traces == 1:
+                return AFAccessibleColours.FOCUS_PALETTE.value[0] * len(
+                    self.trace_name_list
+                )
+            raise ValueError("Number of coloured traces must be 1.")
         number_of_traces = len(self.trace_name_list)
         if number_of_traces == 2 and self.filled_traces_dict is None:
             return [
