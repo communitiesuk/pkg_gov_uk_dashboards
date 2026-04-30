@@ -270,7 +270,8 @@ class TimeSeriesChart:
             else:
                 marker_sizes = [12] * (len(df.with_row_index()))
             if self.grey_traces is not None and trace_name in self.grey_traces:
-                colour = AFAccessibleColours.FOCUS_PALETTE.value[1]
+                focus_palette_list = AFAccessibleColours.FOCUS_PALETTE.value
+                colour = focus_palette_list[1]
             legendgroup = self._get_legend_group(df)
             fig.add_trace(
                 self.create_time_series_trace(
@@ -714,9 +715,9 @@ class TimeSeriesChart:
                 self.grey_traces
             )
             if number_of_coloured_traces == 1:
-                return AFAccessibleColours.FOCUS_PALETTE.value[0] * len(
-                    self.trace_name_list
-                )
+                focus_palette_list = AFAccessibleColours.FOCUS_PALETTE.value
+                colour = [focus_palette_list[0]]
+                return colour * len(self.trace_name_list)
             raise ValueError("Number of coloured traces must be 1.")
         number_of_traces = len(self.trace_name_list)
         if number_of_traces == 2 and self.filled_traces_dict is None:
