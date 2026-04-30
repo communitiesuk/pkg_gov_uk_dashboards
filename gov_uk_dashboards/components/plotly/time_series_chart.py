@@ -717,8 +717,7 @@ class TimeSeriesChart:
                 return AFAccessibleColours.FOCUS_PALETTE.value[0] * len(
                     self.trace_name_list
                 )
-            else:
-                raise ValueError("Number of coloured traces must be 1.")
+            raise ValueError("Number of coloured traces must be 1.")
         number_of_traces = len(self.trace_name_list)
         if number_of_traces == 2 and self.filled_traces_dict is None:
             return [
