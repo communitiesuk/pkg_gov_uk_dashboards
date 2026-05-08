@@ -477,6 +477,11 @@ class TimeSeriesChart:
             legendgroup=legendgroup,
             stackgroup="one" if self.stacked else None,
             visible=visible,
+            zorder=(
+                1000
+                if (self.grey_traces is not None and trace_name not in self.grey_traces)
+                else 500
+            ),  # ensure focus trace appears on top of background traces
         )
 
     def _get_hover_template(self, df, trace_name):
