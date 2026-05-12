@@ -1702,3 +1702,31 @@ mark.expenditure {
     display: none;
   }
 }
+
+.margin-bottom-tenpx-important {
+    margin-bottom: 10px !important;
+}
+
+.whats-new-tag-title {
+    white-space: nowrap !important;
+    row-gap: 10px !important;
+    column-gap: 15px !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    display: flex!important;
+}
+
+.whats-new-all-content {
+    margin-bottom: 40px !important;
+    padding-bottom: 20px !important;
+    border-color: #b1b4b6;
+}
+
+.whats-new-all-content:not(:last-child) {
+    border-bottom: 1px solid #b1b4b6;
+}
+
+.no-bold-no-caps-text {
+  font-weight: 400;
+  text-transform: none
+}
