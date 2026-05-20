@@ -18,3 +18,4 @@ dash_extensions~=2.0.5
 dash[testing]~=4.1.0
 notifications_python_client~=10.0.1
 shapely~=2.1.2
+deepdiff~=9.1.0
