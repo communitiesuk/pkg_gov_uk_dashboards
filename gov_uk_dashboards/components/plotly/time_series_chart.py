@@ -19,7 +19,7 @@ from gov_uk_dashboards.constants import (
     HOVER_TEXT_HEADERS,
     LEGEND_SPACING,
     MAIN_TITLE,
-    REMOVE_INITIAL_MARKER,
+    SHOW_INITIAL_MARKER,
     SUBTITLE,
     YEAR,
 )
@@ -263,12 +263,13 @@ class TimeSeriesChart:
                 self.markers,
             )
         ):
-            if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
-                REMOVE_INITIAL_MARKER
+            # by default hide initial marker for a trace
+            if SHOW_INITIAL_MARKER in df.columns and True in df.get_column(
+                SHOW_INITIAL_MARKER
             ):
-                marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
-            else:
                 marker_sizes = [12] * (len(df.with_row_index()))
+            else:
+                marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
             if self.grey_traces is not None and trace_name in self.grey_traces:
                 focus_palette_list = AFAccessibleColours.FOCUS_PALETTE.value
                 colour = focus_palette_list[1]
