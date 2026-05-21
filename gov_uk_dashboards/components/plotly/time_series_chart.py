@@ -578,7 +578,7 @@ class TimeSeriesChart:
             tick_values = [date(year, 1, 1) for year in tick_text]
             range_x = [
                 min_datetime,
-                max_datetime + relativedelta(months=12),
+                max_datetime + relativedelta(months=2),
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
