@@ -19,7 +19,7 @@ from gov_uk_dashboards.constants import (
     HOVER_TEXT_HEADERS,
     LEGEND_SPACING,
     MAIN_TITLE,
-    REMOVE_INITIAL_MARKER,
+    SHOW_INITIAL_MARKER,
     SUBTITLE,
     YEAR,
 )
@@ -263,12 +263,13 @@ class TimeSeriesChart:
                 self.markers,
             )
         ):
-            if REMOVE_INITIAL_MARKER in df.columns and True in df.get_column(
-                REMOVE_INITIAL_MARKER
+            # by default hide initial marker for a trace
+            if SHOW_INITIAL_MARKER in df.columns and True in df.get_column(
+                SHOW_INITIAL_MARKER
             ):
-                marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
-            else:
                 marker_sizes = [12] * (len(df.with_row_index()))
+            else:
+                marker_sizes = [0] + [12] * (len(df.with_row_index()) - 1)
             if self.grey_traces is not None and trace_name in self.grey_traces:
                 focus_palette_list = AFAccessibleColours.FOCUS_PALETTE.value
                 colour = focus_palette_list[1]
@@ -577,8 +578,8 @@ class TimeSeriesChart:
             tick_text = list(range(min(year_list) - 1, max(year_list) + 2))
             tick_values = [date(year, 1, 1) for year in tick_text]
             range_x = [
-                min_datetime - relativedelta(months=6),
-                max_datetime + relativedelta(months=9),
+                min_datetime,
+                max_datetime + relativedelta(months=2),
             ]
 
         elif self.xaxis_tick_text_format == XAxisFormat.MONTH_YEAR.value:
@@ -591,7 +592,7 @@ class TimeSeriesChart:
             if self.x_axis_start_datetime:
                 start_datetime = self.x_axis_start_datetime
             else:
-                start_datetime = df[self.x_axis_column].min() - relativedelta(months=1)
+                start_datetime = df[self.x_axis_column].min()
 
             latest_datetime = df[self.x_axis_column].max()
             tick_text = []
@@ -647,7 +648,7 @@ class TimeSeriesChart:
 
             range_x = [
                 tick_values[0],
-                tick_values[-1],
+                tick_values[-1] + relativedelta(days=40),
             ]
             tick_text = replace_jun_jul_month_abbreviations(tick_text)
         elif self.xaxis_tick_text_format == XAxisFormat.FINANCIAL_QUARTER.value:
@@ -657,7 +658,8 @@ class TimeSeriesChart:
                 for quarter in tick_values
             ]
 
-            range_x = [0.5, 4.5]
+            range_x = [1, 4.2]
+
         elif self.xaxis_tick_text_format == XAxisFormat.WEEK.value:
             df = self.filtered_df.with_columns(
                 pl.col(self.x_axis_column)
