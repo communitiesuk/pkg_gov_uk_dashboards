@@ -95,7 +95,7 @@ class TimeSeriesChart:
         hover_distance: Optional[int] = 1,
         footnote: Optional[str] = None,
         stacked: Optional[bool] = False,
-        top_trace: Optional[str]=None,
+        top_trace: Optional[str] = None,
     ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -146,7 +146,7 @@ class TimeSeriesChart:
         self.additional_line = additional_line
         self.hover_distance = hover_distance
         self.stacked = stacked
-        self.top_trace=top_trace
+        self.top_trace = top_trace
         self.colour_list = self._get_colour_list()
         self.fig = self.create_time_series_chart()
         self.footnote = footnote
@@ -482,7 +482,8 @@ class TimeSeriesChart:
             visible=visible,
             zorder=(
                 1000
-                if (self.grey_traces is not None and trace_name not in self.grey_traces) or (self.top_trace is not None and trace_name==self.top_trace)
+                if (self.grey_traces is not None and trace_name not in self.grey_traces)
+                or (self.top_trace is not None and trace_name == self.top_trace)
                 else 500
             ),  # ensure focus trace appears on top of background traces
         )
