@@ -21,7 +21,6 @@ Classes:
         Raised when a JSON file cannot be read or parsed.
 """
 
-
 import json
 from pathlib import Path
 from typing import Any
@@ -46,6 +45,7 @@ def flatten(lst):
             yield from flatten(item)
         else:
             yield item
+
 
 class JsonFileLoadError(RuntimeError):
     """Raised when a JSON file cannot be loaded or parsed."""
@@ -74,6 +74,4 @@ def load_json_file(filepath: str | Path) -> Any:
             f"at line {exc.lineno}, column {exc.colno}."
         ) from exc
     except OSError as exc:
-        raise JsonFileLoadError(
-            f"Could not read JSON file '{path}': {exc}"
-        ) from exc
+        raise JsonFileLoadError(f"Could not read JSON file '{path}': {exc}") from exc
