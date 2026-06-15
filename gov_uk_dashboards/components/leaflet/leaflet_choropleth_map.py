@@ -437,10 +437,13 @@ class LeafletChoroplethMap:
 
     def _get_colorscale(self):
         if self.color_scale_is_discrete:
-            range = (
+            column_to_plot_range = (
                 self.df[self.column_to_plot].max() - self.df[self.column_to_plot].min()
             )
-            if len(self.df[self.column_to_plot].unique()) == 6 or range == 5:
+            if (
+                len(self.df[self.column_to_plot].unique()) == 6
+                or column_to_plot_range == 5
+            ):
                 return [
                     "#080C54",
                     "#186290",
@@ -449,7 +452,10 @@ class LeafletChoroplethMap:
                     "#CDE594",
                     "#ffffcc",
                 ]
-            if len(self.df[self.column_to_plot].unique()) == 5 or range == 4:
+            if (
+                len(self.df[self.column_to_plot].unique()) == 5
+                or column_to_plot_range == 4
+            ):
                 return [
                     "#080C54",
                     "#186290",
@@ -457,9 +463,15 @@ class LeafletChoroplethMap:
                     "#80C6A3",
                     "#CDE594",
                 ]
-            if len(self.df[self.column_to_plot].unique()) == 4 or range == 3:
+            if (
+                len(self.df[self.column_to_plot].unique()) == 4
+                or column_to_plot_range == 3
+            ):
                 return ["#080C54", "#1F9EB7", "#80C6A3", "#CDE594"]
-            if len(self.df[self.column_to_plot].unique()) == 3 or range == 2:
+            if (
+                len(self.df[self.column_to_plot].unique()) == 3
+                or column_to_plot_range == 2
+            ):
                 return ["#080C54", "#1F9EB7", "#CDE594"]
         return ["#80C6A3", "#186290"]
 
