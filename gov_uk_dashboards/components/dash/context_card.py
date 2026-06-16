@@ -552,7 +552,7 @@ class ContextCard:
         increase_is_positive: bool = True,
         use_number_for_change_rather_than_percentage: bool = False,
         details_summary_and_text: tuple[str, str] = None,
-        include_changed_from=True
+        include_changed_from=True,
     ):
         """
         A compact “context card” for a time-series measure that renders:
@@ -703,7 +703,7 @@ class ContextCard:
         self.headline_figure = self._get_headline_figure()
         self.current_date = self._get_current_date()
         self.details_summary_and_text = details_summary_and_text
-        self.include_changed_from=include_changed_from
+        self.include_changed_from = include_changed_from
 
     def __call__(self):
         card_content = [
@@ -747,7 +747,7 @@ class ContextCard:
     def _filter_df(self, df):
         df_for_measure = df.filter(df[MEASURE] == self.measure)
         latest_date = df_for_measure.select(pl.col(DATE_VALID).max()).item()
-        if df.height==0:
+        if df.height == 0:
             return df
         if (
             "Percentage change from prev year" in df_for_measure.columns
@@ -771,7 +771,7 @@ class ContextCard:
     def _get_headline_figure(self):
         if self.df.height == 0:
             return 0
-        
+
         unit = "%" if self.headline_figure_is_percentage else ""
 
         return (
@@ -786,7 +786,7 @@ class ContextCard:
 
     # pylint: disable=too-many-statements
     def _get_current_date(self):
-        if self.df.height==0:
+        if self.df.height == 0:
             return None
         current_date = self.df[DATE_VALID][0]
         return convert_date(
