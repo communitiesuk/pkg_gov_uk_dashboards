@@ -9561,16 +9561,6 @@ mark.expenditure {
     margin-top: 10px;
   }
 }
-@media (max-width: 1300px) {
-  .leaflet-control-colorbar.leaflet-control {
-    display: none;
-  }
-}
-@media (max-width: 1300px) {
-  .colorbar-title {
-    display: none;
-  }
-}
 .margin-bottom-tenpx-important {
   margin-bottom: 10px !important;
 }
