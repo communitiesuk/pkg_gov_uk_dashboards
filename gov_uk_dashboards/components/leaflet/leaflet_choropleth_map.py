@@ -14,6 +14,7 @@ from shapely.affinity import scale
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
 )
+from gov_uk_dashboards.components.dash.green_button import green_button
 from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
@@ -258,7 +259,9 @@ class LeafletChoroplethMap:
             )
 
         choropleth_map = display_chart_or_table_with_header(
-            map_container_for_display,
+            html.Div(
+                [green_button("Reset map", "reset-map-btn"), map_container_for_display]
+            ),
             self.title,
             self.subtitle,
             None,

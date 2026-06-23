@@ -9121,6 +9121,12 @@ mark.expenditure {
   gap: 20px 7%;
 }
 
+.four_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 5%;
+}
+
 @media (max-width: 600px) {
   .three_column_grid_layout {
     grid-template-columns: 1fr;
@@ -9553,16 +9559,6 @@ mark.expenditure {
     left: auto !important;
     width: 100%;
     margin-top: 10px;
-  }
-}
-@media (max-width: 1300px) {
-  .leaflet-control-colorbar.leaflet-control {
-    display: none;
-  }
-}
-@media (max-width: 1300px) {
-  .colorbar-title {
-    display: none;
   }
 }
 .margin-bottom-tenpx-important {
