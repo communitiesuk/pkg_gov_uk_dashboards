@@ -96,7 +96,7 @@ class TimeSeriesChart:
         footnote: Optional[str] = None,
         stacked: Optional[bool] = False,
         top_trace: Optional[str] = None,
-        hide_markers: bool=True
+        hide_markers: bool = True,
     ):  # pylint: disable=duplicate-code
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -488,7 +488,9 @@ class TimeSeriesChart:
                 or (self.top_trace is not None and trace_name == self.top_trace)
                 else 500
             ),  # ensure focus trace appears on top of background traces
-            mode=("lines" if self.hide_markers==True else None)
+            mode=(
+                "lines" if self.hide_markers == True else None
+            ),  # if None default is "lines+markers" when there are < 20 points, otherwise "lines"
         )
 
     def _get_hover_template(self, df, trace_name):
