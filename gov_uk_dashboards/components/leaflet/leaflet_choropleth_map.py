@@ -351,18 +351,39 @@ class LeafletChoroplethMap:
                 geojson_copy["features"][i] = self.scale_feature(feature, 5.0)
 
             # Highlight only the selected LA
-            if self.selected_la and feature["properties"]["area"] == self.selected_la:
+            if self.selected_la: # and feature["properties"]["area"] == self.selected_la:
+                def get_region_bounds(geojson, selected_la):
+                    las_in_region = set(
+                    self.df.filter(
+                        pl.col("Region")
+                        == self.df.filter(pl.col("Local authority") == selected_la).select("Region").item()
+                    )
+                    .select("Area_Code")
+                    .to_series()
+                    .to_list()
+                    )
+
+                    coords = []
+
+                    for feature in geojson["features"]:
+                        if feature["properties"].get("geo_id") not in las_in_region:
+                            continue
+
+                        geom = feature["geometry"]
+
+                        if geom["type"] == "Polygon":
+                            coords.extend(geom["coordinates"][0])
+
+                        elif geom["type"] == "MultiPolygon":
+                            for poly in geom["coordinates"]:
+                                coords.extend(poly[0])
+
+                    lats = [p[1] for p in coords]
+                    lngs = [p[0] for p in coords]
+
+                    return [[min(lats), min(lngs)], [max(lats), max(lngs)]]
+                selected_bounds=get_region_bounds(geojson_copy,self.selected_la)
                 # Compute bounds of the selected feature
-                coords = []
-                geom_type = feature["geometry"]["type"]
-                if geom_type == "Polygon":
-                    coords = feature["geometry"]["coordinates"][0]
-                elif geom_type == "MultiPolygon":
-                    for poly in feature["geometry"]["coordinates"]:
-                        coords.extend(poly[0])
-                lats = [pt[1] for pt in coords]
-                lngs = [pt[0] for pt in coords]
-                selected_bounds = [[min(lats), min(lngs)], [max(lats), max(lngs)]]
 
             else:
                 # Other LAs
