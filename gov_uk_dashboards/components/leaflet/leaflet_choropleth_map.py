@@ -313,12 +313,10 @@ class LeafletChoroplethMap:
             for row in self.df.iter_rows(named=True)
         }
 
-        london_la_codes = None
         if london_las:
             london_la_codes = (
                 self.df.filter(pl.col("Region") == "London")
-                .select("Area_Code")
-                .unique()
+                .select(pl.col("Area_Code").unique())
                 .to_series()
                 .to_list()
             )
