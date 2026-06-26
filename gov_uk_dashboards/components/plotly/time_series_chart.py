@@ -254,19 +254,38 @@ class TimeSeriesChart:
             )
             fig.add_trace(trace_connector)
         # pylint: disable=unused-variable
-        for i, (
-            df,
-            trace_name,
-            colour,
-            marker,
-        ) in enumerate(
-            zip(
-                self._get_df_list_for_time_series(),
-                self.trace_name_list,
-                self.colour_list,
-                self.markers,
-            )
+        # for i, (
+        #     df,
+        #     trace_name,
+        #     colour,
+        #     marker,
+        # ) in enumerate(
+        #     zip(
+        #         self._get_df_list_for_time_series(),
+        #         self.trace_name_list,
+        #         self.colour_list,
+        #         self.markers,
+        #     )
+        # ):
+        df_list = self._get_df_list_for_time_series()
+
+        trace_map = {}
+
+        for trace_name, df, colour, marker in zip(
+            self.trace_name_list,
+            df_list,
+            self.colour_list,
+            self.markers
         ):
+            trace_map[trace_name] = (df, colour, marker)
+                
+        # legend_rank_map = {name: i for i, name in enumerate(self.trace_name_list)}
+
+        trace_order = self._get_latest_trace_ranking(trace_map)
+
+        for trace_name in trace_order:
+
+            df, colour, marker = trace_map[trace_name]
             # by default hide initial marker for a trace
             if SHOW_INITIAL_MARKER in df.columns and True in df.get_column(
                 SHOW_INITIAL_MARKER
@@ -707,6 +726,31 @@ class TimeSeriesChart:
         else:
             df_list = [self.filtered_df]
         return df_list
+    
+    def _get_latest_trace_ranking(self,trace_map) -> list[str]:
+        """
+        Returns trace names sorted by latest y-value (descending).
+        """
+
+        ranked = []
+
+        for trace_name, (df, _, _) in trace_map.items():
+
+            if df.is_empty():
+                continue
+
+            latest_value = (
+                df.sort(self.x_axis_column)
+                .select(pl.col(self.y_axis_column).last())
+                .item()
+            )
+
+            ranked.append((trace_name, latest_value))
+
+        ranked.sort(key=lambda x: x[1], reverse=True)
+        print(        "!!!!", [t for t, _ in ranked]
+    )
+        return [t for t, _ in ranked]
 
     def _get_colour_list(self):
         """Returns a list of colours (one per trace in trace_name_list).
