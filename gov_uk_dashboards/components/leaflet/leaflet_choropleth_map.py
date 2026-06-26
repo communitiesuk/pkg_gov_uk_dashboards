@@ -297,7 +297,7 @@ class LeafletChoroplethMap:
     def _add_data_to_geojson_and_get_bounds(self, london_las=False):
         """Adds data to features, highlights selected LA, and returns layers + bounds for selected
         LA's region."""
-
+        # pylint: disable=too-many-locals, too-many-branches
         selected_la_region_bounds = None
         london_region_bounds = None
 
