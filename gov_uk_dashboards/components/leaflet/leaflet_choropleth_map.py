@@ -295,10 +295,10 @@ class LeafletChoroplethMap:
         ]
 
     def _add_data_to_geojson_and_get_bounds(self, london_las=False):
-        """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
-        selected_bounds."""
-        # pylint: disable=too-many-locals, too-many-branches
-        selected_bounds = None
+        """Adds data to features, highlights selected LA, and returns layers + bounds for selected
+        LA's region."""
+
+        selected_la_region_bounds = None
         london_region_bounds = None
 
         # Make a deep copy so each map (display or download) has independent data
@@ -313,10 +313,12 @@ class LeafletChoroplethMap:
             for row in self.df.iter_rows(named=True)
         }
 
+        london_la_codes = None
         if london_las:
             london_la_codes = (
                 self.df.filter(pl.col("Region") == "London")
-                .select(pl.col("Area_Code").unique())
+                .select("Area_Code")
+                .unique()
                 .to_series()
                 .to_list()
             )
@@ -327,6 +329,20 @@ class LeafletChoroplethMap:
             ]
             london_region_bounds = self.pad_bounds(
                 self.compute_bounds(geojson_copy["features"])
+            )
+
+        area_codes_for_las_in_same_region_as_selected_la = None
+        if self.selected_la:
+            area_codes_for_las_in_same_region_as_selected_la = set(
+                self.df.filter(
+                    pl.col("Region")
+                    == self.df.filter(pl.col("Local authority") == self.selected_la)
+                    .select("Region")
+                    .item()
+                )
+                .select("Area_Code")
+                .to_series()
+                .to_list()
             )
 
         for i, feature in enumerate(geojson_copy["features"]):
@@ -350,41 +366,33 @@ class LeafletChoroplethMap:
             if feature["properties"].get("geo_id") == "E06000053":  # IoS LA code
                 geojson_copy["features"][i] = self.scale_feature(feature, 5.0)
 
-            # Highlight only the selected LA
-            if self.selected_la: # and feature["properties"]["area"] == self.selected_la:
-                def get_region_bounds(geojson, selected_la):
-                    las_in_region = set(
-                    self.df.filter(
-                        pl.col("Region")
-                        == self.df.filter(pl.col("Local authority") == selected_la).select("Region").item()
-                    )
-                    .select("Area_Code")
-                    .to_series()
-                    .to_list()
-                    )
+        # Compute regional bounds for selected LA'a region
+        if self.selected_la and area_codes_for_las_in_same_region_as_selected_la:
+            coords = []
 
-                    coords = []
+            for feature in geojson_copy["features"]:
+                if (
+                    feature["properties"].get("geo_id")
+                    not in area_codes_for_las_in_same_region_as_selected_la
+                ):
+                    continue
 
-                    for feature in geojson["features"]:
-                        if feature["properties"].get("geo_id") not in las_in_region:
-                            continue
+                geom = feature["geometry"]
 
-                        geom = feature["geometry"]
+                if geom["type"] == "Polygon":
+                    coords.extend(geom["coordinates"][0])
 
-                        if geom["type"] == "Polygon":
-                            coords.extend(geom["coordinates"][0])
+                elif geom["type"] == "MultiPolygon":
+                    for poly in geom["coordinates"]:
+                        coords.extend(poly[0])
 
-                        elif geom["type"] == "MultiPolygon":
-                            for poly in geom["coordinates"]:
-                                coords.extend(poly[0])
-
-                    lats = [p[1] for p in coords]
-                    lngs = [p[0] for p in coords]
-
-                    return [[min(lats), min(lngs)], [max(lats), max(lngs)]]
-                selected_bounds=get_region_bounds(geojson_copy,self.selected_la)
-                # Compute bounds of the selected feature
-
+            if coords:
+                lats = [p[1] for p in coords]
+                lngs = [p[0] for p in coords]
+                selected_la_region_bounds = [
+                    [min(lats), min(lngs)],
+                    [max(lats), max(lngs)],
+                ]
             else:
                 # Other LAs
                 feature["properties"]["style"] = {
@@ -451,7 +459,7 @@ class LeafletChoroplethMap:
         )
         geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
-        return geojson_layer, selected_bounds, london_region_bounds
+        return geojson_layer, selected_la_region_bounds, london_region_bounds
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
