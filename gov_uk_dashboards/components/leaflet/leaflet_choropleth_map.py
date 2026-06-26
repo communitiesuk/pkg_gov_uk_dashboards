@@ -35,6 +35,7 @@ class LeafletChoroplethMap:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-positional-arguments
     # pylint: disable=too-many-locals
+    # pylint: disable=too-many-statements
 
     def __init__(
         self,
