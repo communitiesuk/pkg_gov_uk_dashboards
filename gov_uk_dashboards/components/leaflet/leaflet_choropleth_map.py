@@ -35,6 +35,7 @@ class LeafletChoroplethMap:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-positional-arguments
     # pylint: disable=too-many-locals
+    # pylint: disable=too-many-statements
 
     def __init__(
         self,
@@ -295,10 +296,10 @@ class LeafletChoroplethMap:
         ]
 
     def _add_data_to_geojson_and_get_bounds(self, london_las=False):
-        """Adds data to features, highlights selected LA, and returns dl.GeoJSON and
-        selected_bounds."""
+        """Adds data to features, highlights selected LA, and returns layers + bounds for selected
+        LA's region."""
         # pylint: disable=too-many-locals, too-many-branches
-        selected_bounds = None
+        selected_la_region_bounds = None
         london_region_bounds = None
 
         # Make a deep copy so each map (display or download) has independent data
@@ -329,6 +330,20 @@ class LeafletChoroplethMap:
                 self.compute_bounds(geojson_copy["features"])
             )
 
+        area_codes_for_las_in_same_region_as_selected_la = None
+        if self.selected_la:
+            area_codes_for_las_in_same_region_as_selected_la = set(
+                self.df.filter(
+                    pl.col("Region")
+                    == self.df.filter(pl.col("Local authority") == self.selected_la)
+                    .select("Region")
+                    .item()
+                )
+                .select("Area_Code")
+                .to_series()
+                .to_list()
+            )
+
         for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
@@ -350,20 +365,33 @@ class LeafletChoroplethMap:
             if feature["properties"].get("geo_id") == "E06000053":  # IoS LA code
                 geojson_copy["features"][i] = self.scale_feature(feature, 5.0)
 
-            # Highlight only the selected LA
-            if self.selected_la and feature["properties"]["area"] == self.selected_la:
-                # Compute bounds of the selected feature
-                coords = []
-                geom_type = feature["geometry"]["type"]
-                if geom_type == "Polygon":
-                    coords = feature["geometry"]["coordinates"][0]
-                elif geom_type == "MultiPolygon":
-                    for poly in feature["geometry"]["coordinates"]:
-                        coords.extend(poly[0])
-                lats = [pt[1] for pt in coords]
-                lngs = [pt[0] for pt in coords]
-                selected_bounds = [[min(lats), min(lngs)], [max(lats), max(lngs)]]
+        # Compute regional bounds for selected LA'a region
+        if self.selected_la and area_codes_for_las_in_same_region_as_selected_la:
+            coords = []
 
+            for feature in geojson_copy["features"]:
+                if (
+                    feature["properties"].get("geo_id")
+                    not in area_codes_for_las_in_same_region_as_selected_la
+                ):
+                    continue
+
+                geom = feature["geometry"]
+
+                if geom["type"] == "Polygon":
+                    coords.extend(geom["coordinates"][0])
+
+                elif geom["type"] == "MultiPolygon":
+                    for poly in geom["coordinates"]:
+                        coords.extend(poly[0])
+
+            if coords:
+                lats = [p[1] for p in coords]
+                lngs = [p[0] for p in coords]
+                selected_la_region_bounds = [
+                    [min(lats), min(lngs)],
+                    [max(lats), max(lngs)],
+                ]
             else:
                 # Other LAs
                 feature["properties"]["style"] = {
@@ -430,7 +458,7 @@ class LeafletChoroplethMap:
         )
         geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
-        return geojson_layer, selected_bounds, london_region_bounds
+        return geojson_layer, selected_la_region_bounds, london_region_bounds
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
