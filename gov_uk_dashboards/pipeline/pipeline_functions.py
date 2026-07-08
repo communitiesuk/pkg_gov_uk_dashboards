@@ -10,9 +10,9 @@ import pytest
 def run_tests(folder="all", local_glossary_folder=None, additional_test_paths=None):
     """runs integration tests and returns 0 for success"""
     source_file = os.getenv("GLOSSARY_FILEPATH")
+    target_file = f"{local_glossary_folder}/glossary.csv"
 
     if source_file:
-        target_file = f"{local_glossary_folder}/glossary.csv"
         shutil.copy(source_file, target_file)
 
     if folder == "all":
