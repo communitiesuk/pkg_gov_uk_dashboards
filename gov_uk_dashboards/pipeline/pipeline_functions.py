@@ -7,13 +7,14 @@ import shutil
 import pytest
 
 
-def run_tests(folder="all", local_glossary_folder=None):
+def run_tests(folder="all", local_glossary_folder=None, additional_test_paths=None):
     """runs integration tests and returns 0 for success"""
     source_file = os.getenv("GLOSSARY_FILEPATH")
 
     if source_file:
         target_file = f"{local_glossary_folder}/glossary.csv"
         shutil.copy(source_file, target_file)
+
     if folder == "all":
         tests_to_run = ["tests/integration", "tests/data_tests"]
     else:
@@ -23,6 +24,9 @@ def run_tests(folder="all", local_glossary_folder=None):
         )
         if Path(about_the_data_path).exists():
             tests_to_run.append(about_the_data_path)
+
+    if additional_test_paths:
+        tests_to_run.extend(additional_test_paths)
 
     plugin = TestResultPlugin()
     test_result = pytest.main(
