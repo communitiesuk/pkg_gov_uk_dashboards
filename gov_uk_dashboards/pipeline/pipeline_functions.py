@@ -1,4 +1,5 @@
 """Functions for use in data updates"""
+
 import os
 from pathlib import Path
 import shutil
@@ -22,7 +23,6 @@ def run_tests(folder="all", local_glossary_folder=None):
         )
         if Path(about_the_data_path).exists():
             tests_to_run.append(about_the_data_path)
-       
 
     plugin = TestResultPlugin()
     test_result = pytest.main(
@@ -32,6 +32,7 @@ def run_tests(folder="all", local_glossary_folder=None):
     if os.path.exists(target_file):
         os.remove(target_file)
     return plugin, test_result
+
 
 class TestResultPlugin:
     """
