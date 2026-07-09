@@ -21,6 +21,55 @@ from gov_uk_dashboards.formatting.number_formatting import (
 
 LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
 
+from urllib.parse import quote
+
+
+def get_house_marker_icon(colour: str) -> dict:  # can pass any colour in
+    svg = f"""
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="48"
+         height="48"
+         viewBox="0 0 48 48">
+
+        <!-- Pin -->
+        <path
+            d="M24 2
+               C14 2 6 10 6 20
+               C6 34 24 46 24 46
+               C24 46 42 34 42 20
+               C42 10 34 2 24 2Z"
+            fill="{colour}"
+            stroke="white"
+            stroke-width="2"/>
+
+        <!-- White house -->
+        <path
+            fill="white"
+            d="
+                M24 11
+                L16 18
+                H18
+                V28
+                H22
+                V22
+                H26
+                V28
+                H30
+                V18
+                H32
+                Z
+            "/>
+
+    </svg>
+    """
+
+    return {
+        "iconUrl": "data:image/svg+xml;charset=utf-8," + quote(svg),
+        "iconSize": [36, 48],
+        "iconAnchor": [18, 48],  # bottom tip of the pin
+        "popupAnchor": [0, -42],
+    }
+
 
 class LeafletChoroplethMap:
     """Class for  generating leaflet choropleth map charts.
@@ -96,10 +145,51 @@ class LeafletChoroplethMap:
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
         ]
+        marker = dl.Marker(  # need to add to img-src of csp:  "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/ "
+            position=[55, 10],
+            icon={
+                "iconUrl": "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",  # marker-icon-blue.png
+                # marker-icon-red.png
+                # marker-icon-green.png
+                # marker-icon-yellow.png
+                # marker-icon-violet.png
+                # marker-icon-orange.png
+                # marker-icon-blue.png
+                # marker-icon-grey.png
+                # marker-icon-black.png
+                # If you need more colours (e.g. dark green, pink, purple, teal, custom hex colours), the better route is usually a DivIcon or generating your own SVG marker, since the PNG set is limited.
+                "shadowUrl": "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+                "iconSize": [25, 41],
+                "iconAnchor": [12, 41],
+                "popupAnchor": [1, -34],
+            },
+            children=[dl.Popup(content="This is <b>html</b>!")],
+        )
+
+        marker1 = dl.Marker(
+            position=[50, 10],
+            icon=get_house_marker_icon("#4daf4a"),
+            children=[dl.Popup("This is my house!")],
+        )
+
+        # these would need generating as svg's though
+        # A more robust production approach is to use an SVG file in your assets folder:
+        # assets/house-marker.svg
+        # marker = dl.Marker(
+        # position=[55, 10],
+        # icon={
+        #     "iconUrl": "/assets/house-marker.svg",
+        #     "iconSize": [40, 40],
+        #     "iconAnchor": [20, 20],
+        # },
+        # )
+
         national_display_children = (
             children
             + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
             + [geojson_layer]
+            + [marker]
+            + [marker1]
         )
         national_download_children = (
             children
