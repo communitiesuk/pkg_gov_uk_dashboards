@@ -59,6 +59,7 @@ class LeafletChoroplethMap:
         show_tile_layer: bool = False,
         selected_la: str = None,
         show_london_map: bool = False,
+        os_basemap_api_key=None
     ):
         self.geojson_data = geojson
         self.is_single_la = self.geojson_data.get("type") == "Feature"
@@ -74,6 +75,7 @@ class LeafletChoroplethMap:
     "EPSG:4326",
     always_xy=True,
 )
+        self.os_basemap_api_key = os_basemap_api_key
         self.df = df
         self.selected_la = selected_la
         self.hover_text_columns = hover_text_columns
@@ -107,7 +109,8 @@ class LeafletChoroplethMap:
 
         # Build children list safely (exclude None)
         children = [
-            *([dl.TileLayer()] if self.show_tile_layer else []),
+            # *([dl.TileLayer()] if self.show_tile_layer else []), # is this needed? don't think so
+            *([self._get_os_basemap()] if self.os_basemap_api_key else []),
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
         ]
@@ -797,3 +800,19 @@ class LeafletChoroplethMap:
         (south, west), (north, east) = bounds
 
         return [[south - pad, west - pad], [north + pad, east + pad]]
+
+    def _get_os_basemap(self):
+        """Return OS Maps tile layer."""
+
+        if not self.os_basemap_api_key:
+            return None
+
+        return dl.TileLayer(
+            url=(
+                "https://api.os.uk/maps/raster/v1/zxy/"
+                "Road_3857/{z}/{x}/{y}.png"
+                f"?key={self.os_basemap_api_key}"
+            ),
+            attribution="© Crown copyright and database rights 2026 OS", # should use OS_ATTRIBUTION from la view 
+            maxZoom=20,
+        )
