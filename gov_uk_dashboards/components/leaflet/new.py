@@ -399,11 +399,17 @@ class LeafletChoroplethMap:
             #         ],
             #     )
             # )
-            
+            tooltip_content = [
+                html.Div([
+                    html.B(f"{col}: "),
+                    html.Span(str(row[col]))
+                ])
+                for col in self.hover_text_columns
+            ]
             markers.append(dl.Marker(
             position=[lat, lon],
             icon=get_house_marker_icon(row["stage_color"]),
-            children=[dl.Tooltip( f"{row[self.area_column]}")],# or Popup?
+            children=[dl.Tooltip(tooltip_content)],# or Popup?
         ))
         
 
