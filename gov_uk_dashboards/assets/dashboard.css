@@ -9588,3 +9588,11 @@ mark.expenditure {
   font-weight: 400;
   text-transform: none;
 }
+
+.leaflet-control-attribution a[href*=leafletjs] {
+  display: none;
+}
+
+.leaflet-control-attribution span[aria-hidden=true] {
+  display: none;
+}
