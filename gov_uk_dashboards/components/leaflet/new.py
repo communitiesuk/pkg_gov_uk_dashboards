@@ -385,7 +385,7 @@ class LeafletChoroplethMap:
         for row in self.df.iter_rows(named=True):
 
             # adjust these names to your dataframe columns
-            point = wkt.loads(row["project_geometry_parsed"])
+            point = wkt.loads(row[self.area_column])
 
             lon, lat = self.osgb_to_wgs84.transform(
                 point.x,
@@ -409,7 +409,7 @@ class LeafletChoroplethMap:
             markers.append(
                 dl.Marker(
                     position=[lat, lon],
-                    icon=get_house_marker_icon(row["stage_color"]),
+                    icon=get_house_marker_icon(row[self.column_to_plot]),
                     children=[dl.Tooltip(tooltip_content)],  # or Popup?
                 )
             )
@@ -845,14 +845,18 @@ class LeafletChoroplethMap:
         """Create categorical legend for marker stages."""
 
         categories = (
-            self.df.select("Stage").unique().sort("Stage").to_series().to_list()
+            self.df.select(self.legend_column)
+            .unique()
+            .sort(self.legend_column)
+            .to_series()
+            .to_list()
         )
 
         colours = (
-            self.df.select(["Stage", "stage_color"])
+            self.df.select([self.legend_column, self.column_to_plot])
             .unique()
-            .sort("Stage")
-            .select("stage_color")
+            .sort(self.legend_column)
+            .select(self.column_to_plot)
             .to_series()
             .to_list()
         )
