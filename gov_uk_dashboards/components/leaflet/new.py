@@ -60,7 +60,7 @@ class LeafletChoroplethMap:
         show_tile_layer: bool = False,
         selected_la: str = None,
         show_london_map: bool = False,
-        os_basemap_api_key=None
+        os_basemap_api_key=None,
     ):
         self.geojson_data = geojson
         self.is_single_la = self.geojson_data.get("type") == "Feature"
@@ -72,10 +72,10 @@ class LeafletChoroplethMap:
                 "features": [self.geojson_data],
             }
         self.osgb_to_wgs84 = Transformer.from_crs(
-    "EPSG:27700",
-    "EPSG:4326",
-    always_xy=True,
-)
+            "EPSG:27700",
+            "EPSG:4326",
+            always_xy=True,
+        )
         self.os_basemap_api_key = os_basemap_api_key
         self.df = df
         self.selected_la = selected_la
@@ -115,16 +115,21 @@ class LeafletChoroplethMap:
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
         ]
-        national_display_children = (
-            children
-            + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
-            + [geojson_layer]
-        )
-        national_download_children = (
-            children
-            + [self._get_colorbar(), *([self._get_colorbar_title()])]
-            + [geojson_layer_download]
-        )
+        if self.is_single_la:
+            map_legend = [self._get_marker_colorbar()]
+        else:
+            map_legend = [
+                self._get_colorbar(),
+                *([self._get_colorbar_title(self.enable_zoom)]),
+            ]
+
+        national_display_children = children + map_legend + [geojson_layer]
+        if self.is_single_la:
+            map_legend = [self._get_marker_colorbar()]
+        else:
+            map_legend = [self._get_colorbar(), *([self._get_colorbar_title()])]
+
+        national_download_children = children + map_legend + [geojson_layer_download]
 
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
@@ -316,10 +321,8 @@ class LeafletChoroplethMap:
 
     def _add_single_la_map(self):
         """Draw single LA boundary and add point markers."""
-        
-        
-        from urllib.parse import quote
 
+        from urllib.parse import quote
 
         def get_house_marker_icon(colour: str) -> dict:  # can pass any colour in
             svg = f"""
@@ -400,20 +403,18 @@ class LeafletChoroplethMap:
             #     )
             # )
             tooltip_content = [
-                html.Div([
-                    html.B(f"{col}: "),
-                    html.Span(str(row[col]))
-                ])
+                html.Div([html.B(f"{col}: "), html.Span(str(row[col]))])
                 for col in self.hover_text_columns
             ]
-            markers.append(dl.Marker(
-            position=[lat, lon],
-            icon=get_house_marker_icon(row["stage_color"]),
-            children=[dl.Tooltip(tooltip_content)],# or Popup?
-        ))
-        
+            markers.append(
+                dl.Marker(
+                    position=[lat, lon],
+                    icon=get_house_marker_icon(row["stage_color"]),
+                    children=[dl.Tooltip(tooltip_content)],  # or Popup?
+                )
+            )
 
-        uk = box(-12, 48.5, 3, 61.5)     # large rectangle covering the UK
+        uk = box(-12, 48.5, 3, 61.5)  # large rectangle covering the UK
         la = shape(geojson_copy["features"][0]["geometry"])
 
         mask = uk.difference(la)
@@ -432,15 +433,14 @@ class LeafletChoroplethMap:
         marker_layer = dl.LayerGroup(markers)
 
         layer = dl.LayerGroup(
-            [   mask_layer,
+            [
+                mask_layer,
                 boundary_layer,
                 marker_layer,
             ]
         )
 
-        bounds = self.compute_bounds(
-            geojson_copy["features"]
-        )
+        bounds = self.compute_bounds(geojson_copy["features"])
 
         return layer, bounds, None
 
@@ -448,10 +448,10 @@ class LeafletChoroplethMap:
         """Adds data to features, highlights selected LA, and returns layers + bounds for selected
         LA's region."""
         # pylint: disable=too-many-locals, too-many-branches
-        
+
         if self.is_single_la:
             return self._add_single_la_map()
-        
+
         selected_la_region_bounds = None
         london_region_bounds = None
 
@@ -837,6 +837,37 @@ class LeafletChoroplethMap:
                 "Road_3857/{z}/{x}/{y}.png"
                 f"?key={self.os_basemap_api_key}"
             ),
-            attribution="© Crown copyright and database rights 2026 OS", # should use OS_ATTRIBUTION from la view 
+            attribution="© Crown copyright and database rights 2026 OS",  # should use OS_ATTRIBUTION from la view
             maxZoom=20,
+        )
+
+    def _get_marker_colorbar(self):
+        """Create categorical legend for marker stages."""
+
+        categories = (
+            self.df.select("Stage").unique().sort("Stage").to_series().to_list()
+        )
+
+        colours = (
+            self.df.select(["Stage", "stage_color"])
+            .unique()
+            .sort("Stage")
+            .select("stage_color")
+            .to_series()
+            .to_list()
+        )
+
+        return dlx.categorical_colorbar(
+            categories=categories,
+            colorscale=colours,
+            width=30,
+            height=200,
+            position="topleft",
+            style={
+                "padding": "6px",
+                "backgroundColor": "white",
+                "borderRadius": "4px",
+                "fontSize": "16px",
+                # "marginTop": top_margin, title ?
+            },
         )
