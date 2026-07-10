@@ -10,6 +10,7 @@ from dash import html
 import polars as pl
 from shapely.geometry import shape, mapping
 from shapely.affinity import scale
+from shapely.geometry import box, shape, mapping
 from shapely import wkt
 from pyproj import Transformer
 
@@ -370,8 +371,8 @@ class LeafletChoroplethMap:
             data=geojson_copy,
             style={
                 "weight": 3,
-                "color": "black",
-                "fillOpacity": 0.1,
+                "color": "blue",
+                "fillOpacity": 0,
             },
         )
 
@@ -404,11 +405,28 @@ class LeafletChoroplethMap:
             icon=get_house_marker_icon(row["stage_color"]),
             children=[dl.Tooltip( f"{row[self.area_column]}")],# or Popup?
         ))
+        
 
+        uk = box(-12, 48.5, 3, 61.5)     # large rectangle covering the UK
+        la = shape(geojson_copy["features"][0]["geometry"])
+
+        mask = uk.difference(la)
+        mask_layer = dl.GeoJSON(
+            data={
+                "type": "Feature",
+                "geometry": mapping(mask),
+            },
+            style={
+                "fillColor": "grey",
+                "fillOpacity": 0.8,
+                "color": "none",
+                "weight": 0,
+            },
+        )
         marker_layer = dl.LayerGroup(markers)
 
         layer = dl.LayerGroup(
-            [
+            [   mask_layer,
                 boundary_layer,
                 marker_layer,
             ]
