@@ -61,6 +61,7 @@ class LeafletChoroplethMap:
         selected_la: str = None,
         show_london_map: bool = False,
         os_basemap_api_key=None,
+        os_basemap_attribution=None
     ):
         self.geojson_data = geojson
         self.is_single_la = self.geojson_data.get("type") == "Feature"
@@ -77,6 +78,7 @@ class LeafletChoroplethMap:
             always_xy=True,
         )
         self.os_basemap_api_key = os_basemap_api_key
+        self.os_basemap_attribution = os_basemap_attribution
         self.df = df
         self.selected_la = selected_la
         self.hover_text_columns = hover_text_columns
@@ -837,7 +839,7 @@ class LeafletChoroplethMap:
                 "Road_3857/{z}/{x}/{y}.png"
                 f"?key={self.os_basemap_api_key}"
             ),
-            attribution="© Crown copyright and database rights 2026 OS",  # should use OS_ATTRIBUTION from la view
+            attribution=self.os_basemap_attribution,
             maxZoom=20,
         )
 
