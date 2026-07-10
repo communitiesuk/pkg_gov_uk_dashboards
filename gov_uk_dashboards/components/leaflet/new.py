@@ -154,7 +154,7 @@ class LeafletChoroplethMap:
             center=[54.5, -2.5],  # Centered on the UK
             # zoom=6.5,
             **zoom_controls,
-            attributionControl=False,
+            attributionControl=True,
             style={"width": "100%", "height": "1000px", "background": "white"},
         )
 
