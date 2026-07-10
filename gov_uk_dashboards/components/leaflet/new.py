@@ -146,9 +146,9 @@ class LeafletChoroplethMap:
                 "padding": [20, 20],
             },  # ensures LA fills map nicely
             minZoom=5,
-            maxZoom=10 if self.enable_zoom else 6.5,
+            # maxZoom=10 if self.enable_zoom else 6.5,
             center=[54.5, -2.5],  # Centered on the UK
-            zoom=6.5,
+            # zoom=6.5,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "1000px", "background": "white"},
