@@ -490,7 +490,7 @@ class LeafletChoroplethMap:
             area_codes_for_las_in_same_region_as_selected_la = set(
                 self.df.filter(
                     pl.col("Region")
-                    == self.df.filter(pl.col("Local authority") == self.selected_la)
+                    == self.df.filter(pl.col("Area_Code") == self.selected_la)
                     .select("Region")
                     .item()
                 )
