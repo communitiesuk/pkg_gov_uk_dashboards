@@ -8,6 +8,7 @@ import re
 from typing import Optional
 
 
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def convert_date(
     date_input,
     input_format=None,
