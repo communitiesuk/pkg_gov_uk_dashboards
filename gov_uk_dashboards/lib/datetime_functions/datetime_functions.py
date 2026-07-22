@@ -8,55 +8,72 @@ import re
 from typing import Optional
 
 
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def convert_date(
     date_input,
     input_format=None,
     output_format=None,
     convert_to_datetime=False,
     abbreviate_jun_jul=False,
+    remove_leading_zero_from_day=True,
 ):
     """
-    Convert a date input (string, date, or datetime) into either a datetime object or a formatted
-        string.
+    Convert a date input into either a datetime object or a formatted string.
+
+    The input may be a string, ``datetime.date``, or ``datetime.datetime``.
 
     Behaviour:
-    - If `date_input` is a string, `input_format` must be provided and is used with
-        `datetime.strptime`.
-    - If `convert_to_datetime` is True, returns a `datetime.datetime` (at midnight if the input was
-        a `date`), and `output_format` is ignored.
-    - If `convert_to_datetime` is False, `output_format` must be provided and is used with
-        `strftime`.
+        - If ``date_input`` is a string, ``input_format`` must be provided and
+          is used with ``datetime.strptime``.
+        - If ``convert_to_datetime`` is True, return a ``datetime.datetime``.
+          A ``datetime.date`` input is converted to midnight, and
+          ``output_format`` is ignored.
+        - If ``convert_to_datetime`` is False, ``output_format`` must be
+          provided and is used with ``datetime.strftime``.
+        - If ``remove_leading_zero_from_day`` is True, ``%d`` directives in
+          ``output_format`` produce a day without a leading zero. For example,
+          ``"01 March"`` becomes ``"1 March"``.
 
-    Month abbreviation tweak:
-    - If `abbreviate_jun_jul` is False (default), and your `output_format` produces abbreviated
-        months (e.g., via `%b`), any standalone "Jun" or "Jul" tokens in the formatted output are
-        expanded to "June" / "July".
-    - If `abbreviate_jun_jul` is True, the output is left exactly as produced by `strftime`.
+    Month abbreviation behaviour:
+        - If ``abbreviate_jun_jul`` is False, standalone ``"Jun"`` and
+          ``"Jul"`` values in the formatted output are expanded to ``"June"``
+          and ``"July"``.
+        - If ``abbreviate_jun_jul`` is True, the output is left as produced by
+          ``strftime``.
 
     Args:
         date_input (str | datetime.datetime | datetime.date):
-            The date to convert.
+            The date value to convert.
         input_format (str | None):
-            Format string for parsing `date_input` when it is a string. Required if `date_input` is
-            a string.
+            Format string used to parse ``date_input`` when it is a string.
+            Required when ``date_input`` is a string.
         output_format (str | None):
-            Format string used when returning a string. Required if `convert_to_datetime` is False.
+            Format string used when returning a string. Required when
+            ``convert_to_datetime`` is False.
         convert_to_datetime (bool):
-            If True, return a `datetime.datetime`. If False, return a formatted string.
+            If True, return a ``datetime.datetime``. If False, return a
+            formatted string.
         abbreviate_jun_jul (bool):
-            If False, expand "Jun"/"Jul" to "June"/"July" in the final formatted string.
+            If False, expand standalone ``"Jun"`` and ``"Jul"`` values to
+            ``"June"`` and ``"July"`` in the formatted output.
+        remove_leading_zero_from_day (bool):
+            If True, remove the leading zero from days produced by ``%d``.
 
     Returns:
         datetime.datetime | str:
-            A datetime object if `convert_to_datetime` is True, otherwise a formatted string.
+            A datetime object if ``convert_to_datetime`` is True; otherwise,
+            a formatted string.
 
     Raises:
         ValueError:
-            If `date_input` is a string and `input_format` is None, or if parsing fails.
-            If `convert_to_datetime` is False and `output_format` is None.
+            If ``date_input`` is a string and ``input_format`` is not provided,
+            if parsing fails, or if ``output_format`` is not provided when
+            returning a formatted string.
         TypeError:
-            If `date_input` is not a string, date, or datetime.
+            If ``date_input`` is not a string, ``datetime.date``, or
+            ``datetime.datetime``.
     """
+
     # Parse / normalise to datetime
     if isinstance(date_input, str):
         if input_format is None:
@@ -84,9 +101,10 @@ def convert_date(
             "output_format must be provided when convert_to_datetime is False"
         )
 
-    output_format = output_format.replace(
-        "%d", str(dt.day)
-    )  # removes leading 0 eg. 01 March becomes 1 March
+    if remove_leading_zero_from_day:
+        output_format = output_format.replace(
+            "%d", str(dt.day)
+        )  # removes leading 0 eg. 01 March becomes 1 March
 
     output_str = dt.strftime(output_format)
 
