@@ -54,25 +54,38 @@ def cvs_contains_no_duplicate_rows(csv_absolute_filepath: str):
 
 
 def inferred_df_has_correct_column_types(
-    csv_absolute_filepath: str, schema: Type[BaseModel]
-):
+    csv_absolute_filepath: str,
+    schema: Type[BaseModel],
+) -> None:
     """
-    Test to check that a df infers the correct column types as defined in schema.
+    Assert that a CSV's inferred column types match those defined by a Pydantic schema.
 
-    Parameters:
-    csv_absolute_filepath (str): local csv absolute filepath to file to test for correct column
-        types
-    schema (Type[BaseModel]): Pydantic model class to extract the expected column types
+    Column order is ignored.
 
-    Returns: bool: True if the inferred column types are correct, False otherwise.
+    Parameters
+    ----------
+    csv_absolute_filepath
+        Absolute path to the CSV file.
+    schema
+        Pydantic model class containing the expected columns and types.
     """
     expected_schema = {
-        field: PYDANTIC_TO_POLARS[extract_main_type(typ)]
-        for field, typ in schema.__annotations__.items()
+        field: PYDANTIC_TO_POLARS[extract_main_type(annotation)]
+        for field, annotation in schema.__annotations__.items()
     }
 
-    df = pl.read_csv(csv_absolute_filepath, infer_schema_length=10000)
-    assert df.schema == expected_schema
+    df = pl.read_csv(
+        csv_absolute_filepath,
+        infer_schema_length=10_000,
+    )
+
+    actual_schema = dict(df.schema)
+
+    assert actual_schema == expected_schema, (
+        "The inferred CSV schema does not match the expected schema.\n"
+        f"Actual:   {actual_schema}\n"
+        f"Expected: {expected_schema}"
+    )
 
 
 def df_has_valid_schema(csv_absolute_filepath: str, schema: Type[BaseModel]):
