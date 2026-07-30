@@ -1,3 +1,5 @@
+"""Functions to filter sentry errors"""
+
 from collections.abc import Callable
 from typing import Any
 
