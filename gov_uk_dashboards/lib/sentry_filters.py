@@ -14,17 +14,11 @@ def is_transient_live_metrics_error(
 
     logger = event.get("logger", "")
 
-    if not logger.startswith(
-        "azure.monitor.opentelemetry.exporter._quickpulse"
-    ):
+    if not logger.startswith("azure.monitor.opentelemetry.exporter._quickpulse"):
         return False
 
     log_entry = event.get("logentry") or {}
-    message = (
-        log_entry.get("formatted")
-        or log_entry.get("message")
-        or ""
-    )
+    message = log_entry.get("formatted") or log_entry.get("message") or ""
 
     if "Exception occurred while pinging live metrics" not in message:
         return False
@@ -43,8 +37,7 @@ def is_transient_live_metrics_error(
         and "Service Unavailable" in exception_message
     ) or (
         exception_name == "ServiceResponseError"
-        and "Remote end closed connection without response"
-        in exception_message
+        and "Remote end closed connection without response" in exception_message
     )
 
 
