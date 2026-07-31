@@ -43,8 +43,33 @@ def is_transient_live_metrics_error(
     )
 
 
+def is_statsbeat_export_timeout(
+    event: SentryEvent,
+    hint: SentryHint,
+) -> bool:
+    exceptions = (event.get("exception") or {}).get("values") or []
+
+    exception_text = " ".join(
+        f"{exception.get('type', '')} {exception.get('value', '')}"
+        for exception in exceptions
+    )
+
+    exc_info = hint.get("exc_info")
+
+    if exc_info:
+        exception_text += f" {exc_info[0].__name__} {exc_info[1]}"
+
+    return (
+        event.get("logger") == "azure.monitor.opentelemetry.exporter.export._base"
+        and "ServiceResponseTimeoutError" in exception_text
+        and "westeurope-5.in.applicationinsights.azure.com" in exception_text
+        and "Read timed out" in exception_text
+    )
+
+
 SENTRY_EVENT_FILTERS: list[SentryFilter] = [
     is_transient_live_metrics_error,
+    is_statsbeat_export_timeout,
 ]
 
 
