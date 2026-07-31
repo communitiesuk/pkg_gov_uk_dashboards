@@ -2,10 +2,24 @@
 
 from collections.abc import Callable
 from typing import Any
+from urllib.parse import urlparse
 
 SentryEvent = dict[str, Any]
 SentryHint = dict[str, Any]
 SentryFilter = Callable[[SentryEvent, SentryHint], bool]
+
+
+def _contains_exact_hostname(text: str, expected_hostname: str) -> bool:
+    """Return True if text contains a URL token with the exact hostname."""
+    expected = expected_hostname.lower()
+
+    for token in text.split():
+        parsed = urlparse(token)
+        hostname = (parsed.hostname or "").lower()
+        if hostname == expected:
+            return True
+
+    return False
 
 
 def is_transient_live_metrics_error(
@@ -43,8 +57,37 @@ def is_transient_live_metrics_error(
     )
 
 
+def is_statsbeat_export_timeout(
+    event: SentryEvent,
+    hint: SentryHint,
+) -> bool:
+    """Return True for known transient Azure Monitor Statsbeat export timeouts."""
+    exceptions = (event.get("exception") or {}).get("values") or []
+
+    exception_text = " ".join(
+        f"{exception.get('type', '')} {exception.get('value', '')}"
+        for exception in exceptions
+    )
+
+    exc_info = hint.get("exc_info")
+
+    if exc_info:
+        exception_text += f" {exc_info[0].__name__} {exc_info[1]}"
+
+    return (
+        event.get("logger") == "azure.monitor.opentelemetry.exporter.export._base"
+        and "ServiceResponseTimeoutError" in exception_text
+        and _contains_exact_hostname(
+            exception_text,
+            "westeurope-5.in.applicationinsights.azure.com",
+        )
+        and "Read timed out" in exception_text
+    )
+
+
 SENTRY_EVENT_FILTERS: list[SentryFilter] = [
     is_transient_live_metrics_error,
+    is_statsbeat_export_timeout,
 ]
 
 
