@@ -61,6 +61,7 @@ def is_statsbeat_export_timeout(
     event: SentryEvent,
     hint: SentryHint,
 ) -> bool:
+    """Return True for known transient Azure Monitor Statsbeat export timeouts."""
     exceptions = (event.get("exception") or {}).get("values") or []
 
     exception_text = " ".join(
@@ -84,32 +85,9 @@ def is_statsbeat_export_timeout(
     )
 
 
-def is_transient_export_error(
-    event: SentryEvent,
-    hint: SentryHint,
-) -> bool:
-    """Return True for transient Azure Monitor telemetry export failures."""
-
-    logger = event.get("logger", "")
-    if not logger.startswith("azure.monitor.opentelemetry.exporter.export"):
-        return False
-
-    exc_info = hint.get("exc_info")
-    if not exc_info:
-        return False
-
-    exception_type, exception, _ = exc_info
-
-    return (
-        exception_type.__name__ == "ServiceResponseError"
-        and "Remote end closed connection without response" in str(exception)
-    )
-
-
 SENTRY_EVENT_FILTERS: list[SentryFilter] = [
     is_transient_live_metrics_error,
     is_statsbeat_export_timeout,
-    is_transient_export_error,
 ]
 
 
