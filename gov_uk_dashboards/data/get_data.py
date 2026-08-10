@@ -32,7 +32,7 @@ def get_cds_odbc_connection_string(server: str) -> str:
     )
 
 
-def read_cds_query_odbc(query: str, server:str) -> pl.DataFrame:
+def read_cds_query_odbc(query: str, server: str) -> pl.DataFrame:
     """Read data from CDS using the direct ODBC path."""
     return pl.read_database(
         query,
