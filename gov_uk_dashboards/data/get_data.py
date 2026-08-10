@@ -32,11 +32,11 @@ def get_cds_odbc_connection_string(server: str) -> str:
     )
 
 
-def read_cds_query_odbc(query: str) -> pl.DataFrame:
+def read_cds_query_odbc(query: str, server:str) -> pl.DataFrame:
     """Read data from CDS using the direct ODBC path."""
     return pl.read_database(
         query,
-        connection=get_cds_odbc_connection_string(),
+        connection=get_cds_odbc_connection_string(server),
     )
 
 
@@ -46,6 +46,7 @@ class GenericDataQuery:
     filename: str
     dir: str
     query: str
+    server: str
     stats_release: bool = False
 
     # @staticmethod
@@ -55,7 +56,7 @@ class GenericDataQuery:
 
         start = perf_counter()
 
-        sql_query = read_cds_query_odbc(self.query())
+        sql_query = read_cds_query_odbc(self.query(), self.server)
 
         print(f"{self.filename} query took {perf_counter()-start} seconds")
 
