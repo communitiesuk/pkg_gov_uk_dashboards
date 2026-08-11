@@ -32,7 +32,7 @@ def test_returns_bulleted_list_with_expected_list_elements():
     expected = [html.Li(x) for x in list_items]
     actual = html_list(list_items)
 
-    assert all([a.children == b.children for a, b in zip(actual.children, expected)])
+    assert all(a.children == b.children for a, b in zip(actual.children, expected))
 
 
 def test_returns_numbered_list_with_expected_list_elements():
@@ -41,7 +41,7 @@ def test_returns_numbered_list_with_expected_list_elements():
     expected = [html.Li(x) for x in list_items]
     actual = html_list(list_items, numbered_list=True)
 
-    assert all([a.children == b.children for a, b in zip(actual.children, expected)])
+    assert all(a.children == b.children for a, b in zip(actual.children, expected))
 
 
 def test_returns_bulleted_list_with_correct_class_name():
