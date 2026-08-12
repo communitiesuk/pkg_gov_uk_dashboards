@@ -711,10 +711,16 @@ class ContextCard:
                 self.headline_figure,
                 className="govuk-body govuk-!-font-weight-bold",
                 style=LARGE_BOLD_FONT_STYLE | {"marginBottom": "0px"},
-            ),
-            paragraph(f"{self.date_prefix} {self.current_date}"),
-            self._get_changed_from_content() if self.include_changed_from else None,
+            )
         ]
+        if self.units:
+            card_content.insert(1, html.Div(paragraph(self.units)))
+
+        card_content.append(paragraph(f"{self.date_prefix} {self.current_date}"))
+
+        if self.include_changed_from:
+            card_content.append(self._get_changed_from_content())
+
         if self.title:
             card_content.insert(0, heading2(self.title))
         if self.additional_text_and_position:
@@ -734,10 +740,7 @@ class ContextCard:
                     style={"marginTop": "40px"},  # from h repo,
                 )
             )
-        if self.units:
-            card_content.insert(
-                1, html.Div(paragraph(self.units), style={"marginTop": "-15px"})
-            )
+
         card_for_display = html.Div(
             card_content,
             className="context-card-grid-item",
