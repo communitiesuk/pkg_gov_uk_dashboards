@@ -489,7 +489,7 @@ class TimeSeriesChart:
                 else 500
             ),  # ensure focus trace appears on top of background traces
             mode=(
-                "lines" if self.hide_markers is True else "lines+markers"
+                "lines" if self.hide_markers else "lines+markers"
             ),  # if None default is "lines+markers" when there are < 20 points, otherwise "lines"
         )
 
