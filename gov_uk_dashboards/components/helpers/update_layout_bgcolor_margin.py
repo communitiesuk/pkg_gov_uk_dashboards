@@ -21,4 +21,6 @@ def update_layout_bgcolor_margin(fig: go.Figure, colour: str):
     fig.update_yaxes(
         gridcolor=colours.GovUKColours.MID_GREY.value,
         zerolinecolor=colours.GovUKColours.MID_GREY.value,
+        ticks="outside",
+        tickcolor=colours.GovUKColours.MID_GREY.value,
     )
