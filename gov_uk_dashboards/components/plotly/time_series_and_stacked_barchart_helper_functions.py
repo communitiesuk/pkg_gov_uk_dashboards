@@ -54,28 +54,8 @@ def format_yaxes(
         x1=0,
         y0=min_y_range,
         y1=ticks[-2],
-        line=dict(color=colours.GovUKColours.MID_GREY.value, width=2),
+        line={"color": colours.GovUKColours.MID_GREY.value, "width": 2},
     )
-    # fig.add_shape(
-    #             type="line",
-    #             xref="paper",
-    #             yref="paper",
-    #             x0=0,
-    #             x1=0,
-    #             y0=0,
-    #             y1=1,
-    #             line=dict(color=colours.GovUKColours.MID_GREY.value, width=2),
-    #         )
-    # fig.add_shape(
-    #     type="line",
-    #     xref="paper",
-    #     yref="y",
-    #     x0=0,
-    #     x1=0,
-    #     y0=min_y_range,
-    #     y1=(ticks[-2]+ticks[-1])/2,
-    #     line=dict(color=colours.GovUKColours.MID_GREY.value, width=2),
-    # )
 
 
 def generate_human_readable_yticks(
