@@ -27,7 +27,7 @@ def heading2(
 ) -> html.H2:
     """Return a H2 dash component"""
     if isinstance(text, html.Div):
-        heading_text = text.children[1].children
+        heading_text = text.title
     else:
         heading_text = text
 
