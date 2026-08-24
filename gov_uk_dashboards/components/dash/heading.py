@@ -21,9 +21,17 @@ def heading1(text: str, size: HeadingSizes = HeadingSizes.LARGE) -> html.H1:
     return html.H1(text, className=size, id=heading_id)
 
 
-def heading2(text: str, size: HeadingSizes = HeadingSizes.MEDIUM) -> html.H2:
+def heading2(
+    text: str | html.Div,
+    size: HeadingSizes = HeadingSizes.MEDIUM,
+) -> html.H2:
     """Return a H2 dash component"""
-    heading_id = f"heading2-{create_id_from_string(text)}"
+    if isinstance(text, html.Div):
+        heading_text = text.children[1].children
+    else:
+        heading_text = text
+
+    heading_id = f"heading2-{create_id_from_string(heading_text)}"
     return html.H2(text, className=size, id=heading_id)
 
 
