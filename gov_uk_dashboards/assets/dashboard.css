@@ -9129,16 +9129,8 @@ mark.expenditure {
 
 .five_column_grid_layout {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px 5%;
-}
-
-.five_column_grid_layout > * {
-  grid-column: span 2;
-}
-
-.five_column_grid_layout > :nth-child(4) {
-  grid-column: 2/span 2;
 }
 
 @media (max-width: 600px) {
