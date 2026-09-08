@@ -79,6 +79,7 @@ class StackedBarChart:
         y_axis_tick_prefix: Optional[str] = None,
         x_hoverformat: Optional[str] = "%b %Y",
         use_plotly_automated_y_axis: bool = False,
+        category_order_for_clustered: Optional[list[str]] = None,
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -105,6 +106,8 @@ class StackedBarChart:
             total_trace_name (Optional[str], optional): Name for an optional total to be added to
                 bottom of hover text, must be in MEASURE column of df, line_trace_name will display
                 in legend. Defaults to None.
+            category_order_for_clustered (Optional[list[str]], optional): List of ordered categories for x-axis.
+                If not None, barchart will be clustered rather than stacked. Defaults to None.
         """
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -131,6 +134,7 @@ class StackedBarChart:
         self.y_axis_tick_prefix = y_axis_tick_prefix
         self.x_hoverformat = x_hoverformat
         self.use_plotly_automated_y_axis = use_plotly_automated_y_axis
+        self.category_order_for_clustered = category_order_for_clustered
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -282,10 +286,16 @@ class StackedBarChart:
             "legend": get_legend_configuration(),
             "font": {"size": CHART_LABEL_FONT_SIZE},
             "showlegend": True,
-            "barmode": "relative",
+            "barmode": (
+                "group" if self.category_order_for_clustered is not None else "relative"
+            ),
             "xaxis": {
                 "categoryorder": "array",
-                "categoryarray": self.trace_name_list,
+                "categoryarray": (
+                    self.category_order_for_clustered
+                    if self.category_order_for_clustered is not None
+                    else self.trace_name_list
+                ),
             },
             "xaxis_title": self.x_axis_column if self.show_x_axis_title else None,
             "hovermode": "x unified" if self.x_unified_hovermode else "closest",
