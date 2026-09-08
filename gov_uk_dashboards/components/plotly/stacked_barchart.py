@@ -106,8 +106,9 @@ class StackedBarChart:
             total_trace_name (Optional[str], optional): Name for an optional total to be added to
                 bottom of hover text, must be in MEASURE column of df, line_trace_name will display
                 in legend. Defaults to None.
-            category_order_for_clustered (Optional[list[str]], optional): List of ordered categories for x-axis.
-                If not None, barchart will be clustered rather than stacked. Defaults to None.
+            category_order_for_clustered (Optional[list[str]], optional): List of ordered categories
+                for x-axis. If not None, barchart will be clustered rather than stacked.
+                Defaults to None.
         """
         self.title_data = title_data
         self.y_axis_column = y_axis_column
