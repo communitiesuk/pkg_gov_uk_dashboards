@@ -1,9 +1,12 @@
+"""Tests for rounding and adding prefix and suffix"""
+
 from gov_uk_dashboards.formatting.round_and_add_prefix_and_suffix import (
     round_and_add_prefix_and_suffix,
 )
 
 
 def test_round_and_add_prefix_and_suffix_returns_formatted_value():
+    """Test to ensure numbers are rounded correctly with correct suffix and prefix"""
     assert round_and_add_prefix_and_suffix(1000000000) == "1000000000"
     assert round_and_add_prefix_and_suffix(2100000000) == "2100000000"
     assert round_and_add_prefix_and_suffix(45678987654, prefix="£") == "£45678987654"

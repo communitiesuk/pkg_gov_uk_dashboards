@@ -4,6 +4,7 @@ import math
 from typing import List
 import plotly
 import polars as pl
+from gov_uk_dashboards import colours
 
 
 def format_yaxes(
@@ -43,6 +44,17 @@ def format_yaxes(
         range=[min_y_range, max_y_range],
         tickvals=ticks,
         ticktext=[f"{v:,}" for v in ticks],
+    )
+
+    fig.add_shape(
+        type="line",
+        xref="paper",
+        yref="y",
+        x0=0,
+        x1=0,
+        y0=min_y_range,
+        y1=ticks[-2],
+        line={"color": colours.GovUKColours.MID_GREY.value, "width": 2},
     )
 
 

@@ -29,3 +29,4 @@ from . import formatting
 from . import colours
 from . import assets
 from .template import read_template
+from . import data

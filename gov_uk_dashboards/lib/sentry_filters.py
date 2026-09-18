@@ -1,0 +1,103 @@
+"""Functions to filter sentry errors"""
+
+from collections.abc import Callable
+from typing import Any
+from urllib.parse import urlparse
+
+SentryEvent = dict[str, Any]
+SentryHint = dict[str, Any]
+SentryFilter = Callable[[SentryEvent, SentryHint], bool]
+
+
+def _contains_exact_hostname(text: str, expected_hostname: str) -> bool:
+    """Return True if text contains a URL token with the exact hostname."""
+    expected = expected_hostname.lower()
+
+    for token in text.split():
+        parsed = urlparse(token)
+        hostname = (parsed.hostname or "").lower()
+        if hostname == expected:
+            return True
+
+    return False
+
+
+def is_transient_live_metrics_error(
+    event: SentryEvent,
+    hint: SentryHint,
+) -> bool:
+    """Return True for known transient Azure Live Metrics ping failures."""
+
+    logger = event.get("logger", "")
+
+    if not logger.startswith("azure.monitor.opentelemetry.exporter._quickpulse"):
+        return False
+
+    log_entry = event.get("logentry") or {}
+    message = log_entry.get("formatted") or log_entry.get("message") or ""
+
+    if "Exception occurred while pinging live metrics" not in message:
+        return False
+
+    exc_info = hint.get("exc_info")
+
+    if not exc_info:
+        return False
+
+    exception_type, exception, _ = exc_info
+    exception_name = exception_type.__name__
+    exception_message = str(exception)
+
+    return (
+        exception_name == "HttpResponseError"
+        and "Service Unavailable" in exception_message
+    ) or (
+        exception_name == "ServiceResponseError"
+        and "Remote end closed connection without response" in exception_message
+    )
+
+
+def is_statsbeat_export_timeout(
+    event: SentryEvent,
+    hint: SentryHint,
+) -> bool:
+    """Return True for known transient Azure Monitor Statsbeat export timeouts."""
+    exceptions = (event.get("exception") or {}).get("values") or []
+
+    exception_text = " ".join(
+        f"{exception.get('type', '')} {exception.get('value', '')}"
+        for exception in exceptions
+    )
+
+    exc_info = hint.get("exc_info")
+
+    if exc_info:
+        exception_text += f" {exc_info[0].__name__} {exc_info[1]}"
+
+    return (
+        event.get("logger") == "azure.monitor.opentelemetry.exporter.export._base"
+        and "ServiceResponseTimeoutError" in exception_text
+        and _contains_exact_hostname(
+            exception_text,
+            "westeurope-5.in.applicationinsights.azure.com",
+        )
+        and "Read timed out" in exception_text
+    )
+
+
+SENTRY_EVENT_FILTERS: list[SentryFilter] = [
+    is_transient_live_metrics_error,
+    is_statsbeat_export_timeout,
+]
+
+
+def before_send(
+    event: SentryEvent,
+    hint: SentryHint,
+) -> SentryEvent | None:
+    """Discard events matching any known non-actionable error filter."""
+
+    if any(event_filter(event, hint) for event_filter in SENTRY_EVENT_FILTERS):
+        return None
+
+    return event

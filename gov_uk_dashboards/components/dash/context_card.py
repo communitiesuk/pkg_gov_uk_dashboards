@@ -711,10 +711,16 @@ class ContextCard:
                 self.headline_figure,
                 className="govuk-body govuk-!-font-weight-bold",
                 style=LARGE_BOLD_FONT_STYLE | {"marginBottom": "0px"},
-            ),
-            paragraph(f"{self.date_prefix} {self.current_date}"),
-            self._get_changed_from_content() if self.include_changed_from else None,
+            )
         ]
+        if self.units:
+            card_content.insert(1, html.Div(paragraph(self.units)))
+
+        card_content.append(paragraph(f"{self.date_prefix} {self.current_date}"))
+
+        if self.include_changed_from:
+            card_content.append(self._get_changed_from_content())
+
         if self.title:
             card_content.insert(0, heading2(self.title))
         if self.additional_text_and_position:
@@ -734,10 +740,7 @@ class ContextCard:
                     style={"marginTop": "40px"},  # from h repo,
                 )
             )
-        if self.units:
-            card_content.insert(
-                1, html.Div(paragraph(self.units), style={"marginTop": "-15px"})
-            )
+
         card_for_display = html.Div(
             card_content,
             className="context-card-grid-item",
@@ -1021,3 +1024,55 @@ class ContextCard:
         )
         tags = [t for t in (tag_last_year, styled_tag_two_years) if t is not None]
         return html.Div(tags) if tags else None
+
+
+def aligned_context_card_title(
+    context_card_titles: list[str], title_position_in_list: int
+) -> html.Div:
+    """Return a title component with consistent height across context cards.
+
+    The longest title is rendered invisibly to reserve sufficient vertical
+    space, while the selected title is positioned visibly at the top and
+    centred horizontally. This ensures that content below the title remains
+    vertically aligned across cards with different title lengths.
+
+    Args:
+        context_card_titles (list[str]): All context card titles used to determine the required
+            title height.
+        title_position_in_list (int): Zero-based index of the title to display from
+            context_card_titles.
+
+    Returns:
+        html.Div: A Dash HTML Div containing the aligned context card title.
+    """
+    longest_title = max(context_card_titles, key=len)
+    actual_title = context_card_titles[title_position_in_list]
+
+    return html.Div(
+        [
+            # Invisible reference text determines the height
+            html.Div(
+                longest_title,
+                style={
+                    "visibility": "hidden",
+                    "textAlign": "center",
+                },
+            ),
+            # Actual title
+            html.Div(
+                actual_title,
+                style={
+                    "position": "absolute",
+                    "top": 0,
+                    "left": 0,
+                    "width": "100%",
+                    "textAlign": "center",
+                },
+            ),
+        ],
+        style={
+            "position": "relative",
+            "width": "100%",
+        },
+        **{"title": actual_title},
+    )

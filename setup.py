@@ -1,6 +1,7 @@
-# Import required functions
-from setuptools import setup, find_packages
+"""Setup for package"""
+
 from pathlib import Path
+from setuptools import setup, find_packages
 
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="UTF-8")
@@ -10,7 +11,7 @@ setup(
     author="Ministry of Housing, Communities & Local Government",
     description="Provides access to functionality common to creating a data dashboard.",
     name="gov_uk_dashboards",
-    version="33.4.1",
+    version="33.16.0",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
@@ -19,7 +20,7 @@ setup(
         "dash~=4.1",
         "numpy>=2.3.2",
         "dash_bootstrap_components~=2.0.3",
-        "plotly>=6.2,<6.9",
+        "plotly>=6.2,<6.10",
         "flask-basicauth~=0.2.0",
     ],
     include_package_data=True,

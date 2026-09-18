@@ -7,11 +7,14 @@ CHART_LABEL_FONT_SIZE = 19
 FINANCIAL_YEAR_ENDING = "Financial year ending"
 VALUE = "Value"
 MAIN_TITLE = "main_title"
+DATE_SUBMITTED = "Date submitted"
 SUBTITLE = "subtitle"
 MEASURE = "measure"
 FILL_TO_PREVIOUS_TRACE = "Fill to previous trace"
 SHOW_INITIAL_MARKER = "Show initial marker"
 YEAR = "Year"
+VALUE_UNROUNDED = "value_unrounded"
+AREA_CODE = "Area_Code"
 
 
 UNIT_SIZE = "Unit size"

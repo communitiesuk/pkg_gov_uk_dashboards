@@ -9127,6 +9127,12 @@ mark.expenditure {
   gap: 20px 5%;
 }
 
+.five_column_grid_layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 5%;
+}
+
 @media (max-width: 600px) {
   .three_column_grid_layout {
     grid-template-columns: 1fr;
