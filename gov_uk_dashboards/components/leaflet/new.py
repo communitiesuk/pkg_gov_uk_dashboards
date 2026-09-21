@@ -61,7 +61,7 @@ class LeafletChoroplethMap:
         selected_la: str = None,
         show_london_map: bool = False,
         os_basemap_api_key=None,
-        os_basemap_attribution=None
+        os_basemap_attribution=None,
     ):
         self.geojson_data = geojson
         self.is_single_la = self.geojson_data.get("type") == "Feature"

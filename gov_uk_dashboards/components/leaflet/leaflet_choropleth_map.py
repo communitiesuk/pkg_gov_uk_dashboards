@@ -57,6 +57,7 @@ class LeafletChoroplethMap:
         show_tile_layer: bool = False,
         selected_la: str = None,
         show_london_map: bool = False,
+        is_local_authority_map: bool = False,
     ):
         self.geojson_data = geojson
         self.df = df
@@ -76,7 +77,7 @@ class LeafletChoroplethMap:
         )
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self._add_data_to_geojson_and_get_bounds()
+        self.is_local_authority_map = is_local_authority_map
         self.instance_number = instance_number
         self.show_london_map = show_london_map
 
@@ -87,8 +88,15 @@ class LeafletChoroplethMap:
         - List[List[float]]: bounds for selected LA
         - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
-        geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
+        if self.is_local_authority_map:
+            return self._get_local_authority_map()
+
+        geojson_layer, selected_bounds, _ = (
+            self._add_data_to_national_geojson_and_get_bounds()
+        )
+        geojson_layer_download, _, _ = (
+            self._add_data_to_national_geojson_and_get_bounds()
+        )
 
         # Build children list safely (exclude None)
         children = [
@@ -156,7 +164,7 @@ class LeafletChoroplethMap:
 
         if self.show_london_map:
             london_layer, _, london_region_bounds = (
-                self._add_data_to_geojson_and_get_bounds(True)
+                self._add_data_to_national_geojson_and_get_bounds(True)
             )
             london_region_rectangle = dl.Rectangle(
                 bounds=london_region_bounds,
@@ -295,7 +303,87 @@ class LeafletChoroplethMap:
             ),
         ]
 
-    def _add_data_to_geojson_and_get_bounds(self, london_las=False):
+    def _get_local_authority_map(self):
+        """Create a Leaflet map for a single local authority."""
+
+        la_layer, la_bounds = self._add_data_to_la_geojson_and_get_bounds()
+
+        children = [
+            *([dl.TileLayer()] if self.show_tile_layer else []),
+            la_layer,
+        ]
+
+        map_container = dl.Map(
+            children=children,
+            bounds=la_bounds,
+            boundsOptions={
+                "padding": [20, 20],
+            },
+            id=self.id_for_choropleth_map_on_page,
+            minZoom=5,
+            maxZoom=18,
+            attributionControl=False,
+            style={
+                "width": "100%",
+                "height": "600px",
+                "background": "white",
+            },
+        )
+
+        map_display = display_chart_or_table_with_header(
+            map_container,
+            self.title,
+            self.subtitle,
+            None,
+            self.download_data_button_id,
+            self.download_chart_button_id,
+            None,
+            instance=self.instance_number,
+        )
+
+        return [
+            map_display,
+            la_bounds,
+            None,
+        ]
+
+    def _add_data_to_la_geojson_and_get_bounds(self):
+        """Create a GeoJSON layer and bounds for a single local authority feature."""
+
+        geojson_copy = copy.deepcopy(self.geojson_data)
+
+        if geojson_copy.get("type") == "Feature":
+            features = [geojson_copy]
+        elif geojson_copy.get("type") == "FeatureCollection":
+            features = geojson_copy.get("features", [])
+        else:
+            raise ValueError(
+                "Local authority GeoJSON must be a Feature or FeatureCollection"
+            )
+
+        bounds = self.compute_bounds(features)
+
+        if bounds:
+            bounds = self.pad_bounds(bounds, pad=0.01)
+
+        la_layer = dl.GeoJSON(
+            data={
+                "type": "FeatureCollection",
+                "features": features,
+            },
+            options={
+                "style": {
+                    "color": "#1d70b8",
+                    "weight": 3,
+                    "fillOpacity": 0,
+                },
+                "interactive": False,
+            },
+        )
+
+        return la_layer, bounds
+
+    def _add_data_to_national_geojson_and_get_bounds(self, london_las=False):
         """Adds data to features, highlights selected LA, and returns layers + bounds for selected
         LA's region."""
         # pylint: disable=too-many-locals, too-many-branches
