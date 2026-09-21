@@ -58,6 +58,8 @@ class LeafletChoroplethMap:
         selected_la: str = None,
         show_london_map: bool = False,
         is_local_authority_map: bool = False,
+        os_basemap_api_key: str = None,
+        os_basemap_attribution: str = None,
     ):
         self.geojson_data = geojson
         self.df = df
@@ -80,6 +82,8 @@ class LeafletChoroplethMap:
         self.is_local_authority_map = is_local_authority_map
         self.instance_number = instance_number
         self.show_london_map = show_london_map
+        self.os_basemap_api_key = os_basemap_api_key
+        self.os_basemap_attribution = os_basemap_attribution
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -309,16 +313,18 @@ class LeafletChoroplethMap:
         la_layer, la_bounds = self._add_data_to_la_geojson_and_get_bounds()
 
         children = [
-            *([dl.TileLayer()] if self.show_tile_layer else []),
+            *(
+                [self._get_os_tile_layer()]
+                if self.os_basemap_api_key
+                else [dl.TileLayer()] if self.show_tile_layer else []
+            ),
             la_layer,
         ]
 
         map_container = dl.Map(
             children=children,
             bounds=la_bounds,
-            boundsOptions={
-                "padding": [20, 20],
-            },
+            boundsOptions={"padding": [20, 20]},
             id=self.id_for_choropleth_map_on_page,
             minZoom=5,
             maxZoom=18,
@@ -341,10 +347,52 @@ class LeafletChoroplethMap:
             instance=self.instance_number,
         )
 
+        # Separate map for screenshot/download
+        download_la_layer, _ = self._add_data_to_la_geojson_and_get_bounds()
+
+        download_children = [
+            *(
+                [self._get_os_tile_layer()]
+                if self.os_basemap_api_key
+                else [dl.TileLayer()] if self.show_tile_layer else []
+            ),
+            download_la_layer,
+        ]
+
+        download_map = dl.Map(
+            children=download_children,
+            bounds=la_bounds,
+            boundsOptions={"padding": [20, 20]},
+            id=f"download-map-{int(time.time() * 1000)}",
+            zoomControl=False,
+            attributionControl=False,
+            style={
+                "width": "1200px",
+                "height": "1200px",
+                "background": "white",
+            },
+        )
+
+        download_map_display = display_chart_or_table_with_header(
+            download_map,
+            self.title,
+            self.subtitle,
+        )
+
+        hidden_download_map = html.Div(
+            [download_map_display],
+            id=f"{self.download_chart_button_id}-hidden-map-container",
+            style={
+                "position": "absolute",
+                "top": "-10000px",
+                "left": "-10000px",
+            },
+        )
+
         return [
             map_display,
             la_bounds,
-            None,
+            hidden_download_map,
         ]
 
     def _add_data_to_la_geojson_and_get_bounds(self):
@@ -431,7 +479,8 @@ class LeafletChoroplethMap:
                 .to_series()
                 .to_list()
             )
-
+        if not geojson_copy.get("features", None):
+            print("hvfjhf")
         for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
@@ -759,3 +808,16 @@ class LeafletChoroplethMap:
         (south, west), (north, east) = bounds
 
         return [[south - pad, west - pad], [north + pad, east + pad]]
+
+    def _get_os_tile_layer(self):
+        if not self.os_basemap_api_key:
+            return None
+
+        return dl.TileLayer(
+            url=(
+                "https://api.os.uk/maps/raster/v1/zxy/"
+                f"Road_3857/{{z}}/{{x}}/{{y}}.png?key={self.os_basemap_api_key}"
+            ),
+            attribution=self.os_basemap_attribution,
+            maxZoom=20,
+        )
