@@ -1,5 +1,7 @@
 """Leaflet choropleth map class"""
 
+from shapely.geometry import shape, Polygon, MultiPolygon
+from shapely.ops import unary_union
 import copy
 import time
 from typing import Optional
@@ -18,6 +20,9 @@ from gov_uk_dashboards.components.dash.green_button import green_button
 from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
+
+from data.get_data import load_data
+from lib.absolute_path import absolute_path
 
 LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
 
@@ -57,11 +62,16 @@ class LeafletChoroplethMap:
         show_tile_layer: bool = False,
         selected_la: str = None,
         show_london_map: bool = False,
-        is_local_authority_map: bool = False,
         os_basemap_api_key: str = None,
         os_basemap_attribution: str = None,
+        include_markers: bool = False,
+        legend_order: list[str] = None,
+        include_new_towns: bool = False,
     ):
         self.geojson_data = geojson
+        self.os_basemap_api_key = os_basemap_api_key
+        self.os_basemap_attribution = os_basemap_attribution
+        self.include_markers = include_markers
         self.df = df
         self.selected_la = selected_la
         self.hover_text_columns = hover_text_columns
@@ -79,11 +89,11 @@ class LeafletChoroplethMap:
         )
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self.is_local_authority_map = is_local_authority_map
+        self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
         self.show_london_map = show_london_map
-        self.os_basemap_api_key = os_basemap_api_key
-        self.os_basemap_attribution = os_basemap_attribution
+        self.legend_order = legend_order
+        self.include_new_towns = include_new_towns
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -92,31 +102,52 @@ class LeafletChoroplethMap:
         - List[List[float]]: bounds for selected LA
         - dl.Map: leaflet choropleth map for chart download, with LA selected if present
         """
-        if self.is_local_authority_map:
-            return self._get_local_authority_map()
-
-        geojson_layer, selected_bounds, _ = (
-            self._add_data_to_national_geojson_and_get_bounds()
-        )
-        geojson_layer_download, _, _ = (
-            self._add_data_to_national_geojson_and_get_bounds()
-        )
+        geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
+        geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
 
         # Build children list safely (exclude None)
         children = [
-            *([dl.TileLayer()] if self.show_tile_layer else []),
+            *(
+                [
+                    dl.TileLayer(
+                        url=(
+                            "https://api.os.uk/maps/raster/v1/zxy/"
+                            "Road_3857/{z}/{x}/{y}.png"
+                            f"?key={self.os_basemap_api_key}"
+                        ),
+                        attribution=self.os_basemap_attribution,
+                        # maxZoom=20,
+                    )
+                ]
+                if self.show_tile_layer
+                else []
+            ),
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
+            dl.Pane(name="new-towns-pane", style={"zIndex": 525}),
+            dl.Pane(name="mask-pane", style={"zIndex": 550}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
+            dl.Pane(name="marker-pane", style={"zIndex": 700}),
+            dl.Pane(name="tooltip-pane", style={"zIndex": 800}),
         ]
-        national_display_children = (
-            children
-            + [self._get_colorbar(), *([self._get_colorbar_title(self.enable_zoom)])]
-            + [geojson_layer]
+
+        display_markers = self._get_project_markers() if self.include_markers else []
+        download_markers = self._get_project_markers() if self.include_markers else []
+
+        new_town_layer = [self._get_new_town_layer()] if self.include_new_towns else []
+
+        new_town_layer_download = (
+            [self._get_new_town_layer()] if self.include_new_towns else []
         )
+
+        national_display_children = (
+            children + [geojson_layer] + new_town_layer + display_markers
+        )
+
         national_download_children = (
             children
-            + [self._get_colorbar(), *([self._get_colorbar_title()])]
             + [geojson_layer_download]
+            + new_town_layer_download
+            + download_markers
         )
 
         disabled_zoom_controls = {
@@ -143,13 +174,25 @@ class LeafletChoroplethMap:
                 "padding": [20, 20],
             },  # ensures LA fills map nicely
             minZoom=5,
-            maxZoom=10 if self.enable_zoom else 6.5,
+            maxZoom=20 if self.enable_zoom else 6.5,
             center=[54.5, -2.5],  # Centered on the UK
             zoom=6.5,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "1000px", "background": "white"},
         )
+
+        if self.include_markers:
+            map_container_for_display = html.Div(
+                [
+                    map_container_for_display,
+                    self._get_local_authority_legend(),
+                ],
+                style={
+                    "position": "relative",
+                    "width": "100%",
+                },
+            )
 
         national_download_choropleth_map = dl.Map(
             children=national_download_children,
@@ -166,9 +209,22 @@ class LeafletChoroplethMap:
             # unique ID to force map to regenerate
         )
 
+        if self.include_markers:
+            download_map_with_legend = html.Div(
+                [
+                    national_download_choropleth_map,
+                    self._get_local_authority_legend(),
+                ],
+                style={
+                    "position": "relative",
+                    "width": "1200px",
+                    "height": "1200px",
+                },
+            )
+
         if self.show_london_map:
             london_layer, _, london_region_bounds = (
-                self._add_data_to_national_geojson_and_get_bounds(True)
+                self._add_data_to_geojson_and_get_bounds(True)
             )
             london_region_rectangle = dl.Rectangle(
                 bounds=london_region_bounds,
@@ -287,7 +343,7 @@ class LeafletChoroplethMap:
             (
                 national_and_london_download_maps_container
                 if self.show_london_map
-                else national_download_choropleth_map
+                else download_map_with_legend
             ),
             self.title,
             self.subtitle,
@@ -307,131 +363,7 @@ class LeafletChoroplethMap:
             ),
         ]
 
-    def _get_local_authority_map(self):
-        """Create a Leaflet map for a single local authority."""
-
-        la_layer, la_bounds = self._add_data_to_la_geojson_and_get_bounds()
-
-        children = [
-            *(
-                [self._get_os_tile_layer()]
-                if self.os_basemap_api_key
-                else [dl.TileLayer()] if self.show_tile_layer else []
-            ),
-            la_layer,
-        ]
-
-        map_container = dl.Map(
-            children=children,
-            bounds=la_bounds,
-            boundsOptions={"padding": [20, 20]},
-            id=self.id_for_choropleth_map_on_page,
-            minZoom=5,
-            maxZoom=18,
-            attributionControl=False,
-            style={
-                "width": "100%",
-                "height": "600px",
-                "background": "white",
-            },
-        )
-
-        map_display = display_chart_or_table_with_header(
-            map_container,
-            self.title,
-            self.subtitle,
-            None,
-            self.download_data_button_id,
-            self.download_chart_button_id,
-            None,
-            instance=self.instance_number,
-        )
-
-        # Separate map for screenshot/download
-        download_la_layer, _ = self._add_data_to_la_geojson_and_get_bounds()
-
-        download_children = [
-            *(
-                [self._get_os_tile_layer()]
-                if self.os_basemap_api_key
-                else [dl.TileLayer()] if self.show_tile_layer else []
-            ),
-            download_la_layer,
-        ]
-
-        download_map = dl.Map(
-            children=download_children,
-            bounds=la_bounds,
-            boundsOptions={"padding": [20, 20]},
-            id=f"download-map-{int(time.time() * 1000)}",
-            zoomControl=False,
-            attributionControl=False,
-            style={
-                "width": "1200px",
-                "height": "1200px",
-                "background": "white",
-            },
-        )
-
-        download_map_display = display_chart_or_table_with_header(
-            download_map,
-            self.title,
-            self.subtitle,
-        )
-
-        hidden_download_map = html.Div(
-            [download_map_display],
-            id=f"{self.download_chart_button_id}-hidden-map-container",
-            style={
-                "position": "absolute",
-                "top": "-10000px",
-                "left": "-10000px",
-            },
-        )
-
-        return [
-            map_display,
-            la_bounds,
-            hidden_download_map,
-        ]
-
-    def _add_data_to_la_geojson_and_get_bounds(self):
-        """Create a GeoJSON layer and bounds for a single local authority feature."""
-
-        geojson_copy = copy.deepcopy(self.geojson_data)
-
-        if geojson_copy.get("type") == "Feature":
-            features = [geojson_copy]
-        elif geojson_copy.get("type") == "FeatureCollection":
-            features = geojson_copy.get("features", [])
-        else:
-            raise ValueError(
-                "Local authority GeoJSON must be a Feature or FeatureCollection"
-            )
-
-        bounds = self.compute_bounds(features)
-
-        if bounds:
-            bounds = self.pad_bounds(bounds, pad=0.01)
-
-        la_layer = dl.GeoJSON(
-            data={
-                "type": "FeatureCollection",
-                "features": features,
-            },
-            options={
-                "style": {
-                    "color": "#1d70b8",
-                    "weight": 3,
-                    "fillOpacity": 0,
-                },
-                "interactive": False,
-            },
-        )
-
-        return la_layer, bounds
-
-    def _add_data_to_national_geojson_and_get_bounds(self, london_las=False):
+    def _add_data_to_geojson_and_get_bounds(self, london_las=False):
         """Adds data to features, highlights selected LA, and returns layers + bounds for selected
         LA's region."""
         # pylint: disable=too-many-locals, too-many-branches
@@ -440,6 +372,101 @@ class LeafletChoroplethMap:
 
         # Make a deep copy so each map (display or download) has independent data
         geojson_copy = copy.deepcopy(self.geojson_data)
+
+        single_boundary = "features" not in geojson_copy
+
+        if single_boundary:
+
+            if geojson_copy.get("type") == "Feature":
+                feature = geojson_copy
+            else:
+                feature = {
+                    "type": "Feature",
+                    "geometry": geojson_copy,
+                    "properties": {},
+                }
+
+            # Put the single LA boundary into a FeatureCollection
+            geojson_copy = {
+                "type": "FeatureCollection",
+                "features": [feature],
+            }
+
+            # Calculate bounds so the map can zoom to the LA
+            bounds = self.compute_bounds(geojson_copy["features"])
+
+            if bounds:
+                selected_la_region_bounds = self.pad_bounds(bounds)
+
+            # now paler layer for elsewhere
+            # Get the LA geometry
+            la_geometries = [
+                shape(feature["geometry"]) for feature in geojson_copy["features"]
+            ]
+
+            la_geometry = unary_union(la_geometries)
+
+            # Large polygon covering the whole map
+            world = Polygon(
+                [
+                    (-180, -90),
+                    (180, -90),
+                    (180, 90),
+                    (-180, 90),
+                    (-180, -90),
+                ]
+            )
+
+            # Everything outside the LA
+            outside_la = world.difference(la_geometry)
+
+            outside_la_geojson = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": outside_la.__geo_interface__,
+                        "properties": {},
+                    }
+                ],
+            }
+
+            outside_la_layer = dl.GeoJSON(
+                data=outside_la_geojson,
+                options={
+                    "pane": "mask-pane",
+                    "interactive": False,
+                },
+                style={
+                    "color": "grey",
+                    "weight": 0,
+                    "fillColor": "grey",
+                    "fillOpacity": 0.8,  # faded outside area
+                },
+            )
+
+            # Selected LA: transparent fill so the normal tile colour shows through
+            geojson_layer = dl.GeoJSON(
+                data=geojson_copy,
+                options={
+                    "pane": "selected-top-pane",
+                    "interactive": False,
+                },
+                style={
+                    "color": "black",
+                    "weight": 2,
+                    "opacity": 1,
+                    "fillOpacity": 0,  # transparent — tile layer shows through
+                },
+            )
+
+            new_layer = geojson_layer = dl.LayerGroup([geojson_layer, outside_la_layer])
+
+            return (
+                new_layer,
+                selected_la_region_bounds,
+                london_region_bounds,
+            )
 
         info_map = {
             row["Area_Code"]: {
@@ -479,8 +506,7 @@ class LeafletChoroplethMap:
                 .to_series()
                 .to_list()
             )
-        if not geojson_copy.get("features", None):
-            print("hvfjhf")
+
         for i, feature in enumerate(geojson_copy["features"]):
             region_code = feature["properties"].get("geo_id")
             info = info_map.get(region_code)
@@ -596,6 +622,114 @@ class LeafletChoroplethMap:
         geojson_layer = dl.LayerGroup([national_layer, selected_la_layer])
 
         return geojson_layer, selected_la_region_bounds, london_region_bounds
+
+    def _get_local_authority_legend(self):
+        """Return a legend for point-based local authority maps."""
+
+        legend_df = (
+            self.df.select(
+                [
+                    self.legend_column,
+                    self.column_to_plot,
+                ]
+            )
+            .drop_nulls()
+            .unique(
+                subset=[self.legend_column],
+                maintain_order=True,
+            )
+        )
+
+        if self.legend_order:
+            legend_df = (
+                legend_df.with_columns(
+                    pl.col(self.legend_column)
+                    .replace(
+                        self.legend_order,
+                        list(range(len(self.legend_order))),
+                        default=len(self.legend_order),
+                    )
+                    .alias("_legend_order")
+                )
+                .sort("_legend_order")
+                .drop("_legend_order")
+            )
+
+        legend_rows = []
+
+        for row in legend_df.iter_rows(named=True):
+            color = row[self.column_to_plot]
+            
+            legend_rows.append(
+                html.Div(
+                    [
+                        
+                        html.Span(
+                            style={
+                                "display": "inline-block",
+                                "width": "14px",
+                                "height": "14px",
+                                "borderRadius": "50%",
+                                "backgroundColor": color,
+                                "border": f"1px solid {color}",
+                                "boxSizing": "border-box",
+                                "marginRight": "10px",
+                                "flexShrink": "0",
+                            }
+                        ),
+                        html.Span(row[self.legend_column]),
+                    ],
+                    style={
+                        "display": "flex",
+                        "alignItems": "center",
+                        "marginBottom": "8px",
+                    },
+                )
+            )
+
+        # Proposed new town is an area rather than a project point,
+        # so represent it with an outlined square.
+        legend_rows.append(
+            html.Div(
+                [
+                    html.Span(
+                        style={
+                            "display": "inline-block",
+                            "width": "16px",
+                            "height": "16px",
+                            "border": "3px solid #0000FF",
+                            "backgroundColor": "rgba(0, 0, 255, 0.5)",
+                            "marginRight": "10px",
+                            "boxSizing": "border-box",
+                            "flexShrink": "0",
+                        }
+                    ),
+                    html.Span("Proposed new town"),
+                ],
+                style={
+                    "display": "flex",
+                    "alignItems": "center",
+                },
+            )
+        )
+
+        return html.Div(
+            legend_rows,
+            style={
+                "position": "absolute",
+                "bottom": "30px",
+                "left": "30px",
+                "backgroundColor": "white",
+                "border": "1px solid #b1b4b6",
+                "padding": "14px 16px",
+                "fontSize": "16px",
+                "lineHeight": "1.25",
+                "zIndex": "1000",
+                "pointerEvents": "none",
+                "minWidth": "210px",
+                "boxShadow": "0 1px 4px rgba(0, 0, 0, 0.2)",
+            },
+        )
 
     def _get_style_handle(self):
         ns = Namespace("myNamespace", "mapColorScaleFunctions")
@@ -809,15 +943,64 @@ class LeafletChoroplethMap:
 
         return [[south - pad, west - pad], [north + pad, east + pad]]
 
-    def _get_os_tile_layer(self):
-        if not self.os_basemap_api_key:
-            return None
+    def _get_project_markers(self):
+        """Create coloured Leaflet markers for project points."""
 
-        return dl.TileLayer(
-            url=(
-                "https://api.os.uk/maps/raster/v1/zxy/"
-                f"Road_3857/{{z}}/{{x}}/{{y}}.png?key={self.os_basemap_api_key}"
-            ),
-            attribution=self.os_basemap_attribution,
-            maxZoom=20,
+        markers = []
+
+        for row in self.df.iter_rows(named=True):
+            coordinates = row.get(self.area_column)
+            color = row.get(self.column_to_plot)
+
+            if not coordinates or not color:
+                continue
+
+            latitude, longitude = coordinates[0]
+
+            tooltip_content = [
+                html.Div(
+                    [
+                        html.Strong(f"{column}: "),
+                        str(row.get(column, "")),
+                    ]
+                )
+                for column in self.hover_text_columns
+            ]
+
+            markers.append(
+                dl.CircleMarker(
+                    center=[latitude, longitude],
+                    radius=7,
+                    color=color,
+                    fillColor=color,
+                    fillOpacity=1,
+                    weight=1,
+                    pane="marker-pane",
+                    children=[
+                        dl.Tooltip(tooltip_content, pane="tooltip-pane"),
+                    ],
+                )
+            )
+
+        return markers
+
+    def _get_new_town_layer(self):
+        """Create proposed new town GeoJSON layer."""
+
+        json_location = absolute_path("data/nt-geographies/nt.geojson")
+        nt_geojson = load_data(json_location, "json")
+
+        return dl.GeoJSON(
+            data=nt_geojson,
+            options={
+                "pane": "new-towns-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "#0000FF",
+                "weight": 3,
+                "opacity": 1,
+                "fillColor": "#0000FF",
+                "fillOpacity": 0.5,
+            },
         )
