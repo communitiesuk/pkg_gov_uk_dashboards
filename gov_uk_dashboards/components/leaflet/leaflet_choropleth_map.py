@@ -105,6 +105,8 @@ class LeafletChoroplethMap:
         geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
         geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
 
+        is_single_boundary_map = self._is_single_boundary_map()
+
         # Build children list safely (exclude None)
         children = [
             *(
@@ -130,25 +132,64 @@ class LeafletChoroplethMap:
             dl.Pane(name="tooltip-pane", style={"zIndex": 800}),
         ]
 
-        display_markers = self._get_project_markers() if self.include_markers else []
-        download_markers = self._get_project_markers() if self.include_markers else []
+        if is_single_boundary_map:
+            display_markers = (
+                self._get_project_markers()
+                if self.include_markers
+                else []
+            )
 
-        new_town_layer = [self._get_new_town_layer()] if self.include_new_towns else []
+            download_markers = (
+                self._get_project_markers()
+                if self.include_markers
+                else []
+            )
 
-        new_town_layer_download = (
-            [self._get_new_town_layer()] if self.include_new_towns else []
-        )
+            new_town_layer = (
+                [self._get_new_town_layer()]
+                if self.include_new_towns
+                else []
+            )
 
-        national_display_children = (
-            children + [geojson_layer] + new_town_layer + display_markers
-        )
+            new_town_layer_download = (
+                [self._get_new_town_layer()]
+                if self.include_new_towns
+                else []
+            )
 
-        national_download_children = (
-            children
-            + [geojson_layer_download]
-            + new_town_layer_download
-            + download_markers
-        )
+            national_display_children = (
+                children
+                + [geojson_layer]
+                + new_town_layer
+                + display_markers
+            )
+
+            national_download_children = (
+                children
+                + [geojson_layer_download]
+                + new_town_layer_download
+                + download_markers
+            )
+
+        else:
+            # Preserve existing national choropleth behaviour.
+            national_display_children = (
+                children
+                + [
+                    self._get_colorbar(),
+                    *([self._get_colorbar_title(self.enable_zoom)]),
+                ]
+                + [geojson_layer]
+            )
+
+            national_download_children = (
+                children
+                + [
+                    self._get_colorbar(),
+                    *([self._get_colorbar_title()]),
+                ]
+                + [geojson_layer_download]
+            )
 
         disabled_zoom_controls = {
             "scrollWheelZoom": False,
@@ -343,7 +384,7 @@ class LeafletChoroplethMap:
             (
                 national_and_london_download_maps_container
                 if self.show_london_map
-                else download_map_with_legend
+                else national_download_choropleth_map
             ),
             self.title,
             self.subtitle,
@@ -1004,3 +1045,7 @@ class LeafletChoroplethMap:
                 "fillOpacity": 0.5,
             },
         )
+
+    def _is_single_boundary_map(self) -> bool:
+        """Return True when GeoJSON represents a single LA boundary."""
+        return "features" not in self.geojson_data
