@@ -132,31 +132,20 @@ class LeafletChoroplethMap:
         ]
 
         if is_single_boundary_map:
-            markers = (
-                self._get_project_markers() if self.include_markers else []
-            )
-
+            markers = self._get_project_markers() if self.include_markers else []
 
             new_town_layer = (
-                self._get_new_town_layer()
-                if self.new_town_geojson
-                else None
+                self._get_new_town_layer() if self.new_town_geojson else None
             )
 
             new_town_children = [new_town_layer] if new_town_layer else []
 
             national_display_children = (
-                children
-                + [geojson_layer]
-                + new_town_children
-                + markers
+                children + [geojson_layer] + new_town_children + markers
             )
 
             national_download_children = (
-                children
-                + [geojson_layer_download]
-                + new_town_children
-                + markers
+                children + [geojson_layer_download] + new_town_children + markers
             )
 
         else:
@@ -1014,8 +1003,6 @@ class LeafletChoroplethMap:
 
     def _get_new_town_layer(self):
         """Create proposed new town GeoJSON layer."""
-
-
 
         return dl.GeoJSON(
             data=self.new_town_geojson,
