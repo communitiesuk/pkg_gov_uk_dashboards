@@ -20,8 +20,6 @@ from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
 
-from data.get_data import load_data
-from lib.absolute_path import absolute_path
 
 LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
 
