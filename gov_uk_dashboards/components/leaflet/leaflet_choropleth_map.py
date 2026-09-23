@@ -66,8 +66,10 @@ class LeafletChoroplethMap:
         include_markers: bool = False,
         legend_order: list[str] = None,
         include_new_towns: bool = False,
+        new_town_geojson: dict | None = None,
     ):
         self.geojson_data = geojson
+        self.new_town_geojson = new_town_geojson
         self.os_basemap_api_key = os_basemap_api_key
         self.os_basemap_attribution = os_basemap_attribution
         self.include_markers = include_markers
@@ -132,31 +134,31 @@ class LeafletChoroplethMap:
         ]
 
         if is_single_boundary_map:
-            display_markers = (
+            markers = (
                 self._get_project_markers() if self.include_markers else []
             )
 
-            download_markers = (
-                self._get_project_markers() if self.include_markers else []
-            )
 
             new_town_layer = (
-                [self._get_new_town_layer()] if self.include_new_towns else []
+                self._get_new_town_layer()
+                if self.new_town_geojson
+                else None
             )
 
-            new_town_layer_download = (
-                [self._get_new_town_layer()] if self.include_new_towns else []
-            )
+            new_town_children = [new_town_layer] if new_town_layer else []
 
             national_display_children = (
-                children + [geojson_layer] + new_town_layer + display_markers
+                children
+                + [geojson_layer]
+                + new_town_children
+                + markers
             )
 
             national_download_children = (
                 children
                 + [geojson_layer_download]
-                + new_town_layer_download
-                + download_markers
+                + new_town_children
+                + markers
             )
 
         else:
@@ -1015,11 +1017,10 @@ class LeafletChoroplethMap:
     def _get_new_town_layer(self):
         """Create proposed new town GeoJSON layer."""
 
-        json_location = absolute_path("data/nt-geographies/nt.geojson")
-        nt_geojson = load_data(json_location, "json")
+
 
         return dl.GeoJSON(
-            data=nt_geojson,
+            data=self.new_town_geojson,
             options={
                 "pane": "new-towns-pane",
                 "interactive": False,
