@@ -1,17 +1,16 @@
 """Leaflet choropleth map class"""
 
-from shapely.geometry import shape, Polygon, MultiPolygon
-from shapely.ops import unary_union
 import copy
 import time
 from typing import Optional
+from shapely.geometry import shape, Polygon, mapping
+from shapely.ops import unary_union
+from shapely.affinity import scale
 from dash_extensions.javascript import Namespace
 import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash import html
 import polars as pl
-from shapely.geometry import shape, mapping
-from shapely.affinity import scale
 
 from gov_uk_dashboards.components.helpers.display_chart_or_table_with_header import (
     display_chart_or_table_with_header,
@@ -134,34 +133,23 @@ class LeafletChoroplethMap:
 
         if is_single_boundary_map:
             display_markers = (
-                self._get_project_markers()
-                if self.include_markers
-                else []
+                self._get_project_markers() if self.include_markers else []
             )
 
             download_markers = (
-                self._get_project_markers()
-                if self.include_markers
-                else []
+                self._get_project_markers() if self.include_markers else []
             )
 
             new_town_layer = (
-                [self._get_new_town_layer()]
-                if self.include_new_towns
-                else []
+                [self._get_new_town_layer()] if self.include_new_towns else []
             )
 
             new_town_layer_download = (
-                [self._get_new_town_layer()]
-                if self.include_new_towns
-                else []
+                [self._get_new_town_layer()] if self.include_new_towns else []
             )
 
             national_display_children = (
-                children
-                + [geojson_layer]
-                + new_town_layer
-                + display_markers
+                children + [geojson_layer] + new_town_layer + display_markers
             )
 
             national_download_children = (
@@ -700,11 +688,10 @@ class LeafletChoroplethMap:
 
         for row in legend_df.iter_rows(named=True):
             color = row[self.column_to_plot]
-            
+
             legend_rows.append(
                 html.Div(
                     [
-                        
                         html.Span(
                             style={
                                 "display": "inline-block",
