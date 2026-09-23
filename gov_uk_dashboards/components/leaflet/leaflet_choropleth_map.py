@@ -177,24 +177,25 @@ class LeafletChoroplethMap:
         }
         zoom_controls = {} if self.enable_zoom else disabled_zoom_controls
 
+        national_bounds = [
+            [49.66247637044628, -6.568378284916049],
+            [55.8212081746314, 1.77370560966352],
+        ]
+
+        initial_bounds = (
+            selected_bounds
+            if is_single_boundary_map and selected_bounds
+            else national_bounds
+        )
+
         map_container_for_display = dl.Map(
             children=national_display_children,
-            bounds=[
-                [49.66247637044628, -6.568378284916049],
-                [55.8212081746314, 1.77370560966352],
-            ],  # got from a print in self._add_data_to_geojson_and_get_bounds
-            maxBounds=[
-                [49.66247637044628, -6.568378284916049],
-                [55.8212081746314, 1.77370560966352],
-            ],
+            bounds=initial_bounds,
+            maxBounds=national_bounds,
             id=self.id_for_choropleth_map_on_page,
-            boundsOptions={
-                "padding": [20, 20],
-            },  # ensures LA fills map nicely
+            boundsOptions={"padding": [20, 20]},
             minZoom=5,
             maxZoom=20 if self.enable_zoom else 6.5,
-            center=[54.5, -2.5],  # Centered on the UK
-            zoom=6.5,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "1000px", "background": "white"},
