@@ -1,3 +1,5 @@
+
+# pylint: disable=too-many-lines
 """Leaflet choropleth map class"""
 
 import copy
@@ -19,7 +21,6 @@ from gov_uk_dashboards.components.dash.green_button import green_button
 from gov_uk_dashboards.formatting.number_formatting import (
     format_number_into_thousands_or_millions,
 )
-
 
 LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
 
@@ -227,18 +228,18 @@ class LeafletChoroplethMap:
             # unique ID to force map to regenerate
         )
 
-        if self.include_markers:
-            download_map_with_legend = html.Div(
-                [
-                    national_download_choropleth_map,
-                    self._get_local_authority_legend(),
-                ],
-                style={
-                    "position": "relative",
-                    "width": "1200px",
-                    "height": "1200px",
-                },
-            )
+        # if self.include_markers:
+        #     download_map_with_legend = html.Div(
+        #         [
+        #             national_download_choropleth_map,
+        #             self._get_local_authority_legend(),
+        #         ],
+        #         style={
+        #             "position": "relative",
+        #             "width": "1200px",
+        #             "height": "1200px",
+        #         },
+        #     )
 
         if self.show_london_map:
             london_layer, _, london_region_bounds = (
