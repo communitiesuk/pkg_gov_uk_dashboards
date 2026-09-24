@@ -187,7 +187,7 @@ class LeafletChoroplethMap:
             if is_single_boundary_map and selected_bounds
             else national_bounds
         )
-        
+
         (south, west), (north, east) = initial_bounds
 
         initial_center = [
