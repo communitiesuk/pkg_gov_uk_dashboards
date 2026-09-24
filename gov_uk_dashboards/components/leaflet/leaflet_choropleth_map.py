@@ -187,6 +187,13 @@ class LeafletChoroplethMap:
             if is_single_boundary_map and selected_bounds
             else national_bounds
         )
+        
+        (south, west), (north, east) = initial_bounds
+
+        initial_center = [
+            (south + north) / 2,
+            (west + east) / 2,
+        ]
 
         map_container_for_display = dl.Map(
             children=national_display_children,
@@ -196,6 +203,7 @@ class LeafletChoroplethMap:
             boundsOptions={"padding": [20, 20]},
             minZoom=5,
             maxZoom=20 if self.enable_zoom else 6.5,
+            center=initial_center,
             **zoom_controls,
             attributionControl=False,
             style={"width": "100%", "height": "1000px", "background": "white"},
