@@ -80,7 +80,7 @@ class StackedBarChart:
         x_hoverformat: Optional[str] = "%b %Y",
         use_plotly_automated_y_axis: bool = False,
         category_order_for_clustered: Optional[list[str]] = None,
-        footnote: str = None
+        footnote: str = None,
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -162,7 +162,7 @@ class StackedBarChart:
             download_all_data_button_id=self.download_all_data_button_id,
             alternative_data_button_text=self.alternative_data_button_text,
             alternative_all_data_button_text=self.alternative_all_data_button_text,
-            footnote=self.footnote
+            footnote=self.footnote,
         )
 
     def is_json_serializable(self, value):
