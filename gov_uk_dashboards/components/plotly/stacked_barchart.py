@@ -80,6 +80,7 @@ class StackedBarChart:
         x_hoverformat: Optional[str] = "%b %Y",
         use_plotly_automated_y_axis: bool = False,
         category_order_for_clustered: Optional[list[str]] = None,
+        footnote: str = None
     ):
         """Initializes the StackedBarChart instance.
         To display the chart, call the `get_stacked_bar_chart()` method.
@@ -109,6 +110,8 @@ class StackedBarChart:
             category_order_for_clustered (Optional[list[str]], optional): List of ordered categories
                 for x-axis. If not None, barchart will be clustered rather than stacked.
                 Defaults to None.
+            footnote (Optional[str], optional): Footnote to display below the chart. Defaults to
+                None.
         """
         self.title_data = title_data
         self.y_axis_column = y_axis_column
@@ -136,6 +139,7 @@ class StackedBarChart:
         self.x_hoverformat = x_hoverformat
         self.use_plotly_automated_y_axis = use_plotly_automated_y_axis
         self.category_order_for_clustered = category_order_for_clustered
+        self.footnote = footnote
         self.fig = self.create_stacked_bar_chart()
 
     def get_stacked_bar_chart(self) -> html.Div:
@@ -158,6 +162,7 @@ class StackedBarChart:
             download_all_data_button_id=self.download_all_data_button_id,
             alternative_data_button_text=self.alternative_data_button_text,
             alternative_all_data_button_text=self.alternative_all_data_button_text,
+            footnote=self.footnote
         )
 
     def is_json_serializable(self, value):
