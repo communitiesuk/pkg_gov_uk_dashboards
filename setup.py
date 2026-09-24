@@ -20,7 +20,7 @@ setup(
         "dash~=4.1",
         "numpy>=2.3.2",
         "dash_bootstrap_components~=2.0.3",
-        "plotly>=6.2,<7.1",
+        "plotly>=6.2,<7.2",
         "flask-basicauth~=0.2.0",
     ],
     include_package_data=True,
