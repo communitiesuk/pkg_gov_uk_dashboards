@@ -65,7 +65,7 @@ class LeafletChoroplethMap:
         legend_order: list[str] = None,
         include_new_towns: bool = False,
         new_town_geojson: dict | None = None,
-        footnote:str=None
+        footnote: str = None,
     ):
         self.geojson_data = geojson
         self.new_town_geojson = new_town_geojson
@@ -94,7 +94,7 @@ class LeafletChoroplethMap:
         self.show_london_map = show_london_map
         self.legend_order = legend_order
         self.include_new_towns = include_new_towns
-        self.footnote=footnote
+        self.footnote = footnote
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -368,7 +368,7 @@ class LeafletChoroplethMap:
             self.download_chart_button_id,
             None,
             instance=self.instance_number,
-            footnote=self.footnote if self.footnote else None
+            footnote=self.footnote if self.footnote else None,
         )
         download_choropleth_map_display = display_chart_or_table_with_header(
             (
