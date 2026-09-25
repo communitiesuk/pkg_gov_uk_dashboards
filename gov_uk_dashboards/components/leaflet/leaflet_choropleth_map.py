@@ -138,7 +138,7 @@ class LeafletChoroplethMap:
                 self._get_new_town_layer() if self.new_town_geojson else None
             )
 
-            new_town_children = [new_town_layer] if new_town_layer else []
+            new_town_children = [new_town_layer] if new_town_layer is not None else []
 
             national_display_children = (
                 children + [geojson_layer] + new_town_children + markers
@@ -201,6 +201,7 @@ class LeafletChoroplethMap:
             maxBounds=national_bounds,
             id=self.id_for_choropleth_map_on_page,
             boundsOptions={"padding": [20, 20]},
+            zoomSnap=0.1,
             minZoom=5,
             maxZoom=20 if self.enable_zoom else 6.5,
             center=initial_center,
