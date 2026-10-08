@@ -134,7 +134,7 @@ class LeafletChoroplethMap:
         ]
 
         if is_single_boundary_map:
-            markers = self._get_project_markers() if self.include_markers else []
+            markers = [self._get_project_markers()] if self.include_markers else []
 
             new_town_layer = (
                 self._get_new_town_layer() if self.new_town_geojson else None
@@ -974,9 +974,8 @@ class LeafletChoroplethMap:
         return [[south - pad, west - pad], [north + pad, east + pad]]
 
     def _get_project_markers(self):
-        """Create coloured Leaflet markers for project points."""
-
-        markers = []
+        """Create a single GeoJSON layer containing all project markers."""
+        features = []
 
         for row in self.df.iter_rows(named=True):
             coordinates = row.get(self.area_column)
@@ -987,32 +986,38 @@ class LeafletChoroplethMap:
 
             latitude, longitude = coordinates[0]
 
-            tooltip_content = [
-                html.Div(
-                    [
-                        html.Strong(f"{column}: "),
-                        str(row.get(column, "")),
-                    ]
-                )
-                for column in self.hover_text_columns
-            ]
-
-            markers.append(
-                dl.CircleMarker(
-                    center=[latitude, longitude],
-                    radius=7,
-                    color=color,
-                    fillColor=color,
-                    fillOpacity=1,
-                    weight=1,
-                    pane="marker-pane",
-                    children=[
-                        dl.Tooltip(tooltip_content, pane="tooltip-pane"),
-                    ],
-                )
+            features.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [longitude, latitude],
+                    },
+                    "properties": {
+                        "color": color,
+                        "tooltip": {
+                            column: row.get(column)
+                            for column in self.hover_text_columns
+                        },
+                    },
+                }
             )
 
-        return markers
+        geojson = {
+            "type": "FeatureCollection",
+            "features": features,
+        }
+
+        ns = Namespace("myNamespace", "mapMarkerFunctions")
+
+        return dl.GeoJSON(
+            data=geojson,
+            options={
+                "pane": "marker-pane",
+                "pointToLayer": ns("pointToLayer"),
+                "onEachFeature": ns("onEachFeature"),
+            },
+        )
 
     def _get_new_town_layer(self):
         """Create proposed new town GeoJSON layer."""

@@ -69,5 +69,41 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 fillColor: fillColor
             };
         }
-    }
+    },
+    mapMarkerFunctions: {
+            pointToLayer: function(feature, latlng) {
+                const color = feature.properties.color;
+
+                return L.circleMarker(latlng, {
+                    radius: 7,
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 1,
+                    weight: 1,
+                    pane: "marker-pane"
+                });
+            },
+            onEachFeature: function(feature, layer) {
+                const tooltip = document.createElement("div");
+
+                Object.entries(feature.properties.tooltip || {}).forEach(
+                    ([column, value]) => {
+                        const row = document.createElement("div");
+                        const label = document.createElement("strong");
+
+                        label.textContent = column + ": ";
+                        row.appendChild(label);
+                        row.appendChild(
+                            document.createTextNode(String(value ?? ""))
+                        );
+
+                        tooltip.appendChild(row);
+                    }
+                );
+
+                layer.bindTooltip(tooltip, {
+                    pane: "tooltip-pane"
+                });
+            }
+        }
 });
