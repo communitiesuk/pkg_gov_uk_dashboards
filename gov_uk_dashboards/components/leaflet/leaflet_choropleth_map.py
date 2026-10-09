@@ -41,7 +41,7 @@ class LeafletChoroplethMap:
 
     def __init__(
         self,
-        geojson: dict,
+        geojson: dict | None,
         df: pl.DataFrame,
         hover_text_columns: list[str],
         column_to_plot: str,
@@ -66,6 +66,9 @@ class LeafletChoroplethMap:
         include_new_towns: bool = False,
         new_town_geojson: dict | None = None,
         footnote: str = None,
+        boundary_url: str | None = None,
+        mask_url: str | None = None,
+        precomputed_bounds: list[list[float]] | None = None,
     ):
         self.geojson_data = geojson
         self.new_town_geojson = new_town_geojson
@@ -89,12 +92,38 @@ class LeafletChoroplethMap:
         )
         self.colorbar_title = self.resolve_colorbar_title(colorbar_title)
         self.show_tile_layer = show_tile_layer
-        self._add_data_to_geojson_and_get_bounds()
         self.instance_number = instance_number
         self.show_london_map = show_london_map
         self.legend_order = legend_order
         self.include_new_towns = include_new_towns
         self.footnote = footnote
+        self._prepared_single_boundary = None
+        self.boundary_url = boundary_url
+        self.mask_url = mask_url
+        self.precomputed_bounds = precomputed_bounds
+
+        precomputed_values = (
+            self.boundary_url,
+            self.mask_url,
+            self.precomputed_bounds,
+        )
+
+        if any(value is not None for value in precomputed_values):
+            if not all(value is not None for value in precomputed_values):
+                raise ValueError(
+                    "Precomputed maps require boundary_url, "
+                    "mask_url and precomputed_bounds."
+                )
+
+        if self.geojson_data is None and self.boundary_url is None:
+            raise ValueError(
+                "Either GeoJSON data or precomputed geography must be provided."
+            )
+
+        if self.boundary_url and self.show_london_map:
+            raise ValueError(
+                "Precomputed single-LA maps do not support show_london_map."
+            )
 
     def get_leaflet_choropleth_map(self):
         """Creates and returns:
@@ -401,103 +430,31 @@ class LeafletChoroplethMap:
         selected_la_region_bounds = None
         london_region_bounds = None
 
-        # Make a deep copy so each map (display or download) has independent data
+        if self.boundary_url and self.mask_url:
+            layer, bounds = self._get_precomputed_boundary_layer()
+            return layer, bounds, None
+
+        if self.geojson_data is None:
+            raise ValueError(
+                "Either geojson data or precomputed boundary "
+                "and mask URLs must be provided."
+            )
+
+        if self._is_single_boundary_map():
+            (
+                boundary_geojson,
+                mask_geojson,
+                selected_bounds,
+            ) = self._prepare_single_boundary_geometry()
+
+            layer = self._create_single_boundary_layer(
+                boundary_geojson,
+                mask_geojson,
+            )
+
+            return layer, selected_bounds, None
+
         geojson_copy = copy.deepcopy(self.geojson_data)
-
-        single_boundary = "features" not in geojson_copy
-
-        if single_boundary:
-
-            if geojson_copy.get("type") == "Feature":
-                feature = geojson_copy
-            else:
-                feature = {
-                    "type": "Feature",
-                    "geometry": geojson_copy,
-                    "properties": {},
-                }
-
-            # Put the single LA boundary into a FeatureCollection
-            geojson_copy = {
-                "type": "FeatureCollection",
-                "features": [feature],
-            }
-
-            # Calculate bounds so the map can zoom to the LA
-            bounds = self.compute_bounds(geojson_copy["features"])
-
-            if bounds:
-                selected_la_region_bounds = self.pad_bounds(bounds)
-
-            # now paler layer for elsewhere
-            # Get the LA geometry
-            la_geometries = [
-                shape(feature["geometry"]) for feature in geojson_copy["features"]
-            ]
-
-            la_geometry = unary_union(la_geometries)
-
-            # Large polygon covering the whole map
-            world = Polygon(
-                [
-                    (-180, -90),
-                    (180, -90),
-                    (180, 90),
-                    (-180, 90),
-                    (-180, -90),
-                ]
-            )
-
-            # Everything outside the LA
-            outside_la = world.difference(la_geometry)
-
-            outside_la_geojson = {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": outside_la.__geo_interface__,
-                        "properties": {},
-                    }
-                ],
-            }
-
-            outside_la_layer = dl.GeoJSON(
-                data=outside_la_geojson,
-                options={
-                    "pane": "mask-pane",
-                    "interactive": False,
-                },
-                style={
-                    "color": "grey",
-                    "weight": 0,
-                    "fillColor": "grey",
-                    "fillOpacity": 0.8,  # faded outside area
-                },
-            )
-
-            # Selected LA: transparent fill so the normal tile colour shows through
-            geojson_layer = dl.GeoJSON(
-                data=geojson_copy,
-                options={
-                    "pane": "selected-top-pane",
-                    "interactive": False,
-                },
-                style={
-                    "color": "black",
-                    "weight": 2,
-                    "opacity": 1,
-                    "fillOpacity": 0,  # transparent — tile layer shows through
-                },
-            )
-
-            new_layer = geojson_layer = dl.LayerGroup([geojson_layer, outside_la_layer])
-
-            return (
-                new_layer,
-                selected_la_region_bounds,
-                london_region_bounds,
-            )
 
         info_map = {
             row["Area_Code"]: {
@@ -1009,7 +966,7 @@ class LeafletChoroplethMap:
         }
 
         ns = Namespace("myNamespace", "mapMarkerFunctions")
-
+        print(f"[MAP TIMER] {self.title} | Markers: {len(features):,}")
         return dl.GeoJSON(
             data=geojson,
             options={
@@ -1038,5 +995,148 @@ class LeafletChoroplethMap:
         )
 
     def _is_single_boundary_map(self) -> bool:
-        """Return True when GeoJSON represents a single LA boundary."""
-        return "features" not in self.geojson_data
+        """Return True for single-LA maps, including precomputed maps."""
+        if self.boundary_url is not None:
+            return True
+
+        return (
+            self.geojson_data is not None
+            and self.geojson_data.get("type") != "FeatureCollection"
+        )
+
+    def _create_single_boundary_layer(self, boundary_geojson, mask_geojson):
+        """Create independent Leaflet layers from prepared geometry."""
+
+        outside_la_layer = dl.GeoJSON(
+            data=mask_geojson,
+            options={
+                "pane": "mask-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "grey",
+                "weight": 0,
+                "fillColor": "grey",
+                "fillOpacity": 0.8,
+            },
+        )
+
+        boundary_layer = dl.GeoJSON(
+            data=boundary_geojson,
+            options={
+                "pane": "selected-top-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "black",
+                "weight": 2,
+                "opacity": 1,
+                "fillOpacity": 0,
+            },
+        )
+
+        return dl.LayerGroup(
+            [
+                boundary_layer,
+                outside_la_layer,
+            ]
+        )
+
+    def _prepare_single_boundary_geometry(self):
+        """Prepare and cache the boundary, outside mask and map bounds.
+
+        The geometry is calculated once per map instance and reused
+        for both display and download layers.
+        """
+        if self._prepared_single_boundary is not None:
+            return self._prepared_single_boundary
+
+        geojson_copy = copy.deepcopy(self.geojson_data)
+
+        if geojson_copy.get("type") == "Feature":
+            feature = geojson_copy
+        else:
+            feature = {
+                "type": "Feature",
+                "geometry": geojson_copy,
+                "properties": {},
+            }
+
+        boundary_geojson = {
+            "type": "FeatureCollection",
+            "features": [feature],
+        }
+
+        bounds = self.compute_bounds(boundary_geojson["features"])
+        selected_bounds = self.pad_bounds(bounds) if bounds else None
+
+        la_geometry = shape(feature["geometry"])
+
+        world = Polygon(
+            [
+                (-180, -90),
+                (180, -90),
+                (180, 90),
+                (-180, 90),
+                (-180, -90),
+            ]
+        )
+
+        outside_la = world.difference(la_geometry)
+
+        mask_geojson = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": outside_la.__geo_interface__,
+                    "properties": {},
+                }
+            ],
+        }
+
+        self._prepared_single_boundary = (
+            boundary_geojson,
+            mask_geojson,
+            selected_bounds,
+        )
+
+        return self._prepared_single_boundary
+
+    def _get_precomputed_boundary_layer(self):
+        """Create boundary and mask layers from precomputed Geobuf URLs."""
+
+        boundary_layer = dl.GeoJSON(
+            url=self.boundary_url,
+            format="geobuf",
+            options={
+                "pane": "selected-top-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "black",
+                "weight": 2,
+                "opacity": 1,
+                "fillOpacity": 0,
+            },
+        )
+
+        mask_layer = dl.GeoJSON(
+            url=self.mask_url,
+            format="geobuf",
+            options={
+                "pane": "mask-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "grey",
+                "weight": 0,
+                "fillColor": "grey",
+                "fillOpacity": 0.8,
+            },
+        )
+
+        return (
+            dl.LayerGroup([boundary_layer, mask_layer]),
+            self.precomputed_bounds,
+        )
