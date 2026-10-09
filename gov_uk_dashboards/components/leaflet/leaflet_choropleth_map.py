@@ -266,7 +266,6 @@ class LeafletChoroplethMap:
             # unique ID to force map to regenerate
         )
 
-
         if self.show_london_map:
             london_layer, _, london_region_bounds = (
                 self._add_data_to_geojson_and_get_bounds(True)
@@ -421,15 +420,12 @@ class LeafletChoroplethMap:
             return layer, bounds, None
 
         if self.geojson_data is None:
-            raise ValueError(
-                "GeoJSON data is required for national choropleth maps."
-            )
+            raise ValueError("GeoJSON data is required for national choropleth maps.")
 
         if self.geojson_data.get("type") != "FeatureCollection":
             raise ValueError(
                 "Single-LA maps require precomputed boundary and mask URLs."
             )
-
 
         geojson_copy = copy.deepcopy(self.geojson_data)
 
@@ -974,8 +970,6 @@ class LeafletChoroplethMap:
     def _is_single_boundary_map(self) -> bool:
         """Return True when using precomputed LA geography."""
         return self.boundary_url is not None
-
-
 
     def _get_precomputed_boundary_layer(self):
         """Create boundary and mask layers from precomputed Geobuf URLs."""
