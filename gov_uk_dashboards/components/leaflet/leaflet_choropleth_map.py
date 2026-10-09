@@ -5,7 +5,6 @@ import copy
 import time
 from typing import Optional
 from shapely.geometry import shape, Polygon, mapping
-from shapely.ops import unary_union
 from shapely.affinity import scale
 from dash_extensions.javascript import Namespace
 import dash_leaflet as dl
