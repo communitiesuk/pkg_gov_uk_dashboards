@@ -4,7 +4,7 @@
 import copy
 import time
 from typing import Optional
-from shapely.geometry import shape, Polygon, mapping
+from shapely.geometry import shape, mapping
 from shapely.affinity import scale
 from dash_extensions.javascript import Namespace
 import dash_leaflet as dl
@@ -96,7 +96,6 @@ class LeafletChoroplethMap:
         self.legend_order = legend_order
         self.include_new_towns = include_new_towns
         self.footnote = footnote
-        self._prepared_single_boundary = None
         self.boundary_url = boundary_url
         self.mask_url = mask_url
         self.precomputed_bounds = precomputed_bounds
@@ -267,18 +266,6 @@ class LeafletChoroplethMap:
             # unique ID to force map to regenerate
         )
 
-        # if self.include_markers:
-        #     download_map_with_legend = html.Div(
-        #         [
-        #             national_download_choropleth_map,
-        #             self._get_local_authority_legend(),
-        #         ],
-        #         style={
-        #             "position": "relative",
-        #             "width": "1200px",
-        #             "height": "1200px",
-        #         },
-        #     )
 
         if self.show_london_map:
             london_layer, _, london_region_bounds = (
@@ -429,29 +416,20 @@ class LeafletChoroplethMap:
         selected_la_region_bounds = None
         london_region_bounds = None
 
-        if self.boundary_url and self.mask_url:
+        if self.boundary_url is not None:
             layer, bounds = self._get_precomputed_boundary_layer()
             return layer, bounds, None
 
         if self.geojson_data is None:
             raise ValueError(
-                "Either geojson data or precomputed boundary "
-                "and mask URLs must be provided."
+                "GeoJSON data is required for national choropleth maps."
             )
 
-        if self._is_single_boundary_map():
-            (
-                boundary_geojson,
-                mask_geojson,
-                selected_bounds,
-            ) = self._prepare_single_boundary_geometry()
-
-            layer = self._create_single_boundary_layer(
-                boundary_geojson,
-                mask_geojson,
+        if self.geojson_data.get("type") != "FeatureCollection":
+            raise ValueError(
+                "Single-LA maps require precomputed boundary and mask URLs."
             )
 
-            return layer, selected_bounds, None
 
         geojson_copy = copy.deepcopy(self.geojson_data)
 
@@ -994,113 +972,10 @@ class LeafletChoroplethMap:
         )
 
     def _is_single_boundary_map(self) -> bool:
-        """Return True for single-LA maps, including precomputed maps."""
-        if self.boundary_url is not None:
-            return True
+        """Return True when using precomputed LA geography."""
+        return self.boundary_url is not None
 
-        return (
-            self.geojson_data is not None
-            and self.geojson_data.get("type") != "FeatureCollection"
-        )
 
-    def _create_single_boundary_layer(self, boundary_geojson, mask_geojson):
-        """Create independent Leaflet layers from prepared geometry."""
-
-        outside_la_layer = dl.GeoJSON(
-            data=mask_geojson,
-            options={
-                "pane": "mask-pane",
-                "interactive": False,
-            },
-            style={
-                "color": "grey",
-                "weight": 0,
-                "fillColor": "grey",
-                "fillOpacity": 0.8,
-            },
-        )
-
-        boundary_layer = dl.GeoJSON(
-            data=boundary_geojson,
-            options={
-                "pane": "selected-top-pane",
-                "interactive": False,
-            },
-            style={
-                "color": "black",
-                "weight": 2,
-                "opacity": 1,
-                "fillOpacity": 0,
-            },
-        )
-
-        return dl.LayerGroup(
-            [
-                boundary_layer,
-                outside_la_layer,
-            ]
-        )
-
-    def _prepare_single_boundary_geometry(self):
-        """Prepare and cache the boundary, outside mask and map bounds.
-
-        The geometry is calculated once per map instance and reused
-        for both display and download layers.
-        """
-        if self._prepared_single_boundary is not None:
-            return self._prepared_single_boundary
-
-        geojson_copy = copy.deepcopy(self.geojson_data)
-
-        if geojson_copy.get("type") == "Feature":
-            feature = geojson_copy
-        else:
-            feature = {
-                "type": "Feature",
-                "geometry": geojson_copy,
-                "properties": {},
-            }
-
-        boundary_geojson = {
-            "type": "FeatureCollection",
-            "features": [feature],
-        }
-
-        bounds = self.compute_bounds(boundary_geojson["features"])
-        selected_bounds = self.pad_bounds(bounds) if bounds else None
-
-        la_geometry = shape(feature["geometry"])
-
-        world = Polygon(
-            [
-                (-180, -90),
-                (180, -90),
-                (180, 90),
-                (-180, 90),
-                (-180, -90),
-            ]
-        )
-
-        outside_la = world.difference(la_geometry)
-
-        mask_geojson = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "geometry": outside_la.__geo_interface__,
-                    "properties": {},
-                }
-            ],
-        }
-
-        self._prepared_single_boundary = (
-            boundary_geojson,
-            mask_geojson,
-            selected_bounds,
-        )
-
-        return self._prepared_single_boundary
 
     def _get_precomputed_boundary_layer(self):
         """Create boundary and mask layers from precomputed Geobuf URLs."""
