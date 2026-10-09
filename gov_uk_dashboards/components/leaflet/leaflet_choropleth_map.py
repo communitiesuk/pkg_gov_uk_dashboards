@@ -632,7 +632,7 @@ class LeafletChoroplethMap:
             legend_df = (
                 legend_df.with_columns(
                     pl.col(self.legend_column)
-                    .replace(
+                    .replace_strict(
                         self.legend_order,
                         list(range(len(self.legend_order))),
                         default=len(self.legend_order),
