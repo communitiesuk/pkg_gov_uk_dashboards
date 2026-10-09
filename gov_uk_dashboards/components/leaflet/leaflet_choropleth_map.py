@@ -939,7 +939,7 @@ class LeafletChoroplethMap:
         }
 
         ns = Namespace("myNamespace", "mapMarkerFunctions")
-        print(f"[MAP TIMER] {self.title} | Markers: {len(features):,}")
+
         return dl.GeoJSON(
             data=geojson,
             options={
