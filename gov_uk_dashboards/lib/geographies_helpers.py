@@ -64,9 +64,9 @@ def generate_la_map_geography(
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    (output_dir / "boundary.pbf").write_bytes(boundary_bytes)
-    (output_dir / "mask.pbf").write_bytes(mask_bytes)
-    (output_dir / "bounds.json").write_text(
+    (output_dir / f"{la_code}_boundary.pbf").write_bytes(boundary_bytes)
+    (output_dir / f"{la_code}_mask.pbf").write_bytes(mask_bytes)
+    (output_dir / f"{la_code}_bounds.json").write_text(
         json.dumps(bounds, separators=(",", ":")),
         encoding="utf-8",
     )
