@@ -62,8 +62,8 @@ class LeafletChoroplethMap:
         os_basemap_attribution: str = None,
         include_markers: bool = False,
         legend_order: list[str] = None,
-        include_new_towns: bool = False,
         new_town_geojson: dict | None = None,
+        green_belt_geojson: dict | None = None,
         footnote: str = None,
         boundary_url: str | None = None,
         mask_url: str | None = None,
@@ -71,6 +71,7 @@ class LeafletChoroplethMap:
     ):
         self.geojson_data = geojson
         self.new_town_geojson = new_town_geojson
+        self.green_belt_geojson = green_belt_geojson
         self.os_basemap_api_key = os_basemap_api_key
         self.os_basemap_attribution = os_basemap_attribution
         self.include_markers = include_markers
@@ -94,7 +95,6 @@ class LeafletChoroplethMap:
         self.instance_number = instance_number
         self.show_london_map = show_london_map
         self.legend_order = legend_order
-        self.include_new_towns = include_new_towns
         self.footnote = footnote
         self.boundary_url = boundary_url
         self.mask_url = mask_url
@@ -154,6 +154,7 @@ class LeafletChoroplethMap:
             ),
             dl.Pane(name="hover-pane", style={"zIndex": 500}),
             dl.Pane(name="new-towns-pane", style={"zIndex": 525}),
+            dl.Pane(name="green-belt-pane", style={"zIndex": 520}),
             dl.Pane(name="mask-pane", style={"zIndex": 550}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
             dl.Pane(name="marker-pane", style={"zIndex": 700}),
@@ -167,14 +168,30 @@ class LeafletChoroplethMap:
                 self._get_new_town_layer() if self.new_town_geojson else None
             )
 
+            green_belt_layer = (
+                self._get_green_belt_layer() if self.green_belt_geojson else None
+            )
+
             new_town_children = [new_town_layer] if new_town_layer is not None else []
 
+            green_belt_children = (
+                [green_belt_layer] if green_belt_layer is not None else []
+            )
+
             national_display_children = (
-                children + [geojson_layer] + new_town_children + markers
+                children
+                + [geojson_layer]
+                + new_town_children
+                + green_belt_children
+                + markers
             )
 
             national_download_children = (
-                children + [geojson_layer_download] + new_town_children + markers
+                children
+                + [geojson_layer_download]
+                + new_town_children
+                + green_belt_children
+                + markers
             )
 
         else:
@@ -963,6 +980,24 @@ class LeafletChoroplethMap:
                 "weight": 3,
                 "opacity": 1,
                 "fillColor": "#0000FF",
+                "fillOpacity": 0.5,
+            },
+        )
+
+    def _get_green_belt_layer(self):
+        """Create green belt GeoJSON layer."""
+
+        return dl.GeoJSON(
+            data=self.green_belt_geojson,
+            options={
+                "pane": "green-belt-pane",
+                "interactive": False,
+            },
+            style={
+                "color": "#008000",  # confirm colour
+                "weight": 3,
+                "opacity": 1,
+                "fillColor": "#008000",  # confirm colour
                 "fillOpacity": 0.5,
             },
         )
