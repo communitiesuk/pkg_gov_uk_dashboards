@@ -666,29 +666,59 @@ class LeafletChoroplethMap:
 
         # Proposed new town is an area rather than a project point,
         # so represent it with an outlined square.
-        legend_rows.append(
-            html.Div(
-                [
-                    html.Span(
-                        style={
-                            "display": "inline-block",
-                            "width": "16px",
-                            "height": "16px",
-                            "border": "3px solid #0000FF",
-                            "backgroundColor": "rgba(0, 0, 255, 0.5)",
-                            "marginRight": "10px",
-                            "boxSizing": "border-box",
-                            "flexShrink": "0",
-                        }
-                    ),
-                    html.Span("Proposed new town"),
-                ],
-                style={
-                    "display": "flex",
-                    "alignItems": "center",
-                },
+        if self.new_town_geojson:
+            legend_rows.append(
+                html.Div(
+                    [
+                        html.Span(
+                            style={
+                                "display": "inline-block",
+                                "width": "16px",
+                                "height": "16px",
+                                "border": "3px solid #0000FF",
+                                "backgroundColor": "rgba(0, 0, 255, 0.5)",
+                                "marginRight": "10px",
+                                "boxSizing": "border-box",
+                                "flexShrink": "0",
+                            }
+                        ),
+                        html.Span("Proposed new town"),
+                    ],
+                    style={
+                        "display": "flex",
+                        "alignItems": "center",
+                        "marginBottom": "8px",
+                    },
+                )
             )
-        )
+
+            # Green belt is an area rather than a project point,
+            # so represent it with an outlined square.
+            if self.green_belt_geojson:
+                legend_rows.append(
+                    html.Div(
+                        [
+                            html.Span(
+                                style={
+                                    "display": "inline-block",
+                                    "width": "16px",
+                                    "height": "16px",
+                                    "border": "3px solid #008000",
+                                    "backgroundColor": "rgba(0, 128, 0, 0.5)",
+                                    "marginRight": "10px",
+                                    "boxSizing": "border-box",
+                                    "flexShrink": "0",
+                                }
+                            ),
+                            html.Span("Green belt"),
+                        ],
+                        style={
+                            "display": "flex",
+                            "alignItems": "center",
+                            "marginBottom": "8px",
+                        },
+                    )
+                )
 
         return html.Div(
             legend_rows,
