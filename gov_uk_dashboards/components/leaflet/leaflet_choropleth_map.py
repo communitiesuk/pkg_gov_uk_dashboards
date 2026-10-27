@@ -1027,7 +1027,7 @@ class LeafletChoroplethMap:
                 "color": "#008000",  # confirm colour
                 "weight": 3,
                 "opacity": 1,
-                "fillColor": "#008000",  # confirm colour
+                "fillColor": "#008000", 
                 "fillOpacity": 0.5,
             },
         )
