@@ -1024,7 +1024,7 @@ class LeafletChoroplethMap:
                 "interactive": False,
             },
             style={
-                "color": "#008000",  # confirm colour
+                "color": "#008000",
                 "weight": 3,
                 "opacity": 1,
                 "fillColor": "#008000", 
