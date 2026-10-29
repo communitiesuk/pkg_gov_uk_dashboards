@@ -709,7 +709,7 @@ class LeafletChoroplethMap:
 
         return geojson_layer, selected_la_region_bounds, london_region_bounds
 
-    def _get_local_authority_legend(self):
+    def _get_local_authority_legend(self): # pylint: disable=too-many-branches
         """Return the legend for a point-based local-authority map.
 
         Preserve the original coloured-circle legend when ``units_column`` is not
