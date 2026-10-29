@@ -2,8 +2,16 @@
 """Leaflet choropleth map class"""
 
 import copy
+import math
+import base64
+from io import BytesIO
 import time
 from typing import Optional
+
+import numpy as np
+from PIL import Image
+from scipy.ndimage import gaussian_filter
+
 from shapely.geometry import shape, mapping
 from shapely.affinity import scale
 from dash_extensions.javascript import Namespace
@@ -22,14 +30,56 @@ from gov_uk_dashboards.formatting.number_formatting import (
 
 LONDON_REGION_MAP_BOUNDS = [[49.8, -10], [55.9, 1.8]]
 
+# HEAT MAP RENDERING PARAMETERS
+# Scale smoothing to the authority's geographical extent while preventing
+# very small or very large authorities from producing unusable heat radii.
+MINIMUM_HEAT_RADIUS_METRES = 250
+MAXIMUM_HEAT_RADIUS_METRES = 5_000
+HEAT_RADIUS_EXTENT_RATIO = 0.025
+
+# Control heat-surface smoothness, resolution and maximum visual strength.
+HEAT_MAX_OPACITY = 0.7
+HEAT_BLUR_RATIO = 0.4
+HEAT_RASTER_SIZE = 600
+
+# Preserve medium concentrations without allowing one extreme hotspot or
+# negligible Gaussian tails to dominate the rendered surface.
+HEAT_DENSITY_PERCENTILE = 99
+HEAT_DISPLAY_POWER = 0.65
+MINIMUM_VISIBLE_HEAT_INTENSITY = 0.03
+
+HEAT_COLOUR_RGB = (18, 67, 109)
+
+# PIN PARAMETERS
+MAJOR_SITE_THRESHOLD = 200
+VERY_LARGE_SITE_THRESHOLD = 500
+
 
 class LeafletChoroplethMap:
-    """Class for  generating leaflet choropleth map charts.
-    Note: Values in the numeric column should use 1 for the highest value, with larger numbers
-    representing lower values.
-    If color_scale_is_discrete is false, colour scale will be continuous, otherwise it will be
-    discrete.
-    Note: Hover text width is based off leaflet-tooltip class in css"""
+    """Create Leaflet choropleth and local-authority project maps.
+
+    National maps display choropleth values using either a discrete or continuous
+    colour scale. For discrete scales, numeric values are expected to use 1 for
+    the highest category, with larger numbers representing lower categories.
+
+    Precomputed single-authority maps can additionally display project markers,
+    proposed New Town and Green Belt overlays, and a continuous heat-density
+    surface.
+
+    When ``units_column`` is supplied, marker shape represents development size.
+    Projects below the major-site threshold use circle markers, larger projects
+    use pins, and projects above the very-large-site threshold use star pins.
+    Marker colour continues to represent the category defined by
+    ``legend_column`` and ``column_to_plot``. Without ``units_column``, the
+    original coloured-circle marker behaviour is preserved.
+
+    When ``display_heat_map`` is True, proposed units are used directly as weights
+    to create a continuous density surface. Heat intensity represents relative
+    concentration within the selected local authority and is not directly
+    comparable between authorities.
+
+    Tooltip width is controlled by the ``leaflet-tooltip`` CSS class.
+    """
 
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
@@ -68,7 +118,13 @@ class LeafletChoroplethMap:
         boundary_url: str | None = None,
         mask_url: str | None = None,
         precomputed_bounds: list[list[float]] | None = None,
+        units_column: str | None = None,
+        display_heat_map: bool = False,
+        legend_colour_heading: str | None = None,
     ):
+        self.legend_colour_heading = legend_colour_heading
+        self.units_column = units_column
+        self.display_heat_map = display_heat_map
         self.geojson_data = geojson
         self.new_town_geojson = new_town_geojson
         self.green_belt_geojson = green_belt_geojson
@@ -123,12 +179,61 @@ class LeafletChoroplethMap:
                 "Precomputed single-LA maps do not support show_london_map."
             )
 
+        if self.display_heat_map and not self.units_column:
+            raise ValueError("units_column is required when display_heat_map is True.")
+
+        required_columns = {
+            "area_column": self.area_column,
+            "column_to_plot": self.column_to_plot,
+            "legend_column": self.legend_column,
+        }
+
+        if self.units_column:
+            required_columns["units_column"] = self.units_column
+
+        for parameter_name, column_name in required_columns.items():
+            if column_name not in self.df.columns:
+                raise ValueError(
+                    f"{parameter_name} '{column_name}' was not found in the DataFrame."
+                )
+
+        missing_hover_columns = [
+            column
+            for column in self.hover_text_columns
+            if column not in self.df.columns
+        ]
+
+        if missing_hover_columns:
+            raise ValueError(
+                "hover_text_columns contains columns not found in the DataFrame: "
+                f"{missing_hover_columns}"
+            )
+
+        if (
+            self.include_markers
+            and self.units_column
+            and not self.legend_colour_heading
+        ):
+            raise ValueError(
+                "legend_colour_heading is required when unit-based "
+                "project markers are enabled."
+            )
+
+        if self.display_heat_map and not self.boundary_url:
+            raise ValueError(
+                "display_heat_map is only supported for precomputed "
+                "single-authority maps."
+            )
+
     def get_leaflet_choropleth_map(self):
-        """Creates and returns:
-        - dl.Map: leaflet choropleth map chart for display on application, which highlights and
-            zooms to selected LA.
-        - List[List[float]]: bounds for selected LA
-        - dl.Map: leaflet choropleth map for chart download, with LA selected if present
+        """Build the display and download versions of the map.
+
+        Precomputed single-authority maps can include project markers, a
+        proposed-units heat surface, New Towns and Green Belt overlays.
+
+        Returns:
+            list: The rendered map component, selected map bounds, and hidden
+            download-map component.
         """
         geojson_layer, selected_bounds, _ = self._add_data_to_geojson_and_get_bounds()
         geojson_layer_download, _, _ = self._add_data_to_geojson_and_get_bounds()
@@ -146,7 +251,6 @@ class LeafletChoroplethMap:
                             f"?key={self.os_basemap_api_key}"
                         ),
                         attribution=self.os_basemap_attribution,
-                        # maxZoom=20,
                     )
                 ]
                 if self.show_tile_layer
@@ -157,12 +261,21 @@ class LeafletChoroplethMap:
             dl.Pane(name="green-belt-pane", style={"zIndex": 520}),
             dl.Pane(name="mask-pane", style={"zIndex": 550}),
             dl.Pane(name="selected-top-pane", style={"zIndex": 600}),
+            dl.Pane(name="density-pane", style={"zIndex": 650}),
             dl.Pane(name="marker-pane", style={"zIndex": 700}),
+            dl.Pane(name="outline-dot-pane", style={"zIndex": 700}),
+            dl.Pane(name="detailed-dot-pane", style={"zIndex": 710}),
+            dl.Pane(name="outline-pin-pane", style={"zIndex": 720}),
+            dl.Pane(name="detailed-pin-pane", style={"zIndex": 730}),
             dl.Pane(name="tooltip-pane", style={"zIndex": 800}),
         ]
 
         if is_single_boundary_map:
-            markers = [self._get_project_markers()] if self.include_markers else []
+            heat_density_layer = (
+                self._get_heat_density_layer() if self.display_heat_map else None
+            )
+
+            marker_layer = self._get_project_markers() if self.include_markers else None
 
             new_town_layer = (
                 self._get_new_town_layer() if self.new_town_geojson else None
@@ -172,26 +285,21 @@ class LeafletChoroplethMap:
                 self._get_green_belt_layer() if self.green_belt_geojson else None
             )
 
-            new_town_children = [new_town_layer] if new_town_layer is not None else []
+            additional_layers = [
+                layer
+                for layer in [
+                    heat_density_layer,
+                    new_town_layer,
+                    marker_layer,
+                    green_belt_layer,
+                ]
+                if layer is not None
+            ]
 
-            green_belt_children = (
-                [green_belt_layer] if green_belt_layer is not None else []
-            )
-
-            national_display_children = (
-                children
-                + [geojson_layer]
-                + new_town_children
-                + green_belt_children
-                + markers
-            )
+            national_display_children = children + [geojson_layer] + additional_layers
 
             national_download_children = (
-                children
-                + [geojson_layer_download]
-                + new_town_children
-                + green_belt_children
-                + markers
+                children + [geojson_layer_download] + additional_layers
             )
 
         else:
@@ -602,7 +710,12 @@ class LeafletChoroplethMap:
         return geojson_layer, selected_la_region_bounds, london_region_bounds
 
     def _get_local_authority_legend(self):
-        """Return a legend for point-based local authority maps."""
+        """Return the legend for a point-based local-authority map.
+
+        Preserve the original coloured-circle legend when ``units_column`` is not
+        supplied. For unit-aware maps, separately show colour, development-size
+        markers, heat concentration and optional geographical overlays.
+        """
 
         legend_df = (
             self.df.select(
@@ -633,84 +746,47 @@ class LeafletChoroplethMap:
                 .drop("_legend_order")
             )
 
+        row_style = {
+            "display": "flex",
+            "alignItems": "center",
+            "minHeight": "18px",
+            "marginBottom": "4px",
+        }
+
+        symbol_container_style = {
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "width": "25px",
+            "minWidth": "25px",
+            "marginRight": "7px",
+        }
+
         legend_rows = []
 
-        for row in legend_df.iter_rows(named=True):
-            color = row[self.column_to_plot]
+        # Preserve the original legend when proposed-unit information
+        # is not supplied.
+        if not self.units_column:
+            for row in legend_df.iter_rows(named=True):
+                color = row[self.column_to_plot]
 
-            legend_rows.append(
-                html.Div(
-                    [
-                        html.Span(
-                            style={
-                                "display": "inline-block",
-                                "width": "14px",
-                                "height": "14px",
-                                "borderRadius": "50%",
-                                "backgroundColor": color,
-                                "border": f"1px solid {color}",
-                                "boxSizing": "border-box",
-                                "marginRight": "10px",
-                                "flexShrink": "0",
-                            }
-                        ),
-                        html.Span(row[self.legend_column]),
-                    ],
-                    style={
-                        "display": "flex",
-                        "alignItems": "center",
-                        "marginBottom": "8px",
-                    },
-                )
-            )
-
-        # Proposed new town is an area rather than a project point,
-        # so represent it with an outlined square.
-        if self.new_town_geojson:
-            legend_rows.append(
-                html.Div(
-                    [
-                        html.Span(
-                            style={
-                                "display": "inline-block",
-                                "width": "16px",
-                                "height": "16px",
-                                "border": "3px solid #0000FF",
-                                "backgroundColor": "rgba(0, 0, 255, 0.5)",
-                                "marginRight": "10px",
-                                "boxSizing": "border-box",
-                                "flexShrink": "0",
-                            }
-                        ),
-                        html.Span("Proposed new town"),
-                    ],
-                    style={
-                        "display": "flex",
-                        "alignItems": "center",
-                        "marginBottom": "8px",
-                    },
-                )
-            )
-
-            # Green belt is an area rather than a project point,
-            # so represent it with an outlined square.
-            if self.green_belt_geojson:
                 legend_rows.append(
                     html.Div(
                         [
                             html.Span(
                                 style={
                                     "display": "inline-block",
-                                    "width": "16px",
-                                    "height": "16px",
-                                    "border": "3px solid #008000",
-                                    "backgroundColor": "rgba(0, 128, 0, 0.5)",
-                                    "marginRight": "10px",
+                                    "width": "14px",
+                                    "height": "14px",
+                                    "borderRadius": "50%",
+                                    "backgroundColor": color,
+                                    "border": f"1px solid {color}",
                                     "boxSizing": "border-box",
+                                    "marginRight": "10px",
                                     "flexShrink": "0",
                                 }
                             ),
-                            html.Span("Green belt"),
+                            html.Span(row[self.legend_column]),
                         ],
                         style={
                             "display": "flex",
@@ -720,6 +796,335 @@ class LeafletChoroplethMap:
                     )
                 )
 
+        else:
+            section_heading_style = {
+                "fontWeight": "bold",
+                "fontSize": "16px",
+                "marginTop": "8px",
+                "marginBottom": "5px",
+            }
+
+            first_section_heading_style = {
+                **section_heading_style,
+                "marginTop": "0",
+            }
+
+            pin_row_style = {
+                **row_style,
+                "minHeight": "30px",
+            }
+
+            pin_symbol_container_style = {
+                **symbol_container_style,
+                "position": "relative",
+                "top": "-2px",
+            }
+
+            divider_style = {
+                "borderTop": "1px solid #b1b4b6",
+                "marginTop": "8px",
+            }
+
+            neutral_marker_colour = "#505a5f"
+            neutral_marker_centre_colour = "#0b0c0c"
+
+            legend_rows.append(
+                html.Div(
+                    f"{self.legend_colour_heading} (colour)",
+                    style=first_section_heading_style,
+                )
+            )
+
+            # Square swatches show that colour and marker shape have
+            # separate meanings.
+            for row in legend_df.iter_rows(named=True):
+                colour = row[self.column_to_plot]
+
+                legend_rows.append(
+                    html.Div(
+                        [
+                            html.Span(
+                                html.Span(
+                                    style={
+                                        "display": "block",
+                                        "width": "14px",
+                                        "height": "14px",
+                                        "backgroundColor": colour,
+                                    }
+                                ),
+                                style=symbol_container_style,
+                            ),
+                            html.Span(row[self.legend_column]),
+                        ],
+                        style=row_style,
+                    )
+                )
+
+            legend_rows.extend(
+                [
+                    html.Div(style=divider_style),
+                    html.Div(
+                        "Development size (marker)",
+                        style=section_heading_style,
+                    ),
+                    html.Div(
+                        [
+                            html.Span(
+                                html.Span(
+                                    style={
+                                        "display": "block",
+                                        "width": "9px",
+                                        "height": "9px",
+                                        "borderRadius": "50%",
+                                        "backgroundColor": neutral_marker_colour,
+                                        "border": f"1px solid {neutral_marker_colour}",
+                                        "boxSizing": "border-box",
+                                    }
+                                ),
+                                style=symbol_container_style,
+                            ),
+                            html.Span(f"Up to {MAJOR_SITE_THRESHOLD:,} units"),
+                        ],
+                        style=row_style,
+                    ),
+                    html.Div(
+                        [
+                            html.Span(
+                                html.Span(
+                                    html.Span(
+                                        style={
+                                            "display": "block",
+                                            "width": "6px",
+                                            "height": "6px",
+                                            "borderRadius": "50%",
+                                            "backgroundColor": (
+                                                neutral_marker_centre_colour
+                                            ),
+                                        }
+                                    ),
+                                    style={
+                                        "display": "flex",
+                                        "alignItems": "center",
+                                        "justifyContent": "center",
+                                        "width": "20px",
+                                        "height": "20px",
+                                        "backgroundColor": neutral_marker_colour,
+                                        "border": (
+                                            f"2px solid {neutral_marker_colour}"
+                                        ),
+                                        "borderRadius": "50% 50% 50% 0",
+                                        "transform": "rotate(-45deg)",
+                                        "boxSizing": "border-box",
+                                    },
+                                ),
+                                style=pin_symbol_container_style,
+                            ),
+                            html.Span(
+                                f"{MAJOR_SITE_THRESHOLD + 1:,}–"
+                                f"{VERY_LARGE_SITE_THRESHOLD:,} "
+                                "units"
+                            ),
+                        ],
+                        style=pin_row_style,
+                    ),
+                    html.Div(
+                        [
+                            html.Span(
+                                html.Span(
+                                    html.Span(
+                                        "★",
+                                        style={
+                                            "display": "block",
+                                            "color": "white",
+                                            "fontSize": "12px",
+                                            "lineHeight": "1",
+                                            "transform": "rotate(45deg)",
+                                        },
+                                    ),
+                                    style={
+                                        "display": "flex",
+                                        "alignItems": "center",
+                                        "justifyContent": "center",
+                                        "width": "20px",
+                                        "height": "20px",
+                                        "backgroundColor": (neutral_marker_colour),
+                                        "border": (
+                                            f"2px solid {neutral_marker_colour}"
+                                        ),
+                                        "borderRadius": "50% 50% 50% 0",
+                                        "transform": "rotate(-45deg)",
+                                        "boxSizing": "border-box",
+                                    },
+                                ),
+                                style=pin_symbol_container_style,
+                            ),
+                            html.Span(f"More than {VERY_LARGE_SITE_THRESHOLD:,} units"),
+                        ],
+                        style=pin_row_style,
+                    ),
+                ]
+            )
+
+            if self.display_heat_map:
+                legend_rows.extend(
+                    [
+                        html.Div(style=divider_style),
+                        html.Div(
+                            "Proposed units concentration",
+                            style=section_heading_style,
+                        ),
+                        html.Div(
+                            [
+                                html.Span(
+                                    html.Span(
+                                        style={
+                                            "display": "block",
+                                            "width": "14px",
+                                            "height": "14px",
+                                            "backgroundColor": (
+                                                f"rgba({HEAT_COLOUR_RGB[0]}, "
+                                                f"{HEAT_COLOUR_RGB[1]}, "
+                                                f"{HEAT_COLOUR_RGB[2]}, 0.20)"
+                                            ),
+                                        }
+                                    ),
+                                    style=symbol_container_style,
+                                ),
+                                html.Span("Lower relative concentration"),
+                            ],
+                            style=row_style,
+                        ),
+                        html.Div(
+                            [
+                                html.Span(
+                                    html.Span(
+                                        style={
+                                            "display": "block",
+                                            "width": "14px",
+                                            "height": "14px",
+                                            "backgroundColor": (
+                                                f"rgba({HEAT_COLOUR_RGB[0]}, "
+                                                f"{HEAT_COLOUR_RGB[1]}, "
+                                                f"{HEAT_COLOUR_RGB[2]}, 0.70)"
+                                            ),
+                                        }
+                                    ),
+                                    style=symbol_container_style,
+                                ),
+                                html.Span("Higher relative concentration"),
+                            ],
+                            style=row_style,
+                        ),
+                    ]
+                )
+
+            if self.new_town_geojson or self.green_belt_geojson:
+                legend_rows.extend(
+                    [
+                        html.Div(style=divider_style),
+                        html.Div(
+                            "Additional layers",
+                            style=section_heading_style,
+                        ),
+                    ]
+                )
+
+        # Additional geographical layers apply to both the original and
+        # unit-based marker legends.
+        if self.new_town_geojson:
+            if self.units_column:
+                new_town_symbol = html.Span(
+                    html.Span(
+                        style={
+                            "display": "block",
+                            "width": "14px",
+                            "height": "14px",
+                            "border": "3px solid #0000FF",
+                            "backgroundColor": "rgba(0, 0, 255, 0.20)",
+                            "boxSizing": "border-box",
+                        }
+                    ),
+                    style=symbol_container_style,
+                )
+            else:
+                new_town_symbol = html.Span(
+                    style={
+                        "display": "inline-block",
+                        "width": "14px",
+                        "height": "14px",
+                        "border": "3px solid #0000FF",
+                        "backgroundColor": "rgba(0, 0, 255, 0.20)",
+                        "marginRight": "10px",
+                        "boxSizing": "border-box",
+                        "flexShrink": "0",
+                    }
+                )
+
+            legend_rows.append(
+                html.Div(
+                    [
+                        new_town_symbol,
+                        html.Span("Proposed new town"),
+                    ],
+                    style=(
+                        row_style
+                        if self.units_column
+                        else {
+                            "display": "flex",
+                            "alignItems": "center",
+                            "marginBottom": "8px",
+                        }
+                    ),
+                )
+            )
+
+        if self.green_belt_geojson:
+            if self.units_column:
+                green_belt_symbol = html.Span(
+                    html.Span(
+                        style={
+                            "display": "block",
+                            "width": "14px",
+                            "height": "14px",
+                            "border": "3px solid #008000",
+                            "backgroundColor": "rgba(0, 128, 0, 0.20)",
+                            "boxSizing": "border-box",
+                        }
+                    ),
+                    style=symbol_container_style,
+                )
+            else:
+                green_belt_symbol = html.Span(
+                    style={
+                        "display": "inline-block",
+                        "width": "14px",
+                        "height": "14px",
+                        "border": "3px solid #008000",
+                        "backgroundColor": "rgba(0, 128, 0, 0.20)",
+                        "marginRight": "10px",
+                        "boxSizing": "border-box",
+                        "flexShrink": "0",
+                    }
+                )
+
+            legend_rows.append(
+                html.Div(
+                    [
+                        green_belt_symbol,
+                        html.Span("Green belt"),
+                    ],
+                    style=(
+                        row_style
+                        if self.units_column
+                        else {
+                            "display": "flex",
+                            "alignItems": "center",
+                            "marginBottom": "8px",
+                        }
+                    ),
+                )
+            )
+
         return html.Div(
             legend_rows,
             style={
@@ -728,12 +1133,11 @@ class LeafletChoroplethMap:
                 "left": "30px",
                 "backgroundColor": "white",
                 "border": "1px solid #b1b4b6",
-                "padding": "14px 16px",
+                "padding": "10px 12px",
                 "fontSize": "16px",
-                "lineHeight": "1.25",
+                "lineHeight": "1.15",
                 "zIndex": "1000",
                 "pointerEvents": "none",
-                "minWidth": "210px",
                 "boxShadow": "0 1px 4px rgba(0, 0, 0, 0.2)",
             },
         )
@@ -795,7 +1199,7 @@ class LeafletChoroplethMap:
         )
 
     def _get_colorbar(self):
-        top_margin = ("100px" if self.colorbar_title else None,)
+        top_margin = "100px" if self.colorbar_title else None
         if self.color_scale_is_discrete:
             return dlx.categorical_colorbar(
                 categories=self._get_color_bar_categories(),
@@ -951,7 +1355,15 @@ class LeafletChoroplethMap:
         return [[south - pad, west - pad], [north + pad, east + pad]]
 
     def _get_project_markers(self):
-        """Create a single GeoJSON layer containing all project markers."""
+        """Create project markers using optional proposed-unit thresholds.
+
+        When ``units_column`` is supplied, projects up to 200 units use circle
+        markers, projects from 201 to 500 units use pins, and projects above
+        500 units use star pins.
+
+        When ``units_column`` is not supplied, preserve the original coloured
+        circle-marker behaviour.
+        """
         features = []
 
         for row in self.df.iter_rows(named=True):
@@ -963,20 +1375,41 @@ class LeafletChoroplethMap:
 
             latitude, longitude = coordinates[0]
 
+            properties = {
+                "color": color,
+                "tooltip": {
+                    column: row.get(column) for column in self.hover_text_columns
+                },
+            }
+
+            if self.units_column:
+                units = row.get(self.units_column)
+
+                try:
+                    units = float(units)
+                except (TypeError, ValueError):
+                    units = 0
+
+                properties.update(
+                    {
+                        "units": units,
+                        "maturity": row.get(self.legend_column),
+                        "major_site_threshold": MAJOR_SITE_THRESHOLD,
+                        "very_large_site_threshold": VERY_LARGE_SITE_THRESHOLD,
+                    }
+                )
+
             features.append(
                 {
                     "type": "Feature",
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [longitude, latitude],
+                        "coordinates": [
+                            longitude,
+                            latitude,
+                        ],
                     },
-                    "properties": {
-                        "color": color,
-                        "tooltip": {
-                            column: row.get(column)
-                            for column in self.hover_text_columns
-                        },
-                    },
+                    "properties": properties,
                 }
             )
 
@@ -985,12 +1418,14 @@ class LeafletChoroplethMap:
             "features": features,
         }
 
-        ns = Namespace("myNamespace", "mapMarkerFunctions")
+        ns = Namespace(
+            "myNamespace",
+            "mapMarkerFunctions",
+        )
 
         return dl.GeoJSON(
             data=geojson,
             options={
-                "pane": "marker-pane",
                 "pointToLayer": ns("pointToLayer"),
                 "onEachFeature": ns("onEachFeature"),
             },
@@ -1073,3 +1508,329 @@ class LeafletChoroplethMap:
             dl.LayerGroup([boundary_layer, mask_layer]),
             self.precomputed_bounds,
         )
+
+    def _get_heat_weight(self, units: float) -> float:
+        """Use proposed units directly so larger sites contribute more heat."""
+        return units
+
+    def _get_heat_density_layer(self):
+        """Create a continuous heat surface weighted by proposed units.
+
+        Project unit totals are placed onto a raster and smoothed using a Gaussian
+        filter. The result is normalised within the selected local authority so
+        that relative concentrations remain visible across authorities of different
+        sizes and development patterns.
+
+        The resulting intensity is relative within each authority and should not
+        be interpreted as an absolute density that is directly comparable between
+        authorities.
+        """
+
+        if not self.precomputed_bounds:
+            return None
+
+        heat_radius_metres = self._get_heat_radius_metres()
+
+        (south, west), (north, east) = self.precomputed_bounds
+
+        width_metres = self._get_distance_metres(
+            (south + north) / 2,
+            west,
+            (south + north) / 2,
+            east,
+        )
+
+        height_metres = self._get_distance_metres(
+            south,
+            (west + east) / 2,
+            north,
+            (west + east) / 2,
+        )
+
+        if width_metres <= 0 or height_metres <= 0:
+            return None
+
+        raster_width = HEAT_RASTER_SIZE
+
+        raster_height = max(
+            1,
+            round(raster_width * (height_metres / width_metres)),
+        )
+
+        # Prevent very narrow or elongated authorities from generating
+        # an unnecessarily large raster.
+        raster_height = min(
+            raster_height,
+            HEAT_RASTER_SIZE * 2,
+        )
+
+        weighted_points = np.zeros(
+            (
+                raster_height,
+                raster_width,
+            ),
+            dtype=float,
+        )
+
+        valid_project_count = 0
+
+        for row in self.df.iter_rows(named=True):
+            coordinates = row.get(self.area_column)
+            units = row.get(self.units_column)
+
+            if not coordinates or units is None:
+                continue
+
+            try:
+                units = float(units)
+            except (TypeError, ValueError):
+                continue
+
+            if units <= 0:
+                continue
+
+            latitude, longitude = coordinates[0]
+
+            if latitude is None or longitude is None:
+                continue
+
+            if not (south <= latitude <= north and west <= longitude <= east):
+                continue
+
+            x_fraction = (longitude - west) / (east - west)
+
+            y_fraction = (north - latitude) / (north - south)
+
+            x_index = min(
+                raster_width - 1,
+                max(
+                    0,
+                    round(x_fraction * (raster_width - 1)),
+                ),
+            )
+
+            y_index = min(
+                raster_height - 1,
+                max(
+                    0,
+                    round(y_fraction * (raster_height - 1)),
+                ),
+            )
+
+            weighted_points[
+                y_index,
+                x_index,
+            ] += self._get_heat_weight(units)
+
+            valid_project_count += 1
+
+        if valid_project_count == 0:
+            return None
+
+        metres_per_x_pixel = width_metres / raster_width
+
+        metres_per_y_pixel = height_metres / raster_height
+
+        blur_radius_metres = heat_radius_metres * HEAT_BLUR_RATIO
+
+        sigma_x = max(
+            1,
+            blur_radius_metres / metres_per_x_pixel,
+        )
+
+        sigma_y = max(
+            1,
+            blur_radius_metres / metres_per_y_pixel,
+        )
+
+        heat_surface = gaussian_filter(
+            weighted_points,
+            sigma=(
+                sigma_y,
+                sigma_x,
+            ),
+            mode="constant",
+        )
+
+        positive_density = heat_surface[heat_surface > 0]
+
+        if positive_density.size == 0:
+            return None
+
+        # Prevent one exceptionally strong hotspot from making the rest of the
+        # authority's heat surface almost invisible.
+        density_reference = np.percentile(
+            positive_density,
+            HEAT_DENSITY_PERCENTILE,
+        )
+
+        heat_surface = np.clip(
+            heat_surface / density_reference,
+            0,
+            1,
+        )
+
+        # Retain visible medium-density areas while preserving darker peaks.
+        heat_surface = np.power(
+            heat_surface,
+            HEAT_DISPLAY_POWER,
+        )
+
+        image_url = self._heat_array_to_data_url(heat_surface)
+
+        return dl.ImageOverlay(
+            url=image_url,
+            bounds=self.precomputed_bounds,
+            opacity=1,
+            interactive=False,
+            pane="density-pane",
+        )
+
+    def _get_distance_metres(
+        self,
+        latitude_1: float,
+        longitude_1: float,
+        latitude_2: float,
+        longitude_2: float,
+    ) -> float:
+        """Return the distance between two coordinates in metres."""
+
+        earth_radius_metres = 6_371_000
+
+        latitude_1_radians = math.radians(latitude_1)
+        latitude_2_radians = math.radians(latitude_2)
+
+        latitude_difference = math.radians(latitude_2 - latitude_1)
+        longitude_difference = math.radians(longitude_2 - longitude_1)
+
+        haversine_value = (
+            math.sin(latitude_difference / 2) ** 2
+            + math.cos(latitude_1_radians)
+            * math.cos(latitude_2_radians)
+            * math.sin(longitude_difference / 2) ** 2
+        )
+
+        angular_distance = 2 * math.atan2(
+            math.sqrt(haversine_value),
+            math.sqrt(1 - haversine_value),
+        )
+
+        return earth_radius_metres * angular_distance
+
+    def _get_heat_radius_metres(self) -> int:
+        """Calculate a heat radius from the local authority's geographical extent.
+
+        The radius is based on a proportion of the authority's longest dimension
+        and clamped between the configured minimum and maximum values so that
+        compact and geographically large authorities remain visually usable.
+        """
+        if not self.precomputed_bounds:
+            return 2_000
+
+        (south, west), (north, east) = self.precomputed_bounds
+
+        centre_latitude = (south + north) / 2
+        centre_longitude = (west + east) / 2
+
+        width_metres = self._get_distance_metres(
+            centre_latitude,
+            west,
+            centre_latitude,
+            east,
+        )
+
+        height_metres = self._get_distance_metres(
+            south,
+            centre_longitude,
+            north,
+            centre_longitude,
+        )
+
+        longest_dimension_metres = max(
+            width_metres,
+            height_metres,
+        )
+
+        calculated_radius = longest_dimension_metres * HEAT_RADIUS_EXTENT_RATIO
+
+        return round(
+            max(
+                MINIMUM_HEAT_RADIUS_METRES,
+                min(
+                    MAXIMUM_HEAT_RADIUS_METRES,
+                    calculated_radius,
+                ),
+            )
+        )
+
+    def _heat_array_to_data_url(
+        self,
+        heat_array: np.ndarray,
+    ) -> str:
+        """Convert the normalised heat surface to a transparent PNG data URL.
+
+        Density is represented using the heat-map blue with varying alpha.
+        Negligible intensity is removed before rendering so Gaussian tails do not
+        produce a faint background haze or expose the underlying raster cells.
+        """
+
+        intensity = np.clip(
+            heat_array,
+            0,
+            1,
+        )
+
+        red_value, green_value, blue_value = HEAT_COLOUR_RGB
+
+        red = np.full(
+            intensity.shape,
+            red_value,
+            dtype=np.uint8,
+        )
+        green = np.full(
+            intensity.shape,
+            green_value,
+            dtype=np.uint8,
+        )
+        blue = np.full(
+            intensity.shape,
+            blue_value,
+            dtype=np.uint8,
+        )
+
+        # Remove negligible Gaussian tails so the raster remains transparent
+        # outside meaningful areas of development density.
+        visible_intensity = np.clip(
+            (intensity - MINIMUM_VISIBLE_HEAT_INTENSITY)
+            / (1 - MINIMUM_VISIBLE_HEAT_INTENSITY),
+            0,
+            1,
+        )
+
+        alpha = (visible_intensity * HEAT_MAX_OPACITY * 255).astype(np.uint8)
+
+        rgba = np.dstack(
+            [
+                red,
+                green,
+                blue,
+                alpha,
+            ]
+        )
+
+        image = Image.fromarray(
+            rgba,
+            mode="RGBA",
+        )
+
+        image_buffer = BytesIO()
+
+        image.save(
+            image_buffer,
+            format="PNG",
+            optimise=True,
+        )
+
+        encoded_image = base64.b64encode(image_buffer.getvalue()).decode("ascii")
+
+        return f"data:image/png;base64,{encoded_image}"

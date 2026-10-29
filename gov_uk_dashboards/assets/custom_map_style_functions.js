@@ -1,6 +1,6 @@
-window.myNamespace = Object.assign({}, window.myNamespace, {  
-    mapColorScaleFunctions: {  
-        continuousColorScale: function(feature, context) {
+window.myNamespace = Object.assign({}, window.myNamespace, {
+    mapColorScaleFunctions: {
+        continuousColorScale: function (feature, context) {
             const {
                 colorscale,
                 colorProp,
@@ -29,7 +29,7 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
                 return `rgb(${r},${g},${b})`;
             }
 
-            // Find segment and interpolate
+             // Find segment and interpolate
             const n = colors.length - 1;
             const idx = Math.min(Math.floor(t * n), n - 1);
             const local_t = (t * n) - idx;
@@ -71,39 +71,174 @@ window.myNamespace = Object.assign({}, window.myNamespace, {
         }
     },
     mapMarkerFunctions: {
-            pointToLayer: function(feature, latlng) {
-                const color = feature.properties.color;
+    pointToLayer: function(feature, latlng) {
+        const properties = feature.properties || {};
+        const color = properties.color;
 
-                return L.circleMarker(latlng, {
-                    radius: 7,
-                    color: color,
-                    fillColor: color,
-                    fillOpacity: 1,
-                    weight: 1,
-                    pane: "marker-pane"
-                });
-            },
-            onEachFeature: function(feature, layer) {
-                const tooltip = document.createElement("div");
+        // Preserve the original marker appearance and stacking when
+        // proposed-unit information has not been supplied.
+        if (
+            properties.units === undefined ||
+            properties.units === null
+        ) {
+            return L.circleMarker(latlng, {
+                radius: 7,
+                color: color,
+                fillColor: color,
+                fillOpacity: 1,
+                weight: 1,
+                pane: "marker-pane"
+            });
+        }
 
-                Object.entries(feature.properties.tooltip || {}).forEach(
-                    ([column, value]) => {
-                        const row = document.createElement("div");
-                        const label = document.createElement("strong");
+        const units = Number(properties.units ?? 0);
 
-                        label.textContent = column + ": ";
-                        row.appendChild(label);
-                        row.appendChild(
-                            document.createTextNode(String(value ?? ""))
-                        );
+        const maturity = String(
+            properties.maturity || ""
+        ).trim();
 
-                        tooltip.appendChild(row);
-                    }
+        const majorSiteThreshold = Number(
+            properties.major_site_threshold);
+
+        const veryLargeSiteThreshold = Number(
+            properties.very_large_site_threshold);
+
+        const isOutline =
+            maturity.toLowerCase() === "outline";
+
+        const isPin =
+            units > majorSiteThreshold;
+
+        const pane = isPin
+            ? (
+                isOutline
+                    ? "outline-pin-pane"
+                    : "detailed-pin-pane"
+            )
+            : (
+                isOutline
+                    ? "outline-dot-pane"
+                    : "detailed-dot-pane"
+            );
+
+        // Very large development: maturity-coloured pin
+        // containing a white star.
+        if (units > veryLargeSiteThreshold) {
+            const pinIcon = L.divIcon({
+                className: "major-site-pin",
+                html: `
+                    <div
+                        style="
+                            width: 24px;
+                            height: 24px;
+                            background-color: ${color};
+                            border: 2px solid ${color};
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            box-sizing: border-box;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        "
+                    >
+                        <span
+                            style="
+                                color: white;
+                                font-size: 14px;
+                                line-height: 1;
+                                transform: rotate(45deg);
+                            "
+                        >
+                            ★
+                        </span>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                tooltipAnchor: [0, -24]
+            });
+
+            return L.marker(latlng, {
+                icon: pinIcon,
+                pane: pane
+            });
+        }
+
+        // Large development: maturity-coloured pin
+        // containing a dark centre.
+        if (units > majorSiteThreshold) {
+            const pinIcon = L.divIcon({
+                className: "major-site-pin",
+                html: `
+                    <div
+                        style="
+                            width: 24px;
+                            height: 24px;
+                            background-color: ${color};
+                            border: 2px solid ${color};
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            box-sizing: border-box;
+                            position: relative;
+                        "
+                    >
+                        <div
+                            style="
+                                width: 7px;
+                                height: 7px;
+                                background-color: rgba(0, 0, 0, 0.35);
+                                border-radius: 50%;
+                                position: absolute;
+                                top: 5.5px;
+                                left: 5.5px;
+                            "
+                        ></div>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                tooltipAnchor: [0, -24]
+            });
+
+            return L.marker(latlng, {
+                icon: pinIcon,
+                pane: pane
+            });
+        }
+
+        // Smaller development.
+        return L.circleMarker(latlng, {
+            radius: 4,
+            color: color,
+            fillColor: color,
+            fillOpacity: 1,
+            weight: 1,
+            pane: pane
+        });
+    },
+
+    onEachFeature: function(feature, layer) {
+        const properties = feature.properties || {};
+        const tooltip = document.createElement("div");
+
+        Object.entries(properties.tooltip || {}).forEach(
+            ([column, value]) => {
+                const row = document.createElement("div");
+                const label = document.createElement("strong");
+
+                label.textContent = column + ": ";
+                row.appendChild(label);
+                row.appendChild(
+                    document.createTextNode(String(value ?? ""))
                 );
 
-                layer.bindTooltip(tooltip, {
-                    pane: "tooltip-pane"
-                });
+                tooltip.appendChild(row);
             }
-        }
+        );
+
+        layer.bindTooltip(tooltip, {
+            pane: "tooltip-pane"
+        });
+    }
+}
 });
