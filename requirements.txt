@@ -18,3 +18,5 @@ dash_extensions~=2.0.6
 dash[testing]~=4.4.1
 notifications_python_client~=13.0.0
 shapely~=2.2.0
+Pillow~=13.0.0
+scipy~=1.18.1
