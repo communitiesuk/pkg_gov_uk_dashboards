@@ -53,7 +53,7 @@ def get_chart_for_download(self, fig):
 
 def wrap_title(text: str, max_width: int = 1200, font_size: int = 18) -> str:
     """Wrap text based on its rendered pixel width."""
-    font = ImageFont.truetype("arial.ttf", font_size)
+    font = get_font(font_size)
     lines = []
     current_line = ""
 
@@ -71,3 +71,19 @@ def wrap_title(text: str, max_width: int = 1200, font_size: int = 18) -> str:
         lines.append(current_line)
 
     return "<br>".join(lines)
+
+
+def get_font(font_size: int) -> ImageFont.FreeTypeFont:
+    """Return an available TrueType font for measuring text width."""
+    font_paths = [
+        "arial.ttf",  # Windows
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+    ]
+
+    for font_path in font_paths:
+        try:
+            return ImageFont.truetype(font_path, font_size)
+        except OSError:
+            continue
+
+    raise RuntimeError("No suitable TrueType font available")
