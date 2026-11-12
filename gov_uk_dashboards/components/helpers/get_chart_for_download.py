@@ -2,6 +2,8 @@
 
 from PIL import ImageFont
 
+from pathlib import Path
+
 from gov_uk_dashboards.constants import MAIN_TITLE, SUBTITLE
 
 
@@ -79,6 +81,9 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
         "arial.ttf",  # Windows
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
     ]
+
+    for font_path in Path("/usr/share").rglob("*.ttf"):
+        print(f"TTF FONT: {font_path}")
 
     for font_path in font_paths:
         try:
