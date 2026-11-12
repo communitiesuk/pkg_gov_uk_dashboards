@@ -1,8 +1,8 @@
 """get_chart_for_download"""
 
-from PIL import ImageFont
-
 from pathlib import Path
+
+from PIL import ImageFont
 
 from gov_uk_dashboards.constants import MAIN_TITLE, SUBTITLE
 
