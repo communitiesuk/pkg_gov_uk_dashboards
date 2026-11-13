@@ -1,5 +1,7 @@
 """get_chart_for_download"""
 
+import logging
+
 from pathlib import Path
 
 from PIL import ImageFont
@@ -84,6 +86,8 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
 
     for font_path in Path("/usr/share").rglob("*.ttf"):
         print(f"TTF FONT: {font_path}")
+        logging.basicConfig(level=logging.INFO)
+        logging.info("TTF FONT: %s", font_path)
 
     for font_path in font_paths:
         try:
