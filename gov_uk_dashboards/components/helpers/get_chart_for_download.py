@@ -3,7 +3,6 @@
 import logging
 
 from pathlib import Path
-import sys
 
 from PIL import ImageFont
 
@@ -17,13 +16,7 @@ def get_chart_for_download(self, fig):
     subtitle = self.title_data[SUBTITLE]
 
     footnote = getattr(self, "footnote", None)
-    
-    logging.basicConfig(
-    level=logging.INFO,
-    stream=sys.stdout,
-    format="%(asctime)s %(levelname)s %(message)s",
-    force=True
-)
+
     logging.warning("Starting font search *******************************************")
 
     wrapped_title = wrap_title(main_title, font_size=24)
@@ -92,7 +85,7 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
         "arial.ttf",  # Windows
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
     ]
-
+    logging.warning("!!!!!!!!!!!!!!!!!!!!!")
     for font_path in Path("/usr/share").rglob("*.ttf"):
         logging.warning("TTF FONT: %s", font_path)
 
