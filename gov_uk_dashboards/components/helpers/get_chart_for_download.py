@@ -84,9 +84,9 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
     font_paths = [
         "gov_uk_dashboards/assets/fonts/Roboto_Condensed-Black.ttf"
     ]
-    font_list = []
-    for font_path in Path("/usr/share").rglob("*.ttf"):
-        font_list.append(font_path)
+    # font_list = []
+    # for font_path in Path("/usr/share").rglob("*.ttf"):
+    #     font_list.append(font_path)
 
     for font_path in font_paths:
         try:
@@ -95,5 +95,5 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
             continue
 
     raise RuntimeError(
-        f"No suitable TrueType font available. Available fonts: {font_list}"
-    )
+        f"No suitable TrueType font available. Available fonts") #: {font_list}"
+    # )
