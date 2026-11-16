@@ -102,8 +102,8 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
     # for font_path in font_paths:
     try:
         return ImageFont.truetype(file_path, font_size)
-    except:
-        raise ValueError(f"{file_path} not found.")
+    except Exception as exc:
+        raise ValueError(f"{file_path} not found.") from exc
 
     # raise RuntimeError(
     #     f"No suitable TrueType font available. Available fonts"
