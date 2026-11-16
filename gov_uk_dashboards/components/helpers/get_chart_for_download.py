@@ -85,9 +85,9 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
         "arial.ttf",  # Windows
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
     ]
-    logging.warning("!!!!!!!!!!!!!!!!!!!!!")
+    font_list = []
     for font_path in Path("/usr/share").rglob("*.ttf"):
-        logging.warning("TTF FONT: %s", font_path)
+        font_list.append(font_path)
 
     for font_path in font_paths:
         try:
@@ -95,4 +95,6 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
         except OSError:
             continue
 
-    raise RuntimeError("No suitable TrueType font available")
+    raise RuntimeError(
+        f"No suitable TrueType font available. Available fonts: {font_list}"
+    )
