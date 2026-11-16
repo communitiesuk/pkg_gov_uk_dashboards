@@ -82,8 +82,7 @@ def wrap_title(text: str, max_width: int = 1200, font_size: int = 18) -> str:
 def get_font(font_size: int) -> ImageFont.FreeTypeFont:
     """Return an available TrueType font for measuring text width."""
     font_paths = [
-        "arial.ttf",  # Windows
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+        "gov_uk_dashboards/assets/fonts/Roboto_Condensed-Black.ttf"
     ]
     font_list = []
     for font_path in Path("/usr/share").rglob("*.ttf"):
