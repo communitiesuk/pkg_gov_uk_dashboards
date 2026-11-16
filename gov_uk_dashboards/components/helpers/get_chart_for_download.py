@@ -81,18 +81,22 @@ def wrap_title(text: str, max_width: int = 1200, font_size: int = 18) -> str:
 
 def get_font(font_size: int) -> ImageFont.FreeTypeFont:
     """Return an available TrueType font for measuring text width."""
-    font_paths = [
-        "gov_uk_dashboards/assets/fonts/Roboto_Condensed-Black.ttf"
-    ]
+    Path.exists("gov_uk_dashboards")
+    
+    font_path = (
+        Path(__file__).resolve().parent
+        / "gov_uk_dashboards"
+        / "assets"
+        / "fonts"
+        / "Roboto_Condensed-Black.ttf"
+    )
     # font_list = []
     # for font_path in Path("/usr/share").rglob("*.ttf"):
     #     font_list.append(font_path)
 
-    for font_path in font_paths:
-        try:
-            return ImageFont.truetype(font_path, font_size)
-        except OSError:
-            continue
+    # for font_path in font_paths:
+    return ImageFont.truetype(font_path, font_size)
+
 
     raise RuntimeError(
         f"No suitable TrueType font available. Available fonts") #: {font_list}"
