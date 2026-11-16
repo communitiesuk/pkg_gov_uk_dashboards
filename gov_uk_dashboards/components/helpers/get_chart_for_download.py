@@ -1,12 +1,14 @@
 """get_chart_for_download"""
 
 import logging
-import sys
+
 from pathlib import Path
 
 from PIL import ImageFont
 
 from gov_uk_dashboards.constants import MAIN_TITLE, SUBTITLE
+
+import gov_uk_dashboards
 
 
 def get_chart_for_download(self, fig):
@@ -81,29 +83,21 @@ def wrap_title(text: str, max_width: int = 1200, font_size: int = 18) -> str:
 
 def get_font(font_size: int) -> ImageFont.FreeTypeFont:
     """Return an available TrueType font for measuring text width."""
-    print(Path("gov_uk_dashboards").exists())
 
-    env_path = Path(sys.prefix)
-    print(env_path)
-    file_path = (
-        env_path
-        / "Lib/site-packages/gov_uk_dashboards/assets/fonts/Roboto_Condensed-Black.ttf"
+    font_path = (
+        Path(gov_uk_dashboards.__file__).parent
+        / "assets"
+        / "fonts"
+        / "Roboto_Condensed-Black.ttf"
     )
-    print(file_path)
-    if file_path.exists():
-        print(f"File exists: {file_path}")
-    else:
-        print(f"File not found: {file_path}")
 
-    # font_list = []
-    # for font_path in Path("/usr/share").rglob("*.ttf"):
-    #     font_list.append(font_path)
+    print(font_path)
+    print(font_path.exists())
 
-    # for font_path in font_paths:
     try:
-        return ImageFont.truetype(file_path, font_size)
+        return ImageFont.truetype(font_path, font_size)
     except Exception as exc:
-        raise ValueError(f"{file_path} not found.") from exc
+        raise ValueError(f"{font_path} not found.") from exc
 
     # raise RuntimeError(
     #     f"No suitable TrueType font available. Available fonts"
