@@ -1,7 +1,5 @@
 """get_chart_for_download"""
 
-import logging
-
 from pathlib import Path
 
 from PIL import ImageFont
@@ -18,8 +16,6 @@ def get_chart_for_download(self, fig):
     subtitle = self.title_data[SUBTITLE]
 
     footnote = getattr(self, "footnote", None)
-
-    logging.warning("Starting font search *******************************************")
 
     wrapped_title = wrap_title(main_title, font_size=24)
 
@@ -91,15 +87,7 @@ def get_font(font_size: int) -> ImageFont.FreeTypeFont:
         / "Roboto_Condensed-Black.ttf"
     )
 
-    print(font_path)
-    print(font_path.exists())
-
     try:
         return ImageFont.truetype(font_path, font_size)
     except Exception as exc:
         raise ValueError(f"{font_path} not found.") from exc
-
-    # raise RuntimeError(
-    #     f"No suitable TrueType font available. Available fonts"
-    # )  #: {font_list}"
-    # # )
