@@ -79,11 +79,18 @@ class BlobStorageGateway:
 
     def download_blob_as_bytes(self, blob_name, max_concurrency=None, encoding=None):
         """
-        Download a blob from Azure Blob Storage and return its contents as bytes.
+        Download a blob from Azure Blob Storage.
 
         Args:
-            blob_name (str): The name (path) of the blob to download from the
-                container."""
+            blob_name (str): Name or path of the blob within the container.
+            max_concurrency (int, optional): Maximum number of parallel connections
+                used for downloading. Defaults to None.
+            encoding (str, optional): Encoding used to decode the blob content.
+                Defaults to None.
+
+        Returns:
+            bytes | str: Blob contents as bytes, or as a string if encoding is specified.
+        """
         blob_downloader = self.container_client.download_blob(
             blob_name, max_concurrency=max_concurrency, encoding=encoding
         )
