@@ -19,6 +19,6 @@ notifications_python_client~=13.0.0
 shapely~=2.2.0
 Pillow~=13.0.0
 scipy~=1.18.1
-azure-storage-blob~=12.28.0
+azure-storage-blob~=12.31.1
 azure-identity~=1.25.3
 python-dotenv~=1.2.4
